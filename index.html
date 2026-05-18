@@ -18,23 +18,6 @@
         <div class="brand-lockup">
           <h1 class="brand-mark">Carry <sup>Alpha</sup></h1>
         </div>
-        <div class="topbar-actions" aria-label="Progress controls">
-          <button class="icon-button" id="exportProgress" type="button" aria-label="Export progress" title="Export progress">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 3v12"></path>
-              <path d="m7 10 5 5 5-5"></path>
-              <path d="M5 21h14"></path>
-            </svg>
-          </button>
-          <label class="icon-button file-action" aria-label="Import progress" title="Import progress">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 21V9"></path>
-              <path d="m17 14-5-5-5 5"></path>
-              <path d="M5 3h14"></path>
-            </svg>
-            <input id="importProgress" type="file" accept="application/json,.json">
-          </label>
-        </div>
       </header>
 
       <main class="workspace-layout">
@@ -45,63 +28,92 @@
           <nav class="topic-list" id="topicList" aria-label="Math topics"></nav>
         </aside>
 
-        <details class="progress-panel" aria-label="Options">
-          <summary class="progress-summary">
-            <span>Options</span>
-            <span id="progressSummary">0 lessons</span>
-          </summary>
-          <div class="options-panel-body">
-            <section class="progress-section">
-              <h2>Next</h2>
-              <p id="stepText">Start with the ones column.</p>
-            </section>
+        <div class="workspace-main">
+          <details class="progress-panel" aria-label="Options">
+            <summary class="progress-summary">
+              <span>Options</span>
+              <span id="progressSummary">0 lessons</span>
+            </summary>
+            <div class="options-panel-body">
+              <section class="progress-section">
+                <h2>Next</h2>
+                <p id="stepText">Start with the ones column.</p>
+              </section>
 
-            <section class="progress-section">
-              <h2>Progress</h2>
-              <dl class="progress-list">
-                <div>
-                  <dt>Current topic</dt>
-                  <dd id="progressTopic">Arithmetic</dd>
+              <section class="progress-section">
+                <h2>Progress</h2>
+                <dl class="progress-list">
+                  <div>
+                    <dt>Current topic</dt>
+                    <dd id="progressTopic">Arithmetic</dd>
+                  </div>
+                  <div>
+                    <dt>Completed</dt>
+                    <dd id="progressCompleted">0 lessons</dd>
+                  </div>
+                  <div>
+                    <dt>Recent activity</dt>
+                    <dd id="progressRecent">Just started</dd>
+                  </div>
+                </dl>
+              </section>
+
+              <section class="progress-section">
+                <h2>Settings</h2>
+                <div class="language-tabs" role="group" aria-label="Language">
+                  <button class="language-tab" id="langEn" type="button" data-locale="EN" aria-pressed="true">EN</button>
+                  <button class="language-tab" id="langZh" type="button" data-locale="ZH_CN" aria-pressed="false">中文</button>
                 </div>
-                <div>
-                  <dt>Completed</dt>
-                  <dd id="progressCompleted">0 lessons</dd>
+                <label class="option-row">
+                  <input id="autoAdvance" type="checkbox" checked>
+                  <span>Advance after a correct digit</span>
+                </label>
+              </section>
+
+              <section class="progress-section">
+                <h2>Saved workspaces</h2>
+                <div class="saved-workspaces" id="savedWorkspaces">Long addition</div>
+              </section>
+
+              <section class="progress-section">
+                <h2>Data</h2>
+                <div class="data-actions" aria-label="Progress controls">
+                  <button class="icon-button" id="exportProgress" type="button" aria-label="Export progress" title="Export progress">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 3v12"></path>
+                      <path d="m7 10 5 5 5-5"></path>
+                      <path d="M5 21h14"></path>
+                    </svg>
+                  </button>
+                  <label class="icon-button file-action" aria-label="Import progress" title="Import progress">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 21V9"></path>
+                      <path d="m17 14-5-5-5 5"></path>
+                      <path d="M5 3h14"></path>
+                    </svg>
+                    <input id="importProgress" type="file" accept="application/json,.json">
+                  </label>
                 </div>
-                <div>
-                  <dt>Recent activity</dt>
-                  <dd id="progressRecent">Just started</dd>
-                </div>
-              </dl>
-            </section>
+              </section>
 
-            <section class="progress-section">
-              <h2>Settings</h2>
-              <div class="language-tabs" role="group" aria-label="Language">
-                <button class="language-tab" id="langEn" type="button" data-locale="EN" aria-pressed="true">EN</button>
-                <button class="language-tab" id="langZh" type="button" data-locale="ZH_CN" aria-pressed="false">中文</button>
-              </div>
-              <label class="option-row">
-                <input id="autoAdvance" type="checkbox" checked>
-                <span>Advance after a correct digit</span>
-              </label>
-            </section>
+              <section class="progress-section">
+                <h2>Source</h2>
+                <p class="source-link">
+                  <a href="https://github.com/iandorsey00/carry" rel="noopener noreferrer" target="_blank">GitHub repository</a>
+                </p>
+              </section>
 
-            <section class="progress-section">
-              <h2>Saved workspaces</h2>
-              <div class="saved-workspaces" id="savedWorkspaces">Long multiplication</div>
-            </section>
+              <p class="device-note compact" role="note">
+                Progress is stored on this device and browser. Export a JSON file to move or back up your work.
+              </p>
+            </div>
+          </details>
 
-            <p class="device-note compact" role="note">
-              Progress is stored on this device and browser. Export a JSON file to move or back up your work.
-            </p>
-          </div>
-        </details>
-
-        <section class="lesson-panel" aria-labelledby="lessonTitle">
+          <section class="lesson-panel" aria-labelledby="lessonTitle">
           <div class="lesson-header">
             <div>
               <p class="eyebrow" id="currentTopic">Arithmetic</p>
-              <h2 id="lessonTitle">Long multiplication</h2>
+              <h2 id="lessonTitle">Long addition</h2>
             </div>
             <div class="mode-tabs" role="tablist" aria-label="Lesson mode">
               <button class="mode-tab" type="button" data-mode="guided" role="tab" aria-selected="true">Guided</button>
@@ -112,7 +124,7 @@
 
           <section class="lesson-intro" id="lessonIntro" aria-labelledby="introTitle">
             <p class="eyebrow">How this works</p>
-            <h3 id="introTitle">Long multiplication</h3>
+            <h3 id="introTitle">Long addition</h3>
             <div class="intro-copy" id="introCopy"></div>
             <button class="tool-button" id="startLesson" type="button">Start</button>
           </section>
@@ -164,9 +176,14 @@
               New
             </button>
           </div>
-        </section>
+          </section>
+        </div>
 
       </main>
+
+      <footer class="site-footer">
+        Carry © 2026 Ian Dorsey · Open source under the MIT License
+      </footer>
     </div>
 
     <script src="./app.js" defer></script>

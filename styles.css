@@ -82,8 +82,10 @@ button {
 
 .topbar,
 .workspace-layout,
+.workspace-main,
 .lesson-panel,
-.topic-panel {
+.topic-panel,
+.site-footer {
   width: 100%;
 }
 
@@ -137,18 +139,12 @@ button {
   font-weight: 700;
 }
 
-.topbar-actions,
+.data-actions,
 .workspace-tools,
 .mode-tabs {
   display: flex;
   align-items: center;
   gap: 8px;
-}
-
-.topbar-actions {
-  position: absolute;
-  top: 28px;
-  right: 0;
 }
 
 .icon-button,
@@ -204,6 +200,19 @@ button {
   align-items: start;
 }
 
+.site-footer {
+  max-width: 1440px;
+  margin: 18px auto 0;
+  color: var(--muted);
+  font-size: 13px;
+  text-align: center;
+}
+
+.workspace-main {
+  display: grid;
+  gap: 8px;
+}
+
 .topic-panel,
 .progress-panel,
 .lesson-panel {
@@ -215,18 +224,6 @@ button {
 .topic-panel,
 .progress-panel {
   padding: 14px;
-}
-
-.topic-panel {
-  grid-row: 1 / span 2;
-}
-
-.progress-panel {
-  grid-column: 2;
-}
-
-.lesson-panel {
-  grid-column: 2;
 }
 
 .panel-heading p,
@@ -277,7 +274,7 @@ button {
 
 .options-panel-body {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 16px;
   margin-top: 14px;
 }
@@ -342,7 +339,7 @@ button {
 
 .lesson-list {
   display: grid;
-  gap: 2px;
+  gap: 4px;
   padding: 6px 0 8px 14px;
   border: 1px solid var(--line);
   border-top: 0;
@@ -352,6 +349,47 @@ button {
 
 .topic-group[open] .topic-summary {
   border-radius: 6px 6px 0 0;
+}
+
+.curriculum-section {
+  display: grid;
+}
+
+.curriculum-section-summary {
+  display: flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 10px;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  list-style: none;
+  text-transform: uppercase;
+}
+
+.curriculum-section-summary::-webkit-details-marker {
+  display: none;
+}
+
+.curriculum-section-summary::after {
+  content: "";
+  width: 7px;
+  height: 7px;
+  margin-left: auto;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg) translateY(-2px);
+}
+
+.curriculum-section[open] .curriculum-section-summary::after {
+  transform: rotate(225deg) translateY(-1px);
+}
+
+.curriculum-section-lessons {
+  display: grid;
+  gap: 2px;
 }
 
 .lesson-nav-button {
@@ -433,7 +471,7 @@ button {
   display: grid;
   gap: 10px;
   max-width: 680px;
-  margin: 0;
+  margin: 14px 0 0;
   padding-left: 22px;
   color: var(--text);
 }
@@ -441,6 +479,149 @@ button {
 .intro-copy li::marker {
   color: var(--muted);
   font-weight: 700;
+}
+
+.intro-figure {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.intro-figure-grid {
+  display: grid;
+  grid-template-columns: 84px repeat(3, 44px);
+  grid-auto-rows: 36px;
+  gap: 4px;
+  width: max-content;
+  max-width: 100%;
+  align-items: center;
+}
+
+.intro-cell {
+  display: flex;
+  min-width: 44px;
+  min-height: 36px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 20px;
+  font-weight: 700;
+  position: relative;
+}
+
+.intro-cell.label {
+  justify-content: flex-end;
+  color: var(--muted);
+  font-size: 12px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.intro-cell.top-label {
+  align-self: end;
+  justify-content: center;
+  text-align: center;
+}
+
+.intro-cell.operator {
+  color: var(--muted);
+}
+
+.intro-cell.mark {
+  min-width: 26px;
+  min-height: 24px;
+  align-self: end;
+  justify-self: start;
+  border: 1px solid var(--accent);
+  background: var(--accent-soft);
+  color: var(--text);
+  font-size: 14px;
+  z-index: 2;
+}
+
+.intro-cell.wide-mark {
+  min-width: 34px;
+}
+
+.intro-cell.active-source,
+.intro-cell.active-result {
+  background: var(--accent-soft);
+}
+
+.intro-cell.exponent-cell {
+  gap: 1px;
+}
+
+.intro-cell.exponent-cell sup {
+  align-self: flex-start;
+  margin-top: 5px;
+  font-size: 0.58em;
+  line-height: 1;
+}
+
+.intro-cell.result,
+.intro-cell.active-result,
+.intro-cell.empty,
+.intro-cell.fraction-piece {
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.intro-cell.wide-note {
+  grid-column: 2 / 5 !important;
+  justify-content: flex-start;
+  min-width: 100%;
+  padding: 0 8px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.intro-cell.fraction-piece {
+  border-radius: 0;
+}
+
+.intro-cell.empty {
+  color: transparent;
+}
+
+.intro-cell.borrow-lent-demo::after {
+  content: "";
+  position: absolute;
+  width: 24px;
+  height: 2px;
+  background: var(--text);
+  transform: rotate(-28deg);
+}
+
+.intro-cell.division-divisor-demo {
+  justify-content: flex-end;
+  padding-right: 8px;
+}
+
+.intro-cell.division-digit-demo {
+  border-top: 2px solid var(--text);
+  border-radius: 0;
+}
+
+.intro-cell.division-digit-demo.active-source {
+  border-left: 2px solid var(--text);
+}
+
+.intro-rule {
+  min-height: 2px;
+  border-top: 2px solid var(--text);
+}
+
+.intro-figure figcaption {
+  max-width: 560px;
+  color: var(--muted);
+  font-size: 13px;
 }
 
 .lesson-setup {
@@ -549,6 +730,17 @@ button {
   grid-template-rows: repeat(11, 44px);
 }
 
+.concept-grid {
+  grid-template-rows: minmax(160px, auto);
+}
+
+.equation-grid,
+.inequality-grid {
+  grid-template-columns: 92px minmax(92px, 128px) 44px minmax(92px, 128px);
+  grid-template-rows: repeat(6, 48px);
+  min-width: 0;
+}
+
 .addition-grid,
 .subtraction-grid {
   grid-template-rows: repeat(5, 44px);
@@ -598,6 +790,62 @@ button {
   background: var(--accent-soft);
 }
 
+.concept-card {
+  display: grid;
+  gap: 16px;
+  justify-self: center;
+  width: min(100%, 620px);
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.concept-card.active-column {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.concept-prompt {
+  margin: 0;
+  color: var(--text);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.concept-answer-label {
+  display: grid;
+  gap: 6px;
+  max-width: 220px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.concept-answer-input {
+  width: 100%;
+  min-width: 160px;
+}
+
+.concept-action {
+  justify-self: start;
+}
+
+.equation-expression {
+  min-width: 92px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  font-size: 20px;
+  white-space: nowrap;
+}
+
+.equation-input {
+  width: 92px;
+  font-size: 20px;
+}
+
 .operator {
   color: var(--muted);
 }
@@ -637,6 +885,14 @@ button {
   font-size: 22px;
   font-weight: 700;
   appearance: textfield;
+}
+
+.digit-input[maxlength="2"] {
+  width: 58px;
+}
+
+.digit-input[maxlength="3"] {
+  width: 72px;
 }
 
 .digit-input::-webkit-outer-spin-button,
@@ -782,6 +1038,21 @@ button {
   color: var(--muted);
 }
 
+.data-actions {
+  margin-top: 10px;
+}
+
+.source-link {
+  margin: 10px 0 0;
+}
+
+.source-link a {
+  color: var(--accent);
+  font-weight: 700;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
 .option-row {
   display: flex;
   align-items: center;
@@ -801,11 +1072,6 @@ button {
 @media (max-width: 1120px) {
   .workspace-layout {
     grid-template-columns: minmax(170px, 220px) minmax(0, 1fr);
-  }
-
-  .progress-panel,
-  .lesson-panel {
-    grid-column: 2;
   }
 
 }
@@ -829,27 +1095,12 @@ button {
     font-size: clamp(3rem, 15vw, 4.4rem);
   }
 
-  .topbar-actions {
-    top: 12px;
-    right: 0;
-  }
-
   .workspace-layout {
     grid-template-columns: 1fr;
   }
 
   .options-panel-body {
     grid-template-columns: 1fr;
-  }
-
-  .topic-panel,
-  .progress-panel,
-  .lesson-panel {
-    grid-column: 1;
-  }
-
-  .topic-panel {
-    grid-row: auto;
   }
 
   .lesson-header {

@@ -5,23 +5,193 @@ const STORAGE_KEY = "carry.progress.v1";
 const topicGroups = [
   {
     name: "Arithmetic",
-    lessons: [
-      { id: "arithmetic.long-addition.3x3", title: "Long addition" },
-      { id: "arithmetic.long-subtraction.3x3", title: "Long subtraction" },
-      { id: "arithmetic.long-multiplication.3x3", title: "Long multiplication" },
-      { id: "arithmetic.long-division.3x1", title: "Long division" },
-      { id: "arithmetic.long-division-remainders", title: "Long division with remainders" }
+    sections: [
+      {
+        title: "Whole Numbers",
+        lessons: [
+          { id: "arithmetic.place-value", title: "Place value" },
+          { id: "arithmetic.number-sense", title: "Number sense" },
+          { id: "arithmetic.long-addition.3x3", title: "Long addition" },
+          { id: "arithmetic.long-subtraction.3x3", title: "Long subtraction" },
+          { id: "arithmetic.long-multiplication.3x3", title: "Long multiplication" },
+          { id: "arithmetic.long-division.3x1", title: "Long division" },
+          { id: "arithmetic.long-division-remainders", title: "Long division with remainders" },
+          { id: "arithmetic.estimation", title: "Estimation and checking" }
+        ]
+      },
+      {
+        title: "Number Systems",
+        lessons: [
+          { id: "arithmetic.integers", title: "Integers" },
+          { id: "arithmetic.fractions", title: "Fractions" },
+          { id: "arithmetic.decimals", title: "Decimals" },
+          { id: "arithmetic.percents", title: "Percents" },
+          { id: "arithmetic.ratios", title: "Ratios" },
+          { id: "arithmetic.factors-multiples-primes", title: "Factors, multiples, primes" },
+          { id: "arithmetic.order-of-operations", title: "Order of operations" },
+          { id: "arithmetic.word-problems", title: "Word problems" },
+          { id: "arithmetic.mixed-review", title: "Mixed review" }
+        ]
+      }
     ]
   },
-  { name: "Pre-Algebra", lessons: [] },
-  { name: "Algebra", lessons: [] },
-  { name: "Geometry", lessons: [] },
-  { name: "Trigonometry", lessons: [] },
-  { name: "Calculus", lessons: [] },
-  { name: "Linear Algebra", lessons: [] },
-  { name: "Real Analysis", lessons: [] },
-  { name: "Abstract Algebra", lessons: [] },
-  { name: "Proofs", lessons: [] }
+  {
+    name: "Pre-Algebra",
+    sections: [
+      {
+        title: "Foundations",
+        lessons: [
+          { id: "prealgebra.integers", title: "Integers" },
+          { id: "prealgebra.expressions", title: "Expressions" },
+          { id: "prealgebra.equations", title: "Equations" },
+          { id: "prealgebra.inequalities", title: "Inequalities" },
+          { id: "prealgebra.exponents", title: "Exponents" },
+          { id: "prealgebra.coordinate-plane", title: "Coordinate plane" }
+        ]
+      }
+    ]
+  },
+  {
+    name: "Algebra",
+    sections: [
+      {
+        title: "Algebra I",
+        lessons: [
+          { id: "algebra.linear-equations", title: "Linear equations" },
+          { id: "algebra.systems", title: "Systems" },
+          { id: "algebra.polynomials", title: "Polynomials" },
+          { id: "algebra.factoring", title: "Factoring" },
+          { id: "algebra.rational-expressions", title: "Rational expressions" },
+          { id: "algebra.quadratics", title: "Quadratics" }
+        ]
+      }
+    ]
+  },
+  {
+    name: "Geometry",
+    sections: [
+      {
+        title: "Euclidean Geometry",
+        lessons: [
+          { id: "geometry.angles", title: "Angles" },
+          { id: "geometry.triangles", title: "Triangles" },
+          { id: "geometry.circles", title: "Circles" },
+          { id: "geometry.area-volume", title: "Area and volume" },
+          { id: "geometry.coordinate", title: "Coordinate geometry" },
+          { id: "geometry.proof-basics", title: "Proof basics" }
+        ]
+      }
+    ]
+  },
+  {
+    name: "Trigonometry",
+    sections: [
+      {
+        title: "Trigonometry",
+        lessons: [
+          { id: "trigonometry.unit-circle", title: "Unit circle" },
+          { id: "trigonometry.right-triangles", title: "Right triangles" },
+          { id: "trigonometry.graphs", title: "Graphs" },
+          { id: "trigonometry.identities", title: "Identities" },
+          { id: "trigonometry.inverse", title: "Inverse trig" }
+        ]
+      }
+    ]
+  },
+  {
+    name: "Precalculus",
+    sections: [
+      {
+        title: "Functions and Models",
+        lessons: [
+          { id: "precalculus.functions", title: "Functions" },
+          { id: "precalculus.transformations", title: "Transformations" },
+          { id: "precalculus.polynomial-rational", title: "Polynomial and rational functions" },
+          { id: "precalculus.exponential-log", title: "Exponential and log functions" },
+          { id: "precalculus.sequences", title: "Sequences" },
+          { id: "precalculus.complex-numbers", title: "Complex numbers" }
+        ]
+      }
+    ]
+  },
+  {
+    name: "Calculus",
+    sections: [
+      {
+        title: "Calculus",
+        lessons: [
+          { id: "calculus.limits", title: "Limits" },
+          { id: "calculus.derivatives", title: "Derivatives" },
+          { id: "calculus.integrals", title: "Integrals" },
+          { id: "calculus.applications", title: "Applications" },
+          { id: "calculus.series", title: "Series" }
+        ]
+      }
+    ]
+  },
+  {
+    name: "Linear Algebra",
+    sections: [
+      {
+        title: "Linear Algebra",
+        lessons: [
+          { id: "linear-algebra.vectors", title: "Vectors" },
+          { id: "linear-algebra.matrices", title: "Matrices" },
+          { id: "linear-algebra.transformations", title: "Transformations" },
+          { id: "linear-algebra.determinants", title: "Determinants" },
+          { id: "linear-algebra.eigenvalues", title: "Eigenvalues" },
+          { id: "linear-algebra.vector-spaces", title: "Vector spaces" }
+        ]
+      }
+    ]
+  },
+  {
+    name: "Proofs",
+    sections: [
+      {
+        title: "Proof Writing",
+        lessons: [
+          { id: "proofs.logic", title: "Logic" },
+          { id: "proofs.quantifiers", title: "Quantifiers" },
+          { id: "proofs.induction", title: "Induction" },
+          { id: "proofs.contradiction", title: "Contradiction" },
+          { id: "proofs.construction", title: "Construction" },
+          { id: "proofs.counterexamples", title: "Counterexamples" }
+        ]
+      }
+    ]
+  },
+  {
+    name: "Real Analysis",
+    sections: [
+      {
+        title: "Analysis",
+        lessons: [
+          { id: "real-analysis.sets", title: "Sets" },
+          { id: "real-analysis.sequences", title: "Sequences" },
+          { id: "real-analysis.limits", title: "Limits" },
+          { id: "real-analysis.continuity", title: "Continuity" },
+          { id: "real-analysis.differentiation", title: "Differentiation" },
+          { id: "real-analysis.integration", title: "Integration" }
+        ]
+      }
+    ]
+  },
+  {
+    name: "Abstract Algebra",
+    sections: [
+      {
+        title: "Algebraic Structures",
+        lessons: [
+          { id: "abstract-algebra.groups", title: "Groups" },
+          { id: "abstract-algebra.rings", title: "Rings" },
+          { id: "abstract-algebra.fields", title: "Fields" },
+          { id: "abstract-algebra.homomorphisms", title: "Homomorphisms" },
+          { id: "abstract-algebra.examples-counterexamples", title: "Examples and counterexamples" }
+        ]
+      }
+    ]
+  }
 ];
 
 const subtractionWorkspace = {
@@ -72,12 +242,338 @@ const divisionRemainderWorkspace = {
   problem: { top: 865, bottom: 4 }
 };
 
+const arithmeticConceptWorkspaces = {
+  "arithmetic.place-value": {
+    id: "arithmetic.place-value",
+    topic: "Arithmetic",
+    title: "Place value",
+    type: "concept",
+    figure: "place-value",
+    intro: [
+      "Read a number by its places: hundreds, tens, and ones.",
+      "A digit changes value when it moves to a different place.",
+      "Use expanded form to see what each digit contributes."
+    ],
+    problems: [
+      { prompt: "In 642, what is the value of the 6?", answer: "600", hint: "The 6 is in the hundreds place.", label: "value of 6" },
+      { prompt: "Complete: 507 = 500 + 0 + __.", answer: "7", answers: ["7", "500+0+7", "500+00+7", "500+7"], hint: "The ones digit is 7.", label: "expanded ones term" },
+      { prompt: "In 381, what digit is in the tens place?", answer: "8", hint: "The tens place is the middle digit.", label: "tens digit" }
+    ]
+  },
+  "arithmetic.number-sense": {
+    id: "arithmetic.number-sense",
+    topic: "Arithmetic",
+    title: "Number sense",
+    type: "concept",
+    figure: "number-line",
+    intro: [
+      "Use position, size, and nearby friendly numbers to reason before calculating.",
+      "Compare numbers by the largest place where they differ.",
+      "Round only when an estimate is enough."
+    ],
+    problems: [
+      { prompt: "Which is larger: 409 or 490?", answer: "490", hint: "Compare the tens digits after the hundreds match.", label: "larger number" },
+      { prompt: "What is 398 closest to: 300, 400, or 500?", answer: "400", hint: "398 is only 2 away from 400.", label: "closest hundred" },
+      { prompt: "Fill the missing number: 125, 150, 175, __.", answer: "200", hint: "Each step adds 25.", label: "next number" }
+    ]
+  },
+  "arithmetic.estimation": {
+    id: "arithmetic.estimation",
+    topic: "Arithmetic",
+    title: "Estimation and checking",
+    type: "concept",
+    figure: "estimation",
+    intro: [
+      "Estimate before or after a calculation to catch unreasonable answers.",
+      "Round to friendly numbers when exact precision is not needed.",
+      "Use the estimate as a guardrail, not as the final answer."
+    ],
+    problems: [
+      { prompt: "Estimate 398 + 201 by rounding to hundreds.", answer: "600", hint: "398 is about 400, and 201 is about 200.", label: "rounded sum" },
+      { prompt: "Estimate 49 x 6 using 50 x 6.", answer: "300", hint: "50 x 6 is a close check.", label: "estimated product" },
+      { prompt: "Is 812 - 398 closer to 400 or 600?", answer: "400", hint: "812 - 400 is about 412.", label: "closer estimate" }
+    ]
+  },
+  "arithmetic.integers": {
+    id: "arithmetic.integers",
+    topic: "Arithmetic",
+    title: "Integers",
+    type: "concept",
+    figure: "integer-line",
+    intro: [
+      "Integers include positive numbers, zero, and negative numbers.",
+      "On a number line, moving right increases the value and moving left decreases it.",
+      "Subtraction can be understood as distance and direction."
+    ],
+    problems: [
+      { prompt: "What is -3 + 8?", answer: "5", hint: "Start at -3 and move 8 steps right.", label: "integer sum" },
+      { prompt: "What is 4 - 9?", answer: "-5", hint: "You move 9 steps left from 4.", label: "integer difference" },
+      { prompt: "Which is greater: -2 or -7?", answer: "-2", hint: "The greater number is farther right on the number line.", label: "greater integer" }
+    ]
+  },
+  "arithmetic.fractions": {
+    id: "arithmetic.fractions",
+    topic: "Arithmetic",
+    title: "Fractions",
+    type: "concept",
+    figure: "fraction-bar",
+    intro: [
+      "A fraction names equal parts of a whole.",
+      "The denominator tells how many equal parts make the whole.",
+      "The numerator tells how many of those parts are being used."
+    ],
+    problems: [
+      { prompt: "Simplify 6/8.", answer: "3/4", hint: "Divide the top and bottom by 2.", label: "simplified fraction" },
+      { prompt: "What is 1/4 of 20?", answer: "5", hint: "Split 20 into 4 equal groups.", label: "fraction of a number" },
+      { prompt: "Which is larger: 1/2 or 1/3?", answer: "1/2", hint: "With the same whole, thirds are smaller parts than halves.", label: "larger fraction" }
+    ]
+  },
+  "arithmetic.decimals": {
+    id: "arithmetic.decimals",
+    topic: "Arithmetic",
+    title: "Decimals",
+    type: "concept",
+    figure: "decimal-grid",
+    intro: [
+      "Decimals extend place value to the right of the ones place.",
+      "Tenths are one place after the decimal point.",
+      "Hundredths are two places after the decimal point."
+    ],
+    problems: [
+      { prompt: "What is 0.4 + 0.7?", answer: "1.1", hint: "Four tenths plus seven tenths is eleven tenths.", label: "decimal sum" },
+      { prompt: "Write 3 tenths as a decimal.", answer: "0.3", hint: "Tenths use one digit after the decimal point.", label: "tenths decimal" },
+      { prompt: "Which is larger: 0.8 or 0.75?", answer: "0.8", hint: "0.8 is the same as 0.80.", label: "larger decimal" }
+    ]
+  },
+  "arithmetic.percents": {
+    id: "arithmetic.percents",
+    topic: "Arithmetic",
+    title: "Percents",
+    type: "concept",
+    figure: "percent-grid",
+    intro: [
+      "Percent means per hundred.",
+      "50% is half, 25% is a quarter, and 10% is one tenth.",
+      "Convert percent questions into parts of 100 when possible."
+    ],
+    problems: [
+      { prompt: "What is 25% of 80?", answer: "20", hint: "25% is one quarter.", label: "percent of a number" },
+      { prompt: "Write 0.6 as a percent.", answer: "60%", hint: "0.6 is 60 hundredths.", label: "decimal to percent" },
+      { prompt: "What is 10% of 350?", answer: "35", hint: "Move one place because 10% is one tenth.", label: "ten percent" }
+    ]
+  },
+  "arithmetic.ratios": {
+    id: "arithmetic.ratios",
+    topic: "Arithmetic",
+    title: "Ratios",
+    type: "concept",
+    figure: "ratio-bars",
+    intro: [
+      "A ratio compares two amounts.",
+      "Equivalent ratios keep the same comparison while scaling both parts.",
+      "Use multiplication or division on both parts to make an equivalent ratio."
+    ],
+    problems: [
+      { prompt: "Simplify the ratio 6:9.", answer: "2:3", hint: "Divide both parts by 3.", label: "simplified ratio" },
+      { prompt: "If 2:5 scales by 4, what is the new first number?", answer: "8", hint: "Multiply the first part by 4.", label: "scaled ratio part" },
+      { prompt: "Complete the equivalent ratio: 3:4 = 12:__.", answer: "16", hint: "3 became 12 by multiplying by 4.", label: "equivalent ratio" }
+    ]
+  },
+  "arithmetic.factors-multiples-primes": {
+    id: "arithmetic.factors-multiples-primes",
+    topic: "Arithmetic",
+    title: "Factors, multiples, primes",
+    type: "concept",
+    figure: "factor-pairs",
+    intro: [
+      "Factors divide a number evenly.",
+      "Multiples are results of multiplying by whole numbers.",
+      "A prime number has exactly two positive factors: 1 and itself."
+    ],
+    problems: [
+      { prompt: "Is 29 prime? Answer yes or no.", answer: "yes", answers: ["yes", "y"], hint: "29 is not divisible by 2, 3, or 5.", label: "prime check" },
+      { prompt: "Give the missing factor: 6 x __ = 42.", answer: "7", hint: "42 divided by 6 is 7.", label: "missing factor" },
+      { prompt: "What is the least common multiple of 4 and 6?", answer: "12", hint: "List multiples until they match.", label: "least common multiple" }
+    ]
+  },
+  "arithmetic.order-of-operations": {
+    id: "arithmetic.order-of-operations",
+    topic: "Arithmetic",
+    title: "Order of operations",
+    type: "concept",
+    figure: "operation-order",
+    intro: [
+      "Parentheses come before multiplication, division, addition, and subtraction.",
+      "Multiplication and division are handled from left to right.",
+      "Addition and subtraction are handled from left to right after that."
+    ],
+    problems: [
+      { prompt: "Evaluate 3 + 4 x 5.", answer: "23", hint: "Multiply before adding.", label: "expression value" },
+      { prompt: "Evaluate (3 + 4) x 5.", answer: "35", hint: "Parentheses go first.", label: "parentheses value" },
+      { prompt: "Evaluate 18 / 3 + 2.", answer: "8", hint: "Divide first, then add.", label: "division before addition" }
+    ]
+  },
+  "arithmetic.word-problems": {
+    id: "arithmetic.word-problems",
+    topic: "Arithmetic",
+    title: "Word problems",
+    type: "concept",
+    figure: "word-problem",
+    intro: [
+      "Find what the question is asking for before calculating.",
+      "Identify the quantities and the operation connecting them.",
+      "Check that the answer uses the right unit."
+    ],
+    problems: [
+      { prompt: "Mina has 18 cards and gets 7 more. How many cards does she have?", answer: "25", hint: "More cards means addition.", label: "cards total" },
+      { prompt: "A box has 6 rows of 8 tiles. How many tiles are there?", answer: "48", hint: "Equal rows suggest multiplication.", label: "array total" },
+      { prompt: "There are 45 apples in 5 equal bags. How many apples are in each bag?", answer: "9", hint: "Split 45 into 5 equal groups.", label: "equal group size" }
+    ]
+  },
+  "arithmetic.mixed-review": {
+    id: "arithmetic.mixed-review",
+    topic: "Arithmetic",
+    title: "Mixed review",
+    type: "concept",
+    figure: "mixed-review",
+    intro: [
+      "Mixed review asks you to choose the operation and method.",
+      "Estimate first when the numbers are large.",
+      "Check whether the result is reasonable before moving on."
+    ],
+    problems: [
+      { prompt: "What is 38 + 47?", answer: "85", hint: "Add ones, then tens.", label: "mixed addition" },
+      { prompt: "What is 9 x 12?", answer: "108", hint: "9 x 10 plus 9 x 2.", label: "mixed multiplication" },
+      {
+        prompt: "Use long division for 144 / 12.",
+        answer: "12",
+        hint: "Open the long division workspace if you want the full written method.",
+        label: "mixed division",
+        workspaceId: "arithmetic.long-division.3x1",
+        top: 144,
+        bottom: 12
+      }
+    ]
+  }
+};
+
+const preAlgebraConceptWorkspaces = {
+  "prealgebra.integers": {
+    id: "prealgebra.integers",
+    topic: "Pre-Algebra",
+    title: "Integers",
+    type: "concept",
+    figure: "integer-line",
+    intro: [
+      "Use integers to describe values above and below zero.",
+      "Addition and subtraction can be tracked as movement on a number line.",
+      "Multiplication and division use sign rules: same signs give positive, different signs give negative."
+    ],
+    problems: [
+      { prompt: "What is -6 + 14?", answer: "8", hint: "Move 14 steps right from -6.", label: "integer addition" },
+      { prompt: "What is -4 x 7?", answer: "-28", hint: "Different signs make a negative product.", label: "integer product" },
+      { prompt: "What is -30 / -5?", answer: "6", hint: "Same signs make a positive quotient.", label: "integer quotient" }
+    ]
+  },
+  "prealgebra.expressions": {
+    id: "prealgebra.expressions",
+    topic: "Pre-Algebra",
+    title: "Expressions",
+    type: "concept",
+    figure: "expression-terms",
+    intro: [
+      "An expression can contain numbers, variables, and operations.",
+      "Like terms have the same variable part.",
+      "Simplifying keeps the value the same while making the expression easier to read."
+    ],
+    problems: [
+      { prompt: "Simplify: 2x + x.", answer: "3x", hint: "Both terms are x terms.", label: "simplified expression" },
+      { prompt: "Evaluate 3n + 2 when n = 4.", answer: "14", hint: "Replace n with 4, then multiply before adding.", label: "expression value" },
+      { prompt: "Simplify: 5a + 3 + 2a.", answer: "7a+3", answers: ["7a+3", "3+7a"], hint: "Combine the a terms and keep the constant.", label: "combined expression" }
+    ]
+  },
+  "prealgebra.equations": {
+    id: "prealgebra.equations",
+    topic: "Pre-Algebra",
+    title: "Equations",
+    type: "equation",
+    figure: "equation-balance",
+    intro: [
+      "An equation says two expressions are equal.",
+      "Solve by doing the same operation to both sides.",
+      "Check by substituting the solution back into the original equation."
+    ],
+    problems: [
+      { a: 1, b: 7, c: 12 },
+      { a: 3, b: 0, c: 18 },
+      { a: 2, b: 5, c: 17 }
+    ]
+  },
+  "prealgebra.inequalities": {
+    id: "prealgebra.inequalities",
+    topic: "Pre-Algebra",
+    title: "Inequalities",
+    type: "inequality",
+    figure: "inequality-line",
+    intro: [
+      "An inequality compares expressions that may not be equal.",
+      "Use the same inverse operations as equations.",
+      "When multiplying or dividing by a negative number, reverse the inequality sign."
+    ],
+    problems: [
+      { a: 1, b: 4, relation: ">", c: 9 },
+      { a: 2, b: 0, relation: "<=", c: 10 },
+      { a: -1, b: 0, relation: "<", c: 3 }
+    ]
+  },
+  "prealgebra.exponents": {
+    id: "prealgebra.exponents",
+    topic: "Pre-Algebra",
+    title: "Exponents",
+    type: "concept",
+    figure: "exponent-stack",
+    intro: [
+      "An exponent tells how many times to use the base as a factor.",
+      "Powers of 10 shift place value.",
+      "Keep the base and exponent roles distinct."
+    ],
+    problems: [
+      { prompt: "Evaluate 2^5.", answer: "32", hint: "2 x 2 x 2 x 2 x 2 = 32.", label: "power value" },
+      { prompt: "Write 10 x 10 x 10 as a power.", answer: "10^3", answers: ["10^3", "10³"], hint: "There are three factors of 10.", label: "power notation" },
+      { prompt: "Evaluate 3^2 + 4.", answer: "13", hint: "Square 3 first, then add 4.", label: "exponent expression value" }
+    ]
+  },
+  "prealgebra.coordinate-plane": {
+    id: "prealgebra.coordinate-plane",
+    topic: "Pre-Algebra",
+    title: "Coordinate plane",
+    type: "concept",
+    figure: "coordinate-plane",
+    intro: [
+      "A coordinate pair is written as (x, y).",
+      "The x-coordinate moves left or right from the origin.",
+      "The y-coordinate moves up or down after the x movement."
+    ],
+    problems: [
+      { prompt: "What point is 3 right and 2 down from the origin?", answer: "(3,-2)", answers: ["(3,-2)", "3,-2"], hint: "Right is positive x. Down is negative y.", label: "coordinate pair" },
+      { prompt: "In the point (-4, 5), what is the x-coordinate?", answer: "-4", hint: "The x-coordinate is the first number.", label: "x coordinate" },
+      { prompt: "Which quadrant contains (2, -6)?", answer: "IV", answers: ["iv", "4", "quadrantiv", "quadrant4"], hint: "Positive x and negative y is Quadrant IV.", label: "quadrant" }
+    ]
+  }
+};
+
+const conceptWorkspaces = {
+  ...arithmeticConceptWorkspaces,
+  ...preAlgebraConceptWorkspaces
+};
+
 const workspaceRegistry = {
   "arithmetic.long-addition.3x3": additionWorkspace,
   "arithmetic.long-subtraction.3x3": subtractionWorkspace,
   "arithmetic.long-multiplication.3x3": multiplicationWorkspace,
   "arithmetic.long-division.3x1": divisionWorkspace,
   "arithmetic.long-division-remainders": divisionRemainderWorkspace,
+  ...conceptWorkspaces,
   "Pre-Algebra": { id: "prealgebra.placeholders", title: "Number patterns", status: "planned" },
   "Algebra": { id: "algebra.placeholders", title: "Equation transformations", status: "planned" },
   "Geometry": { id: "geometry.placeholders", title: "Shape reasoning", status: "planned" },
@@ -93,7 +589,7 @@ const state = {
   progress: loadProgress(),
   mode: "guided",
   activeTopic: "Arithmetic",
-  activeWorkspaceId: "arithmetic.long-subtraction.3x3",
+  activeWorkspaceId: "arithmetic.long-addition.3x3",
   activeStep: 0,
   showIntro: true,
   selectedProblemIndex: 0,
@@ -139,6 +635,9 @@ const subtractionProblemSet = [
 
 const divisionProblemSet = [
   { top: 864, bottom: 4 },
+  { top: 144, bottom: 12 },
+  { top: 168, bottom: 14 },
+  { top: 276, bottom: 23 },
   { top: 693, bottom: 3 },
   { top: 848, bottom: 8 },
   { top: 735, bottom: 5 },
@@ -150,6 +649,9 @@ const divisionProblemSet = [
 
 const divisionRemainderProblemSet = [
   { top: 865, bottom: 4 },
+  { top: 145, bottom: 12 },
+  { top: 170, bottom: 14 },
+  { top: 278, bottom: 23 },
   { top: 694, bottom: 3 },
   { top: 850, bottom: 8 },
   { top: 737, bottom: 5 },
@@ -164,7 +666,7 @@ const els = {};
 document.addEventListener("DOMContentLoaded", () => {
   cacheElements();
   state.activeTopic = state.progress.currentTopic || "Arithmetic";
-  state.activeWorkspaceId = state.progress.currentWorkspaceId || "arithmetic.long-subtraction.3x3";
+  state.activeWorkspaceId = state.progress.currentWorkspaceId || "arithmetic.long-addition.3x3";
   state.mode = state.progress.preferences.mode || "guided";
   renderTopics();
   renderWorkspace();
@@ -212,7 +714,7 @@ function loadProgress() {
     version: 1,
     completedLessons: [],
     currentTopic: "Arithmetic",
-    currentWorkspaceId: "arithmetic.long-subtraction.3x3",
+    currentWorkspaceId: "arithmetic.long-addition.3x3",
     savedWorkspaces: ["Long addition", "Long subtraction", "Long multiplication", "Long division"],
     preferences: { mode: "guided", autoAdvance: true },
     recentActivity: []
@@ -262,35 +764,52 @@ function renderTopics() {
     const summary = document.createElement("summary");
     summary.className = "topic-summary";
     summary.textContent = group.name;
-    summary.setAttribute("aria-current", group.name === state.activeTopic && group.lessons.length === 0 ? "true" : "false");
+    summary.setAttribute("aria-current", group.name === state.activeTopic && lessonsForGroup(group).length === 0 ? "true" : "false");
     details.append(summary);
 
-    if (group.lessons.length > 0) {
+    if (group.sections?.length > 0) {
       const lessonList = document.createElement("div");
       lessonList.className = "lesson-list";
-      for (const lesson of group.lessons) {
-        const button = document.createElement("button");
-        button.type = "button";
-        button.className = "lesson-nav-button";
-        button.textContent = lesson.title;
-        button.dataset.topic = group.name;
-        button.dataset.workspaceId = lesson.id;
-        button.setAttribute("aria-current", lesson.id === state.activeWorkspaceId ? "true" : "false");
-        lessonList.append(button);
+      for (const section of group.sections) {
+        const sectionDetails = document.createElement("details");
+        sectionDetails.className = "curriculum-section";
+        sectionDetails.open = section.lessons.some((lesson) => lesson.id === state.activeWorkspaceId);
+
+        const sectionSummary = document.createElement("summary");
+        sectionSummary.className = "curriculum-section-summary";
+        sectionSummary.textContent = section.title;
+        sectionDetails.append(sectionSummary);
+
+        const sectionLessons = document.createElement("div");
+        sectionLessons.className = "curriculum-section-lessons";
+        for (const lesson of section.lessons) {
+          sectionLessons.append(createLessonButton(lesson, group.name));
+        }
+        sectionDetails.append(sectionLessons);
+        lessonList.append(sectionDetails);
       }
       details.append(lessonList);
     } else {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "lesson-nav-button planned";
-      button.textContent = "Planned";
-      button.dataset.topic = group.name;
-      button.dataset.workspaceId = group.name;
-      details.append(button);
+      details.append(createLessonButton({ id: group.name, title: "Planned" }, group.name));
     }
 
     els.topicList.append(details);
   }
+}
+
+function lessonsForGroup(group) {
+  return group.sections?.flatMap((section) => section.lessons) || group.lessons || [];
+}
+
+function createLessonButton(lesson, topic) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = `lesson-nav-button ${workspaceRegistry[lesson.id] ? "" : "planned"}`.trim();
+  button.textContent = lesson.title;
+  button.dataset.topic = topic;
+  button.dataset.workspaceId = lesson.id;
+  button.setAttribute("aria-current", lesson.id === state.activeWorkspaceId ? "true" : "false");
+  return button;
 }
 
 function renderWorkspace() {
@@ -314,7 +833,16 @@ function renderWorkspace() {
   setWorkspaceView("problem");
   updateProblemSetup(workspace);
 
-  if (workspace.type === "addition") {
+  if (workspace.type === "concept") {
+    state.currentModel = buildConceptModel(workspace);
+    renderConceptGrid(state.currentModel);
+  } else if (workspace.type === "equation") {
+    state.currentModel = buildEquationModel(workspace.problem);
+    renderEquationGrid(state.currentModel);
+  } else if (workspace.type === "inequality") {
+    state.currentModel = buildInequalityModel(workspace.problem);
+    renderInequalityGrid(state.currentModel);
+  } else if (workspace.type === "addition") {
     state.currentModel = buildAdditionModel(workspace.problem.top, workspace.problem.bottom);
     renderAdditionGrid(state.currentModel);
   } else if (workspace.type === "subtraction") {
@@ -327,7 +855,7 @@ function renderWorkspace() {
     state.currentModel = buildMultiplicationModel(workspace.problem.top, workspace.problem.bottom);
     renderMultiplicationGrid(state.currentModel);
   }
-  setStatus("Place the first digit in the active box.", "");
+  setStatus(workspace.type === "concept" || workspace.type === "equation" || workspace.type === "inequality" ? "Enter the active step, then check it." : "Place the first digit in the active box.", "");
   setActiveStep();
   drawOverlays();
   updateStepText();
@@ -381,14 +909,141 @@ function renderIntroCopy(workspace) {
         : "In this lesson, the final remainder is zero."
     ]
   };
-  const items = intros[workspace.type] || ["This interactive workspace is planned."];
+  const items = workspace.intro || intros[workspace.type] || ["This interactive workspace is planned."];
   const list = document.createElement("ol");
   for (const item of items) {
     const li = document.createElement("li");
     li.textContent = item;
     list.append(li);
   }
-  els.introCopy.replaceChildren(list);
+  const figure = createIntroFigure(workspace);
+  els.introCopy.replaceChildren(...[figure, list].filter(Boolean));
+}
+
+function createIntroFigure(workspace) {
+  if (!["addition", "subtraction", "multiplication", "division", "concept", "equation", "inequality"].includes(workspace.type)) return null;
+
+  const figure = document.createElement("figure");
+  figure.className = `intro-figure ${workspace.type}-figure`;
+  const grid = document.createElement("div");
+  grid.className = "intro-figure-grid";
+
+  if (workspace.type === "concept" || workspace.type === "equation" || workspace.type === "inequality") {
+    addConceptIntroFigure(grid, workspace.figure);
+  } else if (workspace.type === "addition") {
+    addIntroCell(grid, "carry", 1, 1, "label");
+    addIntroCell(grid, "1", 1, 3, "mark");
+    addIntroCell(grid, "top", 2, 1, "label");
+    addIntroCell(grid, "4", 2, 2);
+    addIntroCell(grid, "8", 2, 3, "active-source");
+    addIntroCell(grid, "6", 2, 4);
+    addIntroCell(grid, "by", 3, 1, "label");
+    addIntroCell(grid, "+", 3, 1, "operator");
+    addIntroCell(grid, "2", 3, 2);
+    addIntroCell(grid, "5", 3, 3, "active-source");
+    addIntroCell(grid, "7", 3, 4);
+    addIntroRule(grid, 4);
+    addIntroCell(grid, "sum", 5, 1, "label");
+    addIntroCell(grid, "3", 5, 4, "result");
+    addIntroCell(grid, "4", 5, 3, "active-result");
+    addIntroCell(grid, "", 5, 2, "empty");
+  } else if (workspace.type === "subtraction") {
+    addIntroCell(grid, "top", 1, 1, "label");
+    addIntroCell(grid, "5", 1, 2, "borrow-lent-demo");
+    addIntroCell(grid, "13", 1, 3, "mark wide-mark");
+    addIntroCell(grid, "4", 1, 3, "borrow-lent-demo active-source");
+    addIntroCell(grid, "5", 1, 4);
+    addIntroCell(grid, "by", 2, 1, "label");
+    addIntroCell(grid, "–", 2, 1, "operator");
+    addIntroCell(grid, "2", 2, 2);
+    addIntroCell(grid, "7", 2, 3, "active-source");
+    addIntroCell(grid, "8", 2, 4);
+    addIntroRule(grid, 3);
+    addIntroCell(grid, "difference", 4, 1, "label");
+    addIntroCell(grid, "7", 4, 4, "result");
+    addIntroCell(grid, "6", 4, 3, "active-result");
+  } else if (workspace.type === "multiplication") {
+    addIntroCell(grid, "carry", 1, 1, "label");
+    addIntroCell(grid, "2", 1, 3, "mark");
+    addIntroCell(grid, "top", 2, 1, "label");
+    addIntroCell(grid, "2", 2, 2);
+    addIntroCell(grid, "4", 2, 3, "active-source");
+    addIntroCell(grid, "7", 2, 4);
+    addIntroCell(grid, "by", 3, 1, "label");
+    addIntroCell(grid, "×", 3, 1, "operator");
+    addIntroCell(grid, "3", 3, 2);
+    addIntroCell(grid, "8", 3, 3);
+    addIntroCell(grid, "6", 3, 4, "active-source");
+    addIntroRule(grid, 4);
+    addIntroCell(grid, "ones", 5, 1, "label");
+    addIntroCell(grid, "2", 5, 4, "active-result");
+    addIntroCell(grid, "8", 5, 3, "result");
+  } else if (workspace.type === "division") {
+    addIntroCell(grid, "quotient", 1, 1, "label");
+    addIntroCell(grid, "2", 1, 2, "active-result");
+    addIntroCell(grid, "1", 1, 3, "result");
+    addIntroCell(grid, "6", 1, 4, "result");
+    addIntroCell(grid, "4", 2, 1, "operator division-divisor-demo");
+    addIntroCell(grid, "8", 2, 2, "division-digit-demo active-source");
+    addIntroCell(grid, "6", 2, 3, "division-digit-demo");
+    addIntroCell(grid, "4", 2, 4, "division-digit-demo");
+    addIntroCell(grid, "partial", 3, 1, "label");
+    addIntroCell(grid, "8", 3, 2, "active-source");
+    addIntroCell(grid, "product", 4, 1, "label");
+    addIntroCell(grid, "8", 4, 2, "result");
+    addIntroCell(grid, "remain", 5, 1, "label");
+    addIntroCell(grid, "0", 5, 2, "result");
+  }
+
+  const caption = document.createElement("figcaption");
+  caption.textContent = introFigureCaption(workspace);
+  figure.append(grid, caption);
+  return figure;
+}
+
+function addIntroCell(grid, text, row, col, className = "") {
+  const cell = document.createElement("div");
+  cell.className = `intro-cell ${className}`.trim();
+  cell.style.gridRow = String(row);
+  cell.style.gridColumn = String(col);
+  cell.textContent = text;
+  grid.append(cell);
+}
+
+function addIntroExponentCell(grid, baseText, exponentText, row, col) {
+  const cell = document.createElement("div");
+  cell.className = "intro-cell exponent-cell active-source";
+  cell.style.gridRow = String(row);
+  cell.style.gridColumn = String(col);
+
+  const base = document.createElement("span");
+  base.textContent = baseText;
+
+  const exponent = document.createElement("sup");
+  exponent.textContent = exponentText;
+
+  cell.append(base, exponent);
+  grid.append(cell);
+}
+
+function addIntroRule(grid, row) {
+  const rule = document.createElement("div");
+  rule.className = "intro-rule";
+  rule.style.gridRow = String(row);
+  rule.style.gridColumn = "2 / 5";
+  grid.append(rule);
+}
+
+function introFigureCaption(workspace) {
+  if (workspace.type === "inequality") return conceptFigureCaption(workspace.figure);
+  if (workspace.type === "equation") return conceptFigureCaption(workspace.figure);
+  if (workspace.type === "concept") return conceptFigureCaption(workspace.figure);
+  if (workspace.type === "addition") return "A carry mark sits above the next column; the active column is highlighted.";
+  if (workspace.type === "subtraction") return "Borrow marks show what changed: lent digits are crossed out, received tens sit above the digit.";
+  if (workspace.type === "multiplication") return "Each partial row is built from right to left, with carries above the top row.";
+  return workspace.allowsRemainder
+    ? "The final remainder is written at the end of the same divide, multiply, subtract cycle."
+    : "Exact division ends with a final remainder of zero.";
 }
 
 function updateProblemSetup(workspace) {
@@ -403,9 +1058,143 @@ function updateProblemSetup(workspace) {
     : { top: "Top", bottom: "Bottom" };
   els.topNumberLabel.textContent = labels.top;
   els.bottomNumberLabel.textContent = labels.bottom;
-  els.bottomNumber.max = workspace.type === "division" ? "9" : "999";
+  els.bottomNumber.max = workspace.type === "division" ? "99" : "999";
   els.topNumber.value = String(workspace.problem.top);
   els.bottomNumber.value = String(workspace.problem.bottom);
+}
+
+function addConceptIntroFigure(grid, figure) {
+  const add = (text, row, col, className = "") => addIntroCell(grid, text, row, col, className);
+  if (figure === "place-value") {
+    add("hundreds", 1, 2, "label top-label");
+    add("tens", 1, 3, "label top-label");
+    add("ones", 1, 4, "label top-label");
+    add("6", 2, 2, "active-source");
+    add("4", 2, 3);
+    add("2", 2, 4);
+    add("600", 3, 2, "result");
+    add("40", 3, 3, "result");
+    add("2", 3, 4, "result");
+  } else if (figure === "number-line" || figure === "integer-line") {
+    add("-5", 2, 1, "label");
+    add("0", 2, 2, "result");
+    add("5", 2, 3, "active-result");
+    add("10", 2, 4, "result");
+    add("number line", 3, 1, "label");
+    add("right is greater", 3, 2, "wide-note");
+  } else if (figure === "estimation") {
+    add("398", 1, 2);
+    add("→", 1, 3, "operator");
+    add("400", 1, 4, "active-result");
+    add("+", 2, 1, "operator");
+    add("201", 2, 2);
+    add("→", 2, 3, "operator");
+    add("200", 2, 4, "active-result");
+    addIntroRule(grid, 3);
+    add("about", 4, 1, "label");
+    add("600", 4, 4, "result");
+  } else if (figure === "fraction-bar") {
+    add("whole", 1, 1, "label");
+    add("1", 1, 2, "fraction-piece active-result");
+    add("1", 1, 3, "fraction-piece active-result");
+    add("0", 1, 4, "fraction-piece");
+    add("parts", 2, 1, "label");
+    add("2 of 3", 2, 2, "wide-note");
+  } else if (figure === "decimal-grid" || figure === "percent-grid") {
+    add("0.60", 1, 2, "active-result");
+    add("=", 1, 3, "operator");
+    add("60%", 1, 4, "active-result");
+    add("hundredths", 2, 1, "label");
+    add("60 of 100", 2, 2, "wide-note");
+  } else if (figure === "ratio-bars") {
+    add("2", 1, 2, "active-result");
+    add(":", 1, 3, "operator");
+    add("3", 1, 4, "active-result");
+    add("×4", 2, 1, "label");
+    add("8", 2, 2, "result");
+    add(":", 2, 3, "operator");
+    add("12", 2, 4, "result");
+  } else if (figure === "factor-pairs") {
+    add("6", 1, 2, "result");
+    add("×", 1, 3, "operator");
+    add("7", 1, 4, "active-result");
+    add("=", 2, 3, "operator");
+    add("42", 2, 4, "result");
+    add("factor pair", 3, 1, "label");
+  } else if (figure === "operation-order") {
+    add("3", 1, 1);
+    add("+", 1, 2, "operator");
+    add("4×5", 1, 3, "active-source wide-note");
+    add("=", 1, 4, "operator");
+    add("23", 2, 4, "result");
+  } else if (figure === "expression-terms") {
+    add("2x", 1, 1, "active-source");
+    add("+", 1, 2, "operator");
+    add("x", 1, 3, "active-source");
+    add("=", 1, 4, "operator");
+    add("3x", 2, 4, "result");
+  } else if (figure === "equation-balance") {
+    add("x+7", 1, 1, "active-source wide-note");
+    add("=", 1, 3, "operator");
+    add("12", 1, 4, "result");
+    add("-7", 2, 1, "label");
+    add("x", 2, 2, "active-result");
+    add("=", 2, 3, "operator");
+    add("5", 2, 4, "result");
+  } else if (figure === "inequality-line") {
+    add("x", 1, 1, "active-source");
+    add(">", 1, 2, "operator");
+    add("5", 1, 3, "result");
+    add("number line", 2, 1, "label");
+    add("open circle, shade right", 2, 2, "wide-note");
+  } else if (figure === "exponent-stack") {
+    addIntroExponentCell(grid, "2", "5", 1, 2);
+    add("=", 1, 4, "operator");
+    add("32", 2, 4, "result");
+    add("five factors", 2, 1, "label");
+  } else if (figure === "coordinate-plane") {
+    add("x", 1, 1, "label");
+    add("3", 1, 2, "active-result");
+    add("right", 1, 3, "wide-note");
+    add("y", 2, 1, "label");
+    add("-2", 2, 2, "active-result");
+    add("down", 2, 3, "wide-note");
+  } else if (figure === "word-problem") {
+    add("18", 1, 2, "active-source");
+    add("+", 1, 3, "operator");
+    add("7", 1, 4, "active-source");
+    add("cards", 2, 1, "label");
+    add("25", 2, 4, "result");
+  } else {
+    add("38", 1, 2, "active-source");
+    add("+", 1, 3, "operator");
+    add("47", 1, 4, "active-source");
+    add("=", 2, 3, "operator");
+    add("85", 2, 4, "result");
+  }
+}
+
+function conceptFigureCaption(figure) {
+  const captions = {
+    "place-value": "The same digit has a different value depending on its column.",
+    "number-line": "Position helps compare, round, and continue patterns.",
+    "integer-line": "Negative and positive integers are ordered by position on the number line.",
+    estimation: "Rounded numbers make a quick reasonableness check.",
+    "fraction-bar": "Fractions count equal parts of the same whole.",
+    "decimal-grid": "Decimals use the same place-value system to the right of the ones place.",
+    "percent-grid": "Percents are hundredths in another notation.",
+    "ratio-bars": "Equivalent ratios scale both parts by the same factor.",
+    "factor-pairs": "Factor pairs multiply to make the target number.",
+    "operation-order": "Order rules decide which operation happens first.",
+    "word-problem": "Translate the situation into the operation before calculating.",
+    "mixed-review": "Mixed review asks you to choose a method, then check the result.",
+    "expression-terms": "Like terms can be combined without changing the expression's value.",
+    "equation-balance": "Solving an equation keeps both sides balanced.",
+    "inequality-line": "Inequality solutions often describe a whole region on a number line.",
+    "exponent-stack": "The exponent tells how many repeated factors the base has.",
+    "coordinate-plane": "Coordinates move horizontally first, then vertically."
+  };
+  return captions[figure] || captions["mixed-review"];
 }
 
 function renderPlannedWorkspace(workspace) {
@@ -417,8 +1206,8 @@ function renderPlannedWorkspace(workspace) {
   message.className = "planned-message";
   message.textContent = `${workspace.title} is ready for a future interactive workspace.`;
   els.grid.append(message);
-  setStatus("Choose an Arithmetic lesson for a working long-operation module.", "");
-  els.stepText.textContent = "Arithmetic has active lessons in this build.";
+  setStatus("This lesson is planned for a future interactive workspace.", "");
+  els.stepText.textContent = "Choose an available lesson or continue browsing the curriculum.";
 }
 
 function getActiveWorkspace() {
@@ -447,7 +1236,466 @@ function getActiveWorkspace() {
   if (state.activeWorkspaceId === divisionRemainderWorkspace.id) {
     return { ...divisionRemainderWorkspace, problem: currentProblem(divisionRemainderWorkspace.id, divisionRemainderProblemSet) };
   }
-  return workspaceRegistry[state.activeWorkspaceId] || workspaceRegistry[state.activeTopic];
+  if (conceptWorkspaces[state.activeWorkspaceId]) {
+    const workspace = conceptWorkspaces[state.activeWorkspaceId];
+    return {
+      ...workspace,
+      problem: currentProblem(workspace.id, workspace.problems)
+    };
+  }
+  const plannedLesson = findLesson(state.activeWorkspaceId);
+  if (plannedLesson) {
+    return {
+      id: plannedLesson.id,
+      title: plannedLesson.title,
+      status: "planned"
+    };
+  }
+  return workspaceRegistry[state.activeWorkspaceId] || workspaceRegistry[state.activeTopic] || {
+    id: "planned",
+    title: "Planned workspace",
+    status: "planned"
+  };
+}
+
+function buildConceptModel(workspace) {
+  return {
+    ...workspace.problem,
+    sourceWorkspaceId: workspace.id,
+    cells: [
+      {
+        id: `${workspace.id}-answer`,
+        row: 3,
+        col: 2,
+        kind: "conceptAnswer",
+        expected: workspace.problem.answer,
+        answers: workspace.problem.answers || [workspace.problem.answer],
+        sequence: 0,
+        label: workspace.problem.label || "answer",
+        hint: workspace.problem.hint
+      }
+    ]
+  };
+}
+
+function renderConceptGrid(model) {
+  const prompt = document.createElement("section");
+  prompt.className = "concept-card";
+  prompt.style.gridRow = "1";
+  prompt.style.gridColumn = "1 / 8";
+
+  const text = document.createElement("p");
+  text.className = "concept-prompt";
+  text.textContent = model.prompt;
+
+  const answerLabel = document.createElement("label");
+  answerLabel.className = "concept-answer-label";
+  answerLabel.textContent = "Answer";
+
+  const input = document.createElement("input");
+  input.className = "digit-input concept-answer-input";
+  input.inputMode = "text";
+  input.autocomplete = "off";
+  input.maxLength = 16;
+  input.dataset.cellId = model.cells[0].id;
+  input.dataset.expected = model.cells[0].expected;
+  input.dataset.answers = JSON.stringify(model.cells[0].answers);
+  input.dataset.hint = model.cells[0].hint;
+  input.dataset.label = model.cells[0].label;
+  input.dataset.sequence = "0";
+  input.setAttribute("aria-label", model.cells[0].label);
+
+  input.addEventListener("input", (event) => {
+    event.target.value = normalizeAnswerInput(event.target.value);
+    if (state.mode === "practice") validateInput(event.target, false);
+    if (state.mode === "explore") markExploreInput(event.target);
+  });
+  input.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      if (isCurrentProblemComplete()) {
+        event.preventDefault();
+        startNextProblem();
+      } else {
+        checkCurrentStep();
+      }
+    }
+  });
+  input.addEventListener("focus", (event) => {
+    event.target.select();
+  });
+
+  answerLabel.append(input);
+  prompt.append(text, answerLabel);
+  if (model.workspaceId) {
+    const openWorkspace = document.createElement("button");
+    openWorkspace.className = "tool-button compact concept-action";
+    openWorkspace.type = "button";
+    openWorkspace.textContent = "Open long division";
+    openWorkspace.addEventListener("click", () => {
+      openLinkedWorkspace(model);
+    });
+    prompt.append(openWorkspace);
+  }
+  els.grid.append(prompt);
+}
+
+function buildEquationModel(problem) {
+  const { a, b, c } = problem;
+  const afterSubtract = c - b;
+  const solution = afterSubtract / a;
+  const cells = [];
+  let sequence = 0;
+
+  if (b !== 0) {
+    const inverse = signedTerm(-b);
+    cells.push(equationStep({
+      id: "eq-subtract-left",
+      row: 3,
+      col: 2,
+      expected: inverse,
+      sequence,
+      label: `apply ${inverse} to the left side`,
+      hint: `Undo ${signedTerm(b)} by using ${inverse}.`
+    }));
+    sequence += 1;
+    cells.push(equationStep({
+      id: "eq-subtract-right",
+      row: 3,
+      col: 4,
+      expected: inverse,
+      sequence,
+      label: `apply ${inverse} to the right side`,
+      hint: "Keep the equation balanced by doing the same thing to both sides."
+    }));
+    sequence += 1;
+    cells.push(equationStep({
+      id: "eq-simplified-left",
+      row: 4,
+      col: 2,
+      expected: variableTerm(a),
+      sequence,
+      label: "simplified left side",
+      hint: `${variableTerm(a)} remains after the constant is removed.`
+    }));
+    sequence += 1;
+    cells.push(equationStep({
+      id: "eq-simplified-right",
+      row: 4,
+      col: 4,
+      expected: String(afterSubtract),
+      sequence,
+      label: "simplified right side",
+      hint: `${c} ${inverse} = ${afterSubtract}.`
+    }));
+    sequence += 1;
+  }
+
+  if (a !== 1) {
+    cells.push(equationStep({
+      id: "eq-divide-left",
+      row: 5,
+      col: 2,
+      expected: `/${a}`,
+      answers: operationAnswersForCoefficient(a),
+      sequence,
+      label: `divide the left side by ${a}`,
+      hint: `Undo multiplication by ${a} with division.`
+    }));
+    sequence += 1;
+    cells.push(equationStep({
+      id: "eq-divide-right",
+      row: 5,
+      col: 4,
+      expected: `/${a}`,
+      answers: operationAnswersForCoefficient(a),
+      sequence,
+      label: `divide the right side by ${a}`,
+      hint: "Use the same operation on both sides."
+    }));
+    sequence += 1;
+  }
+
+  cells.push(equationStep({
+    id: "eq-solution",
+    row: 6,
+    col: 4,
+    expected: String(solution),
+    sequence,
+    label: `solution ${solution}`,
+    hint: `The value that makes the original equation true is ${solution}.`
+  }));
+
+  return {
+    ...problem,
+    expression: equationExpression(a, b),
+    afterSubtract,
+    solution,
+    cells
+  };
+}
+
+function equationStep({ id, row, col, expected, answers, sequence, label, hint }) {
+  return {
+    id,
+    row,
+    col,
+    kind: "equationStep",
+    expected,
+    answers: answers || [expected],
+    sequence,
+    label,
+    hint,
+    inputMode: "text"
+  };
+}
+
+function renderEquationGrid(model) {
+  const staticCells = [
+    { row: 1, col: 2, value: model.expression, className: "equation-expression active-source" },
+    { row: 1, col: 3, value: "=", className: "operator" },
+    { row: 1, col: 4, value: String(model.c), className: "equation-expression active-source" },
+    { row: 4, col: 3, value: "=", className: "operator" },
+    { row: 6, col: 2, value: "x", className: "equation-expression" },
+    { row: 6, col: 3, value: "=", className: "operator" }
+  ];
+
+  for (let row = 1; row <= 6; row += 1) {
+    addCell({ row, col: 1, value: equationLabelForRow(row), className: "row-label" });
+  }
+
+  for (let row = 1; row <= 6; row += 1) {
+    for (let col = 2; col <= 4; col += 1) {
+      const staticCell = staticCells.find((item) => item.row === row && item.col === col);
+      const inputCell = model.cells.find((item) => item.row === row && item.col === col);
+      if (staticCell) {
+        addCell({ row, col, value: staticCell.value, className: staticCell.className });
+      } else if (inputCell) {
+        addInput(inputCell);
+      } else {
+        addCell({ row, col, value: "", className: "digit-static" });
+      }
+    }
+  }
+}
+
+function buildInequalityModel(problem) {
+  const { a, b, relation, c } = problem;
+  const afterSubtract = c - b;
+  const finalRelation = a < 0 ? reverseRelation(relation) : relation;
+  const solution = afterSubtract / a;
+  const cells = [];
+  let sequence = 0;
+
+  if (b !== 0) {
+    const inverse = signedTerm(-b);
+    cells.push(equationStep({
+      id: "ineq-subtract-left",
+      row: 3,
+      col: 2,
+      expected: inverse,
+      sequence,
+      label: `apply ${inverse} to the left side`,
+      hint: `Undo ${signedTerm(b)} by using ${inverse}.`
+    }));
+    sequence += 1;
+    cells.push(equationStep({
+      id: "ineq-subtract-right",
+      row: 3,
+      col: 4,
+      expected: inverse,
+      sequence,
+      label: `apply ${inverse} to the right side`,
+      hint: "Keep the comparison balanced by doing the same thing to both sides."
+    }));
+    sequence += 1;
+    cells.push(equationStep({
+      id: "ineq-simplified-left",
+      row: 4,
+      col: 2,
+      expected: variableTerm(a),
+      sequence,
+      label: "simplified left side",
+      hint: `${variableTerm(a)} remains after the constant is removed.`
+    }));
+    sequence += 1;
+    cells.push(equationStep({
+      id: "ineq-simplified-right",
+      row: 4,
+      col: 4,
+      expected: String(afterSubtract),
+      sequence,
+      label: "simplified right side",
+      hint: `${c} ${inverse} = ${afterSubtract}.`
+    }));
+    sequence += 1;
+  }
+
+  if (a !== 1) {
+    cells.push(equationStep({
+      id: "ineq-divide-left",
+      row: 5,
+      col: 2,
+      expected: `/${a}`,
+      answers: operationAnswersForCoefficient(a),
+      sequence,
+      label: `apply ${a} to the left side`,
+      hint: a === -1 ? "Multiplying or dividing by -1 changes the sign of the term." : `Undo multiplication by ${a} with division.`
+    }));
+    sequence += 1;
+    cells.push(equationStep({
+      id: "ineq-divide-right",
+      row: 5,
+      col: 4,
+      expected: `/${a}`,
+      answers: operationAnswersForCoefficient(a),
+      sequence,
+      label: `apply ${a} to the right side`,
+      hint: a < 0 ? "Dividing by a negative means the inequality sign will reverse." : "Use the same operation on both sides."
+    }));
+    sequence += 1;
+
+    if (a < 0) {
+      cells.push(equationStep({
+        id: "ineq-flip",
+        row: 5,
+        col: 3,
+        expected: finalRelation,
+        answers: relationAnswers(finalRelation),
+        sequence,
+        label: `reverse the sign to ${displayRelation(finalRelation)}`,
+        hint: "When you divide by a negative, reverse the inequality sign."
+      }));
+      sequence += 1;
+    }
+  }
+
+  cells.push(equationStep({
+    id: "ineq-solution",
+    row: 6,
+    col: 4,
+    expected: String(solution),
+    sequence,
+    label: `boundary value ${solution}`,
+    hint: `The solution is x ${displayRelation(finalRelation)} ${solution}.`
+  }));
+
+  return {
+    ...problem,
+    expression: equationExpression(a, b),
+    afterSubtract,
+    finalRelation,
+    solution,
+    cells
+  };
+}
+
+function renderInequalityGrid(model) {
+  const simplifiedRelation = model.b === 0 ? model.relation : model.relation;
+  const staticCells = [
+    { row: 1, col: 2, value: model.expression, className: "equation-expression active-source" },
+    { row: 1, col: 3, value: displayRelation(model.relation), className: "operator" },
+    { row: 1, col: 4, value: String(model.c), className: "equation-expression active-source" },
+    { row: 4, col: 3, value: displayRelation(simplifiedRelation), className: "operator" },
+    { row: 6, col: 2, value: "x", className: "equation-expression" },
+    { row: 6, col: 3, value: displayRelation(model.finalRelation), className: "operator" }
+  ];
+
+  for (let row = 1; row <= 6; row += 1) {
+    addCell({ row, col: 1, value: equationLabelForRow(row), className: "row-label" });
+  }
+
+  for (let row = 1; row <= 6; row += 1) {
+    for (let col = 2; col <= 4; col += 1) {
+      const staticCell = staticCells.find((item) => item.row === row && item.col === col);
+      const inputCell = model.cells.find((item) => item.row === row && item.col === col);
+      if (inputCell) {
+        addInput(inputCell);
+      } else if (staticCell) {
+        addCell({ row, col, value: staticCell.value, className: staticCell.className });
+      } else {
+        addCell({ row, col, value: "", className: "digit-static" });
+      }
+    }
+  }
+}
+
+function equationLabelForRow(row) {
+  const labels = {
+    1: "start",
+    3: "do both sides",
+    4: "simplify",
+    5: "do both sides",
+    6: "solution"
+  };
+  return labels[row] || "";
+}
+
+function displayRelation(relation) {
+  if (relation === "<=") return "≤";
+  if (relation === ">=") return "≥";
+  return relation;
+}
+
+function reverseRelation(relation) {
+  const reversed = {
+    "<": ">",
+    ">": "<",
+    "<=": ">=",
+    ">=": "<="
+  };
+  return reversed[relation] || relation;
+}
+
+function relationAnswers(relation) {
+  const displayed = displayRelation(relation);
+  if (relation === "<=") return ["<=", "≤"];
+  if (relation === ">=") return [">=", "≥"];
+  return [relation, displayed];
+}
+
+function operationAnswersForCoefficient(coefficient) {
+  const answers = [`/${coefficient}`, `÷${coefficient}`];
+  if (coefficient === -1) {
+    answers.push("*-1", "×-1", "x-1");
+  }
+  return answers;
+}
+
+function equationExpression(a, b) {
+  if (a === 1 && b === 0) return "x";
+  const variable = variableTerm(a);
+  if (b === 0) return variable;
+  return `${variable} ${b > 0 ? "+" : "-"} ${Math.abs(b)}`;
+}
+
+function variableTerm(coefficient) {
+  if (coefficient === 1) return "x";
+  if (coefficient === -1) return "-x";
+  return `${coefficient}x`;
+}
+
+function signedTerm(value) {
+  return value > 0 ? `+${value}` : String(value);
+}
+
+function openLinkedWorkspace(model) {
+  if (!model.workspaceId || !workspaceRegistry[model.workspaceId]) return;
+  state.activeWorkspaceId = model.workspaceId;
+  state.activeTopic = "Arithmetic";
+  state.customProblems[model.workspaceId] = { top: model.top, bottom: model.bottom };
+  state.activeStep = 0;
+  state.showIntro = false;
+  renderTopics();
+  renderWorkspace();
+  saveProgress(`Opened ${workspaceRegistry[model.workspaceId].title.toLowerCase()}`);
+}
+
+function findLesson(id) {
+  for (const group of topicGroups) {
+    const lesson = lessonsForGroup(group).find((item) => item.id === id);
+    if (lesson) return lesson;
+  }
+  return null;
 }
 
 function currentProblem(workspaceId, problemSet) {
@@ -567,21 +1815,28 @@ function additionLabelForRow(row) {
 
 function buildDivisionModel(dividend, divisor) {
   const dividendDigits = digits(dividend, 3);
-  const quotientDigits = digits(Math.floor(dividend / divisor), 3);
   const cells = [];
   let sequence = 0;
   let remainder = 0;
+  let divisionStarted = false;
+  let stepIndex = 0;
 
   dividendDigits.forEach((digit, index) => {
     const col = index + 5;
     const partial = remainder * 10 + digit;
+    if (!divisionStarted && partial < divisor && index < dividendDigits.length - 1) {
+      remainder = partial;
+      return;
+    }
+    divisionStarted = true;
     const quotientDigit = Math.floor(partial / divisor);
     const product = quotientDigit * divisor;
     remainder = partial - product;
+    const row = 3 + stepIndex * 3;
 
     cells.push({
       id: `div-partial-${index}`,
-      row: 3 + index * 3,
+      row,
       col,
       kind: "divisionPartial",
       expected: String(partial),
@@ -608,7 +1863,7 @@ function buildDivisionModel(dividend, divisor) {
 
     cells.push({
       id: `div-product-${index}`,
-      row: 4 + index * 3,
+      row: row + 1,
       col,
       kind: "divisionProduct",
       expected: String(product),
@@ -622,7 +1877,7 @@ function buildDivisionModel(dividend, divisor) {
 
     cells.push({
       id: `div-remainder-${index}`,
-      row: 5 + index * 3,
+      row: row + 2,
       col,
       kind: "divisionRemainder",
       expected: String(remainder),
@@ -634,9 +1889,10 @@ function buildDivisionModel(dividend, divisor) {
       hint: "Subtract the product from the partial dividend."
     });
     sequence += 1;
+    stepIndex += 1;
   });
 
-  return { top: dividend, bottom: divisor, dividendDigits, divisor, quotientDigits, cells };
+  return { top: dividend, bottom: divisor, dividendDigits, divisor, divisorDigits: String(divisor).split(""), cells };
 }
 
 function renderDivisionGrid(model) {
@@ -650,9 +1906,14 @@ function renderDivisionGrid(model) {
       const dividendIndex = col - 5;
 
       if (row === 1 && col >= 5) {
-        addInput(inputCell);
-      } else if (row === 2 && col === 4) {
-        addCell({ row, col, value: String(model.divisor), className: "operator division-divisor" });
+        if (inputCell) {
+          addInput(inputCell);
+        } else {
+          addCell({ row, col, value: "", className: "digit-static" });
+        }
+      } else if (row === 2 && col >= 3 && col <= 4) {
+        const divisorDigit = model.divisorDigits[col - (5 - model.divisorDigits.length)];
+        addCell({ row, col, value: divisorDigit || "", className: "operator division-divisor" });
       } else if (row === 2 && dividendIndex >= 0 && dividendIndex < model.dividendDigits.length) {
         addCell({
           row,
@@ -1051,26 +2312,33 @@ function addInput(cell) {
   label.dataset.col = String(cell.col);
 
   const input = document.createElement("input");
-  input.className = `digit-input ${cell.kind === "carry" ? "carry-input" : ""}`;
-  input.inputMode = "numeric";
-  input.pattern = "[0-9]";
+  input.className = `digit-input ${cell.kind === "carry" ? "carry-input" : ""} ${cell.kind === "equationStep" ? "equation-input" : ""}`.trim();
+  input.inputMode = cell.inputMode || "numeric";
+  if (input.inputMode === "numeric") {
+    input.pattern = "[0-9]";
+  }
   input.maxLength = Math.max(1, cell.expected.length);
   input.autocomplete = "off";
   input.dataset.cellId = cell.id;
   input.dataset.expected = cell.expected;
+  if (cell.answers) {
+    input.dataset.answers = JSON.stringify(cell.answers);
+  }
   input.dataset.hint = cell.hint;
   input.dataset.label = cell.label;
   input.dataset.sequence = String(cell.sequence);
   input.setAttribute("aria-label", cell.label);
 
   input.addEventListener("input", (event) => {
-    event.target.value = normalizeDigitInput(event.target);
+    event.target.value = event.target.inputMode === "numeric" ? normalizeDigitInput(event.target) : normalizeAnswerInput(event.target.value);
     if (shouldAutoAdvance(event.target)) checkCurrentStep();
     if (state.mode === "practice") validateInput(event.target, false);
     if (state.mode === "explore") markExploreInput(event.target);
   });
 
-  input.addEventListener("beforeinput", handleDigitBeforeInput);
+  if (input.inputMode === "numeric") {
+    input.addEventListener("beforeinput", handleDigitBeforeInput);
+  }
 
   input.addEventListener("keydown", handleDigitKeydown);
 
@@ -1156,7 +2424,19 @@ function setActiveStep() {
 
 function highlightActiveContext(step, input) {
   const activeCell = input.closest(".grid-cell");
-  activeCell.classList.add("active-column");
+  activeCell?.classList.add("active-column");
+
+  if (step.kind === "conceptAnswer") {
+    input.closest(".concept-card")?.classList.add("active-column");
+    return;
+  }
+
+  if (step.kind === "equationStep") {
+    els.grid.querySelector(`[data-row="${step.row}"][data-col="2"]`)?.classList.add("active-column");
+    els.grid.querySelector(`[data-row="${step.row}"][data-col="3"]`)?.classList.add("active-column");
+    els.grid.querySelector(`[data-row="${step.row}"][data-col="4"]`)?.classList.add("active-column");
+    return;
+  }
 
   if (step.kind === "carry" || step.label === "place value zero" || step.kind === "sum" || step.id.includes("-lead")) {
     if (step.kind === "sum") {
@@ -1369,7 +2649,14 @@ function handleDigitKeydown(event) {
     insertDigit(event.target, event.key);
     return;
   }
-  if (event.key === "Enter") checkCurrentStep();
+  if (event.key === "Enter") {
+    if (isCurrentProblemComplete()) {
+      event.preventDefault();
+      startNextProblem();
+    } else {
+      checkCurrentStep();
+    }
+  }
 }
 
 function insertDigit(input, digit) {
@@ -1389,7 +2676,7 @@ function normalizeDigitInput(input) {
 }
 
 function validateInput(input, announce) {
-  const correct = input.value === input.dataset.expected;
+  const correct = isCorrectAnswer(input);
   input.classList.toggle("correct", correct);
   input.classList.toggle("incorrect", input.value.length > 0 && !correct);
   if (correct) {
@@ -1398,9 +2685,23 @@ function validateInput(input, announce) {
     state.checkedCells.delete(input.dataset.cellId);
   }
   if (announce) {
-    setStatus(correct ? "Correct. Continue to the next box." : "Try another digit.", correct ? "correct" : "incorrect");
+    const retryText = input.inputMode === "numeric" ? "Try another digit." : "Try another entry.";
+    setStatus(correct ? "Correct. Continue to the next box." : retryText, correct ? "correct" : "incorrect");
   }
   return correct;
+}
+
+function isCorrectAnswer(input) {
+  const answers = input.dataset.answers ? JSON.parse(input.dataset.answers) : [input.dataset.expected];
+  return answers.some((answer) => answerValue(input.value) === answerValue(answer));
+}
+
+function answerValue(value) {
+  return String(value || "").trim().toLowerCase();
+}
+
+function normalizeAnswerInput(value) {
+  return String(value || "").replace(/\s+/g, "").slice(0, 16);
 }
 
 function markExploreInput(input) {
@@ -1508,15 +2809,7 @@ function bindEvents() {
     setStatus(els.autoAdvance.checked ? "Auto-advance is on." : "Auto-advance is off.", "");
   });
   els.newProblem.addEventListener("click", () => {
-    const setLength = problemSetForWorkspace(state.activeWorkspaceId).length;
-    state.selectedProblemIndex = (state.selectedProblemIndex + 1) % setLength;
-    delete state.customProblems[state.activeWorkspaceId];
-    state.activeTopic = "Arithmetic";
-    state.activeStep = 0;
-    state.showIntro = false;
-    renderTopics();
-    renderWorkspace();
-    saveProgress("Started a new problem");
+    startNextProblem();
   });
   els.problemForm.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -1536,6 +2829,11 @@ function bindEvents() {
 }
 
 function handlePageKeydown(event) {
+  if (event.key === "Enter" && isCurrentProblemComplete() && !isFormControl(event.target)) {
+    event.preventDefault();
+    startNextProblem();
+    return;
+  }
   if (isFormControl(event.target) || !/^\d$/.test(event.key)) return;
   const activeInput = els.grid.querySelector(".digit-input.active");
   if (!activeInput) return;
@@ -1592,12 +2890,17 @@ function problemSetForWorkspace(workspaceId) {
   if (workspaceId === multiplicationWorkspace.id) return multiplicationProblemSet;
   if (workspaceId === divisionWorkspace.id) return divisionProblemSet;
   if (workspaceId === divisionRemainderWorkspace.id) return divisionRemainderProblemSet;
+  if (conceptWorkspaces[workspaceId]) return conceptWorkspaces[workspaceId].problems;
   return additionProblemSet;
 }
 
 function randomProblemForWorkspace(workspaceId) {
   if (workspaceId === divisionWorkspace.id) return randomDivisionProblem(false);
   if (workspaceId === divisionRemainderWorkspace.id) return randomDivisionProblem(true);
+  if (conceptWorkspaces[workspaceId]) {
+    const set = conceptWorkspaces[workspaceId].problems;
+    return set[Math.floor(Math.random() * set.length)];
+  }
   const top = randomThreeDigit();
   const bottom = randomThreeDigit();
   if (workspaceId === subtractionWorkspace.id) {
@@ -1609,6 +2912,23 @@ function randomProblemForWorkspace(workspaceId) {
   return { top, bottom };
 }
 
+function startNextProblem() {
+  const setLength = problemSetForWorkspace(state.activeWorkspaceId).length;
+  state.selectedProblemIndex = (state.selectedProblemIndex + 1) % setLength;
+  delete state.customProblems[state.activeWorkspaceId];
+  state.activeTopic = getActiveWorkspace().topic || state.activeTopic;
+  state.activeStep = 0;
+  state.showIntro = false;
+  renderTopics();
+  renderWorkspace();
+  saveProgress("Started a new problem");
+}
+
+function isCurrentProblemComplete() {
+  const steps = orderedSteps();
+  return steps.length > 0 && state.activeStep >= steps.length;
+}
+
 function randomThreeDigit() {
   return Math.floor(Math.random() * 900) + 100;
 }
@@ -1617,7 +2937,7 @@ function isValidDivisionProblem(dividend, divisor, allowsRemainder) {
   const quotient = Math.floor(dividend / divisor);
   const remainder = dividend % divisor;
   return isValidDivisionShape(dividend, divisor)
-    && quotient >= 100
+    && quotient >= 10
     && (allowsRemainder ? remainder > 0 : remainder === 0);
 }
 
@@ -1627,27 +2947,29 @@ function isValidDivisionShape(dividend, divisor) {
     && dividend >= 100
     && dividend <= 999
     && divisor >= 2
-    && divisor <= 9;
+    && divisor <= 99;
 }
 
 function isDivisionRemainderRedirect(dividend, divisor) {
   return isValidDivisionShape(dividend, divisor)
-    && Math.floor(dividend / divisor) >= 100
+    && Math.floor(dividend / divisor) >= 10
     && dividend % divisor > 0;
 }
 
 function randomDivisionProblem(allowsRemainder) {
-  const divisor = Math.floor(Math.random() * 8) + 2;
+  const divisor = Math.floor(Math.random() * 23) + 2;
   const maxQuotient = Math.floor(999 / divisor);
-  const quotient = Math.floor(Math.random() * (maxQuotient - 100 + 1)) + 100;
+  const minQuotient = Math.ceil(100 / divisor);
+  const quotientFloor = Math.max(10, minQuotient);
+  const quotient = Math.floor(Math.random() * (maxQuotient - quotientFloor + 1)) + quotientFloor;
   const remainder = allowsRemainder ? Math.floor(Math.random() * (divisor - 1)) + 1 : 0;
   return { top: divisor * quotient + remainder, bottom: divisor };
 }
 
 function divisionGuardrailMessage(workspace) {
   return workspace.allowsRemainder
-    ? "Use a 3-digit dividend and a 1-digit divisor from 2 to 9 with a nonzero remainder."
-    : "Use a 3-digit dividend and a 1-digit divisor from 2 to 9 with no remainder.";
+    ? "Use a 3-digit dividend and a 1- or 2-digit divisor from 2 to 99 with a nonzero remainder."
+    : "Use a 3-digit dividend and a 1- or 2-digit divisor from 2 to 99 with no remainder.";
 }
 
 function modeStatus(mode) {
@@ -1682,7 +3004,7 @@ function importProgress(event) {
         preferences: { ...state.progress.preferences, ...imported.preferences }
       };
       state.activeTopic = state.progress.currentTopic || "Arithmetic";
-      state.activeWorkspaceId = state.progress.currentWorkspaceId || "arithmetic.long-subtraction.3x3";
+      state.activeWorkspaceId = state.progress.currentWorkspaceId || "arithmetic.long-addition.3x3";
       state.mode = state.progress.preferences.mode || "guided";
       els.autoAdvance.checked = state.progress.preferences.autoAdvance !== false;
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state.progress, null, 2));
