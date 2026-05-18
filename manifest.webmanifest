@@ -1,0 +1,10 @@
+{
+  "name": "Carry",
+  "short_name": "Carry",
+  "description": "A local-first math learning studio.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f7f7f8",
+  "theme_color": "#f7f7f8",
+  "icons": []
+}
