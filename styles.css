@@ -741,6 +741,29 @@ button {
   min-width: 0;
 }
 
+.system-grid,
+.factoring-grid,
+.quadratic-grid {
+  min-width: 0;
+}
+
+.system-grid {
+  grid-template-columns: 104px minmax(136px, 190px) 44px minmax(96px, 150px);
+  grid-template-rows: repeat(8, 48px);
+}
+
+.factoring-grid,
+.quadratic-grid {
+  grid-template-columns: 132px minmax(148px, 190px) 44px minmax(136px, 190px);
+  grid-template-rows: repeat(9, 48px);
+  grid-auto-rows: 48px;
+}
+
+.factoring-grid .equation-input,
+.quadratic-grid .equation-input {
+  width: 136px;
+}
+
 .addition-grid,
 .subtraction-grid {
   grid-template-rows: repeat(5, 44px);
@@ -757,6 +780,19 @@ button {
   font-size: 22px;
   font-weight: 700;
   position: relative;
+}
+
+.grid-cell sup,
+.concept-prompt sup,
+.intro-cell sup {
+  display: inline-block;
+  margin-left: 1px;
+  margin-right: 3px;
+  font-size: 0.52em;
+  line-height: 0;
+  transform: translateY(-0.48em);
+  transform-origin: left center;
+  vertical-align: baseline;
 }
 
 .grid-cell.active-column {
@@ -841,6 +877,26 @@ button {
   white-space: nowrap;
 }
 
+.system-expression,
+.system-note {
+  min-width: 96px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  font-size: 18px;
+  white-space: nowrap;
+}
+
+.system-note {
+  grid-column: 2 / 5 !important;
+  justify-content: flex-start;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: normal;
+}
+
 .equation-input {
   width: 92px;
   font-size: 20px;
@@ -893,6 +949,11 @@ button {
 
 .digit-input[maxlength="3"] {
   width: 72px;
+}
+
+.factoring-grid .digit-input.equation-input,
+.quadratic-grid .digit-input.equation-input {
+  width: 136px;
 }
 
 .digit-input::-webkit-outer-spin-button,

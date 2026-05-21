@@ -2,7 +2,7 @@
 
 Carry is a local-first math learning studio designed to run fully in the browser.
 
-Carry opens directly into a focused learning workspace. It currently includes implemented Arithmetic and Pre-Algebra lessons, including guided long addition, subtraction, multiplication, division, division with remainders, equation transformations, and inequality transformations. Progress is stored privately in the browser with `localStorage`, with JSON export and import controls for backup or transfer.
+Carry opens directly into a focused learning workspace. It currently includes implemented Arithmetic, Pre-Algebra, and Algebra lessons, including guided long addition, subtraction, multiplication, division, division with remainders, equation transformations, inequality transformations, systems, factoring, and quadratics. Progress is stored privately in the browser with `localStorage`, with JSON export and import controls for backup or transfer.
 
 ## Run
 
@@ -13,6 +13,7 @@ Open `index.html` in a browser, or serve the directory with any static file serv
 - `index.html` provides the static app shell.
 - `styles.css` defines the shared interface system, light and dark themes, grid layout, focus states, and responsive behavior.
 - `app.js` contains the client-side workspace registry, progress persistence, lesson renderers, validation, hints, problem guardrails, and import/export flow.
+- `assets/carry-icon.png` provides the app icon and favicon.
 
 ## Current Guardrails
 
@@ -21,7 +22,7 @@ Open `index.html` in a browser, or serve the directory with any static file serv
 - Long subtraction defaults to non-negative answers.
 - Exact long division accepts three-digit dividends and one- or two-digit divisors with no final remainder.
 - Long division with remainders is a separate lesson. If a learner enters a valid remainder problem in exact long division, Carry moves it to the remainders lesson automatically.
-- Equation and inequality helpers focus on simple linear transformations before broader algebra features are added.
+- Algebra helpers focus on simple linear transformations, systems, factoring, and introductory quadratics before broader algebra features are added.
 
 Future topics can register their own workspace, notation renderer, validation logic, hint system, and progress hooks without adding account infrastructure.
 

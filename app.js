@@ -562,9 +562,213 @@ const preAlgebraConceptWorkspaces = {
   }
 };
 
+const algebraConceptWorkspaces = {
+  "algebra.linear-equations": {
+    id: "algebra.linear-equations",
+    topic: "Algebra",
+    title: "Linear equations",
+    type: "equation",
+    figure: "equation-balance",
+    intro: [
+      "Linear equations can be solved by isolating the variable.",
+      "Undo addition or subtraction before undoing multiplication or division.",
+      "Each transformation must preserve equality."
+    ],
+    problems: [
+      { a: 4, b: -3, c: 13 },
+      { a: -2, b: 5, c: 17 },
+      { a: 5, b: 10, c: -15 }
+    ]
+  },
+  "algebra.systems": {
+    id: "algebra.systems",
+    topic: "Algebra",
+    title: "Systems",
+    type: "system",
+    figure: "system-intersection",
+    intro: [
+      "A system asks for values that make more than one equation true.",
+      "A solution to two linear equations is the point where the lines meet.",
+      "Substitution and elimination are two common ways to find that point."
+    ],
+    problems: [
+      {
+        equations: ["x + y = 3", "x - y = 1"],
+        method: "elimination",
+        rows: [
+          { label: "combine", left: { answer: "2x", hint: "Add the left sides: x + x = 2x, and y + -y cancels." }, relation: "=", right: { answer: "4", hint: "Add the right sides: 3 + 1 = 4." } },
+          { label: "solve x", left: "x", relation: "=", right: { answer: "2", hint: "Divide both sides of 2x = 4 by 2." } },
+          { label: "substitute", left: { answer: "2+y", answers: ["2+y", "y+2"], hint: "Put x = 2 into x + y = 3." }, relation: "=", right: "3" },
+          { label: "solve y", left: "y", relation: "=", right: { answer: "1", hint: "Subtract 2 from both sides." } },
+          { label: "solution", left: "(x,y)", relation: "=", right: { answer: "(2,1)", answers: ["(2,1)", "2,1"], hint: "Use x first, then y." } }
+        ]
+      },
+      {
+        equations: ["y = x + 2", "y = 6"],
+        method: "substitution",
+        rows: [
+          { label: "substitute", left: "6", relation: "=", right: { answer: "x+2", hint: "Replace y with 6 in y = x + 2." } },
+          { label: "solve x", left: "x", relation: "=", right: { answer: "4", hint: "Subtract 2 from both sides." } },
+          { label: "solution", left: "(x,y)", relation: "=", right: { answer: "(4,6)", answers: ["(4,6)", "4,6"], hint: "The system gives x = 4 and y = 6." } }
+        ]
+      },
+      {
+        equations: ["2x + y = 7", "y = 3"],
+        method: "substitution",
+        rows: [
+          { label: "substitute", left: { answer: "2x+3", hint: "Replace y with 3 in 2x + y = 7." }, relation: "=", right: "7" },
+          { label: "simplify", left: "2x", relation: "=", right: { answer: "4", hint: "Subtract 3 from both sides." } },
+          { label: "solve x", left: "x", relation: "=", right: { answer: "2", hint: "Divide both sides by 2." } },
+          { label: "solution", left: "(x,y)", relation: "=", right: { answer: "(2,3)", answers: ["(2,3)", "2,3"], hint: "Use x = 2 and y = 3." } }
+        ]
+      }
+    ]
+  },
+  "algebra.polynomials": {
+    id: "algebra.polynomials",
+    topic: "Algebra",
+    title: "Polynomials",
+    type: "concept",
+    figure: "polynomial-terms",
+    intro: [
+      "Polynomials are sums of terms with whole-number powers of a variable.",
+      "Like terms have the same variable and exponent.",
+      "The degree is the largest exponent after the polynomial is simplified."
+    ],
+    problems: [
+      { prompt: "Combine like terms: 3x^2 + 2x + 5x^2.", answer: "8x^2+2x", answers: ["8x^2+2x", "2x+8x^2"], hint: "Combine the x^2 terms and keep the x term.", label: "combined polynomial" },
+      { prompt: "What is the degree of 4x^3 - x + 7?", answer: "3", hint: "Look for the largest exponent.", label: "polynomial degree" },
+      { prompt: "Evaluate x^2 + 2x when x = 3.", answer: "15", hint: "3^2 + 2(3) = 9 + 6.", label: "polynomial value" }
+    ]
+  },
+  "algebra.factoring": {
+    id: "algebra.factoring",
+    topic: "Algebra",
+    title: "Factoring",
+    type: "factoring",
+    figure: "factoring-pairs",
+    intro: [
+      "Factoring rewrites an expression as a product.",
+      "Look for a greatest common factor before using a special pattern.",
+      "For an expression shaped like x^2 + some x's + a number, list factor pairs of the number first, then find the pair whose sum makes the x term."
+    ],
+    problems: [
+      {
+        expression: "x^2 + 5x + 6",
+        method: "pair",
+        rows: [
+          { label: "shape", left: "x^2 + ?x + ?", relation: "->", right: "two binomials" },
+          { label: "x term number", left: "5x", relation: "=", right: { answer: "5", hint: "The number attached to x is 5." } },
+          { label: "number term", left: "6", relation: "=", right: { answer: "6", hint: "The plain number at the end is 6." } },
+          { label: "factor pairs", left: "make 6", relation: ":", right: "1,6 or 2,3" },
+          { label: "choose pair", left: { answer: "2,3", answers: ["2,3", "3,2"], hint: "Start with pairs that multiply to 6: 1 and 6, or 2 and 3. Choose the one whose sum is 5." }, relation: "+", right: { answer: "5", hint: "2 + 3 = 5. The pair 1 and 6 adds to 7, so it does not match." } },
+          { label: "check product", left: "2,3", relation: "x", right: { answer: "6", hint: "2 x 3 = 6, so the same pair also matches the constant." } },
+          { label: "first factor", left: "x +", relation: "", right: { answer: "2", hint: "Use one number from the working pair." } },
+          { label: "second factor", left: "x +", relation: "", right: { answer: "3", hint: "Use the other number from the working pair." } },
+          { label: "factored form", left: "result", relation: "=", right: { answer: "(x+2)(x+3)", answers: ["(x+2)(x+3)", "(x+3)(x+2)"], hint: "Write the two binomials as a product." } }
+        ]
+      },
+      {
+        expression: "6x + 9",
+        method: "gcf",
+        rows: [
+          { label: "common factor", left: "gcf", relation: "=", right: { answer: "3", hint: "3 is the greatest factor shared by 6 and 9." } },
+          { label: "first term", left: "6x / 3", relation: "=", right: { answer: "2x", hint: "6x divided by 3 is 2x." } },
+          { label: "second term", left: "9 / 3", relation: "=", right: { answer: "3", hint: "9 divided by 3 is 3." } },
+          { label: "inside", left: "after divide", relation: "=", right: { answer: "2x+3", hint: "Put the divided terms inside the parentheses." } },
+          { label: "factors", left: "result", relation: "=", right: { answer: "3(2x+3)", hint: "Put the GCF outside the parentheses." } }
+        ]
+      },
+      {
+        expression: "x^2 - 9",
+        method: "difference of squares",
+        rows: [
+          { label: "pattern", left: "a^2 - b^2", relation: "=", right: "(a-b)(a+b)" },
+          { label: "first root", left: "x^2", relation: "->", right: { answer: "x", hint: "The square root of x^2 is x." } },
+          { label: "second root", left: "9", relation: "->", right: { answer: "3", hint: "The square root of 9 is 3." } },
+          { label: "minus factor", left: "x -", relation: "", right: { answer: "3", hint: "One factor uses subtraction." } },
+          { label: "plus factor", left: "x +", relation: "", right: { answer: "3", hint: "The other factor uses addition." } },
+          { label: "factored form", left: "result", relation: "=", right: { answer: "(x-3)(x+3)", answers: ["(x-3)(x+3)", "(x+3)(x-3)"], hint: "Use the square roots with opposite signs." } }
+        ]
+      }
+    ]
+  },
+  "algebra.rational-expressions": {
+    id: "algebra.rational-expressions",
+    topic: "Algebra",
+    title: "Rational expressions",
+    type: "concept",
+    figure: "rational-cancel",
+    intro: [
+      "A rational expression is a fraction made from algebraic expressions.",
+      "Factor first, then cancel common factors.",
+      "Values that make the original denominator zero stay excluded."
+    ],
+    problems: [
+      { prompt: "Simplify: (x^2 - 9) / (x - 3).", answer: "x+3", hint: "Factor the numerator as (x - 3)(x + 3).", label: "simplified rational expression" },
+      { prompt: "For 1 / (x - 5), what value of x is not allowed?", answer: "5", hint: "The denominator cannot be zero.", label: "excluded value" },
+      { prompt: "Simplify: 6x / 9.", answer: "2x/3", answers: ["2x/3", "(2x)/3"], hint: "Divide numerator and denominator by 3.", label: "reduced rational expression" }
+    ]
+  },
+  "algebra.quadratics": {
+    id: "algebra.quadratics",
+    topic: "Algebra",
+    title: "Quadratics",
+    type: "quadratic",
+    figure: "quadratic-roots",
+    intro: [
+      "A quadratic has a squared variable as its highest power.",
+      "Before solving, identify what the problem asks for: roots, a vertex, or a value.",
+      "For beginner factoring problems shaped like x^2 plus an x term plus a number, roots come from finding two binomials whose product equals zero."
+    ],
+    problems: [
+      {
+        expression: "x^2 - 5x + 6 = 0",
+        method: "roots by factoring",
+        rows: [
+          { label: "shape", left: "x^2 + ?x + ? = 0", relation: "->", right: "factor first" },
+          { label: "x term number", left: "-5x", relation: "=", right: { answer: "-5", hint: "The number attached to x is -5." } },
+          { label: "number term", left: "6", relation: "=", right: { answer: "6", hint: "The plain number is 6." } },
+          { label: "factor pairs", left: "make 6", relation: ":", right: "1,6 or 2,3" },
+          { label: "signs", left: "both signs", relation: "=", right: { answer: "--", answers: ["--", "bothnegative", "both negative", "negative", "both-", "both -"], hint: "To multiply to positive 6 and add to negative 5, both numbers need to be negative. Write -- for two negative signs." } },
+          { label: "choose pair", left: { answer: "-2,-3", answers: ["-2,-3", "-3,-2"], hint: "Use the pair 2 and 3, then make both negative: -2 + -3 = -5." }, relation: "+", right: { answer: "-5", hint: "-2 + -3 = -5." } },
+          { label: "check product", left: "-2,-3", relation: "x", right: { answer: "6", hint: "-2 x -3 = 6." } },
+          { label: "factor", left: "expression", relation: "=", right: { answer: "(x-2)(x-3)", answers: ["(x-2)(x-3)", "(x-3)(x-2)"], hint: "Use the pair as the constants in the binomials." } },
+          { label: "zero product", left: "roots", relation: "=", right: { answer: "2,3", answers: ["2,3", "3,2", "x=2,x=3", "x=3,x=2"], hint: "Each factor can equal zero: x - 2 = 0 or x - 3 = 0." } }
+        ]
+      },
+      {
+        expression: "y = x^2 - 4x + 1",
+        method: "vertex",
+        rows: [
+          { label: "x^2 number", left: "x^2", relation: "=", right: { answer: "1", hint: "There is an invisible 1 in front of x^2." } },
+          { label: "x term number", left: "-4x", relation: "=", right: { answer: "-4", hint: "The number attached to x is -4." } },
+          { label: "opposite", left: "opposite of -4", relation: "=", right: { answer: "4", hint: "The opposite of -4 is 4." } },
+          { label: "double", left: "2 times 1", relation: "=", right: { answer: "2", hint: "Double the x^2 number: 2 times 1 is 2." } },
+          { label: "vertex x", left: "opposite / double", relation: "=", right: { answer: "2", hint: "4 divided by 2 is 2." } },
+          { label: "vertex y", left: "2^2 - 4(2) + 1", relation: "=", right: { answer: "-3", hint: "4 - 8 + 1 = -3." } },
+          { label: "vertex", left: "(x,y)", relation: "=", right: { answer: "(2,-3)", answers: ["(2,-3)", "2,-3"], hint: "Use the x-value and y-value together." } }
+        ]
+      },
+      {
+        expression: "x^2 - 9 when x = 4",
+        method: "evaluate",
+        rows: [
+          { label: "substitute", left: "x", relation: "=", right: { answer: "4", hint: "The problem gives x = 4." } },
+          { label: "rewrite", left: "x^2 - 9", relation: "=", right: { answer: "4^2-9", answers: ["4^2-9", "4^2 - 9"], hint: "Replace x with 4." } },
+          { label: "square", left: "4^2", relation: "=", right: { answer: "16", hint: "4 times 4 is 16." } },
+          { label: "subtract", left: "16 - 9", relation: "=", right: { answer: "7", hint: "16 - 9 = 7." } },
+          { label: "value", left: "result", relation: "=", right: { answer: "7", hint: "The expression equals 7 when x = 4." } }
+        ]
+      }
+    ]
+  }
+};
+
 const conceptWorkspaces = {
   ...arithmeticConceptWorkspaces,
-  ...preAlgebraConceptWorkspaces
+  ...preAlgebraConceptWorkspaces,
+  ...algebraConceptWorkspaces
 };
 
 const workspaceRegistry = {
@@ -842,6 +1046,15 @@ function renderWorkspace() {
   } else if (workspace.type === "inequality") {
     state.currentModel = buildInequalityModel(workspace.problem);
     renderInequalityGrid(state.currentModel);
+  } else if (workspace.type === "system") {
+    state.currentModel = buildSystemModel(workspace.problem);
+    renderSystemGrid(state.currentModel);
+  } else if (workspace.type === "factoring") {
+    state.currentModel = buildFactoringModel(workspace.problem);
+    renderFactoringGrid(state.currentModel);
+  } else if (workspace.type === "quadratic") {
+    state.currentModel = buildQuadraticModel(workspace.problem);
+    renderQuadraticGrid(state.currentModel);
   } else if (workspace.type === "addition") {
     state.currentModel = buildAdditionModel(workspace.problem.top, workspace.problem.bottom);
     renderAdditionGrid(state.currentModel);
@@ -855,7 +1068,7 @@ function renderWorkspace() {
     state.currentModel = buildMultiplicationModel(workspace.problem.top, workspace.problem.bottom);
     renderMultiplicationGrid(state.currentModel);
   }
-  setStatus(workspace.type === "concept" || workspace.type === "equation" || workspace.type === "inequality" ? "Enter the active step, then check it." : "Place the first digit in the active box.", "");
+  setStatus(workspace.type === "concept" || workspace.type === "equation" || workspace.type === "inequality" || workspace.type === "system" || workspace.type === "factoring" || workspace.type === "quadratic" ? "Enter the active step, then check it." : "Place the first digit in the active box.", "");
   setActiveStep();
   drawOverlays();
   updateStepText();
@@ -913,7 +1126,7 @@ function renderIntroCopy(workspace) {
   const list = document.createElement("ol");
   for (const item of items) {
     const li = document.createElement("li");
-    li.textContent = item;
+    setMathText(li, item);
     list.append(li);
   }
   const figure = createIntroFigure(workspace);
@@ -921,14 +1134,14 @@ function renderIntroCopy(workspace) {
 }
 
 function createIntroFigure(workspace) {
-  if (!["addition", "subtraction", "multiplication", "division", "concept", "equation", "inequality"].includes(workspace.type)) return null;
+  if (!["addition", "subtraction", "multiplication", "division", "concept", "equation", "inequality", "quadratic"].includes(workspace.type)) return null;
 
   const figure = document.createElement("figure");
   figure.className = `intro-figure ${workspace.type}-figure`;
   const grid = document.createElement("div");
   grid.className = "intro-figure-grid";
 
-  if (workspace.type === "concept" || workspace.type === "equation" || workspace.type === "inequality") {
+  if (workspace.type === "concept" || workspace.type === "equation" || workspace.type === "inequality" || workspace.type === "quadratic") {
     addConceptIntroFigure(grid, workspace.figure);
   } else if (workspace.type === "addition") {
     addIntroCell(grid, "carry", 1, 1, "label");
@@ -1006,7 +1219,7 @@ function addIntroCell(grid, text, row, col, className = "") {
   cell.className = `intro-cell ${className}`.trim();
   cell.style.gridRow = String(row);
   cell.style.gridColumn = String(col);
-  cell.textContent = text;
+  setMathText(cell, text);
   grid.append(cell);
 }
 
@@ -1038,6 +1251,7 @@ function introFigureCaption(workspace) {
   if (workspace.type === "inequality") return conceptFigureCaption(workspace.figure);
   if (workspace.type === "equation") return conceptFigureCaption(workspace.figure);
   if (workspace.type === "concept") return conceptFigureCaption(workspace.figure);
+  if (workspace.type === "quadratic") return conceptFigureCaption(workspace.figure);
   if (workspace.type === "addition") return "A carry mark sits above the next column; the active column is highlighted.";
   if (workspace.type === "subtraction") return "Borrow marks show what changed: lent digits are crossed out, received tens sit above the digit.";
   if (workspace.type === "multiplication") return "Each partial row is built from right to left, with carries above the top row.";
@@ -1159,6 +1373,39 @@ function addConceptIntroFigure(grid, figure) {
     add("y", 2, 1, "label");
     add("-2", 2, 2, "active-result");
     add("down", 2, 3, "wide-note");
+  } else if (figure === "system-intersection") {
+    add("line 1", 1, 1, "label");
+    add("x+y=3", 1, 2, "wide-note active-source");
+    add("line 2", 2, 1, "label");
+    add("x-y=1", 2, 2, "wide-note active-source");
+    add("meet", 3, 1, "label");
+    add("(2,1)", 3, 2, "active-result");
+  } else if (figure === "polynomial-terms") {
+    add("3x^2", 1, 1, "active-source");
+    add("+", 1, 2, "operator");
+    add("5x^2", 1, 3, "active-source");
+    add("=", 1, 4, "operator");
+    add("8x^2", 2, 4, "result");
+  } else if (figure === "factoring-pairs") {
+    add("2", 1, 2, "active-result");
+    add("+", 1, 3, "operator");
+    add("3", 1, 4, "active-result");
+    add("sum", 2, 1, "label");
+    add("5", 2, 4, "result");
+    add("product", 3, 1, "label");
+    add("6", 3, 4, "result");
+  } else if (figure === "rational-cancel") {
+    add("(x-3)(x+3)", 1, 2, "wide-note active-source");
+    add("/", 2, 3, "operator");
+    add("x-3", 3, 2, "wide-note active-source");
+    add("=", 3, 4, "operator");
+    add("x+3", 4, 4, "result");
+  } else if (figure === "quadratic-roots") {
+    add("(x-2)", 1, 1, "active-source");
+    add("(x-3)", 1, 3, "active-source");
+    add("=0", 1, 4, "operator");
+    add("roots", 2, 1, "label");
+    add("2, 3", 2, 4, "result");
   } else if (figure === "word-problem") {
     add("18", 1, 2, "active-source");
     add("+", 1, 3, "operator");
@@ -1192,7 +1439,12 @@ function conceptFigureCaption(figure) {
     "equation-balance": "Solving an equation keeps both sides balanced.",
     "inequality-line": "Inequality solutions often describe a whole region on a number line.",
     "exponent-stack": "The exponent tells how many repeated factors the base has.",
-    "coordinate-plane": "Coordinates move horizontally first, then vertically."
+    "coordinate-plane": "Coordinates move horizontally first, then vertically.",
+    "system-intersection": "A system solution makes both equations true at once.",
+    "polynomial-terms": "Like polynomial terms combine by matching variable and exponent.",
+    "factoring-pairs": "Factoring reverses expansion by finding useful products.",
+    "rational-cancel": "Common factors can cancel after factoring.",
+    "quadratic-roots": "Factored quadratics show where the expression equals zero."
   };
   return captions[figure] || captions["mixed-review"];
 }
@@ -1286,7 +1538,7 @@ function renderConceptGrid(model) {
 
   const text = document.createElement("p");
   text.className = "concept-prompt";
-  text.textContent = model.prompt;
+  setMathText(text, model.prompt);
 
   const answerLabel = document.createElement("label");
   answerLabel.className = "concept-answer-label";
@@ -1617,6 +1869,195 @@ function renderInequalityGrid(model) {
       }
     }
   }
+}
+
+function buildSystemModel(problem) {
+  const cells = [];
+  let sequence = 0;
+
+  problem.rows.forEach((row, rowIndex) => {
+    const gridRow = rowIndex + 4;
+    for (const side of ["left", "right"]) {
+      const value = row[side];
+      if (!isSystemInputCell(value)) continue;
+      cells.push(equationStep({
+        id: `system-${rowIndex}-${side}`,
+        row: gridRow,
+        col: side === "left" ? 2 : 4,
+        expected: value.answer,
+        answers: value.answers || [value.answer],
+        sequence,
+        label: `${row.label} ${side} side`,
+        hint: value.hint
+      }));
+      sequence += 1;
+    }
+  });
+
+  return {
+    ...problem,
+    cells
+  };
+}
+
+function renderSystemGrid(model) {
+  const maxRow = Math.max(8, model.rows.length + 3);
+
+  addCell({ row: 1, col: 1, value: "given", className: "row-label" });
+  addCell({ row: 1, col: 2, value: model.equations[0], className: "system-expression active-source" });
+  addCell({ row: 2, col: 1, value: "", className: "row-label" });
+  addCell({ row: 2, col: 2, value: model.equations[1], className: "system-expression active-source" });
+  addCell({ row: 3, col: 1, value: model.method, className: "row-label" });
+  addCell({ row: 3, col: 2, value: systemMethodText(model.method), className: "system-note" });
+
+  for (let row = 4; row <= maxRow; row += 1) {
+    const workRow = model.rows[row - 4];
+    addCell({ row, col: 1, value: workRow?.label || "", className: "row-label" });
+    for (let col = 2; col <= 4; col += 1) {
+      if (!workRow) {
+        addCell({ row, col, value: "", className: "digit-static" });
+        continue;
+      }
+      if (col === 3) {
+        addCell({ row, col, value: workRow.relation ?? "=", className: "operator" });
+        continue;
+      }
+      const side = col === 2 ? "left" : "right";
+      const value = workRow[side];
+      const inputCell = model.cells.find((cell) => cell.row === row && cell.col === col);
+      if (inputCell) {
+        addInput(inputCell);
+      } else {
+        addCell({ row, col, value: systemCellText(value), className: "system-expression" });
+      }
+    }
+  }
+}
+
+function buildFactoringModel(problem) {
+  const cells = [];
+  let sequence = 0;
+
+  problem.rows.forEach((row, rowIndex) => {
+    const gridRow = rowIndex + 3;
+    for (const side of ["left", "right"]) {
+      const value = row[side];
+      if (!isSystemInputCell(value)) continue;
+      cells.push(equationStep({
+        id: `factor-${rowIndex}-${side}`,
+        row: gridRow,
+        col: side === "left" ? 2 : 4,
+        expected: value.answer,
+        answers: value.answers || [value.answer],
+        sequence,
+        label: `${row.label} ${side} side`,
+        hint: value.hint
+      }));
+      sequence += 1;
+    }
+  });
+
+  return {
+    ...problem,
+    cells
+  };
+}
+
+function renderFactoringGrid(model) {
+  const maxRow = Math.max(11, model.rows.length + 2);
+
+  addCell({ row: 1, col: 1, value: "factor", className: "row-label" });
+  addCell({ row: 1, col: 2, value: model.expression, className: "system-expression active-source" });
+  addCell({ row: 2, col: 1, value: model.method, className: "row-label" });
+  addCell({ row: 2, col: 2, value: factoringMethodText(model.method), className: "system-note" });
+
+  for (let row = 3; row <= maxRow; row += 1) {
+    const workRow = model.rows[row - 3];
+    addCell({ row, col: 1, value: workRow?.label || "", className: "row-label" });
+    for (let col = 2; col <= 4; col += 1) {
+      if (!workRow) {
+        addCell({ row, col, value: "", className: "digit-static" });
+        continue;
+      }
+      if (col === 3) {
+        addCell({ row, col, value: workRow.relation ?? "=", className: "operator" });
+        continue;
+      }
+      const side = col === 2 ? "left" : "right";
+      const value = workRow[side];
+      const inputCell = model.cells.find((cell) => cell.row === row && cell.col === col);
+      if (inputCell) {
+        addInput(inputCell);
+      } else {
+        addCell({ row, col, value: systemCellText(value), className: "system-expression" });
+      }
+    }
+  }
+}
+
+function factoringMethodText(method) {
+  if (method === "pair") return "List pairs for the number term; match the x term.";
+  if (method === "gcf") return "Pull out the greatest common factor first.";
+  if (method === "difference of squares") return "Use square roots with opposite signs.";
+  return "Show the structure before the final factors.";
+}
+
+function buildQuadraticModel(problem) {
+  return buildFactoringModel(problem);
+}
+
+function renderQuadraticGrid(model) {
+  const maxRow = Math.max(12, model.rows.length + 2);
+
+  addCell({ row: 1, col: 1, value: "quadratic", className: "row-label" });
+  addCell({ row: 1, col: 2, value: model.expression, className: "system-expression active-source" });
+  addCell({ row: 2, col: 1, value: model.method, className: "row-label" });
+  addCell({ row: 2, col: 2, value: quadraticMethodText(model.method), className: "system-note" });
+
+  for (let row = 3; row <= maxRow; row += 1) {
+    const workRow = model.rows[row - 3];
+    addCell({ row, col: 1, value: workRow?.label || "", className: "row-label" });
+    for (let col = 2; col <= 4; col += 1) {
+      if (!workRow) {
+        addCell({ row, col, value: "", className: "digit-static" });
+        continue;
+      }
+      if (col === 3) {
+        addCell({ row, col, value: workRow.relation ?? "=", className: "operator" });
+        continue;
+      }
+      const side = col === 2 ? "left" : "right";
+      const value = workRow[side];
+      const inputCell = model.cells.find((cell) => cell.row === row && cell.col === col);
+      if (inputCell) {
+        addInput(inputCell);
+      } else {
+        addCell({ row, col, value: systemCellText(value), className: "system-expression" });
+      }
+    }
+  }
+}
+
+function quadraticMethodText(method) {
+  if (method === "roots by factoring") return "List pairs, match the x term, then set factors to zero.";
+  if (method === "vertex") return "Use the opposite of the x term number divided by double the x^2 number.";
+  if (method === "evaluate") return "Substitute the given x-value, then simplify.";
+  return "Choose the structure that matches the question.";
+}
+
+function isSystemInputCell(value) {
+  return value && typeof value === "object" && "answer" in value;
+}
+
+function systemCellText(value) {
+  if (value === undefined || value === null) return "";
+  return typeof value === "object" ? value.answer || "" : String(value);
+}
+
+function systemMethodText(method) {
+  if (method === "elimination") return "Combine equations to remove one variable.";
+  if (method === "substitution") return "Replace a variable using the other equation.";
+  return "Show each algebra step.";
 }
 
 function equationLabelForRow(row) {
@@ -2268,7 +2709,7 @@ function addCell({ row, col, value, className, borrowSlot = false }) {
   cell.style.gridRow = String(row);
   cell.style.gridColumn = String(col);
   cell.dataset.row = String(row);
-  if (row === 5 && className === "row-label") {
+  if (row === 5 && className === "row-label" && els.grid.classList.contains("multiplication-grid")) {
     cell.dataset.rowLabel = "add-carry";
   }
   cell.dataset.col = String(col);
@@ -2280,9 +2721,39 @@ function addCell({ row, col, value, className, borrowSlot = false }) {
     digit.textContent = value;
     cell.append(digit);
   } else {
-    cell.textContent = value;
+    setMathText(cell, value);
   }
   els.grid.append(cell);
+}
+
+function setMathText(element, value) {
+  const text = String(value ?? "");
+  element.replaceChildren();
+  if (!text.includes("^")) {
+    element.textContent = text;
+    return;
+  }
+
+  element.setAttribute("aria-label", text);
+  const powerPattern = /\^(\{[^}]+\}|-?[A-Za-z0-9]+)/g;
+  let cursor = 0;
+  let match = powerPattern.exec(text);
+  while (match) {
+    if (match.index > cursor) {
+      element.append(document.createTextNode(text.slice(cursor, match.index)));
+    }
+
+    const exponentText = match[1].startsWith("{") ? match[1].slice(1, -1) : match[1];
+    const exponent = document.createElement("sup");
+    exponent.textContent = exponentText;
+    element.append(exponent);
+    cursor = powerPattern.lastIndex;
+    match = powerPattern.exec(text);
+  }
+
+  if (cursor < text.length) {
+    element.append(document.createTextNode(text.slice(cursor)));
+  }
 }
 
 function createBorrowSlot(role) {
@@ -2432,6 +2903,12 @@ function highlightActiveContext(step, input) {
   }
 
   if (step.kind === "equationStep") {
+    if (els.grid.classList.contains("system-grid") || els.grid.classList.contains("factoring-grid") || els.grid.classList.contains("quadratic-grid")) {
+      els.grid.querySelector(`[data-row="${step.row}"][data-col="2"]`)?.classList.add("active-column");
+      els.grid.querySelector(`[data-row="${step.row}"][data-col="3"]`)?.classList.add("active-column");
+      els.grid.querySelector(`[data-row="${step.row}"][data-col="4"]`)?.classList.add("active-column");
+      return;
+    }
     els.grid.querySelector(`[data-row="${step.row}"][data-col="2"]`)?.classList.add("active-column");
     els.grid.querySelector(`[data-row="${step.row}"][data-col="3"]`)?.classList.add("active-column");
     els.grid.querySelector(`[data-row="${step.row}"][data-col="4"]`)?.classList.add("active-column");
