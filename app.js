@@ -765,10 +765,506 @@ const algebraConceptWorkspaces = {
   }
 };
 
+const geometryConceptWorkspaces = {
+  "geometry.angles": {
+    id: "geometry.angles",
+    topic: "Geometry",
+    title: "Angles",
+    type: "concept",
+    figure: "geometry-angles",
+    intro: [
+      "Angles measure turning.",
+      "A straight angle measures 180 degrees.",
+      "Adjacent angles share a side. If they form a straight line, their measures add to 180 degrees."
+    ],
+    problems: [
+      { prompt: "Two adjacent angles make a straight line. One is 120 degrees. What is the other?", answer: "60", answers: ["60", "60degrees"], hint: "Straight line angles add to 180. Compute 180 - 120.", label: "missing angle" },
+      { prompt: "What is the measure of a right angle?", answer: "90", answers: ["90", "90degrees"], hint: "A right angle is one quarter turn.", label: "right angle measure" },
+      { prompt: "Angles of 35 degrees and 55 degrees add to what kind of angle?", answer: "right", answers: ["right", "rightangle", "90", "90degrees"], hint: "35 + 55 = 90.", label: "angle type" }
+    ]
+  },
+  "geometry.triangles": {
+    id: "geometry.triangles",
+    topic: "Geometry",
+    title: "Triangles",
+    type: "concept",
+    figure: "geometry-triangle",
+    intro: [
+      "Every triangle has three sides and three angles.",
+      "The three interior angles of a triangle add to 180 degrees.",
+      "Equal side lengths usually create equal angle relationships."
+    ],
+    problems: [
+      { prompt: "A triangle has angles 60 degrees and 70 degrees. What is the third angle?", answer: "50", answers: ["50", "50degrees"], hint: "Subtract 60 and 70 from 180.", label: "third angle" },
+      { prompt: "A triangle with three equal sides is called what?", answer: "equilateral", hint: "Equal sides means equilateral.", label: "triangle type" },
+      { prompt: "A right triangle has one angle of 90 degrees and another of 35 degrees. What is the third angle?", answer: "55", answers: ["55", "55degrees"], hint: "180 - 90 - 35 = 55.", label: "right triangle angle" }
+    ]
+  },
+  "geometry.circles": {
+    id: "geometry.circles",
+    topic: "Geometry",
+    title: "Circles",
+    type: "concept",
+    figure: "geometry-circle",
+    intro: [
+      "The radius runs from the center of a circle to its edge.",
+      "The diameter runs all the way across through the center.",
+      "Circumference is the distance around the circle."
+    ],
+    problems: [
+      { prompt: "A circle has radius 4. What is its diameter?", answer: "8", hint: "The diameter is twice the radius.", label: "diameter" },
+      { prompt: "A circle has diameter 10. What is its radius?", answer: "5", hint: "The radius is half the diameter.", label: "radius" },
+      { prompt: "Using C = πd, what is the circumference of a circle with diameter 6?", answer: "6π", answers: ["6π", "6pi", "6*pi", "6×π"], hint: "Leave the answer exact: π times the diameter is 6π.", label: "circumference" }
+    ]
+  },
+  "geometry.area-volume": {
+    id: "geometry.area-volume",
+    topic: "Geometry",
+    title: "Area and volume",
+    type: "concept",
+    figure: "geometry-area-volume",
+    intro: [
+      "Area measures how much flat space a shape covers.",
+      "Volume measures how much space a solid holds.",
+      "Track the unit: square units for area, cubic units for volume."
+    ],
+    problems: [
+      { prompt: "What is the area of a rectangle with length 8 and width 3?", answer: "24", hint: "Rectangle area is length times width.", label: "rectangle area" },
+      { prompt: "What is the volume of a rectangular prism with dimensions 2, 3, and 5?", answer: "30", hint: "Multiply all three dimensions.", label: "prism volume" },
+      { prompt: "A triangle has base 10 and height 4. What is its area?", answer: "20", hint: "Triangle area is half of base times height.", label: "triangle area" }
+    ]
+  },
+  "geometry.coordinate": {
+    id: "geometry.coordinate",
+    topic: "Geometry",
+    title: "Coordinate geometry",
+    type: "concept",
+    figure: "geometry-coordinate",
+    intro: [
+      "Coordinate geometry studies shapes using points on a grid.",
+      "Horizontal distance comes from the x-values.",
+      "Vertical distance comes from the y-values."
+    ],
+    problems: [
+      { prompt: "What is the horizontal distance from (1, 2) to (5, 2)?", answer: "4", hint: "The y-values match, so compare x-values: 5 - 1.", label: "horizontal distance" },
+      { prompt: "What is the midpoint of (0, 0) and (6, 0)?", answer: "(3,0)", answers: ["(3,0)", "3,0"], hint: "Average the x-values and average the y-values.", label: "midpoint" },
+      { prompt: "A rectangle has corners (0,0), (4,0), (4,3), and (0,3). What is its area?", answer: "12", hint: "The side lengths are 4 and 3.", label: "coordinate rectangle area" }
+    ]
+  },
+  "geometry.proof-basics": {
+    id: "geometry.proof-basics",
+    topic: "Geometry",
+    title: "Proof basics",
+    type: "concept",
+    figure: "geometry-proof",
+    intro: [
+      "A proof explains why a conclusion must be true.",
+      "Each step should have a reason, such as a definition, a given fact, or a theorem.",
+      "Good proof writing moves from known information toward the claim."
+    ],
+    problems: [
+      { prompt: "If two angles are both right angles, what can you conclude about their measures?", answer: "equal", answers: ["equal", "congruent", "same"], hint: "All right angles measure 90 degrees.", label: "right angle conclusion" },
+      { prompt: "In a proof, what word describes information stated at the start?", answer: "given", hint: "A proof often begins with given information.", label: "proof starting fact" },
+      { prompt: "If AB = CD and CD = EF, which property lets you conclude AB = EF?", answer: "transitive", answers: ["transitive", "transitivity", "transitiveproperty"], hint: "Equality can pass through a shared equal quantity.", label: "equality reason" }
+    ]
+  }
+};
+
+const trigonometryConceptWorkspaces = {
+  "trigonometry.unit-circle": {
+    id: "trigonometry.unit-circle",
+    topic: "Trigonometry",
+    title: "Unit circle",
+    type: "concept",
+    figure: "trig-unit-circle",
+    intro: [
+      "The unit circle has radius 1 and center at the origin.",
+      "A point on the unit circle has coordinates (cos θ, sin θ).",
+      "Special angles give exact values that are used throughout trigonometry."
+    ],
+    problems: [
+      { prompt: "On the unit circle, what is cos 0?", answer: "1", hint: "At angle 0, the point is (1, 0).", label: "cosine at zero" },
+      { prompt: "On the unit circle, what is sin 0?", answer: "0", hint: "At angle 0, the y-coordinate is 0.", label: "sine at zero" },
+      { prompt: "At π/2, what is the point on the unit circle?", answer: "(0,1)", answers: ["(0,1)", "0,1"], hint: "π/2 is the top of the circle.", label: "unit circle point" }
+    ]
+  },
+  "trigonometry.right-triangles": {
+    id: "trigonometry.right-triangles",
+    topic: "Trigonometry",
+    title: "Right triangles",
+    type: "concept",
+    figure: "trig-right-triangle",
+    intro: [
+      "Right-triangle trigonometry compares side lengths relative to an acute angle.",
+      "Sine uses opposite over hypotenuse.",
+      "Cosine uses adjacent over hypotenuse, and tangent uses opposite over adjacent."
+    ],
+    problems: [
+      { prompt: "In a right triangle, opposite = 3 and hypotenuse = 5. What is sin θ?", answer: "3/5", hint: "Sine is opposite over hypotenuse.", label: "sine ratio" },
+      { prompt: "In the same triangle, adjacent = 4 and hypotenuse = 5. What is cos θ?", answer: "4/5", hint: "Cosine is adjacent over hypotenuse.", label: "cosine ratio" },
+      { prompt: "If opposite = 3 and adjacent = 4, what is tan θ?", answer: "3/4", hint: "Tangent is opposite over adjacent.", label: "tangent ratio" }
+    ]
+  },
+  "trigonometry.graphs": {
+    id: "trigonometry.graphs",
+    topic: "Trigonometry",
+    title: "Graphs",
+    type: "concept",
+    figure: "trig-graphs",
+    intro: [
+      "Sine and cosine repeat in waves.",
+      "Amplitude is the distance from the midline to a peak.",
+      "The basic sine and cosine period is 2π."
+    ],
+    problems: [
+      { prompt: "What is the amplitude of y = 3 sin x?", answer: "3", hint: "Amplitude is the coefficient size in front of sin x.", label: "sine amplitude" },
+      { prompt: "What is the period of y = sin x?", answer: "2π", answers: ["2π", "2pi", "2*pi"], hint: "Basic sine repeats every 2π.", label: "sine period" },
+      { prompt: "What is cos 0?", answer: "1", hint: "The cosine graph starts at 1 when x = 0.", label: "cos graph value" }
+    ]
+  },
+  "trigonometry.identities": {
+    id: "trigonometry.identities",
+    topic: "Trigonometry",
+    title: "Identities",
+    type: "concept",
+    figure: "trig-identities",
+    intro: [
+      "An identity is an equation that is true for every allowed input.",
+      "The Pythagorean identity connects sine and cosine.",
+      "Identities let you rewrite expressions without changing their value."
+    ],
+    problems: [
+      { prompt: "Complete the identity: sin^2 x + cos^2 x = __.", answer: "1", hint: "This is the main Pythagorean identity.", label: "pythagorean identity" },
+      { prompt: "Rewrite tan x using sin x and cos x.", answer: "sinx/cosx", answers: ["sinx/cosx", "sin(x)/cos(x)", "sin x/cos x"], hint: "Tangent is sine divided by cosine.", label: "tangent identity" },
+      { prompt: "If sin^2 x = 1/4, what is cos^2 x?", answer: "3/4", hint: "Use sin^2 x + cos^2 x = 1.", label: "cosine squared" }
+    ]
+  },
+  "trigonometry.inverse": {
+    id: "trigonometry.inverse",
+    topic: "Trigonometry",
+    title: "Inverse trig",
+    type: "concept",
+    figure: "trig-inverse",
+    intro: [
+      "Inverse trig functions recover an angle from a ratio.",
+      "arcsin answers the question: what angle has this sine value?",
+      "Principal values keep inverse trig functions single-valued."
+    ],
+    problems: [
+      { prompt: "What is arcsin 0?", answer: "0", hint: "sin 0 = 0.", label: "arcsine zero" },
+      { prompt: "What is arccos 1?", answer: "0", hint: "cos 0 = 1.", label: "arccosine one" },
+      { prompt: "What is arctan 1 in degrees?", answer: "45", answers: ["45", "45degrees"], hint: "tan 45 degrees = 1.", label: "arctangent one" }
+    ]
+  }
+};
+
+const precalculusConceptWorkspaces = {
+  "precalculus.functions": {
+    id: "precalculus.functions",
+    topic: "Precalculus",
+    title: "Functions",
+    type: "concept",
+    figure: "precalc-functions",
+    intro: [
+      "A function assigns each input exactly one output.",
+      "Function notation names the rule and the input, such as f(x).",
+      "Graphs, tables, and formulas can describe the same function."
+    ],
+    problems: [
+      { prompt: "If f(x) = 2x + 1, what is f(3)?", answer: "7", hint: "Replace x with 3: 2 times 3 plus 1.", label: "evaluate a function" },
+      { prompt: "Does a function allow one input to have two outputs?", answer: "no", answers: ["no", "false"], hint: "Each input can have only one output.", label: "function definition" },
+      { prompt: "For the point (4, 9), what is the output?", answer: "9", hint: "In an ordered pair, the output is the y-value.", label: "function output" }
+    ]
+  },
+  "precalculus.transformations": {
+    id: "precalculus.transformations",
+    topic: "Precalculus",
+    title: "Transformations",
+    type: "concept",
+    figure: "precalc-transformations",
+    intro: [
+      "Transformations move or reshape a parent function.",
+      "Adding outside the function moves the graph up or down.",
+      "Changing the input inside the function moves the graph left or right."
+    ],
+    problems: [
+      { prompt: "Compared with y = x^2, y = x^2 + 4 shifts which direction?", answer: "up", hint: "Adding 4 outside the square raises every output.", label: "vertical shift" },
+      { prompt: "What is the vertex of y = (x - 2)^2 + 3?", answer: "(2,3)", answers: ["(2,3)", "2,3"], hint: "The form y = (x - h)^2 + k has vertex (h, k).", label: "parabola vertex" },
+      { prompt: "Compared with y = x^2, y = (x - 5)^2 shifts right by how many units?", answer: "5", hint: "Inside subtraction shifts right.", label: "horizontal shift" }
+    ]
+  },
+  "precalculus.polynomial-rational": {
+    id: "precalculus.polynomial-rational",
+    topic: "Precalculus",
+    title: "Polynomial and rational functions",
+    type: "concept",
+    figure: "precalc-polynomial-rational",
+    intro: [
+      "Polynomials are built from powers of x with number coefficients.",
+      "The degree is the highest power with a nonzero coefficient.",
+      "Rational functions are ratios of polynomials and may have restrictions."
+    ],
+    problems: [
+      { prompt: "What is the degree of p(x) = 4x^3 - x + 8?", answer: "3", hint: "Look for the highest exponent on x.", label: "polynomial degree" },
+      { prompt: "What x-value makes x - 2 equal zero?", answer: "2", hint: "Solve x - 2 = 0.", label: "linear factor zero" },
+      { prompt: "For r(x) = 1/(x - 4), what value is not allowed?", answer: "4", hint: "The denominator cannot equal zero.", label: "rational restriction" }
+    ]
+  },
+  "precalculus.exponential-log": {
+    id: "precalculus.exponential-log",
+    topic: "Precalculus",
+    title: "Exponential and log functions",
+    type: "concept",
+    figure: "precalc-exponential-log",
+    intro: [
+      "Exponential functions use the input as an exponent.",
+      "Logarithms undo exponentials.",
+      "A logarithm asks which exponent creates a given value."
+    ],
+    problems: [
+      { prompt: "What is 2^3?", answer: "8", hint: "2 times 2 times 2 is 8.", label: "evaluate exponential" },
+      { prompt: "If 2^x = 8, what is x?", answer: "3", hint: "2 to the third power is 8.", label: "solve exponential" },
+      { prompt: "What is log 100 using base 10?", answer: "2", hint: "10 squared is 100.", label: "common logarithm" }
+    ]
+  },
+  "precalculus.sequences": {
+    id: "precalculus.sequences",
+    topic: "Precalculus",
+    title: "Sequences",
+    type: "concept",
+    figure: "precalc-sequences",
+    intro: [
+      "A sequence is an ordered list of numbers.",
+      "Arithmetic sequences add the same difference each time.",
+      "Geometric sequences multiply by the same ratio each time."
+    ],
+    problems: [
+      { prompt: "What is the common difference in 4, 7, 10, 13?", answer: "3", hint: "Subtract neighboring terms.", label: "common difference" },
+      { prompt: "What is the next term in 5, 10, 20, 40?", answer: "80", hint: "Each term is doubled.", label: "geometric next term" },
+      { prompt: "In a geometric sequence 3, 12, 48, what is the common ratio?", answer: "4", hint: "Divide 12 by 3.", label: "common ratio" }
+    ]
+  },
+  "precalculus.complex-numbers": {
+    id: "precalculus.complex-numbers",
+    topic: "Precalculus",
+    title: "Complex numbers",
+    type: "concept",
+    figure: "precalc-complex",
+    intro: [
+      "Complex numbers have a real part and an imaginary part.",
+      "The imaginary unit satisfies i^2 = -1.",
+      "A complex number a + bi can be plotted as the point (a, b)."
+    ],
+    problems: [
+      { prompt: "What is i^2?", answer: "-1", hint: "This is the defining property of i.", label: "imaginary unit" },
+      { prompt: "What is the real part of 3 + 4i?", answer: "3", hint: "The real part is the number without i.", label: "real part" },
+      { prompt: "Compute (3 + 4i) + (1 - 2i).", answer: "4+2i", answers: ["4+2i", "4+2*i"], hint: "Add real parts and imaginary parts separately.", label: "complex addition" }
+    ]
+  }
+};
+
+const calculusConceptWorkspaces = {
+  "calculus.limits": {
+    id: "calculus.limits",
+    topic: "Calculus",
+    title: "Limits",
+    type: "concept",
+    figure: "calc-limits",
+    intro: [
+      "A limit describes what a value approaches.",
+      "The input can get close to a number without being exactly there.",
+      "Limits are the foundation for derivatives, integrals, and continuity."
+    ],
+    problems: [
+      { prompt: "As x approaches 2, what does x + 3 approach?", answer: "5", hint: "Substitute the nearby value: 2 + 3.", label: "basic limit" },
+      { prompt: "As x approaches 3, what does x^2 approach?", answer: "9", hint: "Square the value being approached.", label: "square limit" },
+      { prompt: "If both one-sided limits approach 4, what is the two-sided limit?", answer: "4", hint: "When left and right agree, the limit is that shared value.", label: "two-sided limit" }
+    ]
+  },
+  "calculus.derivatives": {
+    id: "calculus.derivatives",
+    topic: "Calculus",
+    title: "Derivatives",
+    type: "concept",
+    figure: "calc-derivatives",
+    intro: [
+      "A derivative measures instantaneous rate of change.",
+      "On a graph, the derivative is the slope of the tangent line.",
+      "Power rules make many polynomial derivatives quick to compute."
+    ],
+    problems: [
+      { prompt: "Find the derivative of x^2.", answer: "2x", answers: ["2x", "2*x"], hint: "Use the power rule: bring down 2 and reduce the exponent by 1.", label: "power rule" },
+      { prompt: "What is the derivative of 5x?", answer: "5", hint: "The slope of a line y = 5x is 5.", label: "linear derivative" },
+      { prompt: "For y = 3x + 2, what is the slope?", answer: "3", hint: "The coefficient of x is the slope.", label: "line slope" }
+    ]
+  },
+  "calculus.integrals": {
+    id: "calculus.integrals",
+    topic: "Calculus",
+    title: "Integrals",
+    type: "concept",
+    figure: "calc-integrals",
+    intro: [
+      "An integral accumulates change.",
+      "Definite integrals can measure area under a curve.",
+      "Antiderivatives reverse derivatives and include a constant."
+    ],
+    problems: [
+      { prompt: "What is an antiderivative of 2x?", answer: "x^2+c", answers: ["x^2+c", "x^2+C", "x^2 + C"], hint: "Differentiate x^2 and you get 2x. Add C for the constant.", label: "basic antiderivative" },
+      { prompt: "What is the area under y = 2 from x = 0 to x = 3?", answer: "6", hint: "This is a rectangle: height 2 and width 3.", label: "constant integral" },
+      { prompt: "What is an antiderivative of 4?", answer: "4x+c", answers: ["4x+c", "4x+C", "4*x+c", "4*x+C"], hint: "A derivative of 4x is 4.", label: "constant antiderivative" }
+    ]
+  },
+  "calculus.applications": {
+    id: "calculus.applications",
+    topic: "Calculus",
+    title: "Applications",
+    type: "concept",
+    figure: "calc-applications",
+    intro: [
+      "Calculus connects formulas to motion, growth, area, and optimization.",
+      "Derivatives turn position into velocity and reveal local change.",
+      "Integrals turn rates into accumulated totals."
+    ],
+    problems: [
+      { prompt: "If s(t) = t^2, what is the velocity at t = 3?", answer: "6", hint: "Velocity is the derivative. The derivative of t^2 is 2t.", label: "velocity from position" },
+      { prompt: "A rate is 5 units per second for 4 seconds. What total accumulates?", answer: "20", hint: "Constant rate times time gives total accumulation.", label: "accumulated total" },
+      { prompt: "If a derivative changes from positive to negative, the function has a local what?", answer: "maximum", answers: ["maximum", "max"], hint: "Increasing then decreasing creates a peak.", label: "local maximum" }
+    ]
+  },
+  "calculus.series": {
+    id: "calculus.series",
+    topic: "Calculus",
+    title: "Series",
+    type: "concept",
+    figure: "calc-series",
+    intro: [
+      "A sequence lists terms; a series adds them.",
+      "Partial sums show how much has accumulated so far.",
+      "Some infinite series settle toward a finite value."
+    ],
+    problems: [
+      { prompt: "What is the next term in 1/2, 1/4, 1/8?", answer: "1/16", hint: "Each term is half the previous term.", label: "geometric term" },
+      { prompt: "What is the infinite sum 1 + 1/2 + 1/4 + ...?", answer: "2", hint: "This geometric series has first term 1 and ratio 1/2.", label: "geometric sum" },
+      { prompt: "A geometric series converges when the absolute value of r is less than what number?", answer: "1", hint: "The ratio must have size less than 1.", label: "convergence condition" }
+    ]
+  }
+};
+
+const linearAlgebraConceptWorkspaces = {
+  "linear-algebra.vectors": {
+    id: "linear-algebra.vectors",
+    topic: "Linear Algebra",
+    title: "Vectors",
+    type: "concept",
+    figure: "linear-vectors",
+    intro: [
+      "A vector has both size and direction.",
+      "In coordinates, vectors add component by component.",
+      "Scalar multiplication stretches, shrinks, or reverses a vector."
+    ],
+    problems: [
+      { prompt: "Add the vectors (2, 3) + (4, 1).", answer: "(6,4)", answers: ["(6,4)", "6,4"], hint: "Add x-components and y-components separately.", label: "vector addition" },
+      { prompt: "Compute 3(2, -1).", answer: "(6,-3)", answers: ["(6,-3)", "6,-3"], hint: "Multiply each component by 3.", label: "scalar multiplication" },
+      { prompt: "What is the length of the vector (3, 4)?", answer: "5", hint: "Use the distance formula: square, add, then take the square root.", label: "vector length" }
+    ]
+  },
+  "linear-algebra.matrices": {
+    id: "linear-algebra.matrices",
+    topic: "Linear Algebra",
+    title: "Matrices",
+    type: "concept",
+    figure: "linear-matrices",
+    intro: [
+      "A matrix is a rectangular array of numbers.",
+      "Rows run horizontally and columns run vertically.",
+      "Matrix-vector multiplication combines columns according to the vector entries."
+    ],
+    problems: [
+      { prompt: "A matrix with 2 rows and 3 columns has what size?", answer: "2x3", answers: ["2x3", "2×3", "2by3"], hint: "Write rows by columns.", label: "matrix size" },
+      { prompt: "For the matrix [[1, 2], [3, 4]], what is the entry in row 2, column 1?", answer: "3", hint: "Row 2 is [3, 4]; column 1 is the first entry.", label: "matrix entry" },
+      { prompt: "Compute [[1, 0], [0, 1]] times (5, 7).", answer: "(5,7)", answers: ["(5,7)", "5,7"], hint: "The identity matrix leaves the vector unchanged.", label: "identity matrix" }
+    ]
+  },
+  "linear-algebra.transformations": {
+    id: "linear-algebra.transformations",
+    topic: "Linear Algebra",
+    title: "Transformations",
+    type: "concept",
+    figure: "linear-transformations",
+    intro: [
+      "A linear transformation sends vectors to vectors.",
+      "Matrices can represent linear transformations.",
+      "Scaling, rotation, reflection, and shear are common geometric examples."
+    ],
+    problems: [
+      { prompt: "The transformation T(x, y) = (2x, 2y) does what to lengths?", answer: "doubles", answers: ["doubles", "double", "multipliesby2", "scalesby2"], hint: "Both coordinates are multiplied by 2.", label: "scaling effect" },
+      { prompt: "What does T(x, y) = (-x, y) reflect across?", answer: "yaxis", answers: ["yaxis", "y-axis", "theyaxis"], hint: "Only the x-coordinate changes sign.", label: "reflection axis" },
+      { prompt: "If T(1, 0) = (0, 1), where does the first basis vector land?", answer: "(0,1)", answers: ["(0,1)", "0,1"], hint: "The prompt gives the image of (1, 0) directly.", label: "basis image" }
+    ]
+  },
+  "linear-algebra.determinants": {
+    id: "linear-algebra.determinants",
+    topic: "Linear Algebra",
+    title: "Determinants",
+    type: "concept",
+    figure: "linear-determinants",
+    intro: [
+      "A determinant describes how a matrix scales area or volume.",
+      "A zero determinant means the transformation flattens space.",
+      "For a 2 by 2 matrix, the determinant is ad - bc."
+    ],
+    problems: [
+      { prompt: "For [[2, 0], [0, 3]], what is the determinant?", answer: "6", hint: "The scaling factors are 2 and 3, so area scales by 2 times 3.", label: "diagonal determinant" },
+      { prompt: "For [[1, 2], [3, 4]], compute ad - bc.", answer: "-2", hint: "Compute 1 times 4 minus 2 times 3.", label: "two by two determinant" },
+      { prompt: "If a determinant is 0, is the matrix invertible?", answer: "no", answers: ["no", "false"], hint: "Zero determinant means information is flattened.", label: "invertibility check" }
+    ]
+  },
+  "linear-algebra.eigenvalues": {
+    id: "linear-algebra.eigenvalues",
+    topic: "Linear Algebra",
+    title: "Eigenvalues",
+    type: "concept",
+    figure: "linear-eigenvalues",
+    intro: [
+      "An eigenvector keeps its direction under a transformation.",
+      "The eigenvalue tells how much that eigenvector is scaled.",
+      "Eigenvectors reveal stable directions inside a linear transformation."
+    ],
+    problems: [
+      { prompt: "If A v = 3v, what is the eigenvalue?", answer: "3", hint: "The eigenvalue is the scale factor multiplying v.", label: "eigenvalue scale" },
+      { prompt: "For [[2, 0], [0, 5]], what eigenvalue belongs to the x-axis direction?", answer: "2", hint: "The x-coordinate is scaled by 2.", label: "x-axis eigenvalue" },
+      { prompt: "If a vector changes direction after applying A, is it an eigenvector of A?", answer: "no", answers: ["no", "false"], hint: "Eigenvectors keep direction, though they may scale or reverse.", label: "eigenvector definition" }
+    ]
+  },
+  "linear-algebra.vector-spaces": {
+    id: "linear-algebra.vector-spaces",
+    topic: "Linear Algebra",
+    title: "Vector spaces",
+    type: "concept",
+    figure: "linear-vector-spaces",
+    intro: [
+      "A vector space is a set where vectors can be added and scaled.",
+      "A span contains every linear combination of chosen vectors.",
+      "A basis spans the space without redundant vectors."
+    ],
+    problems: [
+      { prompt: "Do the vectors (1, 0) and (0, 1) span the plane?", answer: "yes", answers: ["yes", "true"], hint: "Any point (a, b) can be made from a(1, 0) + b(0, 1).", label: "span plane" },
+      { prompt: "How many vectors are in a standard basis for R^2?", answer: "2", hint: "The plane has two independent directions.", label: "basis size" },
+      { prompt: "If one vector is a multiple of another, are they independent?", answer: "no", answers: ["no", "false"], hint: "One vector can be made from the other, so it is redundant.", label: "independence check" }
+    ]
+  }
+};
+
 const conceptWorkspaces = {
   ...arithmeticConceptWorkspaces,
   ...preAlgebraConceptWorkspaces,
-  ...algebraConceptWorkspaces
+  ...algebraConceptWorkspaces,
+  ...geometryConceptWorkspaces,
+  ...trigonometryConceptWorkspaces,
+  ...precalculusConceptWorkspaces,
+  ...calculusConceptWorkspaces,
+  ...linearAlgebraConceptWorkspaces
 };
 
 const workspaceRegistry = {
@@ -1138,6 +1634,14 @@ function createIntroFigure(workspace) {
 
   const figure = document.createElement("figure");
   figure.className = `intro-figure ${workspace.type}-figure`;
+  if (workspace.figure?.startsWith("geometry-") || workspace.figure?.startsWith("trig-") || workspace.figure?.startsWith("precalc-") || workspace.figure?.startsWith("calc-") || workspace.figure?.startsWith("linear-")) {
+    const caption = document.createElement("figcaption");
+    caption.textContent = introFigureCaption(workspace);
+    figure.classList.add("geometry-figure");
+    figure.append(createDiagramIntroSvg(workspace.figure), caption);
+    return figure;
+  }
+
   const grid = document.createElement("div");
   grid.className = "intro-figure-grid";
 
@@ -1212,6 +1716,326 @@ function createIntroFigure(workspace) {
   caption.textContent = introFigureCaption(workspace);
   figure.append(grid, caption);
   return figure;
+}
+
+function createDiagramIntroSvg(figure) {
+  const svg = svgElement("svg", {
+    class: "geometry-diagram",
+    viewBox: "0 0 360 180",
+    role: "img",
+    "aria-label": conceptFigureCaption(figure)
+  });
+
+  svg.append(svgElement("rect", { class: "geometry-frame", x: 1, y: 1, width: 358, height: 178, rx: 8 }));
+
+  if (figure === "geometry-angles") {
+    svg.append(
+      svgElement("line", { class: "geometry-line", x1: 62, y1: 124, x2: 298, y2: 124 }),
+      svgElement("line", { class: "geometry-line active", x1: 142, y1: 124, x2: 86, y2: 48 }),
+      svgElement("path", { class: "geometry-arc active", d: "M 112 124 A 30 30 0 0 1 124 100" }),
+      svgElement("path", { class: "geometry-arc", d: "M 172 124 A 30 30 0 0 0 160 100" })
+    );
+    svgText(svg, "120°", 79, 84, "geometry-label geometry-math active");
+    svgText(svg, "?", 189, 93, "geometry-label result");
+    svgText(svg, "straight line = 180°", 108, 154, "geometry-note");
+  } else if (figure === "geometry-triangle") {
+    svg.append(
+      svgElement("polygon", { class: "geometry-shape", points: "84,132 282,132 170,38" }),
+      svgElement("path", { class: "geometry-arc active", d: "M 118 132 A 34 34 0 0 1 105 106" }),
+      svgElement("path", { class: "geometry-arc active", d: "M 244 132 A 38 38 0 0 0 256 104" }),
+      svgElement("path", { class: "geometry-arc result", d: "M 151 58 A 28 28 0 0 0 190 58" })
+    );
+    svgText(svg, "60°", 100, 109, "geometry-label geometry-math active");
+    svgText(svg, "70°", 241, 108, "geometry-label geometry-math active");
+    svgText(svg, "?", 168, 79, "geometry-label result");
+    svgText(svg, "angles sum to 180°", 109, 158, "geometry-note");
+  } else if (figure === "geometry-circle") {
+    svg.append(
+      svgElement("circle", { class: "geometry-shape", cx: 126, cy: 90, r: 56 }),
+      svgElement("circle", { class: "geometry-point", cx: 126, cy: 90, r: 3 }),
+      svgElement("line", { class: "geometry-line active", x1: 126, y1: 90, x2: 182, y2: 90 }),
+      svgElement("line", { class: "geometry-line result", x1: 70, y1: 90, x2: 182, y2: 90 }),
+      svgElement("path", { class: "geometry-arc", d: "M 208 50 A 68 68 0 0 1 208 130" })
+    );
+    svgText(svg, "r = 4", 142, 80, "geometry-label geometry-math active");
+    svgText(svg, "d = 8", 104, 111, "geometry-label geometry-math result");
+    svgText(svg, "C = πd", 226, 84, "geometry-label geometry-math");
+    svgText(svg, "circumference", 216, 112, "geometry-note");
+  } else if (figure === "geometry-area-volume") {
+    svg.append(
+      svgElement("rect", { class: "geometry-shape active", x: 54, y: 48, width: 112, height: 72, rx: 2 }),
+      svgElement("polygon", { class: "geometry-shape", points: "218,61 287,42 315,83 247,103" }),
+      svgElement("polygon", { class: "geometry-shape", points: "218,61 247,103 247,140 218,98" }),
+      svgElement("polygon", { class: "geometry-shape result", points: "247,103 315,83 315,120 247,140" })
+    );
+    svgText(svg, "8", 100, 40, "geometry-label active");
+    svgText(svg, "3", 34, 88, "geometry-label active");
+    svgText(svg, "A = 24", 83, 148, "geometry-label geometry-math result");
+    svgText(svg, "V = 2·3·5", 228, 154, "geometry-label geometry-math");
+  } else if (figure === "geometry-coordinate") {
+    for (let x = 52; x <= 292; x += 40) svg.append(svgElement("line", { class: "geometry-grid-line", x1: x, y1: 30, x2: x, y2: 150 }));
+    for (let y = 30; y <= 150; y += 40) svg.append(svgElement("line", { class: "geometry-grid-line", x1: 52, y1: y, x2: 292, y2: y }));
+    svg.append(
+      svgElement("line", { class: "geometry-line", x1: 52, y1: 110, x2: 292, y2: 110 }),
+      svgElement("line", { class: "geometry-line", x1: 92, y1: 30, x2: 92, y2: 150 }),
+      svgElement("line", { class: "geometry-line active", x1: 92, y1: 70, x2: 252, y2: 70 }),
+      svgElement("circle", { class: "geometry-point active", cx: 92, cy: 70, r: 4 }),
+      svgElement("circle", { class: "geometry-point result", cx: 252, cy: 70, r: 4 })
+    );
+    svgText(svg, "(1, 2)", 64, 57, "geometry-label active");
+    svgText(svg, "(5, 2)", 224, 57, "geometry-label result");
+    svgText(svg, "horizontal distance = 4", 104, 96, "geometry-note");
+  } else if (figure === "geometry-proof") {
+    proofBox(svg, 36, 38, "Given", "right angles");
+    proofBox(svg, 132, 38, "Reason", "all are 90°");
+    proofBox(svg, 236, 38, "Claim", "equal");
+    svg.append(
+      svgElement("path", { class: "geometry-line", d: "M 116 75 H 132" }),
+      svgElement("path", { class: "geometry-line", d: "M 212 75 H 236" })
+    );
+    svgText(svg, "A proof links each statement to a reason.", 62, 136, "geometry-note");
+  } else if (figure === "trig-unit-circle") {
+    svg.append(
+      svgElement("circle", { class: "geometry-shape", cx: 132, cy: 90, r: 58 }),
+      svgElement("line", { class: "geometry-line", x1: 54, y1: 90, x2: 210, y2: 90 }),
+      svgElement("line", { class: "geometry-line", x1: 132, y1: 22, x2: 132, y2: 158 }),
+      svgElement("line", { class: "geometry-line active", x1: 132, y1: 90, x2: 190, y2: 90 }),
+      svgElement("circle", { class: "geometry-point result", cx: 190, cy: 90, r: 4 })
+    );
+    svgText(svg, "(cos θ, sin θ)", 222, 84, "geometry-label geometry-math");
+    svgText(svg, "(1, 0)", 170, 112, "geometry-label geometry-math result");
+  } else if (figure === "trig-right-triangle") {
+    svg.append(
+      svgElement("polygon", { class: "geometry-shape", points: "70,136 250,136 250,48" }),
+      svgElement("path", { class: "geometry-arc active", d: "M 104 136 A 34 34 0 0 1 101 122" }),
+      svgElement("polyline", { class: "geometry-line", points: "232,136 232,118 250,118" })
+    );
+    svgText(svg, "θ", 108, 126, "geometry-label geometry-math active");
+    svgText(svg, "opposite", 260, 96, "geometry-note");
+    svgText(svg, "adjacent", 132, 154, "geometry-note");
+    svgText(svg, "hypotenuse", 128, 80, "geometry-note");
+  } else if (figure === "trig-graphs") {
+    svg.append(
+      svgElement("line", { class: "geometry-line", x1: 52, y1: 90, x2: 316, y2: 90 }),
+      svgElement("line", { class: "geometry-line", x1: 72, y1: 36, x2: 72, y2: 146 }),
+      svgElement("path", { class: "geometry-line active", d: "M 72 90 C 110 36 148 36 186 90 S 262 144 300 90" }),
+      svgElement("line", { class: "geometry-line result", x1: 130, y1: 90, x2: 130, y2: 48 }),
+      svgElement("path", { class: "geometry-line", d: "M 72 148 V 140 M 72 144 H 300 M 300 148 V 140" })
+    );
+    svgText(svg, "amplitude", 146, 48, "geometry-note");
+    svgText(svg, "0", 68, 112, "geometry-label geometry-math");
+    svgText(svg, "2π", 292, 112, "geometry-label geometry-math");
+    svgText(svg, "period", 170, 164, "geometry-note");
+  } else if (figure === "trig-identities") {
+    svgText(svg, "sin² x + cos² x = 1", 54, 76, "geometry-label geometry-math");
+    svgText(svg, "tan x = sin x / cos x", 54, 118, "geometry-label geometry-math");
+    svg.append(svgElement("path", { class: "geometry-line active", d: "M 52 88 H 286" }));
+  } else if (figure === "trig-inverse") {
+    svgText(svg, "ratio", 62, 78, "geometry-label");
+    svgText(svg, "angle", 246, 78, "geometry-label");
+    svg.append(
+      svgElement("path", { class: "geometry-line active", d: "M 118 72 H 220" }),
+      svgElement("path", { class: "geometry-line active", d: "M 208 62 L 222 72 L 208 82" })
+    );
+    svgText(svg, "arcsin", 148, 58, "geometry-label geometry-math");
+    svgText(svg, "sin θ = 0", 82, 125, "geometry-label geometry-math");
+    svgText(svg, "θ = 0", 226, 125, "geometry-label geometry-math result");
+  } else if (figure === "precalc-functions") {
+    svg.append(
+      svgElement("line", { class: "geometry-line", x1: 58, y1: 132, x2: 304, y2: 132 }),
+      svgElement("line", { class: "geometry-line", x1: 82, y1: 36, x2: 82, y2: 150 }),
+      svgElement("path", { class: "geometry-line active", d: "M 82 122 C 132 104 160 72 206 62 S 270 78 304 48" }),
+      svgElement("line", { class: "geometry-line result", x1: 186, y1: 132, x2: 186, y2: 68 }),
+      svgElement("circle", { class: "geometry-point result", cx: 186, cy: 68, r: 4 })
+    );
+    svgText(svg, "input", 158, 154, "geometry-note");
+    svgText(svg, "output", 28, 70, "geometry-note");
+    svgText(svg, "f(2) = 3", 210, 74, "geometry-label geometry-math");
+  } else if (figure === "precalc-transformations") {
+    svg.append(
+      svgElement("line", { class: "geometry-line", x1: 54, y1: 134, x2: 310, y2: 134 }),
+      svgElement("line", { class: "geometry-line", x1: 90, y1: 42, x2: 90, y2: 148 }),
+      svgElement("path", { class: "geometry-line", d: "M 76 128 Q 116 54 156 128" }),
+      svgElement("path", { class: "geometry-line active", d: "M 150 98 Q 190 24 230 98" }),
+      svgElement("path", { class: "geometry-line result", d: "M 146 92 L 164 74 M 146 92 L 166 94" })
+    );
+    svgText(svg, "y = x²", 78, 44, "geometry-label geometry-math");
+    svgText(svg, "shift", 180, 124, "geometry-note");
+    svgText(svg, "(h, k)", 226, 54, "geometry-label geometry-math result");
+  } else if (figure === "precalc-polynomial-rational") {
+    svg.append(
+      svgElement("line", { class: "geometry-line", x1: 52, y1: 92, x2: 318, y2: 92 }),
+      svgElement("line", { class: "geometry-line", x1: 112, y1: 32, x2: 112, y2: 150 }),
+      svgElement("line", { class: "geometry-line result", x1: 216, y1: 34, x2: 216, y2: 148 }),
+      svgElement("path", { class: "geometry-line active", d: "M 64 130 C 110 54 148 36 190 80" }),
+      svgElement("path", { class: "geometry-line active", d: "M 238 134 C 258 94 282 70 310 52" })
+    );
+    svgText(svg, "zero", 138, 116, "geometry-note");
+    svgText(svg, "not allowed", 228, 42, "geometry-note");
+    svgText(svg, "x = 4", 222, 158, "geometry-label geometry-math");
+  } else if (figure === "precalc-exponential-log") {
+    svg.append(
+      svgElement("line", { class: "geometry-line", x1: 54, y1: 136, x2: 314, y2: 136 }),
+      svgElement("line", { class: "geometry-line", x1: 82, y1: 34, x2: 82, y2: 150 }),
+      svgElement("line", { class: "geometry-line", x1: 72, y1: 140, x2: 302, y2: 40 }),
+      svgElement("path", { class: "geometry-line active", d: "M 82 126 C 146 124 194 106 232 72 S 284 34 306 30" }),
+      svgElement("path", { class: "geometry-line result", d: "M 82 130 C 126 110 172 86 222 78 S 282 72 308 58" })
+    );
+    svgText(svg, "2^x", 250, 44, "geometry-label geometry-math active");
+    svgText(svg, "log x", 262, 86, "geometry-label geometry-math result");
+  } else if (figure === "precalc-sequences") {
+    [64, 114, 164, 214, 264].forEach((x, index) => {
+      svg.append(svgElement("circle", { class: index < 4 ? "geometry-point active" : "geometry-point result", cx: x, cy: 126 - index * 18, r: 5 }));
+      svgText(svg, String(index + 1), x - 4, 154, "geometry-note");
+    });
+    svg.append(svgElement("path", { class: "geometry-line", d: "M 64 126 L 114 108 L 164 90 L 214 72 L 264 54" }));
+    svgText(svg, "add 3", 92, 72, "geometry-note");
+    svgText(svg, "next", 250, 42, "geometry-note");
+  } else if (figure === "precalc-complex") {
+    svg.append(
+      svgElement("line", { class: "geometry-line", x1: 52, y1: 100, x2: 310, y2: 100 }),
+      svgElement("line", { class: "geometry-line", x1: 132, y1: 34, x2: 132, y2: 150 }),
+      svgElement("line", { class: "geometry-line active", x1: 132, y1: 100, x2: 236, y2: 64 }),
+      svgElement("line", { class: "geometry-line result", x1: 236, y1: 100, x2: 236, y2: 64 }),
+      svgElement("circle", { class: "geometry-point result", cx: 236, cy: 64, r: 5 })
+    );
+    svgText(svg, "real", 278, 116, "geometry-note");
+    svgText(svg, "imaginary", 144, 44, "geometry-note");
+    svgText(svg, "3 + 2i", 246, 62, "geometry-label geometry-math result");
+  } else if (figure === "calc-limits") {
+    svg.append(
+      svgElement("line", { class: "geometry-line", x1: 50, y1: 124, x2: 312, y2: 124 }),
+      svgElement("line", { class: "geometry-line", x1: 82, y1: 38, x2: 82, y2: 146 }),
+      svgElement("path", { class: "geometry-line active", d: "M 70 118 C 118 96 148 74 176 72 S 232 88 292 54" }),
+      svgElement("circle", { class: "geometry-point result", cx: 176, cy: 72, r: 5 }),
+      svgElement("path", { class: "geometry-line", d: "M 118 126 L 162 126 M 150 118 L 162 126 L 150 134" }),
+      svgElement("path", { class: "geometry-line", d: "M 234 126 L 190 126 M 202 118 L 190 126 L 202 134" })
+    );
+    svgText(svg, "x → 2", 136, 152, "geometry-label geometry-math");
+    svgText(svg, "limit = 5", 198, 66, "geometry-label geometry-math result");
+  } else if (figure === "calc-derivatives") {
+    svg.append(
+      svgElement("line", { class: "geometry-line", x1: 52, y1: 132, x2: 314, y2: 132 }),
+      svgElement("line", { class: "geometry-line", x1: 82, y1: 36, x2: 82, y2: 148 }),
+      svgElement("path", { class: "geometry-line active", d: "M 76 124 Q 168 122 304 42" }),
+      svgElement("line", { class: "geometry-line result", x1: 138, y1: 116, x2: 246, y2: 74 }),
+      svgElement("circle", { class: "geometry-point result", cx: 192, cy: 95, r: 5 })
+    );
+    svgText(svg, "tangent slope", 230, 106, "geometry-note");
+    svgText(svg, "dy/dx", 118, 70, "geometry-label geometry-math");
+  } else if (figure === "calc-integrals") {
+    svg.append(
+      svgElement("line", { class: "geometry-line", x1: 52, y1: 136, x2: 314, y2: 136 }),
+      svgElement("line", { class: "geometry-line", x1: 82, y1: 36, x2: 82, y2: 150 }),
+      svgElement("path", { class: "geometry-line active", d: "M 82 126 C 128 76 174 64 220 82 S 282 118 306 62" }),
+      svgElement("path", { class: "geometry-shape result", d: "M 118 136 L 118 98 C 152 74 184 72 220 82 L 220 136 Z" })
+    );
+    svgText(svg, "area", 156, 118, "geometry-note");
+    svgText(svg, "∫ f(x) dx", 216, 58, "geometry-label geometry-math");
+  } else if (figure === "calc-applications") {
+    svg.append(
+      svgElement("line", { class: "geometry-line", x1: 52, y1: 132, x2: 314, y2: 132 }),
+      svgElement("line", { class: "geometry-line", x1: 82, y1: 36, x2: 82, y2: 150 }),
+      svgElement("path", { class: "geometry-line active", d: "M 82 120 C 134 94 184 72 252 52" }),
+      svgElement("rect", { class: "geometry-shape result", x: 100, y: 92, width: 132, height: 40, rx: 2 }),
+      svgElement("path", { class: "geometry-line", d: "M 252 52 L 274 52 L 274 30" })
+    );
+    svgText(svg, "rate", 46, 70, "geometry-note");
+    svgText(svg, "total", 144, 118, "geometry-note");
+    svgText(svg, "optimum", 250, 28, "geometry-note");
+  } else if (figure === "calc-series") {
+    [76, 126, 176, 226, 276].forEach((x, index) => {
+      const height = 74 / (index + 1);
+      svg.append(svgElement("rect", { class: index < 4 ? "geometry-shape active" : "geometry-shape result", x: x - 12, y: 136 - height, width: 24, height, rx: 2 }));
+    });
+    svg.append(svgElement("line", { class: "geometry-line", x1: 52, y1: 136, x2: 314, y2: 136 }));
+    svgText(svg, "partial sums", 124, 54, "geometry-note");
+    svgText(svg, "approach 2", 206, 92, "geometry-label geometry-math result");
+  } else if (figure === "linear-vectors") {
+    svg.append(
+      svgElement("line", { class: "geometry-line", x1: 48, y1: 132, x2: 312, y2: 132 }),
+      svgElement("line", { class: "geometry-line", x1: 78, y1: 34, x2: 78, y2: 150 }),
+      svgElement("path", { class: "geometry-line active", d: "M 78 132 L 170 72" }),
+      svgElement("path", { class: "geometry-line active", d: "M 158 70 L 172 72 L 164 84" }),
+      svgElement("path", { class: "geometry-line result", d: "M 78 132 L 242 54" }),
+      svgElement("path", { class: "geometry-line result", d: "M 230 52 L 244 54 L 236 66" })
+    );
+    svgText(svg, "(2, 3)", 118, 84, "geometry-label geometry-math active");
+    svgText(svg, "(6, 4)", 246, 58, "geometry-label geometry-math result");
+  } else if (figure === "linear-matrices") {
+    svgText(svg, "[ 1  0 ]", 62, 70, "geometry-label geometry-math");
+    svgText(svg, "[ 0  1 ]", 62, 102, "geometry-label geometry-math");
+    svgText(svg, "(5, 7)", 174, 86, "geometry-label geometry-math active");
+    svg.append(
+      svgElement("path", { class: "geometry-line", d: "M 142 83 H 166" }),
+      svgElement("path", { class: "geometry-line", d: "M 238 83 H 266" }),
+      svgElement("path", { class: "geometry-line", d: "M 254 73 L 268 83 L 254 93" })
+    );
+    svgText(svg, "(5, 7)", 276, 86, "geometry-label geometry-math result");
+  } else if (figure === "linear-transformations") {
+    svg.append(
+      svgElement("line", { class: "geometry-line", x1: 52, y1: 132, x2: 314, y2: 132 }),
+      svgElement("line", { class: "geometry-line", x1: 120, y1: 36, x2: 120, y2: 150 }),
+      svgElement("polygon", { class: "geometry-shape active", points: "124,122 174,116 164,74 114,80" }),
+      svgElement("polygon", { class: "geometry-shape result", points: "212,122 294,110 274,52 192,64" }),
+      svgElement("path", { class: "geometry-line", d: "M 164 92 H 198 M 186 82 L 200 92 L 186 102" })
+    );
+    svgText(svg, "input", 112, 64, "geometry-note");
+    svgText(svg, "T(v)", 244, 50, "geometry-label geometry-math result");
+  } else if (figure === "linear-determinants") {
+    svg.append(
+      svgElement("polygon", { class: "geometry-shape active", points: "72,126 144,126 144,58 72,58" }),
+      svgElement("polygon", { class: "geometry-shape result", points: "206,126 302,126 274,50 178,50" }),
+      svgElement("path", { class: "geometry-line", d: "M 154 88 H 176 M 164 78 L 178 88 L 164 98" })
+    );
+    svgText(svg, "area 1", 86, 150, "geometry-note");
+    svgText(svg, "area scales", 204, 150, "geometry-note");
+    svgText(svg, "det A", 218, 88, "geometry-label geometry-math result");
+  } else if (figure === "linear-eigenvalues") {
+    svg.append(
+      svgElement("line", { class: "geometry-line", x1: 50, y1: 132, x2: 314, y2: 132 }),
+      svgElement("line", { class: "geometry-line", x1: 86, y1: 38, x2: 86, y2: 150 }),
+      svgElement("path", { class: "geometry-line active", d: "M 86 132 L 168 78" }),
+      svgElement("path", { class: "geometry-line result", d: "M 86 132 L 258 42" }),
+      svgElement("path", { class: "geometry-line result", d: "M 244 42 L 260 42 L 252 56" })
+    );
+    svgText(svg, "v", 150, 74, "geometry-label geometry-math active");
+    svgText(svg, "Av = 3v", 232, 62, "geometry-label geometry-math result");
+  } else if (figure === "linear-vector-spaces") {
+    svg.append(
+      svgElement("line", { class: "geometry-line", x1: 48, y1: 132, x2: 312, y2: 132 }),
+      svgElement("line", { class: "geometry-line", x1: 92, y1: 34, x2: 92, y2: 150 }),
+      svgElement("path", { class: "geometry-line active", d: "M 92 132 L 286 44" }),
+      svgElement("path", { class: "geometry-line active", d: "M 92 132 L 230 132" }),
+      svgElement("path", { class: "geometry-line result", d: "M 92 132 L 92 48" })
+    );
+    svgText(svg, "span", 210, 74, "geometry-note");
+    svgText(svg, "basis", 108, 48, "geometry-note");
+    svgText(svg, "R²", 278, 126, "geometry-label geometry-math result");
+  }
+
+  return svg;
+}
+
+function proofBox(svg, x, y, title, body) {
+  svg.append(svgElement("rect", { class: "geometry-proof-box", x, y, width: 80, height: 74, rx: 8 }));
+  svgText(svg, title, x + 40, y + 26, "geometry-label active", "middle");
+  svgText(svg, body, x + 40, y + 52, "geometry-note", "middle");
+}
+
+function svgElement(tag, attributes = {}) {
+  const element = document.createElementNS("http://www.w3.org/2000/svg", tag);
+  for (const [name, value] of Object.entries(attributes)) {
+    element.setAttribute(name, String(value));
+  }
+  return element;
+}
+
+function svgText(svg, text, x, y, className, anchor = "start") {
+  const element = svgElement("text", { class: className, x, y, "text-anchor": anchor });
+  element.textContent = text;
+  svg.append(element);
+  return element;
 }
 
 function addIntroCell(grid, text, row, col, className = "") {
@@ -1406,6 +2230,45 @@ function addConceptIntroFigure(grid, figure) {
     add("=0", 1, 4, "operator");
     add("roots", 2, 1, "label");
     add("2, 3", 2, 4, "result");
+  } else if (figure === "geometry-angles") {
+    add("120", 1, 2, "active-source");
+    add("+", 1, 3, "operator");
+    add("?", 1, 4, "active-result");
+    add("straight", 2, 1, "label");
+    add("180", 2, 4, "result");
+  } else if (figure === "geometry-triangle") {
+    add("60", 1, 1, "active-source");
+    add("70", 1, 3, "active-source");
+    add("?", 2, 2, "active-result");
+    add("sum", 3, 1, "label");
+    add("180", 3, 4, "result");
+  } else if (figure === "geometry-circle") {
+    add("r", 1, 1, "label");
+    add("4", 1, 2, "active-source");
+    add("d", 2, 1, "label");
+    add("8", 2, 2, "active-result");
+    add("C", 3, 1, "label");
+    add("pi d", 3, 2, "wide-note");
+  } else if (figure === "geometry-area-volume") {
+    add("area", 1, 1, "label");
+    add("8 x 3", 1, 2, "wide-note active-source");
+    add("=", 1, 3, "operator");
+    add("24", 1, 4, "result");
+    add("volume", 3, 1, "label");
+    add("2 x 3 x 5", 3, 2, "wide-note");
+  } else if (figure === "geometry-coordinate") {
+    add("(1,2)", 1, 1, "active-source");
+    add("to", 1, 2, "operator");
+    add("(5,2)", 1, 3, "active-source");
+    add("dx", 2, 1, "label");
+    add("4", 2, 4, "result");
+  } else if (figure === "geometry-proof") {
+    add("given", 1, 1, "label");
+    add("right angles", 1, 2, "wide-note active-source");
+    add("reason", 2, 1, "label");
+    add("all are 90", 2, 2, "wide-note");
+    add("therefore", 3, 1, "label");
+    add("equal", 3, 4, "result");
   } else if (figure === "word-problem") {
     add("18", 1, 2, "active-source");
     add("+", 1, 3, "operator");
@@ -1444,7 +2307,35 @@ function conceptFigureCaption(figure) {
     "polynomial-terms": "Like polynomial terms combine by matching variable and exponent.",
     "factoring-pairs": "Factoring reverses expansion by finding useful products.",
     "rational-cancel": "Common factors can cancel after factoring.",
-    "quadratic-roots": "Factored quadratics show where the expression equals zero."
+    "quadratic-roots": "Factored quadratics show where the expression equals zero.",
+    "geometry-angles": "Angle facts often come from a shared total such as 90 or 180 degrees.",
+    "geometry-triangle": "Triangle angle measures always add to 180 degrees.",
+    "geometry-circle": "Radius, diameter, and circumference describe the same circle in different ways.",
+    "geometry-area-volume": "Area counts flat space; volume counts three-dimensional space.",
+    "geometry-coordinate": "Coordinates turn geometric distance into differences on a grid.",
+    "geometry-proof": "Proofs connect each claim to a reason.",
+    "trig-unit-circle": "The unit circle turns angles into coordinates.",
+    "trig-right-triangle": "Right-triangle trigonometry compares sides relative to an angle.",
+    "trig-graphs": "Trigonometric graphs repeat in predictable waves.",
+    "trig-identities": "Identities let you rewrite trig expressions without changing their values.",
+    "trig-inverse": "Inverse trig functions recover an angle from a ratio.",
+    "precalc-functions": "Functions connect each input to one output.",
+    "precalc-transformations": "Transformations move a parent graph without losing its structure.",
+    "precalc-polynomial-rational": "Polynomial and rational functions reveal zeros, degrees, and restrictions.",
+    "precalc-exponential-log": "Logarithms reverse exponential growth.",
+    "precalc-sequences": "Sequences track ordered patterns term by term.",
+    "precalc-complex": "Complex numbers extend the number line into a plane.",
+    "calc-limits": "Limits describe the value a function approaches.",
+    "calc-derivatives": "Derivatives measure tangent slope and instantaneous change.",
+    "calc-integrals": "Integrals accumulate area or total change.",
+    "calc-applications": "Calculus connects rates, totals, and optimization.",
+    "calc-series": "Series add ordered terms and track partial sums.",
+    "linear-vectors": "Vectors encode size and direction with coordinates.",
+    "linear-matrices": "Matrices organize linear rules in rows and columns.",
+    "linear-transformations": "Linear transformations move vectors while preserving linear structure.",
+    "linear-determinants": "Determinants describe how a matrix scales area or volume.",
+    "linear-eigenvalues": "Eigenvectors keep direction while eigenvalues give the scale.",
+    "linear-vector-spaces": "Vector spaces collect all combinations allowed by addition and scaling."
   };
   return captions[figure] || captions["mixed-review"];
 }
@@ -2727,24 +3618,29 @@ function addCell({ row, col, value, className, borrowSlot = false }) {
 }
 
 function setMathText(element, value) {
-  const text = String(value ?? "");
+  const text = displayMathText(String(value ?? ""));
   element.replaceChildren();
-  if (!text.includes("^")) {
+  element.removeAttribute("aria-label");
+  element.classList.remove("has-math");
+
+  if (!hasMathSyntax(text)) {
     element.textContent = text;
     return;
   }
 
   element.setAttribute("aria-label", text);
+  element.classList.add("has-math");
   const powerPattern = /\^(\{[^}]+\}|-?[A-Za-z0-9]+)/g;
   let cursor = 0;
   let match = powerPattern.exec(text);
   while (match) {
     if (match.index > cursor) {
-      element.append(document.createTextNode(text.slice(cursor, match.index)));
+      appendSegmentBeforeExponent(element, text.slice(cursor, match.index));
     }
 
     const exponentText = match[1].startsWith("{") ? match[1].slice(1, -1) : match[1];
     const exponent = document.createElement("sup");
+    exponent.className = "math-sup";
     exponent.textContent = exponentText;
     element.append(exponent);
     cursor = powerPattern.lastIndex;
@@ -2752,8 +3648,110 @@ function setMathText(element, value) {
   }
 
   if (cursor < text.length) {
+    appendMathSegment(element, text.slice(cursor));
+  }
+}
+
+function appendSegmentBeforeExponent(element, text) {
+  const baseMatch = text.match(/(.*?)(sin|cos|tan|sec|csc|cot|log|ln|lim|[A-Za-z0-9πθ])$/i);
+  if (!baseMatch) {
+    appendMathSegment(element, text);
+    return;
+  }
+
+  appendMathSegment(element, baseMatch[1]);
+  appendRun(element, baseMatch[2], "math-run");
+}
+
+function displayMathText(value) {
+  return String(value || "").replace(/\bpi\b/g, "π");
+}
+
+function hasMathSyntax(text) {
+  return /[\^πθ∫≤≥=+\-*/×·/]|[A-Za-z]\d|\d[A-Za-z]|\([^)]+,[^)]+\)|\b[A-Za-z]\([A-Za-z0-9]+\)|\b(?:sin|cos|tan|sec|csc|cot|arcsin|arccos|arctan|log|ln|lim)\b/i.test(text);
+}
+
+function appendMathSegment(element, text) {
+  if (!text) return;
+  const tokenPattern = /((?<![A-Za-z])(?:[A-Za-z]\([A-Za-z0-9]+\)|[A-Za-zπθ])\s*=\s*[^,.;?]+|\b[A-Za-z]\([A-Za-z0-9]+\)|\b(?:sin|cos|tan|sec|csc|cot|arcsin|arccos|arctan|log|ln|lim)\s*[A-Za-zθπ]?\b|\b(?:\d+|[A-Za-zθπ])\s*[+\-*/×·]\s*(?:\d+|[A-Za-zθπ])\b|\b\d+\s*[π]\b|\b\d+[A-Za-z]\b|\b[A-Za-z]\d+\b|\([^)]+,[^)]+\)|[πθ∫])/gi;
+  let cursor = 0;
+  let match = tokenPattern.exec(text);
+  if (match) {
+    while (match) {
+      if (match.index > cursor) {
+        appendTextRun(element, text.slice(cursor, match.index));
+      }
+      appendRun(element, match[0], "math-run");
+      cursor = tokenPattern.lastIndex;
+      match = tokenPattern.exec(text);
+    }
+    if (cursor < text.length) {
+      appendTextRun(element, text.slice(cursor));
+    }
+    return;
+  }
+
+  appendRun(element, text, shouldUseStandaloneMathFont(text) ? "math-run" : "text-run");
+}
+
+function appendTextRun(element, text) {
+  appendRun(element, text, "text-run");
+}
+
+function appendRun(element, text, className) {
+  if (!text) return;
+  const segment = document.createElement("span");
+  segment.className = className;
+  if (className === "math-run") {
+    appendMathRunContent(segment, text);
+  } else {
+    segment.textContent = text;
+  }
+  element.append(segment);
+}
+
+function appendMathRunContent(element, text) {
+  const identifierPattern = /([A-Za-z]+|π|θ)/g;
+  let cursor = 0;
+  let match = identifierPattern.exec(text);
+  while (match) {
+    if (match.index > cursor) {
+      element.append(document.createTextNode(text.slice(cursor, match.index)));
+    }
+    const token = match[0];
+    const span = document.createElement("span");
+    span.className = mathTokenClass(token);
+    span.textContent = token;
+    element.append(span);
+    cursor = identifierPattern.lastIndex;
+    match = identifierPattern.exec(text);
+  }
+  if (cursor < text.length) {
     element.append(document.createTextNode(text.slice(cursor)));
   }
+}
+
+function mathTokenClass(token) {
+  const uprightTokens = new Set(["sin", "cos", "tan", "sec", "csc", "cot", "arcsin", "arccos", "arctan", "log", "ln", "lim", "π"]);
+  if (uprightTokens.has(token.toLowerCase())) return "math-upright";
+  return token.length === 1 ? "math-var" : "math-upright";
+}
+
+function shouldUseStandaloneMathFont(text) {
+  const trimmed = text.trim();
+  if (!shouldUseMathFont(trimmed)) return false;
+  const withoutUprightNames = trimmed.replace(/\b(?:sin|cos|tan|sec|csc|cot|arcsin|arccos|arctan|log|ln)\b/gi, "");
+  return !/[A-Za-z]{2,}/.test(withoutUprightNames);
+}
+
+function shouldUseMathFont(text) {
+  const trimmed = text.trim();
+  if (!trimmed) return false;
+  if (/[π∫≤≥=+\-*/×·/]/.test(trimmed)) return true;
+  if (/\d[A-Za-z]|[A-Za-z]\d/.test(trimmed)) return true;
+  if (/^\([^)]+,[^)]+\)$/.test(trimmed)) return true;
+  if (/^[A-Za-z]$/.test(trimmed)) return true;
+  return false;
 }
 
 function createBorrowSlot(role) {
@@ -3174,7 +4172,11 @@ function isCorrectAnswer(input) {
 }
 
 function answerValue(value) {
-  return String(value || "").trim().toLowerCase();
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/π/g, "pi")
+    .replace(/×/g, "*");
 }
 
 function normalizeAnswerInput(value) {

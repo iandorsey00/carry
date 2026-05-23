@@ -2,7 +2,7 @@
 
 Carry is a local-first math learning studio designed to run fully in the browser.
 
-Carry opens directly into a focused learning workspace. It currently includes implemented Arithmetic, Pre-Algebra, and Algebra lessons, including guided long addition, subtraction, multiplication, division, division with remainders, equation transformations, inequality transformations, systems, factoring, and quadratics. Progress is stored privately in the browser with `localStorage`, with JSON export and import controls for backup or transfer.
+Carry opens directly into a focused learning workspace. It currently includes implemented Arithmetic, Pre-Algebra, Algebra, Geometry, Trigonometry, Precalculus, Calculus, and Linear Algebra lessons, including guided long addition, subtraction, multiplication, division, division with remainders, equation transformations, inequality transformations, systems, factoring, quadratics, angles, triangles, circles, area and volume, coordinate geometry, proof basics, unit circle values, right-triangle ratios, trig graphs, identities, inverse trig, functions, transformations, polynomial and rational functions, exponential and log functions, sequences, complex numbers, limits, derivatives, integrals, calculus applications, series, vectors, matrices, linear transformations, determinants, eigenvalues, and vector spaces. Progress is stored privately in the browser with `localStorage`, with JSON export and import controls for backup or transfer.
 
 ## Run
 
@@ -22,7 +22,7 @@ Open `index.html` in a browser, or serve the directory with any static file serv
 - Long subtraction defaults to non-negative answers.
 - Exact long division accepts three-digit dividends and one- or two-digit divisors with no final remainder.
 - Long division with remainders is a separate lesson. If a learner enters a valid remainder problem in exact long division, Carry moves it to the remainders lesson automatically.
-- Algebra helpers focus on simple linear transformations, systems, factoring, and introductory quadratics before broader algebra features are added.
+- Algebra, Geometry, Trigonometry, Precalculus, Calculus, and Linear Algebra helpers focus on simple transformations, systems, factoring, introductory quadratics, shape facts, measurement, coordinate reasoning, proof basics, exact trig relationships, function behavior, graph transformations, early advanced algebra, limits, rates of change, accumulation, series, vectors, matrices, determinants, and eigenvectors before broader advanced features are added.
 
 Future topics can register their own workspace, notation renderer, validation logic, hint system, and progress hooks without adding account infrastructure.
 
