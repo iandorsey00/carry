@@ -1,6 +1,6 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-alpha.1";
+const APP_VERSION = "0.1.0-alpha.25";
 const STORAGE_KEY = "carry.progress.v1";
 
 const topicGroups = [
@@ -1409,7 +1409,7 @@ const setTheoryConceptWorkspaces = {
     problems: [
       { prompt: "If <math>A = {1, 2, 3}</math>, is <math>2</math> in <math>A</math>?", answer: "yes", answers: ["yes", "true"], hint: "<math>2</math> appears inside the braces.", label: "membership check" },
       { prompt: "If <math>B = {red, blue}</math>, is green in <math>B</math>?", answer: "no", answers: ["no", "false"], hint: "Only red and blue are listed.", label: "nonmembership check" },
-      { prompt: "What symbol means is an element of?", answer: "∈", answers: ["∈", "in", "elementof", "element of"], hint: "Read <math>x ∈ A</math> as <math>x</math> is an element of <math>A</math>.", label: "membership symbol" }
+      { prompt: "What symbol means is an element of?", answer: "∈", answers: ["∈", "∊", "e", "E", "in", "is in", "element", "elementof", "element of", "member", "member of", "belongs", "belongs to"], hint: "Read <math>x ∈ A</math> as <math>x</math> is an element of <math>A</math>.", label: "membership symbol" }
     ]
   },
   "set-theory.subsets": {
@@ -1844,7 +1844,7 @@ const state = {
   customProblems: {},
   currentModel: null,
   checkedCells: new Map(),
-  lastCheckAt: 0
+  autoAdvancedToStep: null
 };
 
 const multiplicationProblemSet = [
@@ -1909,6 +1909,148 @@ const divisionRemainderProblemSet = [
   { top: 710, bottom: 7 },
   { top: 819, bottom: 4 }
 ];
+
+supplementFoundationalPractice();
+
+function supplementFoundationalPractice() {
+  additionProblemSet.push(
+    { top: 148, bottom: 236 },
+    { top: 275, bottom: 319 },
+    { top: 406, bottom: 357 },
+    { top: 680, bottom: 145 },
+    { top: 59, bottom: 864 },
+    { top: 708, bottom: 292 },
+    { top: 471, bottom: 528 },
+    { top: 826, bottom: 75 }
+  );
+
+  subtractionProblemSet.push(
+    { top: 842, bottom: 367 },
+    { top: 756, bottom: 289 },
+    { top: 603, bottom: 178 },
+    { top: 950, bottom: 456 },
+    { top: 520, bottom: 89 },
+    { top: 904, bottom: 627 }
+  );
+
+  multiplicationProblemSet.push(
+    { top: 142, bottom: 236 },
+    { top: 305, bottom: 418 },
+    { top: 760, bottom: 204 },
+    { top: 629, bottom: 317 },
+    { top: 480, bottom: 625 },
+    { top: 831, bottom: 406 }
+  );
+
+  divisionProblemSet.push(
+    { top: 936, bottom: 6 },
+    { top: 816, bottom: 12 },
+    { top: 988, bottom: 13 },
+    { top: 672, bottom: 21 },
+    { top: 792, bottom: 18 },
+    { top: 945, bottom: 15 }
+  );
+
+  divisionRemainderProblemSet.push(
+    { top: 937, bottom: 6 },
+    { top: 817, bottom: 12 },
+    { top: 989, bottom: 13 },
+    { top: 673, bottom: 21 },
+    { top: 793, bottom: 18 },
+    { top: 946, bottom: 15 }
+  );
+
+  addPractice("arithmetic.fractions", [
+    { prompt: "Simplify 9/12.", answer: "3/4", hint: "Divide the top and bottom by 3.", label: "simplified fraction", feedback: "Look for a common factor in the numerator and denominator." },
+    { prompt: "What is 3/5 of 20?", answer: "12", hint: "One fifth of 20 is 4, so three fifths is 12.", label: "fraction of a number", feedback: "Find one equal part first, then multiply by the numerator." },
+    { prompt: "Which is larger: 2/3 or 2/5?", answer: "2/3", hint: "With the same numerator, smaller parts make a smaller fraction.", label: "larger fraction", feedback: "Compare the size of each part when the numerators match." },
+    { prompt: "Complete: 1/2 = __/8.", answer: "4", hint: "Multiply the denominator by 4, so multiply the numerator by 4.", label: "equivalent fraction", feedback: "Use the same scale factor on the top and bottom." },
+    { prompt: "What is 1/3 + 1/3?", answer: "2/3", hint: "The denominators match, so add the numerators.", label: "like denominator sum", feedback: "When denominators match, keep the denominator and add the numerators." }
+  ]);
+
+  addPractice("arithmetic.decimals", [
+    { prompt: "What is 0.25 + 0.50?", answer: "0.75", answers: ["0.75", ".75"], hint: "Add hundredths: 25 hundredths plus 50 hundredths.", label: "decimal sum", feedback: "Line up place values before adding." },
+    { prompt: "Write 7 hundredths as a decimal.", answer: "0.07", answers: ["0.07", ".07"], hint: "Hundredths use two places after the decimal point.", label: "hundredths decimal", feedback: "Hundredths need two decimal places." },
+    { prompt: "Which is larger: 0.62 or 0.7?", answer: "0.7", answers: ["0.7", "0.70"], hint: "0.7 is the same as 0.70.", label: "larger decimal", feedback: "Compare using the same number of decimal places." },
+    { prompt: "What is 3.4 - 1.2?", answer: "2.2", hint: "Subtract tenths from tenths and ones from ones.", label: "decimal difference", feedback: "Line up the decimal points." }
+  ]);
+
+  addPractice("arithmetic.percents", [
+    { prompt: "What is 50% of 90?", answer: "45", hint: "50% is half.", label: "fifty percent", feedback: "Translate the percent into a familiar fraction." },
+    { prompt: "What is 20% of 60?", answer: "12", hint: "10% is 6, so 20% is 12.", label: "twenty percent", feedback: "Find 10% first if that is easier." },
+    { prompt: "Write 0.35 as a percent.", answer: "35%", answers: ["35%", "35"], hint: "0.35 is 35 hundredths.", label: "decimal to percent", feedback: "Move from decimal hundredths to percent." },
+    { prompt: "Write 75% as a decimal.", answer: "0.75", answers: ["0.75", ".75"], hint: "75% means 75 out of 100.", label: "percent to decimal", feedback: "Percent means per hundred." }
+  ]);
+
+  addPractice("arithmetic.ratios", [
+    { prompt: "Simplify the ratio 8:12.", answer: "2:3", hint: "Divide both parts by 4.", label: "simplified ratio", feedback: "Divide both sides of the ratio by the same number." },
+    { prompt: "Complete the equivalent ratio: 5:6 = 10:__.", answer: "12", hint: "5 became 10 by multiplying by 2.", label: "equivalent ratio", feedback: "Use the same scale factor on both parts." },
+    { prompt: "If 3:7 scales by 5, what is the new second number?", answer: "35", hint: "Multiply the second part by 5.", label: "scaled ratio part", feedback: "Scale both parts by the same factor." },
+    { prompt: "Simplify 15:25.", answer: "3:5", hint: "Divide both parts by 5.", label: "simplified ratio", feedback: "Look for the greatest common factor." }
+  ]);
+
+  addPractice("prealgebra.integers", [
+    { prompt: "What is -8 + 3?", answer: "-5", hint: "Move 3 steps right from -8.", label: "integer addition", feedback: "Use the number line direction: adding moves right." },
+    { prompt: "What is -5 - 6?", answer: "-11", hint: "Move 6 steps left from -5.", label: "integer subtraction", feedback: "Subtracting a positive moves left." },
+    { prompt: "What is -6 x -4?", answer: "24", hint: "Same signs make a positive product.", label: "integer product", feedback: "Check the sign rule first, then multiply." },
+    { prompt: "What is 42 / -7?", answer: "-6", hint: "Different signs make a negative quotient.", label: "integer quotient", feedback: "Different signs give a negative result." }
+  ]);
+
+  addPractice("prealgebra.expressions", [
+    { prompt: "Simplify: 4y + 2y.", answer: "6y", hint: "Both terms are y terms.", label: "combined expression", feedback: "Only combine terms with the same variable part." },
+    { prompt: "Simplify: 8m - 3m + 2.", answer: "5m+2", answers: ["5m+2", "2+5m"], hint: "Combine the m terms and keep the constant.", label: "combined expression", feedback: "Constants and variable terms are different kinds of terms." },
+    { prompt: "Evaluate 2p + 5 when p = 6.", answer: "17", hint: "2 times 6 plus 5.", label: "expression value", feedback: "Substitute first, then follow order of operations." },
+    { prompt: "Simplify: 3a + 4 + a + 6.", answer: "4a+10", answers: ["4a+10", "10+4a"], hint: "Combine a terms, then constants.", label: "combined expression", feedback: "Group like terms before adding." }
+  ]);
+
+  addPractice("prealgebra.exponents", [
+    { prompt: "Evaluate 4^2.", answer: "16", hint: "4 squared means 4 x 4.", label: "power value", feedback: "The exponent counts repeated factors, not addition." },
+    { prompt: "Evaluate 10^4.", answer: "10000", hint: "Use four factors of 10.", label: "power of ten", feedback: "A power of 10 has as many zeros as the exponent." },
+    { prompt: "Write 5 x 5 x 5 as a power.", answer: "5^3", answers: ["5^3", "5³"], hint: "There are three factors of 5.", label: "power notation", feedback: "The repeated factor is the base; the count is the exponent." },
+    { prompt: "Evaluate 2^3 + 1.", answer: "9", hint: "2^3 is 8, then add 1.", label: "exponent expression value", feedback: "Evaluate the exponent before adding." }
+  ]);
+
+  addPractice("algebra.polynomials", [
+    { prompt: "Combine like terms: 6x^2 - 2x^2 + x.", answer: "4x^2+x", answers: ["4x^2+x", "x+4x^2"], hint: "Combine only the x^2 terms.", label: "combined polynomial", feedback: "Match both variable and exponent before combining." },
+    { prompt: "What is the degree of 7x^4 + 2x^2 - 1?", answer: "4", hint: "Find the largest exponent.", label: "polynomial degree", feedback: "Degree is about the highest power after simplifying." },
+    { prompt: "Evaluate x^2 - x when x = 5.", answer: "20", hint: "25 - 5 = 20.", label: "polynomial value", feedback: "Substitute the value for every x first." }
+  ]);
+
+  addPractice("algebra.rational-expressions", [
+    { prompt: "Simplify: 10x / 15.", answer: "2x/3", answers: ["2x/3", "(2x)/3"], hint: "Divide numerator and denominator by 5.", label: "reduced rational expression", feedback: "Reduce common numerical factors." },
+    { prompt: "For 1 / (x + 4), what value of x is not allowed?", answer: "-4", hint: "The denominator cannot equal zero.", label: "excluded value", feedback: "Set the denominator equal to zero to find the excluded value." },
+    { prompt: "Simplify: (x^2 - 4) / (x - 2).", answer: "x+2", hint: "Factor x^2 - 4 as (x - 2)(x + 2).", label: "simplified rational expression", feedback: "Factor first, then cancel common factors." }
+  ]);
+
+  addEquationPractice("prealgebra.equations", [
+    { a: 1, b: -4, c: 9 },
+    { a: 4, b: 0, c: 28 },
+    { a: 3, b: -6, c: 15 },
+    { a: -2, b: 0, c: 18 }
+  ]);
+
+  addEquationPractice("prealgebra.inequalities", [
+    { a: 1, b: -3, relation: ">=", c: 4 },
+    { a: 3, b: 0, relation: ">", c: 12 },
+    { a: -2, b: 0, relation: ">=", c: 8 },
+    { a: 2, b: 5, relation: "<", c: 17 }
+  ]);
+
+  addEquationPractice("algebra.linear-equations", [
+    { a: 3, b: 6, c: 21 },
+    { a: -4, b: 8, c: -12 },
+    { a: 7, b: -2, c: 26 },
+    { a: 2, b: -9, c: 5 }
+  ]);
+}
+
+function addPractice(workspaceId, problems) {
+  conceptWorkspaces[workspaceId]?.problems.push(...problems);
+}
+
+function addEquationPractice(workspaceId, problems) {
+  conceptWorkspaces[workspaceId]?.problems.push(...problems);
+}
 
 const els = {};
 
@@ -2071,6 +2213,7 @@ function renderWorkspace() {
   els.grid.className = `math-grid ${workspace.type}-grid`;
   els.grid.innerHTML = "";
   state.checkedCells.clear();
+  state.autoAdvancedToStep = null;
 
   if (workspace.status === "planned") {
     renderPlannedWorkspace(workspace);
@@ -2116,10 +2259,18 @@ function renderWorkspace() {
     state.currentModel = buildMultiplicationModel(workspace.problem.top, workspace.problem.bottom);
     renderMultiplicationGrid(state.currentModel);
   }
-  setStatus(workspace.type === "concept" || workspace.type === "equation" || workspace.type === "inequality" || workspace.type === "system" || workspace.type === "factoring" || workspace.type === "quadratic" ? "Enter the active step, then check it." : "Place the first digit in the active box.", "");
+  setStatus(workspaceStartStatus(workspace), "");
   setActiveStep();
   drawOverlays();
   updateStepText();
+}
+
+function workspaceStartStatus(workspace) {
+  if (workspace.type === "concept") return "Enter the answer, then check it.";
+  if (["equation", "inequality", "system", "factoring", "quadratic"].includes(workspace.type)) {
+    return "Enter the active step, then check it.";
+  }
+  return "Place the first digit in the active box.";
 }
 
 function setWorkspaceView(view) {
@@ -2176,6 +2327,7 @@ function renderIntroCopy(workspace) {
   sections.className = "intro-sections";
   sections.append(
     createIntroSection("Core idea", items),
+    createIntroSection("Worked example", introWorkedExampleItems(workspace)),
     createIntroSection("What you will practice", introPracticeItems(workspace)),
     createIntroSection("Answer format", introAnswerFormatItems(workspace))
   );
@@ -2198,6 +2350,78 @@ function createIntroSection(title, items) {
 
   section.append(heading, list);
   return section;
+}
+
+function introWorkedExampleItems(workspace) {
+  if (workspace.type === "concept" && workspace.problems?.length) {
+    const problem = workspace.problems[0];
+    return [
+      `Problem: ${problem.prompt}`,
+      `Think: ${problem.hint || "Use the rule from the core idea."}`,
+      `Answer: ${problem.answer}`
+    ];
+  }
+
+  if (workspace.type === "addition") {
+    return [
+      "For 486 + 257, start with ones: 6 + 7 = 13, so write 3 and carry 1.",
+      "Then tens: 8 + 5 + 1 = 14, so write 4 and carry 1.",
+      "Then hundreds: 4 + 2 + 1 = 7, so the sum is 743."
+    ];
+  }
+
+  if (workspace.type === "subtraction") {
+    return [
+      "For 645 - 278, ones needs a borrow: 15 - 8 = 7.",
+      "The tens column became 3, so borrow again: 13 - 7 = 6.",
+      "The hundreds column became 5, so 5 - 2 = 3. The difference is 367."
+    ];
+  }
+
+  if (workspace.type === "multiplication") {
+    return [
+      "For 247 × 386, multiply 247 by 6 first to make the ones partial row.",
+      "Then multiply by 80 and 300, shifting those partial rows left.",
+      "Add the partial rows to get the final product."
+    ];
+  }
+
+  if (workspace.type === "division") {
+    return [
+      "For 864 ÷ 4, ask how many 4s fit into the current part of the dividend.",
+      "8 ÷ 4 = 2, then 6 ÷ 4 = 1 remainder 2, then 24 ÷ 4 = 6.",
+      "The quotient is 216, with no final remainder in the exact division lesson."
+    ];
+  }
+
+  if (workspace.type === "equation") {
+    return [
+      "For x + 7 = 12, subtract 7 from both sides.",
+      "The left side becomes x, and the right side becomes 5.",
+      "So x = 5."
+    ];
+  }
+
+  if (workspace.type === "inequality") {
+    return [
+      "For x + 4 > 9, subtract 4 from both sides.",
+      "The comparison direction stays the same because you did not multiply or divide by a negative.",
+      "So x > 5."
+    ];
+  }
+
+  if (workspace.type === "factoring" || workspace.type === "quadratic") {
+    return [
+      "For x^2 + 5x + 6, find two numbers that multiply to 6 and add to 5.",
+      "The pair 2 and 3 works.",
+      "So x^2 + 5x + 6 = (x + 2)(x + 3)."
+    ];
+  }
+
+  return [
+    "Read the prompt, identify the current rule, and make one small move.",
+    "Check that move before continuing."
+  ];
 }
 
 function introPracticeItems(workspace) {
@@ -3623,7 +3847,8 @@ function buildConceptModel(workspace) {
         answers: workspace.problem.answers || [workspace.problem.answer],
         sequence: 0,
         label: workspace.problem.label || "answer",
-        hint: workspace.problem.hint
+        hint: workspace.problem.hint,
+        feedback: workspace.problem.feedback
       }
     ]
   };
@@ -3653,25 +3878,19 @@ function renderConceptGrid(model) {
   input.dataset.answers = JSON.stringify(model.cells[0].answers);
   input.dataset.hint = model.cells[0].hint;
   input.dataset.label = model.cells[0].label;
+  input.dataset.feedback = model.cells[0].feedback || "";
   input.dataset.prompt = model.prompt;
   input.dataset.sequence = "0";
   input.setAttribute("aria-label", model.cells[0].label);
 
   input.addEventListener("input", (event) => {
     event.target.value = normalizeAnswerInput(event.target.value);
+    if (state.mode === "guided") validateGuidedConceptInput(event.target);
     if (state.mode === "practice") validateInput(event.target, false);
     if (state.mode === "explore") markExploreInput(event.target);
   });
-  input.addEventListener("keydown", (event) => {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      if (isCurrentProblemComplete()) {
-        startNextProblem();
-      } else {
-        checkCurrentStep();
-      }
-    }
-  });
+  input.setAttribute("oninput", "document.dispatchEvent(new CustomEvent('carry-concept-input-command', { detail: this }))");
+  input.setAttribute("onkeydown", "window.carryInlineReturn?.(event)");
   input.addEventListener("focus", (event) => {
     event.target.select();
   });
@@ -5067,12 +5286,14 @@ function addInput(cell) {
   }
   input.dataset.hint = cell.hint;
   input.dataset.label = cell.label;
+  input.dataset.feedback = cell.feedback || "";
   input.dataset.sequence = String(cell.sequence);
   input.setAttribute("aria-label", cell.label);
 
   input.addEventListener("input", (event) => {
     event.target.value = event.target.inputMode === "numeric" ? normalizeDigitInput(event.target) : normalizeAnswerInput(event.target.value);
-    if (shouldAutoAdvance(event.target)) checkCurrentStep();
+    if (event.target.value.trim()) state.autoAdvancedToStep = null;
+    if (shouldAutoAdvance(event.target)) autoAdvanceCurrentStep();
     if (state.mode === "practice") validateInput(event.target, false);
     if (state.mode === "explore") markExploreInput(event.target);
   });
@@ -5120,7 +5341,8 @@ function createScratchInput(type, role) {
 
   input.addEventListener("input", (event) => {
     event.target.value = event.target.value.replace(/\D/g, "").slice(0, 1);
-    if (shouldAutoAdvance(event.target)) checkCurrentStep();
+    if (event.target.value.trim()) state.autoAdvancedToStep = null;
+    if (shouldAutoAdvance(event.target)) autoAdvanceCurrentStep();
     if (state.mode === "practice") validateInput(event.target, false);
     if (state.mode === "explore") markExploreInput(event.target);
   });
@@ -5364,19 +5586,31 @@ function checkCurrentStep() {
     return;
   }
 
+  if (isCurrentProblemComplete()) {
+    setStatus("Lesson complete. Press Return for the next problem, or choose New.", "complete");
+    return;
+  }
+
   const activeStep = steps[state.activeStep];
-  const target = state.mode === "guided" && activeStep ? inputForStep(activeStep) : document.activeElement;
-  const input = target?.classList?.contains("digit-input")
-    ? target
-    : visibleInputs().find((item) => item.classList.contains("active")) || visibleInputs().find((item) => !item.classList.contains("correct"));
+  const focusedInput = document.activeElement?.classList?.contains("digit-input") ? document.activeElement : null;
+  const activeInput = visibleInputs().find((item) => item.classList.contains("active"));
+  const stepInput = state.mode === "guided" && activeStep ? inputForStep(activeStep) : null;
+  const input = focusedInput || activeInput || stepInput || visibleInputs().find((item) => !item.classList.contains("correct"));
   if (!input) {
     setStatus("No active answer is available yet.", "incorrect");
     return;
   }
 
   if (!input.value.trim()) {
+    if (state.autoAdvancedToStep === state.activeStep) {
+      input.classList.remove("incorrect");
+      input.focus({ preventScroll: true });
+      setStatus(`Correct. Continue with ${activeStep?.label || input.dataset.label || "the next box"}.`, "correct");
+      return;
+    }
     setStatus(input.inputMode === "numeric" ? "Try another digit." : "Try another entry.", "incorrect");
     input.classList.add("incorrect");
+    input.focus({ preventScroll: true });
     return;
   }
 
@@ -5395,15 +5629,77 @@ function checkCurrentStep() {
 function requestStepCheck(event) {
   event?.preventDefault?.();
   event?.stopPropagation?.();
-  const now = Date.now();
-  if (now - state.lastCheckAt < 120) return;
-  state.lastCheckAt = now;
-  setStatus("Checking.", "");
+  event?.stopImmediatePropagation?.();
+  if (state.showIntro) {
+    startCurrentLesson();
+    return;
+  }
   checkCurrentStep();
+}
+
+function handleCommandEvent(event) {
+  const checkButton = event.target?.closest?.("#checkStep");
+  if (["click", "pointerdown", "mousedown", "mouseup", "touchstart"].includes(event.type) && checkButton) {
+    requestStepCheck(event);
+    return;
+  }
+  if (event.type !== "keydown" && event.type !== "keyup") return;
+  if ((event.key === "Enter" || event.key === " ") && checkButton) {
+    requestStepCheck(event);
+    return;
+  }
+  if (event.key !== "Enter" || !event.target?.classList?.contains("digit-input")) return;
+  event.preventDefault();
+  event.stopPropagation();
+  event.stopImmediatePropagation();
+  if (isCurrentProblemComplete()) {
+    startNextProblem();
+  } else {
+    checkCurrentStep();
+  }
+}
+
+function handleAnswerKeydown(event) {
+  if (event.key !== "Enter") return;
+  event.preventDefault();
+  event.stopPropagation();
+  event.stopImmediatePropagation();
+  if (isCurrentProblemComplete()) {
+    startNextProblem();
+  } else {
+    checkCurrentStep();
+  }
+}
+
+document.addEventListener("carry-check-command", () => requestStepCheck());
+document.addEventListener("carry-answer-return-command", runReturnCommand);
+document.addEventListener("carry-concept-input-command", (event) => {
+  const input = event.detail;
+  if (!input?.classList?.contains("digit-input")) return;
+  input.value = normalizeAnswerInput(input.value);
+  if (state.mode === "guided") validateGuidedConceptInput(input);
+  if (state.mode === "practice") validateInput(input, false);
+  if (state.mode === "explore") markExploreInput(input);
+});
+
+function runReturnCommand() {
+  if (state.showIntro) {
+    startCurrentLesson();
+  } else if (isCurrentProblemComplete()) {
+    startNextProblem();
+  } else {
+    checkCurrentStep();
+  }
 }
 
 function shouldAutoAdvance(input) {
   return state.mode === "guided" && els.autoAdvance.checked && input.classList.contains("active") && input.value.length >= Number(input.maxLength || 1);
+}
+
+function autoAdvanceCurrentStep() {
+  const previousStep = state.activeStep;
+  checkCurrentStep();
+  state.autoAdvancedToStep = state.activeStep > previousStep && !isCurrentProblemComplete() ? state.activeStep : null;
 }
 
 function handleDigitBeforeInput(event) {
@@ -5420,6 +5716,7 @@ function handleDigitKeydown(event) {
   }
   if (event.key === "Enter") {
     event.preventDefault();
+    event.stopPropagation();
     if (isCurrentProblemComplete()) {
       startNextProblem();
     } else {
@@ -5454,14 +5751,53 @@ function validateInput(input, announce) {
     state.checkedCells.delete(input.dataset.cellId);
   }
   if (announce) {
-    const retryText = input.inputMode === "numeric" ? "Try another digit." : "Try another entry.";
-    setStatus(correct ? "Correct. Continue to the next box." : retryText, correct ? "correct" : "incorrect");
+    setStatus(correct ? "Correct. Continue to the next box." : feedbackForInput(input), correct ? "correct" : "incorrect");
   }
   return correct;
 }
 
+function validateGuidedConceptInput(input) {
+  if (!input.value.trim()) {
+    input.classList.remove("correct", "incorrect", "hint");
+    setStatus("Enter the answer, then check it.", "");
+    return;
+  }
+
+  const correct = validateInput(input, false);
+  if (!correct) {
+    setStatus(feedbackForInput(input), "incorrect");
+    return;
+  }
+
+  if (state.activeStep < orderedSteps().length) {
+    state.activeStep = orderedSteps().length;
+    completeLesson();
+  }
+}
+
+function feedbackForInput(input) {
+  if (input.dataset.feedback) return input.dataset.feedback;
+  const label = answerValue(input.dataset.label);
+  const hint = input.dataset.hint;
+
+  if (label.includes("fraction")) return "Check whether the fraction should be simplified or whether the numerator and denominator were changed by the same factor.";
+  if (label.includes("decimal")) return "Check decimal place value and line up the decimal points.";
+  if (label.includes("percent")) return "Convert the percent to a fraction or decimal first.";
+  if (label.includes("ratio")) return "Scale both parts of the ratio by the same factor.";
+  if (label.includes("integer") || label.includes("sign")) return "Check the sign first, then check the arithmetic.";
+  if (label.includes("coordinate") || label.includes("quadrant")) return "Check x first, then y. Right is positive x; up is positive y.";
+  if (label.includes("equation") || label.includes("solution")) return "Check that the same operation was applied to both sides.";
+  if (label.includes("inequality")) return "Check the comparison sign, especially if a negative multiplier or divisor was used.";
+  if (label.includes("factor")) return "Multiply your factors back out to check the original expression.";
+  if (label.includes("degree") || label.includes("polynomial")) return "Match variable powers carefully before combining or naming the degree.";
+  if (hint) return `Not yet. ${stripMathTags(hint)}`;
+  return input.inputMode === "numeric" ? "Try another digit." : "Try another entry.";
+}
+
 function isCorrectAnswer(input) {
   const answers = acceptedAnswersForInput(input);
+  const userValue = answerValue(input.value);
+  if (answers.some((answer) => answerValue(answer) === userValue)) return true;
   const userValues = answerVariants(input.value);
   return answers.some((answer) => {
     const acceptedValues = answerVariants(answer);
@@ -5626,6 +5962,8 @@ function drawOverlays() {
 }
 
 function bindEvents() {
+  refreshCheckButton();
+
   els.topicList.addEventListener("click", (event) => {
     const button = event.target.closest(".lesson-nav-button");
     if (!button) return;
@@ -5653,27 +5991,28 @@ function bindEvents() {
     });
   });
 
+  document.addEventListener("click", handleCommandEvent, true);
+  document.addEventListener("pointerdown", handleCommandEvent, true);
+  document.addEventListener("mousedown", handleCommandEvent, true);
+  document.addEventListener("mouseup", handleCommandEvent, true);
+  document.addEventListener("touchstart", handleCommandEvent, true);
+  document.addEventListener("keydown", handleCommandEvent, true);
   els.checkStep.addEventListener("pointerdown", requestStepCheck);
+  els.checkStep.addEventListener("mousedown", requestStepCheck);
+  els.checkStep.addEventListener("mouseup", requestStepCheck);
+  els.checkStep.addEventListener("touchstart", requestStepCheck);
   els.checkStep.addEventListener("click", requestStepCheck);
   els.checkStep.onpointerdown = requestStepCheck;
+  els.checkStep.onmousedown = requestStepCheck;
+  els.checkStep.onmouseup = requestStepCheck;
   els.checkStep.onclick = requestStepCheck;
   els.checkStep.addEventListener("keydown", (event) => {
     if (event.key === "Enter" || event.key === " ") {
       requestStepCheck(event);
     }
   });
-  els.workspaceTools.addEventListener("click", (event) => {
-    if (event.target.closest("#checkStep")) {
-      requestStepCheck(event);
-    }
-  });
   els.hintStep.addEventListener("click", showHint);
-  els.startLesson.addEventListener("click", () => {
-    state.showIntro = false;
-    state.activeStep = 0;
-    renderWorkspace();
-    saveProgress(`Started ${getActiveWorkspace().title.toLowerCase()}`);
-  });
+  els.startLesson.addEventListener("click", startCurrentLesson);
   els.autoAdvance.addEventListener("change", () => {
     saveProgress("Changed options");
     setStatus(els.autoAdvance.checked ? "Auto-advance is on." : "Auto-advance is off.", "");
@@ -5698,6 +6037,12 @@ function bindEvents() {
   document.addEventListener("keydown", handlePageKeydown);
 }
 
+function refreshCheckButton() {
+  const replacement = els.checkStep.cloneNode(true);
+  els.checkStep.replaceWith(replacement);
+  els.checkStep = replacement;
+}
+
 function configureModeTabs(workspace) {
   const availableModes = modesForWorkspace(workspace);
   if (!availableModes.includes(state.mode)) {
@@ -5717,12 +6062,22 @@ function modesForWorkspace(workspace) {
   return ["guided", "practice", "explore"];
 }
 
+function startCurrentLesson() {
+  if (!state.showIntro) return;
+  state.showIntro = false;
+  state.activeStep = 0;
+  renderWorkspace();
+  saveProgress(`Started ${getActiveWorkspace().title.toLowerCase()}`);
+}
+
 function handlePageKeydown(event) {
   if (event.defaultPrevented) return;
   if (event.key === "Enter") {
     if (isFormControl(event.target) && !event.target.classList?.contains("digit-input")) return;
     event.preventDefault();
-    if (isCurrentProblemComplete()) {
+    if (state.showIntro) {
+      startCurrentLesson();
+    } else if (isCurrentProblemComplete()) {
       startNextProblem();
     } else if (!state.showIntro && orderedSteps().length > 0) {
       checkCurrentStep();

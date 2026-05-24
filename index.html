@@ -12,7 +12,7 @@
     <link rel="icon" type="image/png" sizes="512x512" href="./assets/carry-icon.png">
     <link rel="apple-touch-icon" href="./assets/carry-icon.png">
     <link rel="manifest" href="./manifest.webmanifest">
-    <link rel="stylesheet" href="./styles.css?v=0.1.0-alpha.1">
+    <link rel="stylesheet" href="./styles.css?v=0.1.0-alpha.25">
   </head>
   <body>
     <div class="app-shell">
@@ -157,7 +157,7 @@
           </div>
 
           <div class="workspace-tools" aria-label="Workspace tools">
-            <button class="tool-button" id="checkStep" type="button">
+            <button class="tool-button" id="checkStep" type="button" onpointerdown="window.carryInlineCheck(event)" onmousedown="window.carryInlineCheck(event)" onclick="window.carryInlineCheck(event)">
               <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path d="m20 6-11 11-5-5"></path>
               </svg>
@@ -184,10 +184,80 @@
       </main>
 
       <footer class="site-footer">
-        Carry <span id="appVersion">v0.1.0-alpha.1</span> © 2026 Ian Dorsey · Open source under the MIT License
+        Carry <span id="appVersion">v0.1.0-alpha.25</span> © 2026 Ian Dorsey · Open source under the MIT License
       </footer>
     </div>
 
-    <script src="./app.js?v=0.1.0-alpha.1" defer></script>
+    <script>
+      window.carryInlineCheck = function carryInlineCheck(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        const status = document.querySelector("#activityStatus");
+        const before = status ? status.textContent.trim() : "";
+        document.dispatchEvent(new CustomEvent("carry-check-command"));
+        window.setTimeout(function fallbackCheck() {
+          if (!status || status.textContent.trim() !== before) return;
+          window.carryFallbackCheck();
+        }, 0);
+      };
+
+      window.carryInlineReturn = function carryInlineReturn(event) {
+        if (event.key !== "Enter") return;
+        event.preventDefault();
+        event.stopPropagation();
+        const status = document.querySelector("#activityStatus");
+        const before = status ? status.textContent.trim() : "";
+        document.dispatchEvent(new CustomEvent("carry-answer-return-command"));
+        window.setTimeout(function fallbackReturn() {
+          if (!status || status.textContent.trim() !== before) return;
+          window.carryFallbackCheck();
+        }, 0);
+      };
+
+      window.carryFallbackCheck = function carryFallbackCheck() {
+        const input = document.querySelector(".digit-input.active") || document.querySelector(".digit-input");
+        const status = document.querySelector("#activityStatus");
+        if (!input || !status) return;
+
+        const value = input.value.trim();
+        if (!value) {
+          input.classList.add("incorrect");
+          status.className = "activity-status incorrect";
+          status.textContent = input.inputMode === "numeric" ? "Try another digit." : "Try another entry.";
+          input.focus({ preventScroll: true });
+          return;
+        }
+
+        const answers = input.dataset.answers ? JSON.parse(input.dataset.answers) : [input.dataset.expected || ""];
+        const normalize = function normalize(text) {
+          return String(text || "")
+            .replace(/<\/?math>/g, "")
+            .trim()
+            .toLowerCase()
+            .replace(/[−–—]/g, "-")
+            .replace(/π/g, "pi")
+            .replace(/θ/g, "theta")
+            .replace(/²/g, "^2")
+            .replace(/³/g, "^3")
+            .replace(/×/g, "*")
+            .replace(/·/g, "*")
+            .replace(/\s+/g, "");
+        };
+        const normalizedValue = normalize(value);
+        const correct = answers.some(function matches(answer) {
+          return normalize(answer) === normalizedValue || normalize(answer).replace(/[{}]/g, "") === normalizedValue.replace(/[{}]/g, "");
+        });
+
+        input.classList.toggle("correct", correct);
+        input.classList.toggle("incorrect", !correct);
+        status.className = "activity-status " + (correct ? "correct" : "incorrect");
+        if (correct) {
+          status.textContent = "Correct. Choose New for another problem.";
+        } else {
+          status.textContent = input.dataset.hint ? "Not yet. " + input.dataset.hint.replace(/<\/?math>/g, "") : "Try another entry.";
+        }
+      };
+    </script>
+    <script src="./app.js?v=0.1.0-alpha.25" defer></script>
   </body>
 </html>
