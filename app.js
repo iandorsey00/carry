@@ -162,6 +162,38 @@ const topicGroups = [
     ]
   },
   {
+    name: "Set Theory",
+    sections: [
+      {
+        title: "Sets and Relations",
+        lessons: [
+          { id: "set-theory.sets-notation", title: "Sets and notation" },
+          { id: "set-theory.subsets", title: "Subsets and power sets" },
+          { id: "set-theory.operations", title: "Union and intersection" },
+          { id: "set-theory.cartesian-relations", title: "Products and relations" },
+          { id: "set-theory.functions", title: "Functions as maps" },
+          { id: "set-theory.countability", title: "Countability" }
+        ]
+      }
+    ]
+  },
+  {
+    name: "Number Theory",
+    sections: [
+      {
+        title: "Divisibility and Congruence",
+        lessons: [
+          { id: "number-theory.divisibility", title: "Divisibility" },
+          { id: "number-theory.primes", title: "Primes and factorization" },
+          { id: "number-theory.gcd-lcm", title: "GCD and LCM" },
+          { id: "number-theory.euclidean-algorithm", title: "Euclidean algorithm" },
+          { id: "number-theory.modular-arithmetic", title: "Modular arithmetic" },
+          { id: "number-theory.congruences", title: "Congruences" }
+        ]
+      }
+    ]
+  },
+  {
     name: "Real Analysis",
     sections: [
       {
@@ -1256,6 +1288,514 @@ const linearAlgebraConceptWorkspaces = {
   }
 };
 
+const proofsConceptWorkspaces = {
+  "proofs.logic": {
+    id: "proofs.logic",
+    topic: "Proofs",
+    title: "Logic",
+    type: "concept",
+    figure: "proof-logic",
+    intro: [
+      "Logic tracks how statements imply other statements.",
+      "An implication has a hypothesis and a conclusion.",
+      "A proof can use known true statements to force a new statement to be true."
+    ],
+    problems: [
+      { prompt: "In the statement if P then Q, which part is the hypothesis?", answer: "p", answers: ["p", "P"], hint: "The hypothesis is the condition after if.", label: "identify hypothesis" },
+      { prompt: "In the statement if P then Q, which part is the conclusion?", answer: "q", answers: ["q", "Q"], hint: "The conclusion is what follows then.", label: "identify conclusion" },
+      { prompt: "If P implies Q and P is true, what can you conclude?", answer: "q", answers: ["q", "Q"], hint: "This is direct reasoning: the implication fires when P is true.", label: "direct implication" }
+    ]
+  },
+  "proofs.quantifiers": {
+    id: "proofs.quantifiers",
+    topic: "Proofs",
+    title: "Quantifiers",
+    type: "concept",
+    figure: "proof-quantifiers",
+    intro: [
+      "Quantifiers say how many objects a statement covers.",
+      "For all means every object in the chosen set.",
+      "There exists means at least one object works."
+    ],
+    problems: [
+      { prompt: "Which phrase means every object: for all or there exists?", answer: "forall", answers: ["forall", "for all", "every", "all"], hint: "For all makes a claim about every case.", label: "universal quantifier" },
+      { prompt: "Which phrase means at least one object works?", answer: "exists", answers: ["exists", "thereexists", "there exists", "atleastone", "at least one"], hint: "There exists only needs one example.", label: "existential quantifier" },
+      { prompt: "To disprove a for all statement, what should you find?", answer: "counterexample", answers: ["counterexample", "a counterexample"], hint: "One failing case is enough.", label: "disprove universal" }
+    ]
+  },
+  "proofs.induction": {
+    id: "proofs.induction",
+    topic: "Proofs",
+    title: "Induction",
+    type: "concept",
+    figure: "proof-induction",
+    intro: [
+      "Induction proves a statement for every integer in a sequence.",
+      "First prove the base case.",
+      "Then prove that one true case forces the next case."
+    ],
+    problems: [
+      { prompt: "In induction, what is the first case called?", answer: "base", answers: ["base", "basecase", "base case"], hint: "It anchors the proof at the starting value.", label: "base case" },
+      { prompt: "After the base case, which step proves that case k implies case k + 1?", answer: "inductive", answers: ["inductive", "inductivestep", "inductive step"], hint: "This is the step that moves the proof forward.", label: "inductive step" },
+      { prompt: "If P(1) is true and P(k) implies P(k + 1), what can induction prove?", answer: "all", answers: ["all", "alln", "every n", "all positive integers"], hint: "The truth moves from 1 to 2 to 3 and so on.", label: "induction conclusion" }
+    ]
+  },
+  "proofs.contradiction": {
+    id: "proofs.contradiction",
+    topic: "Proofs",
+    title: "Contradiction",
+    type: "concept",
+    figure: "proof-contradiction",
+    intro: [
+      "Proof by contradiction starts by assuming the opposite of the claim.",
+      "The goal is to derive something impossible.",
+      "Once the opposite fails, the original claim must be true."
+    ],
+    problems: [
+      { prompt: "In a contradiction proof, do you first assume the claim or its opposite?", answer: "opposite", answers: ["opposite", "negation", "not the claim"], hint: "You temporarily suppose the claim is false.", label: "contradiction assumption" },
+      { prompt: "What kind of result finishes a contradiction proof?", answer: "contradiction", answers: ["contradiction", "impossible", "false"], hint: "You show the assumption led to something impossible.", label: "contradiction finish" },
+      { prompt: "If assuming not P leads to a contradiction, what can you conclude?", answer: "p", answers: ["p", "P", "p is true", "true"], hint: "The negation failed, so P remains.", label: "contradiction conclusion" }
+    ]
+  },
+  "proofs.construction": {
+    id: "proofs.construction",
+    topic: "Proofs",
+    title: "Construction",
+    type: "concept",
+    figure: "proof-construction",
+    intro: [
+      "A construction proof shows an object exists by building it.",
+      "The object must satisfy the required conditions.",
+      "After building it, verify that it really works."
+    ],
+    problems: [
+      { prompt: "To prove there exists an even number greater than 10, is 12 a valid example?", answer: "yes", answers: ["yes", "true"], hint: "12 is even and greater than 10.", label: "valid construction" },
+      { prompt: "After constructing an example, what should you do next?", answer: "verify", answers: ["verify", "check", "prove it works"], hint: "Show that the constructed object has the required properties.", label: "verify construction" },
+      { prompt: "A construction proof is mainly used for which quantifier: for all or exists?", answer: "exists", answers: ["exists", "thereexists", "there exists"], hint: "Building one object proves existence.", label: "construction quantifier" }
+    ]
+  },
+  "proofs.counterexamples": {
+    id: "proofs.counterexamples",
+    topic: "Proofs",
+    title: "Counterexamples",
+    type: "concept",
+    figure: "proof-counterexamples",
+    intro: [
+      "A counterexample is one case that breaks a claim.",
+      "Counterexamples disprove universal statements.",
+      "The best counterexamples are specific and easy to check."
+    ],
+    problems: [
+      { prompt: "Claim: every prime number is odd. Which number is a counterexample?", answer: "2", hint: "2 is prime, but it is even.", label: "prime counterexample" },
+      { prompt: "Does one counterexample disprove a for all statement?", answer: "yes", answers: ["yes", "true"], hint: "Universal claims fail when even one case fails.", label: "counterexample power" },
+      { prompt: "Claim: all rectangles are squares. Give side lengths for a rectangle that is not a square.", answer: "2x3", answers: ["2x3", "2×3", "2by3", "2 by 3", "3x2", "3×2", "3by2", "3 by 2"], hint: "Use unequal side lengths, such as 2 by 3.", label: "rectangle counterexample" }
+    ]
+  }
+};
+
+const setTheoryConceptWorkspaces = {
+  "set-theory.sets-notation": {
+    id: "set-theory.sets-notation",
+    topic: "Set Theory",
+    title: "Sets and notation",
+    type: "concept",
+    figure: "set-notation",
+    intro: [
+      "A set is a collection of objects called elements.",
+      "Set notation uses braces, such as <math>A = {1, 2, 3}</math>.",
+      "The symbol <math>∈</math> means is an element of, and <math>∉</math> means is not an element of."
+    ],
+    problems: [
+      { prompt: "If <math>A = {1, 2, 3}</math>, is <math>2</math> in <math>A</math>?", answer: "yes", answers: ["yes", "true"], hint: "<math>2</math> appears inside the braces.", label: "membership check" },
+      { prompt: "If <math>B = {red, blue}</math>, is green in <math>B</math>?", answer: "no", answers: ["no", "false"], hint: "Only red and blue are listed.", label: "nonmembership check" },
+      { prompt: "What symbol means is an element of?", answer: "∈", answers: ["∈", "in", "elementof", "element of"], hint: "Read <math>x ∈ A</math> as <math>x</math> is an element of <math>A</math>.", label: "membership symbol" }
+    ]
+  },
+  "set-theory.subsets": {
+    id: "set-theory.subsets",
+    topic: "Set Theory",
+    title: "Subsets and power sets",
+    type: "concept",
+    figure: "set-subsets",
+    intro: [
+      "A subset sits entirely inside another set.",
+      "<math>A</math> is a subset of <math>B</math> if every element of <math>A</math> is also in <math>B</math>.",
+      "The power set contains every subset of a set, including the empty set."
+    ],
+    problems: [
+      { prompt: "Is <math>{1, 2}</math> a subset of <math>{1, 2, 3}</math>?", answer: "yes", answers: ["yes", "true"], hint: "Both <math>1</math> and <math>2</math> appear in the larger set.", label: "subset check" },
+      { prompt: "How many subsets does a set with 3 elements have?", answer: "8", hint: "A set with n elements has 2^n subsets.", label: "power set size" },
+      { prompt: "Is the empty set a subset of every set?", answer: "yes", answers: ["yes", "true"], hint: "There is no element in the empty set that can fail to belong.", label: "empty subset" }
+    ]
+  },
+  "set-theory.operations": {
+    id: "set-theory.operations",
+    topic: "Set Theory",
+    title: "Union and intersection",
+    type: "concept",
+    figure: "set-operations",
+    intro: [
+      "Union collects everything in either set.",
+      "Intersection keeps only what the sets share.",
+      "Complement means everything in the universe that is outside the set."
+    ],
+    problems: [
+      { prompt: "If <math>A = {1, 2}</math> and <math>B = {2, 3}</math>, what is <math>A ∩ B</math>?", answer: "{2}", answers: ["{2}", "2"], hint: "Intersection keeps the shared element.", label: "intersection" },
+      { prompt: "If <math>A = {1, 2}</math> and <math>B = {2, 3}</math>, what is <math>A ∪ B</math>?", answer: "{1,2,3}", answers: ["{1,2,3}", "1,2,3", "{1, 2, 3}"], hint: "Union keeps everything, without repeating <math>2</math>.", label: "union" },
+      { prompt: "Which operation means in A or in B: union or intersection?", answer: "union", answers: ["union", "cup"], hint: "Union uses or.", label: "union meaning" }
+    ]
+  },
+  "set-theory.cartesian-relations": {
+    id: "set-theory.cartesian-relations",
+    topic: "Set Theory",
+    title: "Products and relations",
+    type: "concept",
+    figure: "set-relations",
+    intro: [
+      "A Cartesian product forms ordered pairs.",
+      "A relation is a selected set of ordered pairs.",
+      "Relations can describe matching, ordering, equivalence, or many other connections."
+    ],
+    problems: [
+      { prompt: "If <math>A = {1, 2}</math> and <math>B = {x}</math>, how many ordered pairs are in <math>A × B</math>?", answer: "2", hint: "Each element of <math>A</math> pairs with <math>x</math>.", label: "product size" },
+      { prompt: "In the ordered pair <math>(3, 5)</math>, what is the first coordinate?", answer: "3", hint: "The first coordinate is the left entry.", label: "first coordinate" },
+      { prompt: "Is a relation a set of ordered pairs?", answer: "yes", answers: ["yes", "true"], hint: "A relation is usually represented by ordered pairs.", label: "relation definition" }
+    ]
+  },
+  "set-theory.functions": {
+    id: "set-theory.functions",
+    topic: "Set Theory",
+    title: "Functions as maps",
+    type: "concept",
+    figure: "set-functions",
+    intro: [
+      "A function is a relation with exactly one output for each allowed input.",
+      "The domain is the set of inputs.",
+      "The codomain is the set where outputs are allowed to land."
+    ],
+    problems: [
+      { prompt: "Can one input of a function have two different outputs?", answer: "no", answers: ["no", "false"], hint: "A function gives each input exactly one output.", label: "function rule" },
+      { prompt: "What is the set of allowed inputs called?", answer: "domain", hint: "The domain is where inputs come from.", label: "domain" },
+      { prompt: "If <math>f(2) = 7</math>, what is the output for input <math>2</math>?", answer: "7", hint: "The value after the equals sign is the output.", label: "function output" }
+    ]
+  },
+  "set-theory.countability": {
+    id: "set-theory.countability",
+    topic: "Set Theory",
+    title: "Countability",
+    type: "concept",
+    figure: "set-countability",
+    intro: [
+      "A finite set has a specific whole-number size.",
+      "An infinite set is countable when its elements can be listed in a sequence.",
+      "Some infinite sets, such as the real numbers, are uncountable."
+    ],
+    problems: [
+      { prompt: "How many elements are in {a, b, c}?", answer: "3", hint: "Count the listed elements.", label: "finite size" },
+      { prompt: "Are the positive integers countable?", answer: "yes", answers: ["yes", "true"], hint: "They are already listed as 1, 2, 3, and so on.", label: "integer countability" },
+      { prompt: "Are the real numbers countable?", answer: "no", answers: ["no", "false"], hint: "The real numbers cannot be fully listed in a sequence.", label: "real countability" }
+    ]
+  }
+};
+
+const numberTheoryConceptWorkspaces = {
+  "number-theory.divisibility": {
+    id: "number-theory.divisibility",
+    topic: "Number Theory",
+    title: "Divisibility",
+    type: "concept",
+    figure: "number-divisibility",
+    intro: [
+      "A number divides another number when there is no remainder.",
+      "Divisibility turns multiplication facts into structure.",
+      "The notation a | b means a divides b."
+    ],
+    problems: [
+      { prompt: "Does 4 divide 20?", answer: "yes", answers: ["yes", "true"], hint: "20 = 4 × 5.", label: "divides twenty" },
+      { prompt: "Does 6 divide 20?", answer: "no", answers: ["no", "false"], hint: "20 divided by 6 leaves a remainder.", label: "does not divide twenty" },
+      { prompt: "If 3 | 18, what does the vertical bar mean?", answer: "divides", answers: ["divides", "divides evenly"], hint: "Read 3 | 18 as 3 divides 18.", label: "divisibility symbol" }
+    ]
+  },
+  "number-theory.primes": {
+    id: "number-theory.primes",
+    topic: "Number Theory",
+    title: "Primes and factorization",
+    type: "concept",
+    figure: "number-primes",
+    intro: [
+      "A prime number has exactly two positive factors: 1 and itself.",
+      "Composite numbers can be broken into prime factors.",
+      "Prime factorization describes a number using prime building blocks."
+    ],
+    problems: [
+      { prompt: "Is 17 prime?", answer: "yes", answers: ["yes", "true"], hint: "17 is not divisible by 2, 3, or 5.", label: "prime check" },
+      { prompt: "Is 21 prime?", answer: "no", answers: ["no", "false"], hint: "21 = 3 × 7.", label: "composite check" },
+      { prompt: "Write 12 as a product of primes.", answer: "2*2*3", answers: ["2*2*3", "2×2×3", "2^2*3", "2^2×3"], hint: "12 = 4 × 3, and 4 = 2 × 2.", label: "prime factorization" }
+    ]
+  },
+  "number-theory.gcd-lcm": {
+    id: "number-theory.gcd-lcm",
+    topic: "Number Theory",
+    title: "GCD and LCM",
+    type: "concept",
+    figure: "number-gcd-lcm",
+    intro: [
+      "The greatest common divisor is the largest number that divides both numbers.",
+      "The least common multiple is the smallest positive number both numbers divide.",
+      "GCD and LCM organize shared factors and shared multiples."
+    ],
+    problems: [
+      { prompt: "What is gcd(12, 18)?", answer: "6", hint: "6 is the largest number that divides both 12 and 18.", label: "gcd" },
+      { prompt: "What is lcm(4, 6)?", answer: "12", hint: "12 is the first positive multiple shared by 4 and 6.", label: "lcm" },
+      { prompt: "Which is about shared factors: GCD or LCM?", answer: "gcd", answers: ["gcd", "greatest common divisor"], hint: "GCD looks downward at divisors.", label: "shared factors" }
+    ]
+  },
+  "number-theory.euclidean-algorithm": {
+    id: "number-theory.euclidean-algorithm",
+    topic: "Number Theory",
+    title: "Euclidean algorithm",
+    type: "concept",
+    figure: "number-euclidean",
+    intro: [
+      "The Euclidean algorithm finds a GCD by repeated division with remainder.",
+      "Replace the larger number by the remainder and keep going.",
+      "The last nonzero remainder is the GCD."
+    ],
+    problems: [
+      { prompt: "In 18 = 12 × 1 + 6, what is the remainder?", answer: "6", hint: "The remainder is the leftover part after 12 × 1.", label: "euclidean remainder" },
+      { prompt: "After 18 = 12 × 1 + 6, what pair comes next: (12, 6) or (18, 6)?", answer: "(12,6)", answers: ["(12,6)", "12,6"], hint: "Move to the old divisor and the remainder.", label: "next euclidean pair" },
+      { prompt: "If the next remainder is 0, what was the GCD in this example?", answer: "6", hint: "The last nonzero remainder is 6.", label: "euclidean gcd" }
+    ]
+  },
+  "number-theory.modular-arithmetic": {
+    id: "number-theory.modular-arithmetic",
+    topic: "Number Theory",
+    title: "Modular arithmetic",
+    type: "concept",
+    figure: "number-modular",
+    intro: [
+      "Modular arithmetic tracks remainders after division.",
+      "Working mod n means values that differ by n are treated as equivalent.",
+      "Clock arithmetic is the everyday model for modular arithmetic."
+    ],
+    problems: [
+      { prompt: "What is 14 mod 5?", answer: "4", hint: "14 = 5 × 2 + 4.", label: "mod remainder" },
+      { prompt: "On a 12-hour clock, 10 + 5 lands on what hour?", answer: "3", hint: "15 wraps around to 3.", label: "clock arithmetic" },
+      { prompt: "In mod 7 arithmetic, is 9 equivalent to 2?", answer: "yes", answers: ["yes", "true"], hint: "9 and 2 differ by 7.", label: "mod equivalence" }
+    ]
+  },
+  "number-theory.congruences": {
+    id: "number-theory.congruences",
+    topic: "Number Theory",
+    title: "Congruences",
+    type: "concept",
+    figure: "number-congruences",
+    intro: [
+      "A congruence says two numbers have the same remainder.",
+      "The notation a ≡ b mod n means n divides a - b.",
+      "Congruences let equations be solved in remainder systems."
+    ],
+    problems: [
+      { prompt: "Is 17 ≡ 2 mod 5?", answer: "yes", answers: ["yes", "true"], hint: "17 and 2 differ by 15, which is divisible by 5.", label: "congruence check" },
+      { prompt: "If a ≡ b mod n, what divides a - b?", answer: "n", answers: ["n", "the modulus", "modulus"], hint: "That is the definition of congruence mod n.", label: "congruence definition" },
+      { prompt: "What is the smallest nonnegative number congruent to 23 mod 6?", answer: "5", hint: "23 = 6 × 3 + 5.", label: "least residue" }
+    ]
+  }
+};
+
+const realAnalysisConceptWorkspaces = {
+  "real-analysis.sets": {
+    id: "real-analysis.sets",
+    topic: "Real Analysis",
+    title: "Sets",
+    type: "concept",
+    figure: "real-sets",
+    intro: [
+      "Real analysis uses sets to say exactly which numbers are under discussion.",
+      "An interval contains every real number between its endpoints.",
+      "Bounds describe whether a set stays below, above, or inside a range."
+    ],
+    problems: [
+      { prompt: "Does the interval [2, 5] include 2?", answer: "yes", answers: ["yes", "true"], hint: "A square bracket means the endpoint is included.", label: "closed endpoint" },
+      { prompt: "Does the interval (2, 5) include 2?", answer: "no", answers: ["no", "false"], hint: "A parenthesis means the endpoint is not included.", label: "open endpoint" },
+      { prompt: "What is the smallest number in the set [2, 5]?", answer: "2", hint: "The left endpoint is included.", label: "minimum of interval" }
+    ]
+  },
+  "real-analysis.sequences": {
+    id: "real-analysis.sequences",
+    topic: "Real Analysis",
+    title: "Sequences",
+    type: "concept",
+    figure: "real-sequences",
+    intro: [
+      "A sequence is a list of numbers indexed by positive integers.",
+      "Convergence means the terms eventually stay close to one value.",
+      "The tail of a sequence matters more than its first few terms."
+    ],
+    problems: [
+      { prompt: "What number does the sequence 1/n approach?", answer: "0", hint: "As n gets large, 1 divided by n gets close to 0.", label: "sequence limit" },
+      { prompt: "Does the sequence 1, -1, 1, -1 converge?", answer: "no", answers: ["no", "false"], hint: "It keeps jumping between two values.", label: "nonconvergent sequence" },
+      { prompt: "If every term after some point stays within epsilon of L, what value is the sequence approaching?", answer: "l", answers: ["l", "L"], hint: "The value named in the closeness condition is the limit.", label: "limit name" }
+    ]
+  },
+  "real-analysis.limits": {
+    id: "real-analysis.limits",
+    topic: "Real Analysis",
+    title: "Limits",
+    type: "concept",
+    figure: "real-limits",
+    intro: [
+      "A function limit describes output behavior near an input.",
+      "The function does not need to equal the limiting value at the point.",
+      "Epsilon-delta language makes the idea of getting close precise."
+    ],
+    problems: [
+      { prompt: "As x approaches 3, what does 2x approach?", answer: "6", hint: "Use the nearby input value: 2 times 3.", label: "function limit" },
+      { prompt: "Can a limit exist even if the function is undefined at that point?", answer: "yes", answers: ["yes", "true"], hint: "Limits depend on nearby values, not only the value at the point.", label: "punctured limit" },
+      { prompt: "In epsilon-delta language, epsilon controls closeness of outputs or inputs?", answer: "outputs", answers: ["outputs", "output"], hint: "Epsilon measures vertical closeness to the limiting value.", label: "epsilon role" }
+    ]
+  },
+  "real-analysis.continuity": {
+    id: "real-analysis.continuity",
+    topic: "Real Analysis",
+    title: "Continuity",
+    type: "concept",
+    figure: "real-continuity",
+    intro: [
+      "Continuity means the function value matches the limiting value.",
+      "A function can fail continuity through a hole, jump, or vertical blow-up.",
+      "On intervals, continuity supports powerful existence theorems."
+    ],
+    problems: [
+      { prompt: "If lim f(x) as x approaches a equals f(a), is f continuous at a?", answer: "yes", answers: ["yes", "true"], hint: "This is the definition of continuity at a point.", label: "continuity definition" },
+      { prompt: "If a graph has a jump at x = 2, is it continuous there?", answer: "no", answers: ["no", "false"], hint: "A jump means the nearby values do not meet smoothly at one value.", label: "jump discontinuity" },
+      { prompt: "For f(x) = x + 1, is f continuous at x = 0?", answer: "yes", answers: ["yes", "true"], hint: "Linear functions are continuous everywhere.", label: "linear continuity" }
+    ]
+  },
+  "real-analysis.differentiation": {
+    id: "real-analysis.differentiation",
+    topic: "Real Analysis",
+    title: "Differentiation",
+    type: "concept",
+    figure: "real-differentiation",
+    intro: [
+      "Differentiability is a precise version of having a tangent slope.",
+      "The derivative is defined by a limit of difference quotients.",
+      "Differentiability implies continuity, but continuity alone is not enough."
+    ],
+    problems: [
+      { prompt: "If a function is differentiable at a point, is it continuous there?", answer: "yes", answers: ["yes", "true"], hint: "Differentiability is stronger than continuity.", label: "differentiability implies continuity" },
+      { prompt: "Does |x| have a derivative at x = 0?", answer: "no", answers: ["no", "false"], hint: "The left and right slopes at the corner disagree.", label: "absolute value corner" },
+      { prompt: "What is the derivative of x^2?", answer: "2x", answers: ["2x", "2*x"], hint: "Use the power rule.", label: "basic derivative" }
+    ]
+  },
+  "real-analysis.integration": {
+    id: "real-analysis.integration",
+    topic: "Real Analysis",
+    title: "Integration",
+    type: "concept",
+    figure: "real-integration",
+    intro: [
+      "Integration can be defined through sums over partitions.",
+      "A partition cuts an interval into smaller pieces.",
+      "Riemann sums approximate area, and the integral is the limiting value when the mesh becomes fine."
+    ],
+    problems: [
+      { prompt: "A partition divides an interval into smaller what?", answer: "pieces", answers: ["pieces", "subintervals", "intervals"], hint: "A partition chops the interval into subintervals.", label: "partition meaning" },
+      { prompt: "For a constant function f(x) = 3 on [0, 2], what is the area under the graph?", answer: "6", hint: "The rectangle has height 3 and width 2.", label: "constant integral" },
+      { prompt: "Do Riemann sums approximate area using rectangles?", answer: "yes", answers: ["yes", "true"], hint: "Each subinterval contributes a rectangle-like area.", label: "riemann rectangles" }
+    ]
+  }
+};
+
+const abstractAlgebraConceptWorkspaces = {
+  "abstract-algebra.groups": {
+    id: "abstract-algebra.groups",
+    topic: "Abstract Algebra",
+    title: "Groups",
+    type: "concept",
+    figure: "abstract-groups",
+    intro: [
+      "A group is a set with one operation that follows specific rules.",
+      "The operation must be closed, associative, have an identity, and give every element an inverse.",
+      "Groups abstract symmetry, addition, and modular arithmetic."
+    ],
+    problems: [
+      { prompt: "Under addition, what is the identity element for integers?", answer: "0", hint: "Adding 0 changes nothing.", label: "additive identity" },
+      { prompt: "Under addition, what is the inverse of 5?", answer: "-5", hint: "The inverse adds with 5 to make 0.", label: "additive inverse" },
+      { prompt: "If a set with an operation contains a and b but not a*b, which group rule fails?", answer: "closure", hint: "Closure means combining elements stays inside the set.", label: "closure rule" }
+    ]
+  },
+  "abstract-algebra.rings": {
+    id: "abstract-algebra.rings",
+    topic: "Abstract Algebra",
+    title: "Rings",
+    type: "concept",
+    figure: "abstract-rings",
+    intro: [
+      "A ring has two operations, usually called addition and multiplication.",
+      "Addition behaves like an abelian group.",
+      "Multiplication distributes over addition."
+    ],
+    problems: [
+      { prompt: "How many operations does a ring have?", answer: "2", hint: "A ring has addition and multiplication.", label: "ring operations" },
+      { prompt: "In a ring, multiplication distributes over which operation?", answer: "addition", hint: "Think a(b + c) = ab + ac.", label: "distributive operation" },
+      { prompt: "Are the integers a ring under usual addition and multiplication?", answer: "yes", answers: ["yes", "true"], hint: "Integers support both operations and satisfy the ring rules.", label: "integer ring" }
+    ]
+  },
+  "abstract-algebra.fields": {
+    id: "abstract-algebra.fields",
+    topic: "Abstract Algebra",
+    title: "Fields",
+    type: "concept",
+    figure: "abstract-fields",
+    intro: [
+      "A field is a number system where addition, subtraction, multiplication, and division work well.",
+      "Every nonzero element has a multiplicative inverse.",
+      "The rational, real, and complex numbers are standard examples of fields."
+    ],
+    problems: [
+      { prompt: "In a field, does every nonzero element have a multiplicative inverse?", answer: "yes", answers: ["yes", "true"], hint: "Division by nonzero elements is allowed in a field.", label: "field inverse" },
+      { prompt: "Is 0 required to have a multiplicative inverse in a field?", answer: "no", answers: ["no", "false"], hint: "Division by zero is still not allowed.", label: "zero inverse" },
+      { prompt: "Are the integers a field under usual operations?", answer: "no", answers: ["no", "false"], hint: "2 has no integer multiplicative inverse.", label: "integers not field" }
+    ]
+  },
+  "abstract-algebra.homomorphisms": {
+    id: "abstract-algebra.homomorphisms",
+    topic: "Abstract Algebra",
+    title: "Homomorphisms",
+    type: "concept",
+    figure: "abstract-homomorphisms",
+    intro: [
+      "A homomorphism is a structure-preserving map.",
+      "It sends a combined input to the corresponding combination of outputs.",
+      "Homomorphisms let you compare algebraic systems without ignoring their operations."
+    ],
+    problems: [
+      { prompt: "A homomorphism is a map that preserves what?", answer: "structure", answers: ["structure", "operation", "operations"], hint: "It respects the operation, so structure is preserved.", label: "homomorphism meaning" },
+      { prompt: "For an additive homomorphism f, f(a + b) equals f(a) plus what?", answer: "f(b)", answers: ["f(b)", "fb"], hint: "Preserving addition means f(a + b) = f(a) + f(b).", label: "additive homomorphism" },
+      { prompt: "Does a homomorphism have to be one-to-one?", answer: "no", answers: ["no", "false"], hint: "Some homomorphisms collapse different inputs together.", label: "homomorphism injective" }
+    ]
+  },
+  "abstract-algebra.examples-counterexamples": {
+    id: "abstract-algebra.examples-counterexamples",
+    topic: "Abstract Algebra",
+    title: "Examples and counterexamples",
+    type: "concept",
+    figure: "abstract-examples",
+    intro: [
+      "Examples show that a definition can be satisfied.",
+      "Counterexamples show exactly where a proposed claim fails.",
+      "In abstract algebra, checking the operation is just as important as checking the set."
+    ],
+    problems: [
+      { prompt: "Under usual addition, give an example of an integer identity element.", answer: "0", hint: "Adding it leaves every integer unchanged.", label: "identity example" },
+      { prompt: "Why are positive integers not a group under addition: missing inverses or missing associativity?", answer: "missinginverses", answers: ["missinginverses", "missing inverses", "inverses"], hint: "The inverse of 3 under addition is -3, which is not positive.", label: "positive integer counterexample" },
+      { prompt: "To disprove that every ring is a field, should you give a ring that is not a field?", answer: "yes", answers: ["yes", "true"], hint: "One ring without field division is enough.", label: "ring field counterexample" }
+    ]
+  }
+};
+
 const conceptWorkspaces = {
   ...arithmeticConceptWorkspaces,
   ...preAlgebraConceptWorkspaces,
@@ -1264,7 +1804,12 @@ const conceptWorkspaces = {
   ...trigonometryConceptWorkspaces,
   ...precalculusConceptWorkspaces,
   ...calculusConceptWorkspaces,
-  ...linearAlgebraConceptWorkspaces
+  ...linearAlgebraConceptWorkspaces,
+  ...proofsConceptWorkspaces,
+  ...setTheoryConceptWorkspaces,
+  ...numberTheoryConceptWorkspaces,
+  ...realAnalysisConceptWorkspaces,
+  ...abstractAlgebraConceptWorkspaces
 };
 
 const workspaceRegistry = {
@@ -1280,6 +1825,8 @@ const workspaceRegistry = {
   "Trigonometry": { id: "trigonometry.placeholders", title: "Identity studio", status: "planned" },
   "Calculus": { id: "calculus.placeholders", title: "Limits and derivatives", status: "planned" },
   "Linear Algebra": { id: "linear-algebra.placeholders", title: "Vector spaces", status: "planned" },
+  "Set Theory": { id: "set-theory.placeholders", title: "Sets and relations", status: "planned" },
+  "Number Theory": { id: "number-theory.placeholders", title: "Divisibility and congruence", status: "planned" },
   "Real Analysis": { id: "real-analysis.placeholders", title: "Definitions and proofs", status: "planned" },
   "Abstract Algebra": { id: "abstract-algebra.placeholders", title: "Groups and examples", status: "planned" },
   "Proofs": { id: "proofs.placeholders", title: "Proof construction", status: "planned" }
@@ -1514,6 +2061,7 @@ function createLessonButton(lesson, topic) {
 
 function renderWorkspace() {
   const workspace = getActiveWorkspace();
+  configureModeTabs(workspace);
   els.currentTopic.textContent = state.activeTopic;
   els.lessonTitle.textContent = workspace.title;
   els.grid.className = `math-grid ${workspace.type}-grid`;
@@ -1584,7 +2132,7 @@ function renderIntroWorkspace(workspace) {
   setWorkspaceView("intro");
   els.overlay.innerHTML = "";
   state.currentModel = null;
-  els.introTitle.textContent = workspace.title;
+  els.introTitle.textContent = "Overview";
   renderIntroCopy(workspace);
   els.stepText.textContent = `Read the ${workspace.title.toLowerCase()} overview, then start a problem.`;
 }
@@ -1619,14 +2167,119 @@ function renderIntroCopy(workspace) {
     ]
   };
   const items = workspace.intro || intros[workspace.type] || ["This interactive workspace is planned."];
+  const figure = createIntroFigure(workspace);
+  const sections = document.createElement("div");
+  sections.className = "intro-sections";
+  sections.append(
+    createIntroSection("Core idea", items),
+    createIntroSection("What you will practice", introPracticeItems(workspace)),
+    createIntroSection("Answer format", introAnswerFormatItems(workspace))
+  );
+  els.introCopy.replaceChildren(...[figure, sections].filter(Boolean));
+}
+
+function createIntroSection(title, items) {
+  const section = document.createElement("section");
+  section.className = "intro-section";
+
+  const heading = document.createElement("h4");
+  heading.textContent = title;
+
   const list = document.createElement("ol");
-  for (const item of items) {
+  for (const item of items.filter(Boolean)) {
     const li = document.createElement("li");
     setMathText(li, item);
     list.append(li);
   }
-  const figure = createIntroFigure(workspace);
-  els.introCopy.replaceChildren(...[figure, list].filter(Boolean));
+
+  section.append(heading, list);
+  return section;
+}
+
+function introPracticeItems(workspace) {
+  if (workspace.type === "concept" && workspace.problems?.length) {
+    return workspace.problems.slice(0, 3).map((problem) => {
+      const hint = problem.hint ? ` ${problem.hint}` : "";
+      return `${problem.prompt}${hint}`;
+    });
+  }
+
+  if (workspace.type === "equation") {
+    return [
+      "Write the same operation on both sides before simplifying.",
+      "Keep each row balanced: left side, relation, right side.",
+      "The final line should name the variable value."
+    ];
+  }
+
+  if (workspace.type === "inequality") {
+    return [
+      "Use inverse operations as you would for equations.",
+      "When multiplying or dividing by a negative number, reverse the inequality sign.",
+      "The final line should state the variable and the correct relation."
+    ];
+  }
+
+  if (workspace.type === "system") {
+    return [
+      "Show the method first: substitution or elimination.",
+      "Find one variable, substitute it back, then write the ordered pair.",
+      "Check the pair in both original equations."
+    ];
+  }
+
+  if (workspace.type === "factoring" || workspace.type === "quadratic") {
+    return [
+      "Identify the shape of the expression before choosing a method.",
+      "Use factor pairs, a greatest common factor, or a special pattern.",
+      "Check by multiplying the factors back out."
+    ];
+  }
+
+  return [
+    "Work in the highlighted place first.",
+    "Use Check to validate the smallest current step.",
+    "Use Hint when the next move is not clear."
+  ];
+}
+
+function introAnswerFormatItems(workspace) {
+  if (workspace.type === "concept" && workspace.problems?.length) {
+    const examples = workspace.problems
+      .slice(0, 3)
+      .map((problem) => answerFormatExample(problem))
+      .filter(Boolean);
+    return [
+      "Equivalent typing is accepted when possible: spaces, capitalization, the pi symbol or typed p-i, ×/*, and degree symbols are normalized.",
+      ...examples
+    ];
+  }
+
+  if (workspace.type === "division") {
+    return workspace.allowsRemainder
+      ? ["Use digits in the quotient boxes and write the final remainder when the workspace asks for it."]
+      : ["Use digits in the quotient, product, and remainder boxes. This lesson uses problems with no final remainder."];
+  }
+
+  if (["addition", "subtraction", "multiplication"].includes(workspace.type)) {
+    return ["Use one digit per square unless the active square is a carry or borrow mark that asks for a small value."];
+  }
+
+  return ["Use compact math notation. Spaces and capitalization are ignored for checking."];
+}
+
+function answerFormatExample(problem) {
+  const rawAnswers = uniqueList([problem.answer, ...(problem.answers || [])]).filter(Boolean);
+  const answers = rawAnswers.filter((answer) => !isCompactDuplicateAnswer(answer, rawAnswers));
+  if (!answers.length) return "";
+  const visible = answers.slice(0, 3).join(" or ");
+  return `For "${problem.label || "answer"}", accepted forms include ${visible}.`;
+}
+
+function isCompactDuplicateAnswer(answer, answers) {
+  const text = String(answer);
+  if (!/[A-Za-z]/.test(text) || /[\s-]/.test(text)) return false;
+  return answers.some((other) => other !== answer && answerValue(other) === answerValue(answer) && /[\s-]/.test(String(other)));
 }
 
 function createIntroFigure(workspace) {
@@ -1634,7 +2287,7 @@ function createIntroFigure(workspace) {
 
   const figure = document.createElement("figure");
   figure.className = `intro-figure ${workspace.type}-figure`;
-  if (workspace.figure?.startsWith("geometry-") || workspace.figure?.startsWith("trig-") || workspace.figure?.startsWith("precalc-") || workspace.figure?.startsWith("calc-") || workspace.figure?.startsWith("linear-")) {
+  if (isDiagramFigure(workspace.figure)) {
     const caption = document.createElement("figcaption");
     caption.textContent = introFigureCaption(workspace);
     figure.classList.add("geometry-figure");
@@ -1718,6 +2371,36 @@ function createIntroFigure(workspace) {
   return figure;
 }
 
+function isDiagramFigure(figure) {
+  if (!figure) return false;
+  const diagramPrefixes = ["geometry-", "trig-", "precalc-", "calc-", "linear-", "proof-", "set-", "number-", "real-", "abstract-"];
+  const diagramFigures = new Set([
+    "place-value",
+    "number-line",
+    "integer-line",
+    "estimation",
+    "fraction-bar",
+    "decimal-grid",
+    "percent-grid",
+    "ratio-bars",
+    "factor-pairs",
+    "operation-order",
+    "word-problem",
+    "mixed-review",
+    "expression-terms",
+    "equation-balance",
+    "inequality-line",
+    "exponent-stack",
+    "coordinate-plane",
+    "system-intersection",
+    "polynomial-terms",
+    "factoring-pairs",
+    "rational-cancel",
+    "quadratic-roots"
+  ]);
+  return diagramPrefixes.some((prefix) => figure.startsWith(prefix)) || diagramFigures.has(figure);
+}
+
 function createDiagramIntroSvg(figure) {
   const svg = svgElement("svg", {
     class: "geometry-diagram",
@@ -1728,7 +2411,319 @@ function createDiagramIntroSvg(figure) {
 
   svg.append(svgElement("rect", { class: "geometry-frame", x: 1, y: 1, width: 358, height: 178, rx: 8 }));
 
-  if (figure === "geometry-angles") {
+  if (figure === "number-line" || figure === "integer-line") {
+    const ticks = figure === "integer-line"
+      ? [
+          { value: "-7", x: 76 },
+          { value: "-3", x: 124, active: true },
+          { value: "0", x: 160, result: true },
+          { value: "5", x: 220, active: true },
+          { value: "8", x: 256, result: true }
+        ]
+      : [
+          { value: "300", x: 78 },
+          { value: "400", x: 166, result: true },
+          { value: "500", x: 254 }
+        ];
+    svg.append(
+      svgElement("line", { class: "geometry-line", x1: 54, y1: 104, x2: 306, y2: 104 }),
+      svgElement("path", { class: "geometry-line", d: "M 294 94 L 308 104 L 294 114" })
+    );
+    for (const tick of ticks) {
+      svg.append(
+        svgElement("line", { class: tick.active ? "geometry-line active" : "geometry-line", x1: tick.x, y1: 94, x2: tick.x, y2: 114 }),
+        svgElement("circle", { class: tick.result ? "geometry-point result" : tick.active ? "geometry-point active" : "geometry-point", cx: tick.x, cy: 104, r: tick.result || tick.active ? 5 : 3 })
+      );
+      svgText(svg, tick.value, tick.x, 136, tick.result ? "geometry-label geometry-math result" : "geometry-label geometry-math", "middle");
+    }
+    if (figure === "integer-line") {
+      svg.append(svgElement("path", { class: "geometry-line active", d: "M 124 78 C 154 44 220 44 256 78" }));
+      svgText(svg, "move right to add", 132, 58, "geometry-note");
+      svgText(svg, "right is greater", 200, 158, "geometry-note");
+    } else {
+      svg.append(svgElement("path", { class: "geometry-line active", d: "M 162 76 C 180 54 218 54 250 78" }));
+      svgText(svg, "398 is near 400", 112, 62, "geometry-note");
+      svgText(svg, "closer", 182, 92, "geometry-note");
+    }
+  } else if (figure === "place-value") {
+    const columns = [
+      { label: "hundreds", digit: "6", value: "600", x: 66 },
+      { label: "tens", digit: "4", value: "40", x: 154 },
+      { label: "ones", digit: "2", value: "2", x: 242 }
+    ];
+    for (const column of columns) {
+      svg.append(svgElement("rect", { class: "geometry-shape active", x: column.x, y: 48, width: 58, height: 48, rx: 6 }));
+      svgText(svg, column.label, column.x + 29, 35, "geometry-note", "middle");
+      svgText(svg, column.digit, column.x + 29, 80, "geometry-label geometry-math active", "middle");
+      svgText(svg, column.value, column.x + 29, 132, "geometry-label geometry-math result", "middle");
+      svg.append(svgElement("path", { class: "geometry-line result", d: `M ${column.x + 29} 100 V 112` }));
+    }
+  } else if (figure === "fraction-bar") {
+    [0, 1, 2, 3].forEach((index) => {
+      svg.append(svgElement("rect", { class: index < 3 ? "geometry-shape active" : "geometry-shape", x: 66 + index * 58, y: 70, width: 58, height: 42, rx: 0 }));
+    });
+    svgText(svg, "3 of 4 equal parts", 104, 142, "geometry-label geometry-math result");
+    svgText(svg, "same whole", 124, 48, "geometry-note");
+  } else if (figure === "decimal-grid" || figure === "percent-grid") {
+    for (let row = 0; row < 5; row += 1) {
+      for (let col = 0; col < 10; col += 1) {
+        const index = row * 10 + col;
+        svg.append(svgElement("rect", {
+          class: index < 30 ? "geometry-shape active" : "geometry-shape",
+          x: 58 + col * 20,
+          y: 38 + row * 20,
+          width: 18,
+          height: 18,
+          rx: 2
+        }));
+      }
+    }
+    svgText(svg, figure === "percent-grid" ? "30 of 100 = 30%" : "3 tenths = 0.3", 206, 154, "geometry-label geometry-math result", "middle");
+  } else if (figure === "ratio-bars") {
+    svg.append(
+      svgElement("rect", { class: "geometry-shape active", x: 62, y: 54, width: 72, height: 28, rx: 4 }),
+      svgElement("rect", { class: "geometry-shape result", x: 134, y: 54, width: 108, height: 28, rx: 4 }),
+      svgElement("rect", { class: "geometry-shape active", x: 62, y: 104, width: 144, height: 28, rx: 4 }),
+      svgElement("rect", { class: "geometry-shape result", x: 206, y: 104, width: 108, height: 28, rx: 4 })
+    );
+    svgText(svg, "2 : 3", 72, 44, "geometry-label geometry-math active");
+    svgText(svg, "×2", 260, 82, "geometry-note");
+    svgText(svg, "4 : 6", 72, 154, "geometry-label geometry-math result");
+  } else if (figure === "equation-balance") {
+    svg.append(
+      svgElement("line", { class: "geometry-line", x1: 180, y1: 48, x2: 180, y2: 128 }),
+      svgElement("line", { class: "geometry-line", x1: 78, y1: 94, x2: 282, y2: 94 }),
+      svgElement("path", { class: "geometry-line active", d: "M 108 94 L 88 134 H 128 Z" }),
+      svgElement("path", { class: "geometry-line result", d: "M 252 94 L 232 134 H 272 Z" })
+    );
+    svgText(svg, "x + 7", 84, 78, "geometry-label geometry-math active");
+    svgText(svg, "12", 244, 78, "geometry-label geometry-math result");
+    svgText(svg, "do the same thing to both sides", 92, 158, "geometry-note");
+  } else if (figure === "inequality-line") {
+    svg.append(
+      svgElement("line", { class: "geometry-line", x1: 58, y1: 104, x2: 304, y2: 104 }),
+      svgElement("path", { class: "geometry-line active", d: "M 182 104 H 298" }),
+      svgElement("path", { class: "geometry-line active", d: "M 286 94 L 300 104 L 286 114" }),
+      svgElement("circle", { class: "geometry-shape result", cx: 182, cy: 104, r: 8 })
+    );
+    svgText(svg, "5", 176, 136, "geometry-label geometry-math");
+    svgText(svg, "x > 5", 150, 70, "geometry-label geometry-math result");
+    svgText(svg, "open circle, shade right", 112, 158, "geometry-note");
+  } else if (figure === "exponent-stack") {
+    [72, 116, 160, 204, 248].forEach((x, index) => {
+      svg.append(svgElement("circle", { class: "geometry-point active", cx: x, cy: 94, r: 12 }));
+      svgText(svg, "2", x, 100, "geometry-label geometry-math active", "middle");
+      if (index < 4) svgText(svg, "×", x + 24, 100, "geometry-label geometry-math");
+    });
+    svgText(svg, "2^5 means five factors of 2", 88, 142, "geometry-label geometry-math result");
+  } else if (figure === "coordinate-plane") {
+    drawMiniAxes(svg);
+    svg.append(
+      svgElement("path", { class: "geometry-line active", d: "M 154 102 H 238" }),
+      svgElement("path", { class: "geometry-line result", d: "M 238 102 V 142" }),
+      svgElement("circle", { class: "geometry-point result", cx: 238, cy: 142, r: 5 })
+    );
+    svgText(svg, "(3, -2)", 246, 145, "geometry-label geometry-math result");
+    svgText(svg, "right, then down", 86, 54, "geometry-note");
+  } else if (figure === "estimation") {
+    svg.append(
+      svgElement("line", { class: "geometry-line", x1: 58, y1: 108, x2: 304, y2: 108 }),
+      svgElement("circle", { class: "geometry-point active", cx: 168, cy: 108, r: 5 }),
+      svgElement("circle", { class: "geometry-point result", cx: 172, cy: 108, r: 8 })
+    );
+    svgText(svg, "398", 154, 82, "geometry-label geometry-math active");
+    svgText(svg, "400", 158, 142, "geometry-label geometry-math result");
+    svgText(svg, "round to a nearby friendly number", 82, 54, "geometry-note");
+  } else if (figure === "factor-pairs") {
+    svgText(svg, "6 × 7", 88, 84, "geometry-label geometry-math active");
+    svgText(svg, "=", 166, 84, "geometry-label geometry-math");
+    svgText(svg, "42", 202, 84, "geometry-label geometry-math result");
+    svg.append(
+      svgElement("path", { class: "geometry-line active", d: "M 110 98 C 122 128 188 128 216 98" }),
+      svgElement("circle", { class: "geometry-point active", cx: 96, cy: 78, r: 5 }),
+      svgElement("circle", { class: "geometry-point active", cx: 142, cy: 78, r: 5 })
+    );
+    svgText(svg, "a factor pair multiplies to the target", 74, 146, "geometry-note");
+  } else if (figure === "operation-order") {
+    svgText(svg, "3 + 4 × 5", 78, 68, "geometry-label geometry-math");
+    svg.append(
+      svgElement("rect", { class: "geometry-shape active", x: 142, y: 42, width: 80, height: 38, rx: 6 }),
+      svgElement("path", { class: "geometry-line active", d: "M 182 84 V 112" })
+    );
+    svgText(svg, "multiply first", 136, 128, "geometry-note");
+    svgText(svg, "23", 238, 128, "geometry-label geometry-math result");
+  } else if (figure === "word-problem") {
+    svg.append(
+      svgElement("rect", { class: "geometry-shape active", x: 64, y: 54, width: 70, height: 46, rx: 6 }),
+      svgElement("path", { class: "geometry-line active", d: "M 136 78 H 218" }),
+      svgElement("path", { class: "geometry-line active", d: "M 206 68 L 220 78 L 206 88" }),
+      svgElement("rect", { class: "geometry-shape result", x: 222, y: 54, width: 74, height: 46, rx: 6 })
+    );
+    svgText(svg, "story", 88, 83, "geometry-note");
+    svgText(svg, "18 + 7", 232, 83, "geometry-label geometry-math result");
+    svgText(svg, "choose the operation before calculating", 72, 138, "geometry-note");
+  } else if (figure === "mixed-review") {
+    ["+", "–", "×", "÷"].forEach((symbol, index) => {
+      const x = 78 + index * 52;
+      svg.append(svgElement("circle", { class: index === 2 ? "geometry-shape active" : "geometry-shape", cx: x, cy: 82, r: 22 }));
+      svgText(svg, symbol, x, 90, "geometry-label geometry-math", "middle");
+    });
+    svgText(svg, "pick a method", 92, 132, "geometry-note");
+    svgText(svg, "then check", 210, 132, "geometry-note");
+  } else if (figure === "expression-terms" || figure === "polynomial-terms") {
+    const left = figure === "polynomial-terms" ? "3x^2" : "2x";
+    const right = figure === "polynomial-terms" ? "5x^2" : "x";
+    const result = figure === "polynomial-terms" ? "8x^2" : "3x";
+    svgText(svg, left, 72, 78, "geometry-label geometry-math active");
+    svgText(svg, "+", 134, 78, "geometry-label geometry-math");
+    svgText(svg, right, 166, 78, "geometry-label geometry-math active");
+    svg.append(svgElement("path", { class: "geometry-line active", d: "M 78 94 C 112 126 176 126 202 94" }));
+    svgText(svg, "same variable part", 104, 138, "geometry-note");
+    svgText(svg, result, 250, 78, "geometry-label geometry-math result");
+  } else if (figure === "system-intersection") {
+    drawMiniAxes(svg);
+    svg.append(
+      svgElement("path", { class: "geometry-line active", d: "M 86 142 L 260 48" }),
+      svgElement("path", { class: "geometry-line result", d: "M 90 56 L 260 140" }),
+      svgElement("circle", { class: "geometry-point", cx: 176, cy: 94, r: 6 })
+    );
+    svgText(svg, "(2, 1)", 188, 86, "geometry-label geometry-math");
+    svgText(svg, "both equations true here", 104, 158, "geometry-note");
+  } else if (figure === "factoring-pairs") {
+    svgText(svg, "x^2 + 5x + 6", 66, 54, "geometry-label geometry-math");
+    svgText(svg, "2 + 3 = 5", 86, 100, "geometry-label geometry-math active");
+    svgText(svg, "2 × 3 = 6", 86, 132, "geometry-label geometry-math result");
+    svg.append(svgElement("path", { class: "geometry-line active", d: "M 238 92 L 282 92 L 282 122 L 238 122 Z" }));
+    svgText(svg, "(x+2)(x+3)", 202, 158, "geometry-label geometry-math result");
+  } else if (figure === "rational-cancel") {
+    svgText(svg, "(x - 3)(x + 3)", 70, 64, "geometry-label geometry-math active");
+    svg.append(svgElement("line", { class: "geometry-line", x1: 70, y1: 82, x2: 214, y2: 82 }));
+    svgText(svg, "x - 3", 112, 112, "geometry-label geometry-math active");
+    svg.append(
+      svgElement("path", { class: "geometry-line result", d: "M 88 48 L 154 118" }),
+      svgElement("path", { class: "geometry-line result", d: "M 240 82 H 282" })
+    );
+    svgText(svg, "x + 3", 290, 88, "geometry-label geometry-math result");
+  } else if (figure === "quadratic-roots") {
+    svg.append(
+      svgElement("line", { class: "geometry-line", x1: 58, y1: 124, x2: 304, y2: 124 }),
+      svgElement("path", { class: "geometry-line active", d: "M 92 132 Q 180 38 268 132" }),
+      svgElement("circle", { class: "geometry-point result", cx: 132, cy: 124, r: 5 }),
+      svgElement("circle", { class: "geometry-point result", cx: 228, cy: 124, r: 5 })
+    );
+    svgText(svg, "roots", 162, 58, "geometry-note");
+    svgText(svg, "x = 2", 110, 154, "geometry-label geometry-math result");
+    svgText(svg, "x = 3", 208, 154, "geometry-label geometry-math result");
+  } else if (figure === "set-notation") {
+    svg.append(
+      svgElement("rect", { class: "geometry-shape active", x: 78, y: 52, width: 204, height: 72, rx: 10 }),
+      svgElement("circle", { class: "geometry-point result", cx: 138, cy: 88, r: 6 }),
+      svgElement("circle", { class: "geometry-point result", cx: 180, cy: 88, r: 6 }),
+      svgElement("circle", { class: "geometry-point result", cx: 222, cy: 88, r: 6 })
+    );
+    svgText(svg, "A = {1, 2, 3}", 116, 40, "geometry-label geometry-math");
+    svgText(svg, "2 ∈ A", 154, 150, "geometry-label geometry-math result");
+  } else if (figure === "set-subsets") {
+    svg.append(
+      svgElement("circle", { class: "geometry-shape active", cx: 178, cy: 92, r: 64 }),
+      svgElement("circle", { class: "geometry-shape result", cx: 158, cy: 92, r: 32 })
+    );
+    svgText(svg, "B", 226, 70, "geometry-label geometry-math active");
+    svgText(svg, "A", 152, 98, "geometry-label geometry-math result");
+    svgText(svg, "A ⊆ B", 142, 156, "geometry-label geometry-math");
+  } else if (figure === "set-operations") {
+    svg.append(
+      svgElement("circle", { class: "geometry-shape active", cx: 142, cy: 90, r: 52 }),
+      svgElement("circle", { class: "geometry-shape result", cx: 206, cy: 90, r: 52 })
+    );
+    svgText(svg, "A", 100, 54, "geometry-label geometry-math active");
+    svgText(svg, "B", 240, 54, "geometry-label geometry-math result");
+    svgText(svg, "A ∩ B", 154, 94, "geometry-label geometry-math");
+    svgText(svg, "shared middle", 132, 150, "geometry-note");
+  } else if (figure === "set-relations") {
+    svg.append(
+      svgElement("rect", { class: "geometry-shape active", x: 62, y: 42, width: 82, height: 104, rx: 8 }),
+      svgElement("rect", { class: "geometry-shape result", x: 220, y: 42, width: 82, height: 104, rx: 8 })
+    );
+    [["1", 88, 72], ["2", 88, 118], ["x", 260, 72], ["y", 260, 118]].forEach(([text, x, y]) => svgText(svg, text, x, y, "geometry-label geometry-math", "middle"));
+    svg.append(
+      svgElement("path", { class: "geometry-line active", d: "M 104 68 H 244" }),
+      svgElement("path", { class: "geometry-line result", d: "M 104 114 C 150 146 206 146 244 118" })
+    );
+    svgText(svg, "ordered pairs", 130, 164, "geometry-note");
+  } else if (figure === "set-functions") {
+    svg.append(
+      svgElement("rect", { class: "geometry-shape active", x: 62, y: 42, width: 82, height: 104, rx: 8 }),
+      svgElement("rect", { class: "geometry-shape result", x: 220, y: 42, width: 82, height: 104, rx: 8 })
+    );
+    [["input", 102, 32], ["output", 262, 32], ["1", 102, 74], ["2", 102, 116], ["a", 262, 74], ["b", 262, 116]].forEach(([text, x, y]) => svgText(svg, text, x, y, "geometry-note", "middle"));
+    svg.append(
+      svgElement("path", { class: "geometry-line active", d: "M 112 72 H 250" }),
+      svgElement("path", { class: "geometry-line active", d: "M 238 62 L 252 72 L 238 82" }),
+      svgElement("path", { class: "geometry-line result", d: "M 112 114 H 250" }),
+      svgElement("path", { class: "geometry-line result", d: "M 238 104 L 252 114 L 238 124" })
+    );
+    svgText(svg, "one output per input", 112, 164, "geometry-note");
+  } else if (figure === "set-countability") {
+    [78, 118, 158, 198, 238, 278].forEach((x, index) => {
+      svg.append(svgElement("circle", { class: index < 4 ? "geometry-point active" : "geometry-point result", cx: x, cy: 90, r: 6 }));
+      svgText(svg, String(index + 1), x, 122, "geometry-label geometry-math", "middle");
+    });
+    svg.append(svgElement("path", { class: "geometry-line active", d: "M 72 90 H 286" }));
+    svgText(svg, "listable: 1, 2, 3, ...", 104, 58, "geometry-note");
+    svgText(svg, "countable", 142, 154, "geometry-label result");
+  } else if (figure === "number-divisibility") {
+    svgText(svg, "20 = 4 × 5", 92, 72, "geometry-label geometry-math active");
+    svg.append(
+      svgElement("rect", { class: "geometry-shape result", x: 82, y: 100, width: 44, height: 28, rx: 4 }),
+      svgElement("rect", { class: "geometry-shape result", x: 132, y: 100, width: 44, height: 28, rx: 4 }),
+      svgElement("rect", { class: "geometry-shape result", x: 182, y: 100, width: 44, height: 28, rx: 4 }),
+      svgElement("rect", { class: "geometry-shape result", x: 232, y: 100, width: 44, height: 28, rx: 4 })
+    );
+    svgText(svg, "equal groups, no remainder", 104, 158, "geometry-note");
+  } else if (figure === "number-primes") {
+    svgText(svg, "12", 164, 42, "geometry-label geometry-math");
+    svg.append(
+      svgElement("path", { class: "geometry-line active", d: "M 174 50 L 122 88 M 174 50 L 224 88" }),
+      svgElement("path", { class: "geometry-line result", d: "M 122 96 L 96 132 M 122 96 L 148 132" })
+    );
+    svgText(svg, "4", 116, 104, "geometry-label geometry-math active");
+    svgText(svg, "3", 220, 104, "geometry-label geometry-math result");
+    svgText(svg, "2", 90, 150, "geometry-label geometry-math result");
+    svgText(svg, "2", 144, 150, "geometry-label geometry-math result");
+    svgText(svg, "prime factors", 198, 150, "geometry-note");
+  } else if (figure === "number-gcd-lcm") {
+    svgText(svg, "12: 1,2,3,4,6,12", 62, 64, "geometry-label geometry-math active");
+    svgText(svg, "18: 1,2,3,6,9,18", 62, 100, "geometry-label geometry-math result");
+    svg.append(svgElement("rect", { class: "geometry-shape result", x: 152, y: 72, width: 34, height: 40, rx: 5 }));
+    svgText(svg, "6", 164, 100, "geometry-label geometry-math");
+    svgText(svg, "largest shared divisor", 100, 150, "geometry-note");
+  } else if (figure === "number-euclidean") {
+    svgText(svg, "18 = 12 × 1 + 6", 70, 62, "geometry-label geometry-math active");
+    svgText(svg, "12 = 6 × 2 + 0", 70, 104, "geometry-label geometry-math result");
+    svg.append(svgElement("path", { class: "geometry-line active", d: "M 220 66 C 250 78 250 100 220 108" }));
+    svgText(svg, "last nonzero remainder is 6", 82, 150, "geometry-note");
+  } else if (figure === "number-modular") {
+    svg.append(svgElement("circle", { class: "geometry-shape", cx: 178, cy: 90, r: 58 }));
+    for (let i = 0; i < 12; i += 1) {
+      const angle = (-90 + i * 30) * Math.PI / 180;
+      const x = 178 + Math.cos(angle) * 42;
+      const y = 90 + Math.sin(angle) * 42;
+      svgText(svg, String(i === 0 ? 12 : i), x, y + 5, "geometry-note", "middle");
+    }
+    svg.append(svgElement("path", { class: "geometry-line active", d: "M 178 90 L 178 48 M 178 90 L 220 90" }));
+    svgText(svg, "wrap around", 128, 164, "geometry-note");
+  } else if (figure === "number-congruences") {
+    svg.append(
+      svgElement("line", { class: "geometry-line", x1: 58, y1: 104, x2: 304, y2: 104 }),
+      svgElement("circle", { class: "geometry-point active", cx: 112, cy: 104, r: 6 }),
+      svgElement("circle", { class: "geometry-point result", cx: 232, cy: 104, r: 6 }),
+      svgElement("path", { class: "geometry-line active", d: "M 112 78 C 146 42 198 42 232 78" })
+    );
+    svgText(svg, "2", 108, 134, "geometry-label geometry-math");
+    svgText(svg, "17", 224, 134, "geometry-label geometry-math");
+    svgText(svg, "same remainder mod 5", 106, 58, "geometry-note");
+  } else if (figure === "geometry-angles") {
     svg.append(
       svgElement("line", { class: "geometry-line", x1: 62, y1: 124, x2: 298, y2: 124 }),
       svgElement("line", { class: "geometry-line active", x1: 142, y1: 124, x2: 86, y2: 48 }),
@@ -2012,6 +3007,173 @@ function createDiagramIntroSvg(figure) {
     svgText(svg, "span", 210, 74, "geometry-note");
     svgText(svg, "basis", 108, 48, "geometry-note");
     svgText(svg, "R²", 278, 126, "geometry-label geometry-math result");
+  } else if (figure === "proof-logic") {
+    proofBox(svg, 46, 52, "If P", "hypothesis");
+    proofBox(svg, 234, 52, "Then Q", "conclusion");
+    svg.append(
+      svgElement("path", { class: "geometry-line active", d: "M 126 88 H 232" }),
+      svgElement("path", { class: "geometry-line active", d: "M 220 78 L 234 88 L 220 98" })
+    );
+    svgText(svg, "implication", 142, 72, "geometry-note");
+  } else if (figure === "proof-quantifiers") {
+    svg.append(
+      svgElement("circle", { class: "geometry-shape", cx: 126, cy: 92, r: 54 }),
+      svgElement("circle", { class: "geometry-point active", cx: 96, cy: 84, r: 5 }),
+      svgElement("circle", { class: "geometry-point active", cx: 128, cy: 64, r: 5 }),
+      svgElement("circle", { class: "geometry-point active", cx: 156, cy: 104, r: 5 }),
+      svgElement("circle", { class: "geometry-point result", cx: 252, cy: 92, r: 8 })
+    );
+    svgText(svg, "for all", 92, 156, "geometry-note");
+    svgText(svg, "exists", 230, 126, "geometry-note");
+    svgText(svg, "∀", 112, 98, "geometry-label geometry-math active");
+    svgText(svg, "∃", 272, 98, "geometry-label geometry-math result");
+  } else if (figure === "proof-induction") {
+    [64, 116, 168, 220, 272].forEach((x, index) => {
+      svg.append(svgElement("rect", { class: index === 0 ? "geometry-shape result" : "geometry-shape active", x: x - 18, y: 106 - index * 8, width: 36, height: 28, rx: 3 }));
+      svgText(svg, String(index + 1), x - 5, 126 - index * 8, "geometry-note");
+      if (index < 4) {
+        svg.append(svgElement("path", { class: "geometry-line", d: `M ${x + 20} ${118 - index * 8} H ${x + 44}` }));
+      }
+    });
+    svgText(svg, "base", 46, 82, "geometry-note");
+    svgText(svg, "k → k + 1", 164, 68, "geometry-label geometry-math");
+  } else if (figure === "proof-contradiction") {
+    svgText(svg, "assume not P", 56, 62, "geometry-label geometry-math active");
+    svg.append(
+      svgElement("path", { class: "geometry-line active", d: "M 104 76 C 132 106 178 112 220 96" }),
+      svgElement("path", { class: "geometry-line result", d: "M 214 84 L 242 112 M 242 84 L 214 112" })
+    );
+    svgText(svg, "impossible", 202, 136, "geometry-note");
+    svgText(svg, "therefore P", 56, 144, "geometry-label geometry-math result");
+  } else if (figure === "proof-construction") {
+    proofBox(svg, 42, 48, "Build", "example");
+    proofBox(svg, 236, 48, "Verify", "works");
+    svg.append(
+      svgElement("path", { class: "geometry-line active", d: "M 122 84 H 234" }),
+      svgElement("path", { class: "geometry-line active", d: "M 222 74 L 236 84 L 222 94" })
+    );
+    svgText(svg, "12 is even", 128, 130, "geometry-label geometry-math result");
+  } else if (figure === "proof-counterexamples") {
+    svgText(svg, "all cases", 72, 54, "geometry-note");
+    svg.append(
+      svgElement("line", { class: "geometry-line active", x1: 64, y1: 92, x2: 286, y2: 92 }),
+      svgElement("circle", { class: "geometry-point active", cx: 102, cy: 92, r: 5 }),
+      svgElement("circle", { class: "geometry-point active", cx: 156, cy: 92, r: 5 }),
+      svgElement("circle", { class: "geometry-point active", cx: 210, cy: 92, r: 5 }),
+      svgElement("circle", { class: "geometry-point result", cx: 264, cy: 92, r: 7 }),
+      svgElement("path", { class: "geometry-line result", d: "M 250 78 L 278 106 M 278 78 L 250 106" })
+    );
+    svgText(svg, "one failure breaks the claim", 82, 138, "geometry-note");
+  } else if (figure === "real-sets") {
+    svg.append(
+      svgElement("line", { class: "geometry-line", x1: 54, y1: 104, x2: 306, y2: 104 }),
+      svgElement("line", { class: "geometry-line active", x1: 118, y1: 104, x2: 242, y2: 104 }),
+      svgElement("circle", { class: "geometry-point result", cx: 118, cy: 104, r: 6 }),
+      svgElement("circle", { class: "geometry-point result", cx: 242, cy: 104, r: 6 })
+    );
+    svgText(svg, "2", 112, 132, "geometry-label geometry-math");
+    svgText(svg, "5", 236, 132, "geometry-label geometry-math");
+    svgText(svg, "[2, 5]", 148, 68, "geometry-label geometry-math result");
+  } else if (figure === "real-sequences") {
+    [72, 112, 152, 192, 232, 272].forEach((x, index) => {
+      const y = 52 + index * 13;
+      svg.append(svgElement("circle", { class: index < 4 ? "geometry-point active" : "geometry-point result", cx: x, cy: y, r: 5 }));
+    });
+    svg.append(
+      svgElement("line", { class: "geometry-line result", x1: 54, y1: 130, x2: 310, y2: 130 }),
+      svgElement("path", { class: "geometry-line", d: "M 252 116 L 284 128 M 270 116 L 284 128 L 270 140" })
+    );
+    svgText(svg, "terms", 82, 42, "geometry-note");
+    svgText(svg, "limit 0", 226, 154, "geometry-label geometry-math result");
+  } else if (figure === "real-limits") {
+    svg.append(
+      svgElement("line", { class: "geometry-line", x1: 50, y1: 126, x2: 314, y2: 126 }),
+      svgElement("line", { class: "geometry-line", x1: 82, y1: 36, x2: 82, y2: 148 }),
+      svgElement("path", { class: "geometry-line active", d: "M 72 124 C 120 96 158 74 202 70 S 270 74 306 48" }),
+      svgElement("rect", { class: "geometry-shape result", x: 160, y: 56, width: 86, height: 28, rx: 2 }),
+      svgElement("circle", { class: "geometry-point result", cx: 202, cy: 70, r: 5 })
+    );
+    svgText(svg, "epsilon band", 176, 50, "geometry-note");
+    svgText(svg, "x → a", 146, 152, "geometry-label geometry-math");
+  } else if (figure === "real-continuity") {
+    svg.append(
+      svgElement("line", { class: "geometry-line", x1: 50, y1: 126, x2: 314, y2: 126 }),
+      svgElement("line", { class: "geometry-line", x1: 82, y1: 36, x2: 82, y2: 148 }),
+      svgElement("path", { class: "geometry-line active", d: "M 72 118 C 126 94 168 72 218 78 S 276 98 306 58" }),
+      svgElement("circle", { class: "geometry-point result", cx: 218, cy: 78, r: 5 })
+    );
+    svgText(svg, "lim f(x) = f(a)", 166, 54, "geometry-label geometry-math result");
+    svgText(svg, "no jump", 218, 116, "geometry-note");
+  } else if (figure === "real-differentiation") {
+    svg.append(
+      svgElement("line", { class: "geometry-line", x1: 50, y1: 128, x2: 314, y2: 128 }),
+      svgElement("line", { class: "geometry-line", x1: 82, y1: 36, x2: 82, y2: 148 }),
+      svgElement("path", { class: "geometry-line active", d: "M 72 118 C 132 106 186 74 306 50" }),
+      svgElement("line", { class: "geometry-line result", x1: 142, y1: 96, x2: 250, y2: 68 }),
+      svgElement("circle", { class: "geometry-point result", cx: 196, cy: 82, r: 5 })
+    );
+    svgText(svg, "difference quotient", 124, 54, "geometry-note");
+    svgText(svg, "slope limit", 210, 108, "geometry-note");
+  } else if (figure === "real-integration") {
+    svg.append(
+      svgElement("line", { class: "geometry-line", x1: 50, y1: 136, x2: 314, y2: 136 }),
+      svgElement("line", { class: "geometry-line", x1: 82, y1: 36, x2: 82, y2: 150 }),
+      svgElement("path", { class: "geometry-line active", d: "M 82 118 C 130 74 186 80 232 66 S 280 80 306 48" })
+    );
+    [104, 132, 160, 188, 216, 244].forEach((x, index) => {
+      const heights = [42, 54, 58, 60, 66, 72];
+      svg.append(svgElement("rect", { class: "geometry-shape result", x, y: 136 - heights[index], width: 24, height: heights[index], rx: 1 }));
+    });
+    svgText(svg, "partition", 126, 154, "geometry-note");
+    svgText(svg, "Riemann sum", 214, 54, "geometry-note");
+  } else if (figure === "abstract-groups") {
+    svg.append(
+      svgElement("circle", { class: "geometry-shape", cx: 178, cy: 92, r: 58 }),
+      svgElement("path", { class: "geometry-line active", d: "M 142 70 A 44 44 0 0 1 214 70" }),
+      svgElement("path", { class: "geometry-line active", d: "M 210 58 L 224 70 L 208 80" }),
+      svgElement("path", { class: "geometry-line result", d: "M 142 114 A 44 44 0 0 0 214 114" }),
+      svgElement("path", { class: "geometry-line result", d: "M 146 126 L 132 114 L 148 104" })
+    );
+    svgText(svg, "identity", 144, 96, "geometry-note");
+    svgText(svg, "inverse", 146, 154, "geometry-note");
+    svgText(svg, "a*b", 166, 44, "geometry-label geometry-math active");
+  } else if (figure === "abstract-rings") {
+    proofBox(svg, 46, 48, "Add", "abelian");
+    proofBox(svg, 234, 48, "Multiply", "distribute");
+    svg.append(
+      svgElement("path", { class: "geometry-line active", d: "M 126 84 H 232" }),
+      svgElement("path", { class: "geometry-line active", d: "M 220 74 L 234 84 L 220 94" })
+    );
+    svgText(svg, "a(b+c)=ab+ac", 118, 146, "geometry-label geometry-math result");
+  } else if (figure === "abstract-fields") {
+    svg.append(
+      svgElement("circle", { class: "geometry-shape active", cx: 124, cy: 90, r: 42 }),
+      svgElement("circle", { class: "geometry-shape result", cx: 236, cy: 90, r: 42 }),
+      svgElement("path", { class: "geometry-line", d: "M 166 90 H 194 M 182 80 L 196 90 L 182 100" })
+    );
+    svgText(svg, "a", 116, 96, "geometry-label geometry-math active");
+    svgText(svg, "a⁻¹", 224, 96, "geometry-label geometry-math result");
+    svgText(svg, "a · a⁻¹ = 1", 126, 150, "geometry-label geometry-math");
+  } else if (figure === "abstract-homomorphisms") {
+    svg.append(
+      svgElement("circle", { class: "geometry-shape", cx: 98, cy: 90, r: 46 }),
+      svgElement("circle", { class: "geometry-shape", cx: 260, cy: 90, r: 46 }),
+      svgElement("path", { class: "geometry-line active", d: "M 142 78 H 216" }),
+      svgElement("path", { class: "geometry-line active", d: "M 204 68 L 218 78 L 204 88" }),
+      svgElement("path", { class: "geometry-line result", d: "M 142 110 H 216" }),
+      svgElement("path", { class: "geometry-line result", d: "M 204 100 L 218 110 L 204 120" })
+    );
+    svgText(svg, "a+b", 76, 96, "geometry-label geometry-math active");
+    svgText(svg, "f(a)+f(b)", 226, 96, "geometry-label geometry-math result");
+    svgText(svg, "preserve operation", 126, 154, "geometry-note");
+  } else if (figure === "abstract-examples") {
+    proofBox(svg, 46, 48, "Example", "satisfies");
+    proofBox(svg, 234, 48, "Counter", "breaks");
+    svg.append(
+      svgElement("path", { class: "geometry-line active", d: "M 80 134 L 100 154 L 132 116" }),
+      svgElement("path", { class: "geometry-line result", d: "M 232 124 L 268 154 M 268 124 L 232 154" })
+    );
+    svgText(svg, "check the operation", 116, 146, "geometry-note");
   }
 
   return svg;
@@ -2021,6 +3183,19 @@ function proofBox(svg, x, y, title, body) {
   svg.append(svgElement("rect", { class: "geometry-proof-box", x, y, width: 80, height: 74, rx: 8 }));
   svgText(svg, title, x + 40, y + 26, "geometry-label active", "middle");
   svgText(svg, body, x + 40, y + 52, "geometry-note", "middle");
+}
+
+function drawMiniAxes(svg) {
+  for (let x = 74; x <= 274; x += 40) {
+    svg.append(svgElement("line", { class: "geometry-grid-line", x1: x, y1: 42, x2: x, y2: 150 }));
+  }
+  for (let y = 42; y <= 150; y += 20) {
+    svg.append(svgElement("line", { class: "geometry-grid-line", x1: 74, y1: y, x2: 274, y2: y }));
+  }
+  svg.append(
+    svgElement("line", { class: "geometry-line", x1: 74, y1: 102, x2: 274, y2: 102 }),
+    svgElement("line", { class: "geometry-line", x1: 154, y1: 42, x2: 154, y2: 150 })
+  );
 }
 
 function svgElement(tag, attributes = {}) {
@@ -2335,7 +3510,36 @@ function conceptFigureCaption(figure) {
     "linear-transformations": "Linear transformations move vectors while preserving linear structure.",
     "linear-determinants": "Determinants describe how a matrix scales area or volume.",
     "linear-eigenvalues": "Eigenvectors keep direction while eigenvalues give the scale.",
-    "linear-vector-spaces": "Vector spaces collect all combinations allowed by addition and scaling."
+    "linear-vector-spaces": "Vector spaces collect all combinations allowed by addition and scaling.",
+    "proof-logic": "Logic tracks how one statement forces another.",
+    "proof-quantifiers": "Quantifiers control whether a claim covers all cases or at least one.",
+    "proof-induction": "Induction proves infinitely many cases by linking each case to the next.",
+    "proof-contradiction": "Contradiction proves a claim by showing its negation cannot work.",
+    "proof-construction": "Construction proves existence by building and checking an example.",
+    "proof-counterexamples": "Counterexamples disprove universal claims with one failing case.",
+    "set-notation": "Set notation names collections and membership.",
+    "set-subsets": "Subsets sit completely inside larger sets.",
+    "set-operations": "Union and intersection compare what sets contain.",
+    "set-relations": "Relations are sets of ordered pairs.",
+    "set-functions": "Functions map each input to exactly one output.",
+    "set-countability": "Countability asks whether elements can be listed.",
+    "number-divisibility": "Divisibility means equal groups with no remainder.",
+    "number-primes": "Prime factorization breaks numbers into prime building blocks.",
+    "number-gcd-lcm": "GCD and LCM organize shared divisors and multiples.",
+    "number-euclidean": "The Euclidean algorithm finds a GCD by remainders.",
+    "number-modular": "Modular arithmetic tracks remainders after wrapping.",
+    "number-congruences": "Congruences say two numbers share a remainder system.",
+    "real-sets": "Intervals and bounds make sets of real numbers precise.",
+    "real-sequences": "Sequences converge when their tails stay close to one value.",
+    "real-limits": "Epsilon bands make approaching a limit precise.",
+    "real-continuity": "Continuity means the limit and function value agree.",
+    "real-differentiation": "Differentiability is a limit-based tangent slope.",
+    "real-integration": "Integration can be built from increasingly fine sums.",
+    "abstract-groups": "Groups package one operation with identity and inverses.",
+    "abstract-rings": "Rings combine addition, multiplication, and distributivity.",
+    "abstract-fields": "Fields make division by nonzero elements possible.",
+    "abstract-homomorphisms": "Homomorphisms preserve algebraic structure across maps.",
+    "abstract-examples": "Examples and counterexamples test definitions precisely."
   };
   return captions[figure] || captions["mixed-review"];
 }
@@ -2439,12 +3643,13 @@ function renderConceptGrid(model) {
   input.className = "digit-input concept-answer-input";
   input.inputMode = "text";
   input.autocomplete = "off";
-  input.maxLength = 16;
+  input.maxLength = 48;
   input.dataset.cellId = model.cells[0].id;
   input.dataset.expected = model.cells[0].expected;
   input.dataset.answers = JSON.stringify(model.cells[0].answers);
   input.dataset.hint = model.cells[0].hint;
   input.dataset.label = model.cells[0].label;
+  input.dataset.prompt = model.prompt;
   input.dataset.sequence = "0";
   input.setAttribute("aria-label", model.cells[0].label);
 
@@ -3618,11 +4823,22 @@ function addCell({ row, col, value, className, borrowSlot = false }) {
 }
 
 function setMathText(element, value) {
-  const text = displayMathText(String(value ?? ""));
+  const text = String(value ?? "");
   element.replaceChildren();
   element.removeAttribute("aria-label");
   element.classList.remove("has-math");
 
+  if (text.includes("<math>")) {
+    element.setAttribute("aria-label", stripMathTags(displayMathText(text)));
+    element.classList.add("has-math");
+    appendExplicitMathText(element, text);
+    return;
+  }
+
+  appendAutoMathText(element, displayMathText(text));
+}
+
+function appendAutoMathText(element, text) {
   if (!hasMathSyntax(text)) {
     element.textContent = text;
     return;
@@ -3652,6 +4868,56 @@ function setMathText(element, value) {
   }
 }
 
+function appendExplicitMathText(element, text) {
+  const pattern = /<math>(.*?)<\/math>/g;
+  let cursor = 0;
+  let match = pattern.exec(text);
+  while (match) {
+    if (match.index > cursor) {
+      appendAutoMathFragment(element, displayMathText(text.slice(cursor, match.index)));
+    }
+    appendRun(element, displayMathText(match[1]), "math-run");
+    cursor = pattern.lastIndex;
+    match = pattern.exec(text);
+  }
+  if (cursor < text.length) {
+    appendAutoMathFragment(element, displayMathText(text.slice(cursor)));
+  }
+}
+
+function appendAutoMathFragment(element, text) {
+  if (!text) return;
+  if (!hasMathSyntax(text)) {
+    appendTextRun(element, text);
+    return;
+  }
+
+  const powerPattern = /\^(\{[^}]+\}|-?[A-Za-z0-9]+)/g;
+  let cursor = 0;
+  let match = powerPattern.exec(text);
+  while (match) {
+    if (match.index > cursor) {
+      appendSegmentBeforeExponent(element, text.slice(cursor, match.index));
+    }
+
+    const exponentText = match[1].startsWith("{") ? match[1].slice(1, -1) : match[1];
+    const exponent = document.createElement("sup");
+    exponent.className = "math-sup";
+    exponent.textContent = exponentText;
+    element.append(exponent);
+    cursor = powerPattern.lastIndex;
+    match = powerPattern.exec(text);
+  }
+
+  if (cursor < text.length) {
+    appendMathSegment(element, text.slice(cursor));
+  }
+}
+
+function stripMathTags(text) {
+  return String(text || "").replace(/<\/?math>/g, "");
+}
+
 function appendSegmentBeforeExponent(element, text) {
   const baseMatch = text.match(/(.*?)(sin|cos|tan|sec|csc|cot|log|ln|lim|[A-Za-z0-9πθ])$/i);
   if (!baseMatch) {
@@ -3668,12 +4934,12 @@ function displayMathText(value) {
 }
 
 function hasMathSyntax(text) {
-  return /[\^πθ∫≤≥=+\-*/×·/]|[A-Za-z]\d|\d[A-Za-z]|\([^)]+,[^)]+\)|\b[A-Za-z]\([A-Za-z0-9]+\)|\b(?:sin|cos|tan|sec|csc|cot|arcsin|arccos|arctan|log|ln|lim)\b/i.test(text);
+  return /[\^πθ∫≤≥≡∈∉⊆∪∩=+\-*/×·/]|[A-Za-z]\d|\d[A-Za-z]|\([^)]+,[^)]+\)|\b[A-Za-z]\([A-Za-z0-9]+\)|\b(?:sin|cos|tan|sec|csc|cot|arcsin|arccos|arctan|log|ln|lim)\b/i.test(text);
 }
 
 function appendMathSegment(element, text) {
   if (!text) return;
-  const tokenPattern = /((?<![A-Za-z])(?:[A-Za-z]\([A-Za-z0-9]+\)|[A-Za-zπθ])\s*=\s*[^,.;?]+|\b[A-Za-z]\([A-Za-z0-9]+\)|\b(?:sin|cos|tan|sec|csc|cot|arcsin|arccos|arctan|log|ln|lim)\s*[A-Za-zθπ]?\b|\b(?:\d+|[A-Za-zθπ])\s*[+\-*/×·]\s*(?:\d+|[A-Za-zθπ])\b|\b\d+\s*[π]\b|\b\d+[A-Za-z]\b|\b[A-Za-z]\d+\b|\([^)]+,[^)]+\)|[πθ∫])/gi;
+  const tokenPattern = /((?<![A-Za-z])(?:[A-Za-z]\([A-Za-z0-9]+\)|[A-Za-zπθ])\s*=\s*[^,.;?]+|\b[A-Za-z]\([A-Za-z0-9]+\)|\b(?:sin|cos|tan|sec|csc|cot|arcsin|arccos|arctan|log|ln|lim)\s*[A-Za-zθπ]?\b|\b(?:\d+|[A-Za-zθπ])\s*[+\-*/×·]\s*(?:\d+|[A-Za-zθπ])\b|\b\d+\s*[π]\b|\b\d+[A-Za-z]\b|\b[A-Za-z]\d+\b|\([^)]+,[^)]+\)|[πθ∫∈∉⊆∪∩≡])/gi;
   let cursor = 0;
   let match = tokenPattern.exec(text);
   if (match) {
@@ -3786,7 +5052,9 @@ function addInput(cell) {
   if (input.inputMode === "numeric") {
     input.pattern = "[0-9]";
   }
-  input.maxLength = Math.max(1, cell.expected.length);
+  input.maxLength = cell.inputMode === "text"
+    ? Math.max(16, cell.expected.length, ...(cell.answers || []).map((answer) => String(answer).length)) + 8
+    : Math.max(1, cell.expected.length);
   input.autocomplete = "off";
   input.dataset.cellId = cell.id;
   input.dataset.expected = cell.expected;
@@ -4125,8 +5393,8 @@ function handleDigitKeydown(event) {
     return;
   }
   if (event.key === "Enter") {
+    event.preventDefault();
     if (isCurrentProblemComplete()) {
-      event.preventDefault();
       startNextProblem();
     } else {
       checkCurrentStep();
@@ -4167,20 +5435,103 @@ function validateInput(input, announce) {
 }
 
 function isCorrectAnswer(input) {
-  const answers = input.dataset.answers ? JSON.parse(input.dataset.answers) : [input.dataset.expected];
-  return answers.some((answer) => answerValue(input.value) === answerValue(answer));
+  const answers = acceptedAnswersForInput(input);
+  const userValues = answerVariants(input.value);
+  return answers.some((answer) => {
+    const acceptedValues = answerVariants(answer);
+    return acceptedValues.some((accepted) => userValues.has(accepted));
+  });
 }
 
 function answerValue(value) {
   return String(value || "")
+    .replace(/<\/?math>/g, "")
     .trim()
     .toLowerCase()
+    .replace(/[−–—]/g, "-")
     .replace(/π/g, "pi")
-    .replace(/×/g, "*");
+    .replace(/θ/g, "theta")
+    .replace(/²/g, "^2")
+    .replace(/³/g, "^3")
+    .replace(/×/g, "*")
+    .replace(/·/g, "*")
+    .replace(/\bdegrees?\b|\bdeg\b|°/g, "")
+    .replace(/\s+/g, "");
+}
+
+function acceptedAnswersForInput(input) {
+  const explicit = input.dataset.answers ? JSON.parse(input.dataset.answers) : [input.dataset.expected];
+  const answers = new Set(explicit.map(String));
+  const expected = answerValue(input.dataset.expected);
+  const label = answerValue(input.dataset.label);
+  const prompt = answerValue(input.dataset.prompt);
+
+  for (const alias of semanticAnswerAliases(expected, label, prompt)) {
+    answers.add(alias);
+  }
+
+  return [...answers];
+}
+
+function semanticAnswerAliases(expected, label, prompt) {
+  const aliases = [];
+
+  if (expected === "0") aliases.push("zero");
+  if (expected === "1") aliases.push("one");
+  if (expected === "2") aliases.push("two");
+  if (expected === "3") aliases.push("three");
+  if (expected === "4") aliases.push("four");
+  if (expected === "5") aliases.push("five");
+  if (expected === "6") aliases.push("six");
+  if (expected === "7") aliases.push("seven");
+  if (expected === "8") aliases.push("eight");
+  if (expected === "9") aliases.push("nine");
+
+  if (["yes", "true"].includes(expected)) aliases.push("y", "true", "yes");
+  if (["no", "false"].includes(expected)) aliases.push("n", "false", "no");
+
+  if (expected === "0" && label.includes("identity")) aliases.push("identity", "additive identity", "zero element");
+  if (expected === "1" && label.includes("identity")) aliases.push("identity", "multiplicative identity", "one element");
+  if (expected === "-5" && label.includes("inverse")) aliases.push("negative 5", "opposite of 5", "additive inverse");
+  if (expected === "closure") aliases.push("closed", "closure property");
+  if (expected === "associative") aliases.push("associativity", "associative property");
+  if (expected === "commutative") aliases.push("commutativity", "commutative property");
+  if (expected === "distributive" || expected === "distributivity") aliases.push("distributes", "distributive property", "distributivity");
+  if (expected === "counterexample") aliases.push("counter example", "counter-example");
+  if (expected === "forall") aliases.push("for every", "universal", "universal quantifier");
+  if (expected === "exists") aliases.push("existential", "existential quantifier", "at least one");
+  if (expected === "p" && prompt.includes("notp")) aliases.push("p is true", "p true", "the claim");
+
+  return aliases;
+}
+
+function answerVariants(value) {
+  const compact = answerValue(value);
+  const loose = compact
+    .replace(/\btimes\b/g, "*")
+    .replace(/\bplus\b/g, "+")
+    .replace(/\bminus\b/g, "-")
+    .replace(/\bby\b/g, "x")
+    .replace(/[()[\]{}.,:_\s]/g, "")
+    .replace(/\*/g, "")
+    .replace(/\+/g, "plus")
+    .replace(/\//g, "over")
+    .replace(/\^/g, "")
+    .replace(/\bthe\b|\ba\b|\ban\b/g, "")
+    .replace(/property/g, "");
+
+  const variants = new Set([compact, loose]);
+  if (compact.startsWith("+")) variants.add(compact.slice(1));
+  if (/^\((-?\d+),(-?\d+)\)$/.test(compact)) variants.add(compact.slice(1, -1));
+  if (/^-?\d+\/-?\d+$/.test(compact)) {
+    const [numerator, denominator] = compact.split("/").map(Number);
+    if (denominator !== 0) variants.add(String(numerator / denominator));
+  }
+  return variants;
 }
 
 function normalizeAnswerInput(value) {
-  return String(value || "").replace(/\s+/g, "").slice(0, 16);
+  return String(value || "").replace(/\s+/g, " ").slice(0, 48);
 }
 
 function markExploreInput(input) {
@@ -4264,6 +5615,7 @@ function bindEvents() {
 
   els.modeTabs.forEach((tab) => {
     tab.addEventListener("click", () => {
+      if (tab.hidden) return;
       state.mode = tab.dataset.mode;
       state.activeStep = 0;
       els.modeTabs.forEach((item) => {
@@ -4275,7 +5627,11 @@ function bindEvents() {
     });
   });
 
-  els.checkStep.addEventListener("click", checkCurrentStep);
+  els.workspaceTools.addEventListener("click", (event) => {
+    if (event.target.closest("#checkStep")) {
+      checkCurrentStep();
+    }
+  });
   els.hintStep.addEventListener("click", showHint);
   els.startLesson.addEventListener("click", () => {
     state.showIntro = false;
@@ -4307,10 +5663,35 @@ function bindEvents() {
   document.addEventListener("keydown", handlePageKeydown);
 }
 
+function configureModeTabs(workspace) {
+  const availableModes = modesForWorkspace(workspace);
+  if (!availableModes.includes(state.mode)) {
+    state.mode = availableModes[0];
+  }
+
+  els.modeTabs.forEach((tab) => {
+    const available = availableModes.includes(tab.dataset.mode);
+    tab.hidden = !available;
+    tab.setAttribute("aria-selected", tab.dataset.mode === state.mode ? "true" : "false");
+  });
+}
+
+function modesForWorkspace(workspace) {
+  if (workspace.status === "planned") return ["guided"];
+  if (workspace.type === "concept") return ["guided", "practice"];
+  return ["guided", "practice", "explore"];
+}
+
 function handlePageKeydown(event) {
-  if (event.key === "Enter" && isCurrentProblemComplete() && !isFormControl(event.target)) {
+  if (event.defaultPrevented) return;
+  if (event.key === "Enter") {
+    if (isFormControl(event.target) && !event.target.classList?.contains("digit-input")) return;
     event.preventDefault();
-    startNextProblem();
+    if (isCurrentProblemComplete()) {
+      startNextProblem();
+    } else if (!state.showIntro && orderedSteps().length > 0) {
+      checkCurrentStep();
+    }
     return;
   }
   if (isFormControl(event.target) || !/^\d$/.test(event.key)) return;
