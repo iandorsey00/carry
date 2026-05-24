@@ -1,5 +1,6 @@
 "use strict";
 
+const APP_VERSION = "0.1.0-alpha.1";
 const STORAGE_KEY = "carry.progress.v1";
 
 const topicGroups = [
@@ -1842,7 +1843,8 @@ const state = {
   selectedProblemIndex: 0,
   customProblems: {},
   currentModel: null,
-  checkedCells: new Map()
+  checkedCells: new Map(),
+  lastCheckAt: 0
 };
 
 const multiplicationProblemSet = [
@@ -1912,6 +1914,7 @@ const els = {};
 
 document.addEventListener("DOMContentLoaded", () => {
   cacheElements();
+  if (els.appVersion) els.appVersion.textContent = `v${APP_VERSION}`;
   state.activeTopic = state.progress.currentTopic || "Arithmetic";
   state.activeWorkspaceId = state.progress.currentWorkspaceId || "arithmetic.long-addition.3x3";
   state.mode = state.progress.preferences.mode || "guided";
@@ -1954,6 +1957,7 @@ function cacheElements() {
   els.bottomNumber = document.querySelector("#bottomNumber");
   els.randomProblem = document.querySelector("#randomProblem");
   els.modeTabs = Array.from(document.querySelectorAll(".mode-tab"));
+  els.appVersion = document.querySelector("#appVersion");
 }
 
 function loadProgress() {
@@ -3660,8 +3664,8 @@ function renderConceptGrid(model) {
   });
   input.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
+      event.preventDefault();
       if (isCurrentProblemComplete()) {
-        event.preventDefault();
         startNextProblem();
       } else {
         checkCurrentStep();
@@ -5360,9 +5364,21 @@ function checkCurrentStep() {
     return;
   }
 
-  const target = state.mode === "guided" ? inputForStep(steps[state.activeStep]) : document.activeElement;
-  const input = target?.classList?.contains("digit-input") ? target : visibleInputs().find((item) => !item.classList.contains("correct"));
-  if (!input) return;
+  const activeStep = steps[state.activeStep];
+  const target = state.mode === "guided" && activeStep ? inputForStep(activeStep) : document.activeElement;
+  const input = target?.classList?.contains("digit-input")
+    ? target
+    : visibleInputs().find((item) => item.classList.contains("active")) || visibleInputs().find((item) => !item.classList.contains("correct"));
+  if (!input) {
+    setStatus("No active answer is available yet.", "incorrect");
+    return;
+  }
+
+  if (!input.value.trim()) {
+    setStatus(input.inputMode === "numeric" ? "Try another digit." : "Try another entry.", "incorrect");
+    input.classList.add("incorrect");
+    return;
+  }
 
   const correct = validateInput(input, true);
   if (correct && state.mode === "guided") {
@@ -5374,6 +5390,16 @@ function checkCurrentStep() {
       updateStepText();
     }
   }
+}
+
+function requestStepCheck(event) {
+  event?.preventDefault?.();
+  event?.stopPropagation?.();
+  const now = Date.now();
+  if (now - state.lastCheckAt < 120) return;
+  state.lastCheckAt = now;
+  setStatus("Checking.", "");
+  checkCurrentStep();
 }
 
 function shouldAutoAdvance(input) {
@@ -5588,7 +5614,7 @@ function updateStepText() {
 }
 
 function setStatus(text, variant) {
-  els.status.textContent = text;
+  setMathText(els.status, text);
   els.status.className = `activity-status ${variant || ""}`.trim();
 }
 
@@ -5627,9 +5653,18 @@ function bindEvents() {
     });
   });
 
+  els.checkStep.addEventListener("pointerdown", requestStepCheck);
+  els.checkStep.addEventListener("click", requestStepCheck);
+  els.checkStep.onpointerdown = requestStepCheck;
+  els.checkStep.onclick = requestStepCheck;
+  els.checkStep.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      requestStepCheck(event);
+    }
+  });
   els.workspaceTools.addEventListener("click", (event) => {
     if (event.target.closest("#checkStep")) {
-      checkCurrentStep();
+      requestStepCheck(event);
     }
   });
   els.hintStep.addEventListener("click", showHint);

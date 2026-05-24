@@ -1,5 +1,7 @@
 # Carry
 
+Version: `0.1.0-alpha.1`
+
 Carry is a local-first math learning studio designed to run fully in the browser.
 
 Carry opens directly into a focused learning workspace. It currently includes implemented Arithmetic, Pre-Algebra, Algebra, Geometry, Trigonometry, Precalculus, Calculus, Linear Algebra, Proofs, Set Theory, Number Theory, Real Analysis, and Abstract Algebra lessons, including guided long addition, subtraction, multiplication, division, division with remainders, equation transformations, inequality transformations, systems, factoring, quadratics, angles, triangles, circles, area and volume, coordinate geometry, proof basics, unit circle values, right-triangle ratios, trig graphs, identities, inverse trig, functions, transformations, polynomial and rational functions, exponential and log functions, sequences, complex numbers, limits, derivatives, integrals, calculus applications, series, vectors, matrices, linear transformations, determinants, eigenvalues, vector spaces, logic, quantifiers, induction, contradiction, construction, counterexamples, set notation, subsets, set operations, relations, functions as maps, countability, divisibility, primes, GCD and LCM, the Euclidean algorithm, modular arithmetic, congruences, real sequences, epsilon-delta limits, continuity, differentiability, Riemann integration, groups, rings, fields, homomorphisms, and abstract examples. Progress is stored privately in the browser with `localStorage`, with JSON export and import controls for backup or transfer.
@@ -14,6 +16,10 @@ Open `index.html` in a browser, or serve the directory with any static file serv
 - `styles.css` defines the shared interface system, light and dark themes, grid layout, focus states, and responsive behavior.
 - `app.js` contains the client-side workspace registry, progress persistence, lesson renderers, validation, hints, problem guardrails, and import/export flow.
 - `assets/carry-icon.png` provides the app icon and favicon.
+
+## Versioning
+
+Carry uses pre-1.0 semantic versions while the curriculum and interaction model are still settling. Bump the app version when releasing user-visible curriculum, validation, persistence, import/export, navigation, or interface behavior changes. Do not bump it for private notes, comments, or purely local development experiments that are not deployed.
 
 ## Current Guardrails
 
