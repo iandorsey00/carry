@@ -1,6 +1,6 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-alpha.25";
+const APP_VERSION = "0.1.0-alpha.26";
 const STORAGE_KEY = "carry.progress.v1";
 
 const topicGroups = [
@@ -1911,6 +1911,7 @@ const divisionRemainderProblemSet = [
 ];
 
 supplementFoundationalPractice();
+supplementBroadPractice();
 
 function supplementFoundationalPractice() {
   additionProblemSet.push(
@@ -2050,6 +2051,149 @@ function addPractice(workspaceId, problems) {
 
 function addEquationPractice(workspaceId, problems) {
   conceptWorkspaces[workspaceId]?.problems.push(...problems);
+}
+
+function supplementBroadPractice() {
+  addPractice("arithmetic.place-value", [
+    { prompt: "In 735, what is the value of the 7?", answer: "700", hint: "The 7 is in the hundreds place.", label: "value of 7", feedback: "Name the place first, then write the digit's value." },
+    { prompt: "Complete: 864 = 800 + __ + 4.", answer: "60", hint: "The 6 is in the tens place.", label: "expanded tens term", feedback: "The tens digit contributes groups of ten." },
+    { prompt: "In 902, what digit is in the ones place?", answer: "2", hint: "The ones place is the rightmost digit.", label: "ones digit", feedback: "Read the places from right to left: ones, tens, hundreds." },
+    { prompt: "Write 300 + 40 + 9 as a number.", answer: "349", hint: "Put the hundreds, tens, and ones together.", label: "standard form", feedback: "Expanded form names each place value separately." }
+  ]);
+
+  addPractice("arithmetic.number-sense", [
+    { prompt: "Which is larger: 681 or 618?", answer: "681", hint: "The hundreds match, so compare the tens digits.", label: "larger number", feedback: "Compare from left to right." },
+    { prompt: "What is 241 closest to: 200, 300, or 400?", answer: "200", hint: "241 is 41 away from 200 and 59 away from 300.", label: "closest hundred", feedback: "Use distance from nearby friendly numbers." },
+    { prompt: "Fill the missing number: 210, 220, 230, __.", answer: "240", hint: "Each step adds 10.", label: "next number", feedback: "Find the repeated change between terms." },
+    { prompt: "Which number is between 500 and 600: 489, 531, or 604?", answer: "531", hint: "531 is greater than 500 and less than 600.", label: "number between", feedback: "Check both boundaries." }
+  ]);
+
+  addPractice("arithmetic.estimation", [
+    { prompt: "Estimate 604 + 197 by rounding to hundreds.", answer: "800", hint: "604 is about 600, and 197 is about 200.", label: "rounded sum", feedback: "Round to numbers that are easy to add." },
+    { prompt: "Estimate 52 x 7 using 50 x 7.", answer: "350", hint: "50 x 7 is a close check.", label: "estimated product", feedback: "Use a nearby friendly number." },
+    { prompt: "Is 919 - 102 closer to 800 or 900?", answer: "800", hint: "919 - 100 is about 819.", label: "closer estimate", feedback: "Estimate before doing exact subtraction." },
+    { prompt: "Estimate 31 x 19 using 30 x 20.", answer: "600", hint: "30 x 20 is a nearby easy product.", label: "two-factor estimate", feedback: "Round both factors when exact precision is not needed." }
+  ]);
+
+  addPractice("geometry.angles", [
+    { prompt: "Two adjacent angles make a straight line. One is 45 degrees. What is the other?", answer: "135", answers: ["135", "135degrees"], hint: "Straight line angles add to 180.", label: "missing angle", feedback: "Subtract the known angle from 180." },
+    { prompt: "What kind of angle is 30 degrees: acute, right, or obtuse?", answer: "acute", hint: "Acute angles are less than 90 degrees.", label: "angle type", feedback: "Compare the measure to 90 degrees." },
+    { prompt: "What kind of angle is 140 degrees?", answer: "obtuse", hint: "Obtuse angles are greater than 90 and less than 180 degrees.", label: "angle type", feedback: "Classify by size." }
+  ]);
+
+  addPractice("geometry.triangles", [
+    { prompt: "A triangle has angles 40 degrees and 65 degrees. What is the third angle?", answer: "75", answers: ["75", "75degrees"], hint: "Subtract 40 and 65 from 180.", label: "third angle", feedback: "Triangle angles always total 180 degrees." },
+    { prompt: "A triangle with two equal sides is called what?", answer: "isosceles", hint: "Two equal sides means isosceles.", label: "triangle type", feedback: "Match the side pattern to the name." },
+    { prompt: "Can a triangle have angles 90, 60, and 40 degrees?", answer: "no", answers: ["no", "false"], hint: "Those angles add to 190.", label: "triangle possibility", feedback: "Check whether the angles add to 180." }
+  ]);
+
+  addPractice("geometry.circles", [
+    { prompt: "A circle has radius 7. What is its diameter?", answer: "14", hint: "The diameter is twice the radius.", label: "diameter", feedback: "Double the radius." },
+    { prompt: "A circle has diameter 18. What is its radius?", answer: "9", hint: "The radius is half the diameter.", label: "radius", feedback: "Halve the diameter." },
+    { prompt: "Using C = πd, what is the circumference of a circle with diameter 8?", answer: "8π", answers: ["8π", "8pi", "8*pi", "8×π"], hint: "Leave the answer exact as 8π.", label: "circumference", feedback: "Multiply π by the diameter." }
+  ]);
+
+  addPractice("geometry.area-volume", [
+    { prompt: "What is the area of a rectangle with length 9 and width 4?", answer: "36", hint: "Rectangle area is length times width.", label: "rectangle area", feedback: "Multiply the two side lengths." },
+    { prompt: "A triangle has base 12 and height 5. What is its area?", answer: "30", hint: "Use half of base times height.", label: "triangle area", feedback: "Take half after multiplying base and height." },
+    { prompt: "What is the volume of a rectangular prism with dimensions 3, 4, and 6?", answer: "72", hint: "Multiply all three dimensions.", label: "prism volume", feedback: "Volume uses three dimensions." }
+  ]);
+
+  addPractice("geometry.coordinate", [
+    { prompt: "What is the vertical distance from (2, 1) to (2, 6)?", answer: "5", hint: "The x-values match, so compare y-values.", label: "vertical distance", feedback: "Subtract the smaller coordinate from the larger one." },
+    { prompt: "What is the midpoint of (2, 4) and (8, 4)?", answer: "(5,4)", answers: ["(5,4)", "5,4"], hint: "Average the x-values and average the y-values.", label: "midpoint", feedback: "Midpoint means average each coordinate." },
+    { prompt: "A rectangle has side lengths 5 and 2 on the coordinate grid. What is its area?", answer: "10", hint: "Area is length times width.", label: "coordinate rectangle area", feedback: "Use the side lengths after reading the grid." }
+  ]);
+
+  addPractice("trigonometry.unit-circle", [
+    { prompt: "On the unit circle, what is sin π/2?", answer: "1", hint: "At π/2, the point is at the top of the circle.", label: "sine at pi over two", feedback: "Sine is the y-coordinate on the unit circle." },
+    { prompt: "At π, what is the point on the unit circle?", answer: "(-1,0)", answers: ["(-1,0)", "-1,0"], hint: "π is the leftmost point on the unit circle.", label: "unit circle point", feedback: "Move halfway around the circle from (1, 0)." },
+    { prompt: "On the unit circle, what is cos π?", answer: "-1", hint: "At π, the x-coordinate is -1.", label: "cosine at pi", feedback: "Cosine is the x-coordinate." }
+  ]);
+
+  addPractice("trigonometry.right-triangles", [
+    { prompt: "In a right triangle, opposite = 5 and hypotenuse = 13. What is sin θ?", answer: "5/13", hint: "Sine is opposite over hypotenuse.", label: "sine ratio", feedback: "Use the side relative to the chosen angle." },
+    { prompt: "If adjacent = 12 and hypotenuse = 13, what is cos θ?", answer: "12/13", hint: "Cosine is adjacent over hypotenuse.", label: "cosine ratio", feedback: "Cosine uses the side next to the angle." },
+    { prompt: "If opposite = 5 and adjacent = 12, what is tan θ?", answer: "5/12", hint: "Tangent is opposite over adjacent.", label: "tangent ratio", feedback: "Tangent does not use the hypotenuse." }
+  ]);
+
+  addPractice("trigonometry.graphs", [
+    { prompt: "What is the amplitude of y = 4 cos x?", answer: "4", hint: "Amplitude is the coefficient size in front of cos x.", label: "cosine amplitude", feedback: "Use the absolute value of the multiplier." },
+    { prompt: "What is the period of y = cos x?", answer: "2π", answers: ["2π", "2pi", "2*pi"], hint: "Basic cosine repeats every 2π.", label: "cosine period", feedback: "Basic sine and cosine share the same period." },
+    { prompt: "What is sin 0?", answer: "0", hint: "The sine graph starts at 0.", label: "sine graph value", feedback: "Use the unit circle or the graph." }
+  ]);
+
+  addPractice("trigonometry.identities", [
+    { prompt: "If cos^2 x = 1/9, what is sin^2 x?", answer: "8/9", hint: "Use sin^2 x + cos^2 x = 1.", label: "sine squared", feedback: "Subtract the known squared value from 1." },
+    { prompt: "Complete: 1 + tan^2 x = __.", answer: "sec^2x", answers: ["sec^2x", "sec^2 x", "sec²x"], hint: "This is a Pythagorean identity.", label: "secant identity", feedback: "This identity pairs tangent with secant." },
+    { prompt: "Rewrite cot x using cos x and sin x.", answer: "cosx/sinx", answers: ["cosx/sinx", "cos(x)/sin(x)", "cos x/sin x"], hint: "Cotangent is cosine divided by sine.", label: "cotangent identity", feedback: "Cotangent is the reciprocal of tangent." }
+  ]);
+
+  addPractice("precalculus.functions", [
+    { prompt: "If f(x) = x^2 - 1, what is f(4)?", answer: "15", hint: "Replace x with 4.", label: "evaluate a function", feedback: "Substitute the input wherever x appears." },
+    { prompt: "For the point (-2, 5), what is the input?", answer: "-2", hint: "The input is the x-value.", label: "function input", feedback: "Ordered pairs are written as input, output." },
+    { prompt: "Can a vertical line hit the graph of a function twice?", answer: "no", answers: ["no", "false"], hint: "That would give one input two outputs.", label: "vertical line test", feedback: "Functions need one output per input." }
+  ]);
+
+  addPractice("precalculus.transformations", [
+    { prompt: "Compared with y = x^2, y = x^2 - 6 shifts which direction?", answer: "down", hint: "Subtracting outside lowers every output.", label: "vertical shift", feedback: "Outside changes affect y-values." },
+    { prompt: "What is the vertex of y = (x + 1)^2 - 4?", answer: "(-1,-4)", answers: ["(-1,-4)", "-1,-4"], hint: "Use y = (x - h)^2 + k.", label: "parabola vertex", feedback: "Inside plus means the h-value is negative." },
+    { prompt: "Compared with y = x^2, y = (x + 3)^2 shifts left by how many units?", answer: "3", hint: "Inside addition shifts left.", label: "horizontal shift", feedback: "Horizontal shifts feel opposite inside parentheses." }
+  ]);
+
+  addPractice("calculus.limits", [
+    { prompt: "As x approaches 5, what does x - 2 approach?", answer: "3", hint: "Substitute the nearby value: 5 - 2.", label: "basic limit", feedback: "For continuous simple expressions, direct substitution works." },
+    { prompt: "As x approaches -1, what does x^2 approach?", answer: "1", hint: "Square -1.", label: "square limit", feedback: "Use the value being approached." },
+    { prompt: "If the left-hand limit is 2 and the right-hand limit is 3, does the two-sided limit exist?", answer: "no", answers: ["no", "false"], hint: "The two sides must agree.", label: "two-sided limit", feedback: "Compare the two one-sided limits." }
+  ]);
+
+  addPractice("calculus.derivatives", [
+    { prompt: "Find the derivative of x^3.", answer: "3x^2", answers: ["3x^2", "3*x^2"], hint: "Bring down 3 and reduce the exponent by 1.", label: "power rule", feedback: "Use the power rule." },
+    { prompt: "What is the derivative of 7x?", answer: "7", hint: "The slope of y = 7x is 7.", label: "linear derivative", feedback: "The coefficient of x is the slope." },
+    { prompt: "For y = -2x + 9, what is the slope?", answer: "-2", hint: "The coefficient of x is -2.", label: "line slope", feedback: "Read the coefficient of x." }
+  ]);
+
+  addPractice("calculus.integrals", [
+    { prompt: "What is an antiderivative of 3x^2?", answer: "x^3+c", answers: ["x^3+c", "x^3+C", "x^3 + C"], hint: "Differentiate x^3 to get 3x^2.", label: "basic antiderivative", feedback: "Reverse the power rule." },
+    { prompt: "What is the area under y = 4 from x = 0 to x = 5?", answer: "20", hint: "This is a rectangle: height 4 and width 5.", label: "constant integral", feedback: "For a constant function, multiply height by width." },
+    { prompt: "What is an antiderivative of 9?", answer: "9x+c", answers: ["9x+c", "9x+C", "9*x+c", "9*x+C"], hint: "A derivative of 9x is 9.", label: "constant antiderivative", feedback: "Constants integrate to constant times x plus C." }
+  ]);
+
+  addPractice("linear-algebra.vectors", [
+    { prompt: "Add the vectors (1, 5) + (3, -2).", answer: "(4,3)", answers: ["(4,3)", "4,3"], hint: "Add x-components and y-components separately.", label: "vector addition", feedback: "Vectors add component by component." },
+    { prompt: "Compute -2(3, 4).", answer: "(-6,-8)", answers: ["(-6,-8)", "-6,-8"], hint: "Multiply each component by -2.", label: "scalar multiplication", feedback: "A negative scalar also reverses direction." },
+    { prompt: "What is the length of the vector (5, 12)?", answer: "13", hint: "Use the 5-12-13 right triangle.", label: "vector length", feedback: "Square, add, then take the square root." }
+  ]);
+
+  addPractice("proofs.logic", [
+    { prompt: "In the statement if A then B, which part is the conclusion?", answer: "b", answers: ["b", "B"], hint: "The conclusion follows then.", label: "identify conclusion", feedback: "Separate the if part from the then part." },
+    { prompt: "If A implies B and B is false, what can you conclude about A?", answer: "false", answers: ["false", "a is false", "not a", "¬a"], hint: "If A were true, B would have to be true.", label: "contrapositive reasoning", feedback: "This is reasoning by contrapositive." },
+    { prompt: "What word joins two statements so both must be true?", answer: "and", answers: ["and", "conjunction"], hint: "A and B requires both pieces.", label: "logical and", feedback: "Conjunction means both." }
+  ]);
+
+  addPractice("set-theory.sets-notation", [
+    { prompt: "If <math>C = {4, 5, 6}</math>, is <math>7</math> in <math>C</math>?", answer: "no", answers: ["no", "false"], hint: "<math>7</math> is not listed inside the braces.", label: "nonmembership check", feedback: "Check the listed elements." },
+    { prompt: "If <math>D = {a, b}</math>, is <math>a</math> in <math>D</math>?", answer: "yes", answers: ["yes", "true"], hint: "<math>a</math> is listed inside the braces.", label: "membership check", feedback: "Membership means appears as an element." },
+    { prompt: "What symbol means is not an element of?", answer: "∉", answers: ["∉", "notin", "not in", "is not in"], hint: "It is the membership symbol with a slash.", label: "nonmembership symbol", feedback: "Use the slashed membership symbol." }
+  ]);
+
+  addPractice("number-theory.modular-arithmetic", [
+    { prompt: "What is 17 mod 6?", answer: "5", hint: "17 = 6 × 2 + 5.", label: "mod remainder", feedback: "Find the remainder after division." },
+    { prompt: "On a 12-hour clock, 8 + 7 lands on what hour?", answer: "3", hint: "15 wraps around to 3.", label: "clock arithmetic", feedback: "Subtract 12 after passing 12." },
+    { prompt: "In mod 5 arithmetic, is 12 equivalent to 2?", answer: "yes", answers: ["yes", "true"], hint: "12 and 2 differ by 10.", label: "mod equivalence", feedback: "Numbers are equivalent mod n when their difference is divisible by n." }
+  ]);
+
+  addPractice("real-analysis.sequences", [
+    { prompt: "What number does the sequence 2/n approach?", answer: "0", hint: "As n gets large, 2 divided by n gets close to 0.", label: "sequence limit", feedback: "A fixed numerator over growing n tends to 0." },
+    { prompt: "Does the sequence 1, 1, 1, 1 converge?", answer: "yes", answers: ["yes", "true"], hint: "It stays at one value.", label: "constant sequence", feedback: "A constant sequence converges to that constant." },
+    { prompt: "If a sequence approaches 7, what is its limit?", answer: "7", hint: "The limit is the value approached by the terms.", label: "limit value", feedback: "Name the destination value." }
+  ]);
+
+  addPractice("abstract-algebra.groups", [
+    { prompt: "Under multiplication, what is the identity element for nonzero real numbers?", answer: "1", hint: "Multiplying by 1 changes nothing.", label: "multiplicative identity", feedback: "The identity leaves elements unchanged." },
+    { prompt: "Under addition, what is the inverse of -8?", answer: "8", hint: "-8 plus 8 is 0.", label: "additive inverse", feedback: "Find the element that combines to make the identity." },
+    { prompt: "If combining two elements always stays in the set, which rule is being checked?", answer: "closure", hint: "Closure keeps results inside the set.", label: "closure rule", feedback: "Closure is about staying inside." }
+  ]);
 }
 
 const els = {};
@@ -2354,12 +2498,7 @@ function createIntroSection(title, items) {
 
 function introWorkedExampleItems(workspace) {
   if (workspace.type === "concept" && workspace.problems?.length) {
-    const problem = workspace.problems[0];
-    return [
-      `Problem: ${problem.prompt}`,
-      `Think: ${problem.hint || "Use the rule from the core idea."}`,
-      `Answer: ${problem.answer}`
-    ];
+    return conceptWorkedExampleItems(workspace);
   }
 
   if (workspace.type === "addition") {
@@ -2426,10 +2565,11 @@ function introWorkedExampleItems(workspace) {
 
 function introPracticeItems(workspace) {
   if (workspace.type === "concept" && workspace.problems?.length) {
-    return workspace.problems.slice(0, 3).map((problem) => {
-      const hint = problem.hint ? ` ${problem.hint}` : "";
-      return `${problem.prompt}${hint}`;
-    });
+    return [
+      "Read the question and identify the rule it is asking you to use.",
+      "Work with the active numbers in the problem area; the overview examples use different numbers.",
+      "After a miss, use the hint to choose the next attempt instead of guessing randomly."
+    ];
   }
 
   if (workspace.type === "equation") {
@@ -2471,15 +2611,398 @@ function introPracticeItems(workspace) {
   ];
 }
 
+function conceptWorkedExampleItems(workspace) {
+  const examples = {
+    "arithmetic.place-value": [
+      "Example: in 358, the 3 is in the hundreds place.",
+      "Think: hundreds are groups of 100.",
+      "So the 3 contributes 300."
+    ],
+    "arithmetic.number-sense": [
+      "Example: to compare 572 and 527, compare from left to right.",
+      "The hundreds match, but 7 tens is greater than 2 tens.",
+      "So 572 is larger."
+    ],
+    "arithmetic.estimation": [
+      "Example: 296 + 401 is about 300 + 400.",
+      "Use the rounded numbers to check the size of the result.",
+      "The estimate is about 700."
+    ],
+    "arithmetic.integers": [
+      "Example: -4 + 9 means start at -4 and move 9 steps right.",
+      "Moving right passes zero and lands at 5.",
+      "So the result is positive."
+    ],
+    "arithmetic.fractions": [
+      "Example: simplify 8/12 by dividing top and bottom by 4.",
+      "The numerator becomes 2 and the denominator becomes 3.",
+      "So the simplified fraction is 2/3."
+    ],
+    "arithmetic.decimals": [
+      "Example: compare 0.6 and 0.54 by writing 0.6 as 0.60.",
+      "Now compare hundredths: 60 hundredths is greater than 54 hundredths.",
+      "So 0.6 is greater."
+    ],
+    "arithmetic.percents": [
+      "Example: 25% of 40 is one quarter of 40.",
+      "One quarter means divide by 4.",
+      "So 25% of 40 is 10."
+    ],
+    "arithmetic.ratios": [
+      "Example: simplify 10:15 by dividing both parts by 5.",
+      "The first part becomes 2 and the second becomes 3.",
+      "So the equivalent ratio is 2:3."
+    ],
+    "arithmetic.factors-multiples-primes": [
+      "Example: 18 has factor pairs 1×18, 2×9, and 3×6.",
+      "Because it has factor pairs besides 1 and itself, it is composite.",
+      "A prime number would have exactly two positive factors."
+    ],
+    "arithmetic.order-of-operations": [
+      "Example: in 5 + 2 × 6, multiply before adding.",
+      "Compute 2 × 6 first to get 12.",
+      "Then add 5."
+    ],
+    "arithmetic.word-problems": [
+      "Example: 4 bags with 6 marbles each describes equal groups.",
+      "Equal groups suggest multiplication.",
+      "Compute bags times marbles per bag."
+    ],
+    "arithmetic.mixed-review": [
+      "Example: before calculating 98 + 203, estimate 100 + 200.",
+      "Then do the exact operation.",
+      "Use the estimate to catch an unreasonable result."
+    ],
+    "prealgebra.integers": [
+      "Example: -3 × -5 has two negative factors.",
+      "Same signs make a positive product.",
+      "Then multiply the sizes: 3 × 5."
+    ],
+    "prealgebra.expressions": [
+      "Example: 4n + 2n + 7 has two like variable terms.",
+      "Combine 4n and 2n to make 6n.",
+      "Keep the constant term separate."
+    ],
+    "prealgebra.exponents": [
+      "Example: 3^4 means four factors of 3.",
+      "That is 3 × 3 × 3 × 3.",
+      "The exponent counts factors, not how much to add."
+    ],
+    "prealgebra.coordinate-plane": [
+      "Example: the point (2, -5) moves 2 right and 5 down from the origin.",
+      "The first coordinate is horizontal.",
+      "The second coordinate is vertical."
+    ],
+    "algebra.polynomials": [
+      "Example: 2x^2 + 5x^2 - x has like squared terms.",
+      "Combine only the x^2 terms.",
+      "The x term stays separate."
+    ],
+    "algebra.rational-expressions": [
+      "Example: simplify 12x/18 by dividing top and bottom by 6.",
+      "The numerical fraction becomes 2/3.",
+      "The x remains in the numerator."
+    ],
+    "geometry.angles": [
+      "Example: two angles on a straight line add to 180 degrees.",
+      "If one angle is 70 degrees, subtract 70 from 180.",
+      "The missing angle is the amount needed to complete the straight line."
+    ],
+    "geometry.triangles": [
+      "Example: triangle angles always add to 180 degrees.",
+      "If two angles are 45 degrees and 80 degrees, add them first.",
+      "Subtract that total from 180 for the third angle."
+    ],
+    "geometry.circles": [
+      "Example: a radius of 5 gives a diameter of 10.",
+      "The diameter is twice the radius.",
+      "For exact circumference, keep π in the answer unless a decimal is requested."
+    ],
+    "geometry.area-volume": [
+      "Example: a rectangle with sides 6 and 4 has area 6 × 4.",
+      "Area counts square units.",
+      "Volume would require a third dimension."
+    ],
+    "geometry.coordinate": [
+      "Example: the horizontal distance from (2, 3) to (7, 3) uses x-values only.",
+      "The y-values match, so subtract 2 from 7.",
+      "That gives the horizontal length."
+    ],
+    "geometry.proof-basics": [
+      "Example: if two quantities are both equal to 10, they are equal to each other.",
+      "Name the reason, not just the result.",
+      "A proof step should connect a fact to a valid rule."
+    ],
+    "trigonometry.unit-circle": [
+      "Example: at angle 0, the unit-circle point is (1, 0).",
+      "Cosine is the x-coordinate and sine is the y-coordinate.",
+      "So read trig values from the point."
+    ],
+    "trigonometry.right-triangles": [
+      "Example: if opposite is 6 and hypotenuse is 10, sine is 6/10.",
+      "Simplify the ratio when possible.",
+      "Choose the side names relative to the marked angle."
+    ],
+    "trigonometry.graphs": [
+      "Example: y = 2 sin x has amplitude 2.",
+      "Amplitude is the distance from the midline to a peak.",
+      "Basic sine repeats after 2π."
+    ],
+    "trigonometry.identities": [
+      "Example: if sin^2 x = 1/4, then cos^2 x is the rest of 1.",
+      "Use sin^2 x + cos^2 x = 1.",
+      "Subtract the known squared value from 1."
+    ],
+    "trigonometry.inverse": [
+      "Example: arcsin asks which angle has a given sine value.",
+      "Since sin 0 = 0, arcsin 0 returns 0 in the principal range.",
+      "Always check which inverse trig function is being used."
+    ],
+    "precalculus.functions": [
+      "Example: if g(x) = 3x - 2, then g(4) uses 4 wherever x appears.",
+      "Compute 3 × 4 first.",
+      "Then subtract 2."
+    ],
+    "precalculus.transformations": [
+      "Example: y = (x - 4)^2 + 1 has vertex (4, 1).",
+      "The number inside gives the horizontal shift.",
+      "The number outside gives the vertical shift."
+    ],
+    "precalculus.polynomial-rational": [
+      "Example: p(x) = 2x^5 + x has degree 5.",
+      "The degree is the largest exponent with a nonzero coefficient.",
+      "Lower powers do not change the degree."
+    ],
+    "precalculus.exponential-log": [
+      "Example: log base 10 of 1000 asks what power of 10 gives 1000.",
+      "10^3 = 1000.",
+      "So the logarithm is the exponent."
+    ],
+    "precalculus.sequences": [
+      "Example: 6, 10, 14, 18 has common difference 4.",
+      "Subtract neighboring terms.",
+      "Use the same difference to continue an arithmetic sequence."
+    ],
+    "precalculus.complex-numbers": [
+      "Example: (2 + 3i) + (5 - i) combines real and imaginary parts separately.",
+      "Real parts add with real parts.",
+      "Imaginary parts add with imaginary parts."
+    ],
+    "calculus.limits": [
+      "Example: as x approaches 4, x + 6 approaches 10.",
+      "For simple continuous expressions, substitute the approached value.",
+      "Limits describe nearby behavior."
+    ],
+    "calculus.derivatives": [
+      "Example: the derivative of x^4 is 4x^3.",
+      "Bring down the exponent as a coefficient.",
+      "Reduce the exponent by 1."
+    ],
+    "calculus.integrals": [
+      "Example: an antiderivative of 5 is 5x + C.",
+      "Differentiate 5x + C to check.",
+      "The constant C disappears under differentiation."
+    ],
+    "calculus.applications": [
+      "Example: a constant rate of 3 units per second for 8 seconds accumulates 24 units.",
+      "Rate times time gives total when the rate is constant.",
+      "Derivatives describe rates; integrals accumulate rates."
+    ],
+    "calculus.series": [
+      "Example: the geometric sequence 1, 1/3, 1/9 keeps multiplying by 1/3.",
+      "A series adds the terms of a sequence.",
+      "A small ratio can make an infinite series settle."
+    ],
+    "linear-algebra.vectors": [
+      "Example: (1, 4) + (6, -2) is found component by component.",
+      "Add the first components together.",
+      "Then add the second components together."
+    ],
+    "linear-algebra.matrices": [
+      "Example: a matrix with 3 rows and 2 columns has size 3×2.",
+      "Rows are counted first.",
+      "Columns are counted second."
+    ],
+    "linear-algebra.transformations": [
+      "Example: T(x, y) = (x, -y) reflects across the x-axis.",
+      "The x-coordinate stays the same.",
+      "The y-coordinate changes sign."
+    ],
+    "linear-algebra.determinants": [
+      "Example: for [[3, 0], [0, 4]], the determinant is 3 × 4.",
+      "Diagonal scaling multiplies area by the product of the scale factors.",
+      "A zero scale factor would flatten area to zero."
+    ],
+    "linear-algebra.eigenvalues": [
+      "Example: if Av = 5v, the vector keeps its direction and scales by 5.",
+      "The scale factor is the eigenvalue.",
+      "The direction v is the eigenvector direction."
+    ],
+    "linear-algebra.vector-spaces": [
+      "Example: (1, 0) and (0, 1) can build any vector (a, b).",
+      "Use a copies of the first and b copies of the second.",
+      "That is why they span the plane."
+    ],
+    "proofs.logic": [
+      "Example: in if R then S, R is the hypothesis and S is the conclusion.",
+      "If R is true, the implication lets you conclude S.",
+      "Do not reverse the direction unless another rule allows it."
+    ],
+    "proofs.quantifiers": [
+      "Example: to disprove all birds can fly, one flightless bird would be enough.",
+      "A universal statement fails when one case fails.",
+      "An existence statement needs one successful case."
+    ],
+    "proofs.induction": [
+      "Example: induction first proves the starting case.",
+      "Then it proves that one case forces the next.",
+      "Together those steps create a chain."
+    ],
+    "proofs.contradiction": [
+      "Example: to prove a claim by contradiction, temporarily assume the claim is false.",
+      "Then reason until that assumption creates an impossibility.",
+      "The failed assumption supports the original claim."
+    ],
+    "proofs.construction": [
+      "Example: to prove an even number greater than 20 exists, you can build one.",
+      "After naming it, verify it is even and greater than 20.",
+      "Construction proves existence by giving an object."
+    ],
+    "proofs.counterexamples": [
+      "Example: the claim all odd numbers are prime fails at 9.",
+      "9 is odd, but it is not prime.",
+      "One specific failing case disproves a universal claim."
+    ],
+    "set-theory.sets-notation": [
+      "Example: if B = {4, 5}, then 4 is an element of B.",
+      "Membership asks whether the object appears in the set.",
+      "Use braces to read the listed elements."
+    ],
+    "set-theory.subsets": [
+      "Example: {2, 4} is a subset of {2, 3, 4}.",
+      "Every element of the smaller set appears in the larger set.",
+      "That is the subset test."
+    ],
+    "set-theory.operations": [
+      "Example: {1, 3} ∩ {3, 5} keeps only the shared element.",
+      "Intersection means in both sets.",
+      "Union would keep everything from either set."
+    ],
+    "set-theory.cartesian-relations": [
+      "Example: {1, 2} × {a, b} has four ordered pairs.",
+      "Each element of the first set pairs with each element of the second.",
+      "Order matters in ordered pairs."
+    ],
+    "set-theory.functions": [
+      "Example: a map that sends 1 to 5 and 1 to 6 is not a function.",
+      "One input cannot have two different outputs.",
+      "The domain names the allowed inputs."
+    ],
+    "set-theory.countability": [
+      "Example: {red, blue, green} is finite with three elements.",
+      "A countable infinite set can be arranged in a list.",
+      "Countability asks whether listing is possible."
+    ],
+    "number-theory.divisibility": [
+      "Example: 5 divides 35 because 35 = 5 × 7.",
+      "There is no remainder.",
+      "Divisibility is exact division."
+    ],
+    "number-theory.primes": [
+      "Example: 15 is composite because 15 = 3 × 5.",
+      "Prime numbers have exactly two positive factors.",
+      "Composite numbers have more."
+    ],
+    "number-theory.gcd-lcm": [
+      "Example: gcd(8, 12) is 4.",
+      "List shared factors and choose the largest.",
+      "LCM instead asks for the first shared multiple."
+    ],
+    "number-theory.euclidean-algorithm": [
+      "Example: 20 = 12 × 1 + 8 starts a GCD calculation.",
+      "The next pair is the old divisor and the remainder.",
+      "Continue until the remainder is zero."
+    ],
+    "number-theory.modular-arithmetic": [
+      "Example: 16 mod 7 is 2 because 16 = 7 × 2 + 2.",
+      "Modular arithmetic tracks remainders.",
+      "Clock arithmetic is a familiar model."
+    ],
+    "number-theory.congruences": [
+      "Example: 14 is congruent to 2 mod 6 because their difference is 12.",
+      "12 is divisible by 6.",
+      "Congruent numbers have the same remainder."
+    ],
+    "real-analysis.sets": [
+      "Example: [1, 4) includes 1 but not 4.",
+      "A square bracket includes the endpoint.",
+      "A parenthesis excludes the endpoint."
+    ],
+    "real-analysis.sequences": [
+      "Example: 3/n approaches 0 as n grows.",
+      "The numerator stays fixed while the denominator grows.",
+      "The terms get closer and closer to 0."
+    ],
+    "real-analysis.limits": [
+      "Example: a function can approach 8 near a point even if the point itself is missing.",
+      "Limits care about nearby behavior.",
+      "The value at the point is a separate question."
+    ],
+    "real-analysis.continuity": [
+      "Example: a continuous function at a has its nearby limit equal to f(a).",
+      "The graph has no break at that point.",
+      "A jump or hole breaks continuity."
+    ],
+    "real-analysis.differentiation": [
+      "Example: |x| has a corner at 0.",
+      "The left and right slopes disagree there.",
+      "So differentiability can fail even when continuity holds."
+    ],
+    "real-analysis.integration": [
+      "Example: a partition splits [0, 1] into smaller intervals.",
+      "A Riemann sum uses pieces to approximate area.",
+      "Finer partitions improve the approximation."
+    ],
+    "abstract-algebra.groups": [
+      "Example: integers under addition have identity 0.",
+      "Every integer has an additive inverse.",
+      "Those are two of the group rules."
+    ],
+    "abstract-algebra.rings": [
+      "Example: integers have addition and multiplication.",
+      "Multiplication distributes over addition.",
+      "That is part of why integers form a ring."
+    ],
+    "abstract-algebra.fields": [
+      "Example: rational numbers form a field under usual operations.",
+      "Every nonzero rational number has a reciprocal.",
+      "Integers fail this division requirement."
+    ],
+    "abstract-algebra.homomorphisms": [
+      "Example: an additive homomorphism satisfies f(a + b) = f(a) + f(b).",
+      "It preserves the operation.",
+      "That is what structure-preserving means."
+    ],
+    "abstract-algebra.examples-counterexamples": [
+      "Example: positive integers under addition fail to be a group.",
+      "The additive inverse of 3 is -3, which is not positive.",
+      "The counterexample identifies the failed rule."
+    ]
+  };
+
+  return examples[workspace.id] || [
+    "Example: choose a similar problem with different numbers.",
+    "Use the rule from the core idea on that example.",
+    "Then apply the same method to the active question."
+  ];
+}
+
 function introAnswerFormatItems(workspace) {
   if (workspace.type === "concept" && workspace.problems?.length) {
-    const examples = workspace.problems
-      .slice(0, 3)
-      .map((problem) => answerFormatExample(problem))
-      .filter(Boolean);
     return [
       "Equivalent typing is accepted when possible: spaces, capitalization, the pi symbol or typed p-i, ×/*, and degree symbols are normalized.",
-      ...examples
+      "Use compact math notation when the question asks for a formula, expression, coordinate, or set.",
+      "For yes-or-no questions, type yes or no."
     ];
   }
 
@@ -2494,20 +3017,6 @@ function introAnswerFormatItems(workspace) {
   }
 
   return ["Use compact math notation. Spaces and capitalization are ignored for checking."];
-}
-
-function answerFormatExample(problem) {
-  const rawAnswers = uniqueList([problem.answer, ...(problem.answers || [])]).filter(Boolean);
-  const answers = rawAnswers.filter((answer) => !isCompactDuplicateAnswer(answer, rawAnswers));
-  if (!answers.length) return "";
-  const visible = answers.slice(0, 3).join(" or ");
-  return `For "${problem.label || "answer"}", accepted forms include ${visible}.`;
-}
-
-function isCompactDuplicateAnswer(answer, answers) {
-  const text = String(answer);
-  if (!/[A-Za-z]/.test(text) || /[\s-]/.test(text)) return false;
-  return answers.some((other) => other !== answer && answerValue(other) === answerValue(answer) && /[\s-]/.test(String(other)));
 }
 
 function createIntroFigure(workspace) {
