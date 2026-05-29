@@ -1,6 +1,6 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-alpha.32";
+const APP_VERSION = "0.1.0-alpha.33";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 
@@ -6637,6 +6637,7 @@ function bindEvents() {
   els.exportProgress.addEventListener("click", exportProgress);
   els.importProgress.addEventListener("change", importProgress);
   els.scratchpadInput.addEventListener("input", handleScratchpadInput);
+  els.scratchpadInput.addEventListener("keydown", handleScratchpadKeydown);
   els.newScratchpad.addEventListener("click", createScratchpad);
   els.renameScratchpad.addEventListener("click", renameScratchpad);
   els.copyScratchPlain.addEventListener("click", () => copyScratchpad("plain"));
@@ -7596,6 +7597,30 @@ function insertScratchpadText(value) {
   input.focus();
   input.setSelectionRange(caret, caret);
   handleScratchpadInput();
+}
+
+function handleScratchpadKeydown(event) {
+  if (event.key !== "Enter" || (!event.metaKey && !event.ctrlKey) || event.shiftKey || event.altKey) return;
+  event.preventDefault();
+  duplicateScratchpadLine();
+}
+
+function duplicateScratchpadLine() {
+  const input = els.scratchpadInput;
+  const cursor = input.selectionStart ?? input.value.length;
+  const value = input.value;
+  const lineStart = value.lastIndexOf("\n", Math.max(0, cursor - 1)) + 1;
+  const lineEndIndex = value.indexOf("\n", cursor);
+  const lineEnd = lineEndIndex === -1 ? value.length : lineEndIndex;
+  const line = value.slice(lineStart, lineEnd);
+  const insertAt = lineEnd;
+  const insertion = `\n${line}`;
+  input.value = `${value.slice(0, insertAt)}${insertion}${value.slice(insertAt)}`;
+  const caret = insertAt + insertion.length;
+  input.focus();
+  input.setSelectionRange(caret, caret);
+  handleScratchpadInput();
+  setScratchpadStatus("Line duplicated.");
 }
 
 function scratchpadLatexText() {
