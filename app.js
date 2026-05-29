@@ -1,6 +1,6 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-alpha.35";
+const APP_VERSION = "0.1.0-alpha.36";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 
@@ -7241,6 +7241,13 @@ function appendMathMlContent(target, value) {
       }
     }
 
+    const matrix = readMatrixLiteral(text, cursor);
+    if (matrix) {
+      target.append(createMathMlMatrix(matrix.rows));
+      cursor = matrix.end;
+      continue;
+    }
+
     if (text.startsWith("\\dfrac", cursor) || text.startsWith("\\frac", cursor)) {
       const commandLength = text.startsWith("\\dfrac", cursor) ? 6 : 5;
       const numerator = readBraceGroup(text, cursor + commandLength);
@@ -7310,6 +7317,94 @@ function appendMathMlContent(target, value) {
     target.append(createMathMlToken(mathMlOperatorTag(text[cursor]), displayMathMlOperator(text[cursor])));
     cursor += 1;
   }
+}
+
+function readMatrixLiteral(text, start) {
+  if (!text.startsWith("[[", start)) return null;
+  let cursor = start + 1;
+  const rows = [];
+
+  while (cursor < text.length) {
+    cursor = skipMathWhitespace(text, cursor);
+    if (text[cursor] !== "[") return null;
+    cursor += 1;
+
+    const row = [];
+    let cellStart = cursor;
+    let braceDepth = 0;
+    let parenDepth = 0;
+    let closedRow = false;
+
+    while (cursor < text.length) {
+      const char = text[cursor];
+      if (char === "{") braceDepth += 1;
+      if (char === "}") braceDepth = Math.max(0, braceDepth - 1);
+      if (char === "(") parenDepth += 1;
+      if (char === ")") parenDepth = Math.max(0, parenDepth - 1);
+
+      if (braceDepth === 0 && parenDepth === 0 && char === ",") {
+        row.push(text.slice(cellStart, cursor).trim());
+        cursor += 1;
+        cellStart = cursor;
+        continue;
+      }
+
+      if (braceDepth === 0 && parenDepth === 0 && char === "]") {
+        row.push(text.slice(cellStart, cursor).trim());
+        cursor += 1;
+        closedRow = true;
+        break;
+      }
+
+      cursor += 1;
+    }
+
+    if (!closedRow || !row.length) return null;
+    rows.push(row);
+    cursor = skipMathWhitespace(text, cursor);
+    if (text[cursor] === ",") {
+      cursor += 1;
+      continue;
+    }
+    if (text[cursor] === "]") {
+      cursor += 1;
+      const columnCount = rows[0].length;
+      return rows.every((item) => item.length === columnCount)
+        ? { rows, end: cursor }
+        : null;
+    }
+    return null;
+  }
+
+  return null;
+}
+
+function skipMathWhitespace(text, cursor) {
+  let index = cursor;
+  while (/\s/.test(text[index])) index += 1;
+  return index;
+}
+
+function createMathMlMatrix(rows) {
+  const wrapper = createMathMlElement("mrow");
+  const table = createMathMlElement("mtable");
+  table.setAttribute("rowspacing", "0.18em");
+  table.setAttribute("columnspacing", "0.8em");
+  for (const row of rows) {
+    const tableRow = createMathMlElement("mtr");
+    for (const cell of row) {
+      const tableCell = createMathMlElement("mtd");
+      tableCell.append(createMathMlRow(cell));
+      tableRow.append(tableCell);
+    }
+    table.append(tableRow);
+  }
+  wrapper.append(
+    createMathMlToken("mo", "[", { stretchy: "true" }),
+    table,
+    createMathMlToken("mo", "]", { stretchy: "true" })
+  );
+  return wrapper;
 }
 
 function appendMathMlScript(target, text, cursor) {
