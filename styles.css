@@ -713,7 +713,7 @@ button {
   display: inline math;
   font-family: var(--math-font);
   font-size: 1em;
-  math-style: compact;
+  math-style: normal;
   vertical-align: -0.08em;
 }
 

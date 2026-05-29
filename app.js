@@ -1,6 +1,6 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-alpha.33";
+const APP_VERSION = "0.1.0-alpha.34";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 
@@ -7254,7 +7254,6 @@ function appendMathMlContent(target, value) {
       const denominator = numerator ? readBraceGroup(text, numerator.end) : null;
       if (numerator && denominator) {
         const frac = createMathMlElement("mfrac");
-        if (commandLength === 5) frac.setAttribute("displaystyle", "false");
         const top = createMathMlElement("mrow");
         const bottom = createMathMlElement("mrow");
         appendMathMlContent(top, numerator.value);
