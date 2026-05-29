@@ -1,6 +1,6 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-alpha.38";
+const APP_VERSION = "0.1.0-alpha.40";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 
@@ -7012,6 +7012,8 @@ function splitTopLevelEquals(text) {
 function normalizePlainMathLine(line) {
   let text = String(line || "").trim();
   if (!text) return "";
+  const protectedText = [];
+  text = protectTextCommands(text, protectedText);
   text = text
     .replace(/[≤]/g, "<=")
     .replace(/[≥]/g, ">=")
@@ -7050,6 +7052,7 @@ function normalizePlainMathLine(line) {
     .replace(/(?<!\\)\bint\[([^,\]]+),([^\]]+)\]\s+([^=\n]+?)\s*d([A-Za-z])\b/gi, "\\int_{$1}^{$2} $3\\,d$4")
     .replace(/(?<!\\)\bint_([^\s^]+)\^([^\s]+)\s+([^=\n]+?)\s*d([A-Za-z])\b/gi, "\\int_{$1}^{$2} $3\\,d$4")
     .replace(/(?<!\\)\bint\s+([^=\n]+?)\s*d([A-Za-z])\b/gi, "\\int $1\\,d$2")
+    .replace(/(?<!\\)\bint\b/gi, "\\int")
     .replace(/\b(d[A-Za-z])\/(d[A-Za-z])\b/g, "\\dfrac{$1}{$2}")
     .replace(/(?<![\\\w])([A-Za-z0-9]+)\/([A-Za-z0-9]+)(?![\w])/g, "\\frac{$1}{$2}")
     .replace(/<=>/g, "\\iff")
@@ -7060,9 +7063,22 @@ function normalizePlainMathLine(line) {
     .replace(/<=/g, "\\le")
     .replace(/>=/g, "\\ge")
     .replace(/!=/g, "\\ne");
+  text = restoreTextCommands(text, protectedText);
   text = text.replace(/\^(\(([^()]*)\)|([A-Za-z0-9]+))/g, (_, _raw, grouped, simple) => `^{${grouped || simple}}`);
   text = text.replace(/\^\{([^{}^]*\^[^{}]*)\}/g, (_, body) => `^{${normalizePlainPowers(body)}}`);
   return text;
+}
+
+function protectTextCommands(text, protectedText) {
+  return String(text || "").replace(/\\text\{([^{}]*)\}/g, (match) => {
+    const key = `@@CARRYTEXT${protectedText.length}@@`;
+    protectedText.push(match);
+    return key;
+  });
+}
+
+function restoreTextCommands(text, protectedText) {
+  return String(text || "").replace(/@@CARRYTEXT(\d+)@@/g, (_, index) => protectedText[Number(index)] || "");
 }
 
 function normalizePlainPowers(text) {
@@ -7297,6 +7313,15 @@ function appendMathMlContent(target, value) {
       continue;
     }
 
+    if (text.startsWith("\\text", cursor)) {
+      const group = readBraceGroup(text, cursor + 5);
+      if (group) {
+        target.append(createMathMlToken("mtext", group.value));
+        cursor = group.end;
+        continue;
+      }
+    }
+
     if (text.startsWith("\\mathbb", cursor)) {
       const group = readBraceGroup(text, cursor + 7);
       if (group) {
@@ -7505,7 +7530,7 @@ function appendMathMlIntegral(target, text, index) {
 }
 
 function mathMlCommandAt(text, index) {
-  const commands = ["\\Rightarrow", "\\therefore", "\\subseteq", "\\emptyset", "\\because", "\\arcsin", "\\arccos", "\\arctan", "\\forall", "\\exists", "\\models", "\\notin", "\\subset", "\\theta", "\\vdash", "\\land", "\\oplus", "\\lor", "\\neg", "\\iff", "\\sin", "\\cos", "\\tan", "\\sec", "\\csc", "\\cot", "\\log", "\\cup", "\\cap", "\\ln", "\\pi", "\\le", "\\ge", "\\ne", "\\pm", "\\to", "\\in", "\\,"];
+  const commands = ["\\Rightarrow", "\\therefore", "\\subseteq", "\\emptyset", "\\because", "\\arcsin", "\\arccos", "\\arctan", "\\forall", "\\exists", "\\models", "\\notin", "\\subset", "\\theta", "\\vdash", "\\quad", "\\land", "\\oplus", "\\lor", "\\neg", "\\iff", "\\sin", "\\cos", "\\tan", "\\sec", "\\csc", "\\cot", "\\log", "\\cup", "\\cap", "\\ln", "\\pi", "\\le", "\\ge", "\\ne", "\\pm", "\\to", "\\in", "\\;", "\\,"];
   return commands.find((command) => text.startsWith(command, index));
 }
 
@@ -7542,12 +7567,14 @@ function appendMathMlCommand(target, command) {
     "\\cup": ["mo", "∪"],
     "\\cap": ["mo", "∩"],
     "\\emptyset": ["mi", "∅", "normal"],
-    "\\,": ["mspace", ""]
+    "\\,": ["mspace", "", "0.22em"],
+    "\\;": ["mspace", "", "0.36em"],
+    "\\quad": ["mspace", "", "1em"]
   };
   const [tag, value, variant] = commandMap[command] || ["mtext", command];
   const token = createMathMlToken(tag, value);
-  if (tag === "mspace") token.setAttribute("width", "0.22em");
-  if (variant) token.setAttribute("mathvariant", variant);
+  if (tag === "mspace") token.setAttribute("width", variant || "0.22em");
+  else if (variant) token.setAttribute("mathvariant", variant);
   target.append(token);
 }
 
@@ -7842,6 +7869,8 @@ function latexToPlainScratchpad(latex) {
       .replace(/\\frac\{([^{}]*)\}\{([^{}]*)\}/g, "$1/$2")
       .replace(/\\sqrt\{([^{}]*)\}/g, "sqrt($1)")
       .replace(/\^\{([^{}]*)\}/g, "^($1)")
+      .replace(/\\quad/g, " ")
+      .replace(/\\;/g, " ")
       .replace(/\\,/g, " ")
       .replace(/\\pi/g, "pi")
       .replace(/\\theta/g, "theta")
