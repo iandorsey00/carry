@@ -12,7 +12,7 @@
     <link rel="icon" type="image/png" sizes="512x512" href="./assets/carry-icon.png">
     <link rel="apple-touch-icon" href="./assets/carry-icon.png">
     <link rel="manifest" href="./manifest.webmanifest">
-    <link rel="stylesheet" href="./styles.css?v=0.1.0-alpha.26">
+    <link rel="stylesheet" href="./styles.css?v=0.1.0-alpha.32">
   </head>
   <body>
     <div class="app-shell">
@@ -20,6 +20,10 @@
         <div class="brand-lockup">
           <h1 class="brand-mark">Carry <sup>Alpha</sup></h1>
         </div>
+        <nav class="surface-switch" aria-label="Carry workspaces">
+          <button class="surface-tab" id="learnSurface" type="button" aria-pressed="true">Learn</button>
+          <button class="surface-tab" id="scratchpadSurface" type="button" aria-pressed="false">Scratchpad</button>
+        </nav>
       </header>
 
       <main class="workspace-layout">
@@ -111,7 +115,7 @@
             </div>
           </details>
 
-          <section class="lesson-panel" aria-labelledby="lessonTitle">
+          <section class="lesson-panel" id="lessonPanel" aria-labelledby="lessonTitle">
           <div class="lesson-header">
             <div>
               <p class="eyebrow" id="currentTopic">Arithmetic</p>
@@ -179,12 +183,143 @@
             </button>
           </div>
           </section>
+
+          <section class="scratchpad-panel" id="scratchpadPanel" aria-labelledby="scratchpadTitle" hidden>
+            <div class="scratchpad-header">
+              <div>
+                <p class="eyebrow">Notation helper</p>
+                <h2 id="scratchpadTitle">Scratchpad</h2>
+              </div>
+              <div class="scratchpad-actions" aria-label="Scratchpad actions">
+                <div class="scratchpad-action-group" aria-label="Scratchpad controls">
+                  <span>Scratchpad</span>
+                  <button class="tool-button compact" id="newScratchpad" type="button">New</button>
+                  <button class="tool-button compact" id="renameScratchpad" type="button">Rename</button>
+                </div>
+                <div class="scratchpad-action-group" aria-label="LaTeX file controls">
+                  <span>LaTeX</span>
+                  <button class="tool-button compact" id="exportScratchLatex" type="button">Export</button>
+                  <label class="tool-button compact file-action">
+                    Import
+                    <input id="importScratchLatex" type="file" accept=".tex,.txt,text/plain,application/x-tex">
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <p class="scratchpad-note">
+              Type plain math or LaTeX-ish notation on the left. Carry formats it on the right.
+            </p>
+
+            <div class="scratchpad-toolbar" aria-label="Math symbol helpers">
+              <section class="scratchpad-symbol-group" aria-label="Calculus">
+                <h3>Calculus</h3>
+                <div class="scratchpad-symbol-buttons">
+                  <button type="button" data-insert="int ">∫</button>
+                  <button type="button" data-insert="int_0^1 ">∫₀¹</button>
+                  <button type="button" data-insert="dy/dt">dy/dt</button>
+                  <button type="button" data-insert="ln||">ln| |</button>
+                </div>
+              </section>
+              <section class="scratchpad-symbol-group" aria-label="Notation">
+                <h3>Notation</h3>
+                <div class="scratchpad-symbol-buttons">
+                  <button type="button" data-insert="e^()">e^( )</button>
+                  <button type="button" data-insert="sqrt()">sqrt( )</button>
+                  <button type="button" data-insert="theta">θ</button>
+                  <button type="button" data-insert="pi">π</button>
+                </div>
+              </section>
+              <section class="scratchpad-symbol-group" aria-label="Relations">
+                <h3>Relations</h3>
+                <div class="scratchpad-symbol-buttons">
+                  <button type="button" data-insert="<=">≤</button>
+                  <button type="button" data-insert=">=">≥</button>
+                  <button type="button" data-insert="!=">≠</button>
+                  <button type="button" data-insert="+/-">±</button>
+                  <button type="button" data-insert=" -> ">→</button>
+                  <button type="button" data-insert=" => ">⇒</button>
+                </div>
+              </section>
+              <section class="scratchpad-symbol-group" aria-label="Sets">
+                <h3>Sets</h3>
+                <div class="scratchpad-symbol-buttons">
+                  <button type="button" data-insert="\in">∈</button>
+                  <button type="button" data-insert="\notin">∉</button>
+                  <button type="button" data-insert="\subset">⊂</button>
+                  <button type="button" data-insert="\subseteq">⊆</button>
+                  <button type="button" data-insert="\cup">∪</button>
+                  <button type="button" data-insert="\cap">∩</button>
+                  <button type="button" data-insert="\emptyset">∅</button>
+                  <button type="button" data-insert="{ }">{ }</button>
+                </div>
+              </section>
+              <section class="scratchpad-symbol-group" aria-label="Number systems">
+                <h3>Number systems</h3>
+                <div class="scratchpad-symbol-buttons">
+                  <button type="button" data-insert="\mathbb{N}">ℕ</button>
+                  <button type="button" data-insert="\mathbb{Z}">ℤ</button>
+                  <button type="button" data-insert="\mathbb{Q}">ℚ</button>
+                  <button type="button" data-insert="\mathbb{R}">ℝ</button>
+                  <button type="button" data-insert="\mathbb{C}">ℂ</button>
+                </div>
+              </section>
+            </div>
+
+            <div class="scratchpad-layout">
+              <section class="scratchpad-editor-panel" aria-labelledby="scratchpadEditorLabel">
+                <div class="scratchpad-section-heading">
+                  <h3 id="scratchpadEditorLabel">Plain text / LaTeX-ish</h3>
+                  <button class="icon-button" id="copyScratchPlain" type="button" aria-label="Copy plain text" title="Copy plain text">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <rect x="9" y="9" width="11" height="11" rx="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                  </button>
+                </div>
+                <textarea id="scratchpadInput" spellcheck="false"></textarea>
+              </section>
+
+              <section class="scratchpad-preview-panel" aria-labelledby="scratchpadPreviewLabel">
+                <div class="scratchpad-section-heading">
+                  <h3 id="scratchpadPreviewLabel">Rendered preview</h3>
+                  <div class="copy-actions">
+                    <button class="icon-button" id="copyScratchLatex" type="button" aria-label="Copy LaTeX" title="Copy LaTeX">
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M4 7h16"></path>
+                        <path d="M8 7v10"></path>
+                        <path d="M16 7v10"></path>
+                        <path d="M6 17h12"></path>
+                      </svg>
+                    </button>
+                    <button class="icon-button" id="copyScratchMarkdown" type="button" aria-label="Copy Markdown" title="Copy Markdown">
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M4 19V5h4l4 6 4-6h4v14"></path>
+                        <path d="M12 11v8"></path>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <div class="scratchpad-preview" id="scratchpadPreview" aria-live="polite"></div>
+              </section>
+            </div>
+
+            <div class="scratchpad-footer">
+              <section class="scratchpad-saved" aria-labelledby="savedScratchpadsTitle">
+                <h3 id="savedScratchpadsTitle">Recent scratchpads</h3>
+                <div class="scratchpad-list" id="scratchpadList"></div>
+              </section>
+              <p class="device-note compact" id="scratchpadStatus">
+                Scratchpads are saved privately in this browser.
+              </p>
+            </div>
+          </section>
         </div>
 
       </main>
 
       <footer class="site-footer">
-        Carry <span id="appVersion">v0.1.0-alpha.26</span> © 2026 Ian Dorsey · Open source under the MIT License
+        Carry <span id="appVersion">v0.1.0-alpha.32</span> © 2026 Ian Dorsey · Open source under the MIT License
       </footer>
     </div>
 
@@ -258,6 +393,6 @@
         }
       };
     </script>
-    <script src="./app.js?v=0.1.0-alpha.26" defer></script>
+    <script src="./app.js?v=0.1.0-alpha.32" defer></script>
   </body>
 </html>

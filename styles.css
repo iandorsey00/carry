@@ -63,7 +63,8 @@ body {
 }
 
 button,
-input {
+input,
+textarea {
   font: inherit;
 }
 
@@ -99,6 +100,31 @@ button {
   margin: 0 auto 18px;
   padding: 28px 96px 8px;
   text-align: center;
+}
+
+.surface-switch {
+  display: inline-flex;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-muted);
+}
+
+.surface-tab {
+  min-height: 36px;
+  padding: 0 14px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.surface-tab[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: var(--surface);
+  color: var(--accent);
 }
 
 .topbar h1,
@@ -415,6 +441,348 @@ button {
 
 .lesson-panel {
   padding: 16px;
+}
+
+.scratchpad-panel {
+  display: grid;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.scratchpad-header,
+.scratchpad-footer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 300px);
+  gap: 16px;
+  align-items: start;
+}
+
+.scratchpad-section-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  min-height: 44px;
+}
+
+.scratchpad-header h2,
+.scratchpad-section-heading h3,
+.scratchpad-saved h3 {
+  margin: 0;
+}
+
+.scratchpad-header h2 {
+  font-size: 22px;
+  line-height: 1.15;
+}
+
+.scratchpad-actions,
+.copy-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.scratchpad-actions {
+  display: grid;
+  justify-items: end;
+  justify-content: flex-end;
+}
+
+.scratchpad-action-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.scratchpad-action-group + .scratchpad-action-group {
+  margin-top: 6px;
+}
+
+.scratchpad-action-group > span {
+  min-width: 72px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+  text-align: right;
+  text-transform: uppercase;
+}
+
+.scratchpad-note {
+  max-width: 760px;
+  margin: 0;
+  color: var(--muted);
+}
+
+.scratchpad-toolbar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
+  gap: 10px;
+  padding: 10px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.scratchpad-symbol-group {
+  min-width: 0;
+}
+
+.scratchpad-symbol-group h3 {
+  margin: 0 0 5px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.scratchpad-symbol-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.scratchpad-symbol-buttons button {
+  min-height: 36px;
+  min-width: 38px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  font-family: var(--math-font);
+  font-weight: 700;
+}
+
+.scratchpad-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 14px;
+  min-height: 440px;
+}
+
+.scratchpad-editor-panel,
+.scratchpad-preview-panel {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 10px;
+  min-width: 0;
+}
+
+.scratchpad-section-heading h3,
+.scratchpad-saved h3 {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.scratchpad-section-heading h3 {
+  white-space: nowrap;
+}
+
+#scratchpadInput {
+  width: 100%;
+  min-height: 420px;
+  resize: vertical;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  font-family: ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.scratchpad-preview {
+  min-height: 420px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  overflow: auto;
+}
+
+.scratch-line {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  gap: 12px;
+  min-height: 28px;
+  align-items: baseline;
+}
+
+.scratch-line-number {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+  text-align: right;
+  user-select: none;
+}
+
+.scratch-line-math {
+  min-width: 0;
+  font-family: var(--math-font);
+  font-size: 20px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.scratch-line-math-aligned {
+  display: grid;
+  grid-template-columns: minmax(4ch, 1fr) auto minmax(0, 1.4fr);
+  gap: 0.28em;
+  align-items: baseline;
+}
+
+.scratch-align-left {
+  justify-self: end;
+  min-width: 0;
+}
+
+.scratch-align-equals {
+  justify-self: center;
+}
+
+.scratch-align-right {
+  justify-self: start;
+  min-width: 0;
+}
+
+.scratch-line-empty .scratch-line-math::before {
+  content: "";
+  display: inline-block;
+}
+
+.scratch-var {
+  font-style: italic;
+}
+
+.scratch-upright {
+  font-style: normal;
+}
+
+.scratch-sup {
+  margin-left: 1px;
+  font-size: 0.58em;
+  line-height: 0.9;
+  vertical-align: super;
+}
+
+.scratch-sup .scratch-sup {
+  font-size: 0.72em;
+  transform: translateY(-0.1em);
+}
+
+.scratch-frac {
+  display: inline-grid;
+  grid-template-rows: auto auto;
+  min-width: 1.4em;
+  margin: 0 0.12em;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.scratch-frac-inline {
+  font-size: 0.72em;
+}
+
+.scratch-frac-display {
+  font-size: 0.9em;
+}
+
+.scratch-frac-top {
+  padding: 0 0.18em 0.02em;
+  border-bottom: 1.5px solid currentColor;
+  line-height: 1.02;
+}
+
+.scratch-frac-bottom {
+  padding: 0.02em 0.18em 0;
+  line-height: 1.02;
+}
+
+.scratch-mathml-line {
+  display: inline math;
+  font-family: var(--math-font);
+  font-size: 1em;
+  math-style: compact;
+  vertical-align: -0.08em;
+}
+
+.scratch-integral {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 0.08em;
+  vertical-align: middle;
+}
+
+.scratch-integral-symbol {
+  font-size: 1.28em;
+  line-height: 1;
+}
+
+.scratch-integral-scripts {
+  display: inline-grid;
+  grid-template-rows: auto auto;
+  margin-left: 1px;
+  font-size: 0.58em;
+  line-height: 1;
+}
+
+.scratch-integral-upper {
+  align-self: end;
+  transform: translateY(-0.12em);
+}
+
+.scratch-integral-lower {
+  align-self: start;
+  transform: translateY(0.12em);
+}
+
+.scratch-integral-upper-inline,
+.scratch-integral-lower-inline {
+  font-size: 0.58em;
+  line-height: 0;
+}
+
+.scratchpad-saved {
+  display: grid;
+  gap: 8px;
+  min-width: min(100%, 420px);
+}
+
+#scratchpadStatus {
+  margin-top: 0;
+}
+
+.scratchpad-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.scratchpad-list button {
+  min-height: 34px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--muted);
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.scratchpad-list button[aria-current="true"] {
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 .lesson-header {
@@ -1290,6 +1658,28 @@ button {
 
   .lesson-header {
     display: grid;
+  }
+
+  .scratchpad-header,
+  .scratchpad-footer {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .scratchpad-actions,
+  .scratchpad-action-group {
+    justify-items: stretch;
+    justify-content: start;
+  }
+
+  .scratchpad-action-group > span {
+    width: 100%;
+    min-width: 0;
+    text-align: left;
+  }
+
+  .scratchpad-layout {
+    grid-template-columns: 1fr;
   }
 
   .lesson-setup {

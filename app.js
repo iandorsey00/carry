@@ -1,7 +1,8 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-alpha.26";
+const APP_VERSION = "0.1.0-alpha.32";
 const STORAGE_KEY = "carry.progress.v1";
+const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 
 const topicGroups = [
   {
@@ -1835,6 +1836,8 @@ const workspaceRegistry = {
 
 const state = {
   progress: loadProgress(),
+  scratchpads: loadScratchpads(),
+  activeSurface: "learn",
   mode: "guided",
   activeTopic: "Arithmetic",
   activeWorkspaceId: "arithmetic.long-addition.3x3",
@@ -2201,11 +2204,14 @@ const els = {};
 document.addEventListener("DOMContentLoaded", () => {
   cacheElements();
   if (els.appVersion) els.appVersion.textContent = `v${APP_VERSION}`;
+  state.activeSurface = state.scratchpads.activeSurface || "learn";
   state.activeTopic = state.progress.currentTopic || "Arithmetic";
   state.activeWorkspaceId = state.progress.currentWorkspaceId || "arithmetic.long-addition.3x3";
   state.mode = state.progress.preferences.mode || "guided";
+  renderSurface();
   renderTopics();
   renderWorkspace();
+  renderScratchpad();
   bindEvents();
   updateProgressPanel();
 });
@@ -2244,6 +2250,22 @@ function cacheElements() {
   els.randomProblem = document.querySelector("#randomProblem");
   els.modeTabs = Array.from(document.querySelectorAll(".mode-tab"));
   els.appVersion = document.querySelector("#appVersion");
+  els.learnSurface = document.querySelector("#learnSurface");
+  els.scratchpadSurface = document.querySelector("#scratchpadSurface");
+  els.lessonPanel = document.querySelector("#lessonPanel");
+  els.scratchpadPanel = document.querySelector("#scratchpadPanel");
+  els.scratchpadInput = document.querySelector("#scratchpadInput");
+  els.scratchpadPreview = document.querySelector("#scratchpadPreview");
+  els.scratchpadList = document.querySelector("#scratchpadList");
+  els.scratchpadStatus = document.querySelector("#scratchpadStatus");
+  els.newScratchpad = document.querySelector("#newScratchpad");
+  els.renameScratchpad = document.querySelector("#renameScratchpad");
+  els.copyScratchPlain = document.querySelector("#copyScratchPlain");
+  els.copyScratchLatex = document.querySelector("#copyScratchLatex");
+  els.copyScratchMarkdown = document.querySelector("#copyScratchMarkdown");
+  els.exportScratchLatex = document.querySelector("#exportScratchLatex");
+  els.importScratchLatex = document.querySelector("#importScratchLatex");
+  els.scratchpadToolbar = document.querySelector(".scratchpad-toolbar");
 }
 
 function loadProgress() {
@@ -2270,6 +2292,55 @@ function loadProgress() {
   } catch {
     return fallback;
   }
+}
+
+function loadScratchpads() {
+  const fallbackPad = {
+    id: createId("scratchpad"),
+    title: "Differential equation work",
+    text: [
+      "dy/dt = 8ty",
+      "(1/y)dy = 8t dt",
+      "int (1/y)dy = int 8t dt",
+      "ln|y| = 4t^2 + C",
+      "y = Ce^(4t^2)"
+    ].join("\n"),
+    updatedAt: new Date().toISOString()
+  };
+  const fallback = {
+    version: 1,
+    activeSurface: "learn",
+    activeScratchpadId: fallbackPad.id,
+    scratchpads: [fallbackPad]
+  };
+
+  try {
+    const stored = localStorage.getItem(SCRATCHPAD_STORAGE_KEY);
+    if (!stored) return fallback;
+    const parsed = JSON.parse(stored);
+    const scratchpads = Array.isArray(parsed.scratchpads) && parsed.scratchpads.length
+      ? parsed.scratchpads.map((pad) => ({
+        id: pad.id || createId("scratchpad"),
+        title: pad.title || "Untitled scratchpad",
+        text: String(pad.text || ""),
+        updatedAt: pad.updatedAt || new Date().toISOString()
+      }))
+      : fallback.scratchpads;
+    return {
+      ...fallback,
+      ...parsed,
+      scratchpads,
+      activeScratchpadId: scratchpads.some((pad) => pad.id === parsed.activeScratchpadId)
+        ? parsed.activeScratchpadId
+        : scratchpads[0].id
+    };
+  } catch {
+    return fallback;
+  }
+}
+
+function createId(prefix) {
+  return `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
 function uniqueList(items) {
@@ -2425,6 +2496,25 @@ function setWorkspaceView(view) {
   els.status.hidden = !isProblem;
   els.gridShell.hidden = !isProblem;
   els.workspaceTools.hidden = !isProblem;
+}
+
+function renderSurface() {
+  const isScratchpad = state.activeSurface === "scratchpad";
+  els.lessonPanel.hidden = isScratchpad;
+  els.scratchpadPanel.hidden = !isScratchpad;
+  els.learnSurface.setAttribute("aria-pressed", isScratchpad ? "false" : "true");
+  els.scratchpadSurface.setAttribute("aria-pressed", isScratchpad ? "true" : "false");
+  if (isScratchpad) {
+    els.scratchpadInput?.focus({ preventScroll: true });
+  }
+}
+
+function setSurface(surface) {
+  state.activeSurface = surface;
+  state.scratchpads.activeSurface = surface;
+  saveScratchpads();
+  renderSurface();
+  if (surface === "scratchpad") renderScratchpad();
 }
 
 function renderIntroWorkspace(workspace) {
@@ -6481,10 +6571,14 @@ function bindEvents() {
     state.activeStep = 0;
     state.showIntro = workspaceRegistry[state.activeWorkspaceId]?.status !== "planned";
     state.selectedProblemIndex = 0;
+    setSurface("learn");
     renderTopics();
     renderWorkspace();
     saveProgress(`Opened ${button.textContent}`);
   });
+
+  els.learnSurface.addEventListener("click", () => setSurface("learn"));
+  els.scratchpadSurface.addEventListener("click", () => setSurface("scratchpad"));
 
   els.modeTabs.forEach((tab) => {
     tab.addEventListener("click", () => {
@@ -6542,6 +6636,24 @@ function bindEvents() {
   });
   els.exportProgress.addEventListener("click", exportProgress);
   els.importProgress.addEventListener("change", importProgress);
+  els.scratchpadInput.addEventListener("input", handleScratchpadInput);
+  els.newScratchpad.addEventListener("click", createScratchpad);
+  els.renameScratchpad.addEventListener("click", renameScratchpad);
+  els.copyScratchPlain.addEventListener("click", () => copyScratchpad("plain"));
+  els.copyScratchLatex.addEventListener("click", () => copyScratchpad("latex"));
+  els.copyScratchMarkdown.addEventListener("click", () => copyScratchpad("markdown"));
+  els.exportScratchLatex.addEventListener("click", exportScratchpadLatex);
+  els.importScratchLatex.addEventListener("change", importScratchpadLatex);
+  els.scratchpadToolbar.addEventListener("click", (event) => {
+    const button = event.target.closest("button[data-insert]");
+    if (!button) return;
+    insertScratchpadText(button.dataset.insert);
+  });
+  els.scratchpadList.addEventListener("click", (event) => {
+    const button = event.target.closest("button[data-scratchpad-id]");
+    if (!button) return;
+    switchScratchpad(button.dataset.scratchpadId);
+  });
   window.addEventListener("resize", drawOverlays);
   document.addEventListener("keydown", handlePageKeydown);
 }
@@ -6781,6 +6893,825 @@ function importProgress(event) {
     }
   });
   reader.readAsText(file);
+}
+
+function activeScratchpad() {
+  let pad = state.scratchpads.scratchpads.find((item) => item.id === state.scratchpads.activeScratchpadId);
+  if (!pad) {
+    pad = state.scratchpads.scratchpads[0];
+    state.scratchpads.activeScratchpadId = pad?.id;
+  }
+  return pad;
+}
+
+function saveScratchpads() {
+  localStorage.setItem(SCRATCHPAD_STORAGE_KEY, JSON.stringify(state.scratchpads, null, 2));
+}
+
+function renderScratchpad() {
+  const pad = activeScratchpad();
+  if (!pad) return;
+  if (els.scratchpadTitle) els.scratchpadTitle.textContent = pad.title;
+  if (els.scratchpadInput && els.scratchpadInput.value !== pad.text) {
+    els.scratchpadInput.value = pad.text;
+  }
+  renderScratchpadPreview();
+  renderScratchpadList();
+}
+
+function renderScratchpadList() {
+  els.scratchpadList.replaceChildren();
+  const pads = [...state.scratchpads.scratchpads].sort((a, b) => String(b.updatedAt).localeCompare(String(a.updatedAt)));
+  for (const pad of pads.slice(0, 12)) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = pad.title;
+    button.dataset.scratchpadId = pad.id;
+    button.setAttribute("aria-current", pad.id === state.scratchpads.activeScratchpadId ? "true" : "false");
+    els.scratchpadList.append(button);
+  }
+}
+
+function handleScratchpadInput() {
+  const pad = activeScratchpad();
+  if (!pad) return;
+  pad.text = els.scratchpadInput.value;
+  pad.updatedAt = new Date().toISOString();
+  saveScratchpads();
+  renderScratchpadPreview();
+  renderScratchpadList();
+  setScratchpadStatus("Scratchpad saved in this browser.");
+}
+
+function renderScratchpadPreview() {
+  const pad = activeScratchpad();
+  els.scratchpadPreview.replaceChildren();
+  const lines = String(pad?.text || "").split("\n");
+  const normalizedLines = lines.map((line) => normalizePlainMathLine(line));
+  const alignEquals = normalizedLines.filter(Boolean).length > 1
+    && normalizedLines.filter((line) => splitTopLevelEquals(line)).length > 1;
+
+  lines.forEach((line, index) => {
+    const row = document.createElement("div");
+    row.className = `scratch-line ${line.trim() ? "" : "scratch-line-empty"}`.trim();
+    if (alignEquals) row.classList.add("scratch-line-aligned");
+
+    const number = document.createElement("span");
+    number.className = "scratch-line-number";
+    number.textContent = String(index + 1);
+
+    const math = document.createElement("div");
+    math.className = "scratch-line-math";
+    renderScratchpadLineMath(math, normalizedLines[index], alignEquals);
+
+    row.append(number, math);
+    els.scratchpadPreview.append(row);
+  });
+}
+
+function renderScratchpadLineMath(target, latex, alignEquals) {
+  target.replaceChildren();
+  if (!latex) return;
+
+  const split = alignEquals ? splitTopLevelEquals(latex) : null;
+  if (!split) {
+    target.append(createMathMlExpression(latex));
+    return;
+  }
+
+  target.classList.add("scratch-line-math-aligned");
+  const left = document.createElement("span");
+  left.className = "scratch-align-left";
+  const equals = document.createElement("span");
+  equals.className = "scratch-align-equals";
+  const right = document.createElement("span");
+  right.className = "scratch-align-right";
+  left.append(createMathMlExpression(split.left));
+  equals.textContent = "=";
+  right.append(createMathMlExpression(split.right));
+  target.append(left, equals, right);
+}
+
+function splitTopLevelEquals(text) {
+  let depth = 0;
+  for (let index = 0; index < text.length; index += 1) {
+    const char = text[index];
+    if (char === "{") depth += 1;
+    if (char === "}") depth = Math.max(0, depth - 1);
+    if (char === "=" && depth === 0) {
+      return {
+        left: text.slice(0, index).trimEnd(),
+        right: text.slice(index + 1).trimStart()
+      };
+    }
+  }
+  return null;
+}
+
+function normalizePlainMathLine(line) {
+  let text = String(line || "").trim();
+  if (!text) return "";
+  text = text
+    .replace(/[≤]/g, "<=")
+    .replace(/[≥]/g, ">=")
+    .replace(/[≠]/g, "!=")
+    .replace(/[→]/g, "->")
+    .replace(/[⇒]/g, "=>")
+    .replace(/∉/g, "\\notin")
+    .replace(/∈/g, "\\in")
+    .replace(/⊆/g, "\\subseteq")
+    .replace(/⊂/g, "\\subset")
+    .replace(/∪/g, "\\cup")
+    .replace(/∩/g, "\\cap")
+    .replace(/∅/g, "\\emptyset")
+    .replace(/ℕ/g, "\\mathbb{N}")
+    .replace(/ℤ/g, "\\mathbb{Z}")
+    .replace(/ℚ/g, "\\mathbb{Q}")
+    .replace(/ℝ/g, "\\mathbb{R}")
+    .replace(/ℂ/g, "\\mathbb{C}")
+    .replace(/\+\/-/g, "\\pm")
+    .replace(/\btheta\b/gi, "\\theta")
+    .replace(/\bpi\b/gi, "\\pi")
+    .replace(/\b(sin|cos|tan|sec|csc|cot|arcsin|arccos|arctan|ln|log)\b/gi, "\\$1")
+    .replace(/sqrt\(([^()]*)\)/gi, (_, body) => `\\sqrt{${normalizePlainPowers(body)}}`)
+    .replace(/\be\^\(([^()]*)\)/gi, (_, body) => `e^{${normalizePlainPowers(body)}}`)
+    .replace(/(?<!\\)\bint\[([^,\]]+),([^\]]+)\]\s+([^=\n]+?)\s*d([A-Za-z])\b/gi, "\\int_{$1}^{$2} $3\\,d$4")
+    .replace(/(?<!\\)\bint_([^\s^]+)\^([^\s]+)\s+([^=\n]+?)\s*d([A-Za-z])\b/gi, "\\int_{$1}^{$2} $3\\,d$4")
+    .replace(/(?<!\\)\bint\s+([^=\n]+?)\s*d([A-Za-z])\b/gi, "\\int $1\\,d$2")
+    .replace(/\b(d[A-Za-z])\/(d[A-Za-z])\b/g, "\\dfrac{$1}{$2}")
+    .replace(/(?<![\\\w])([A-Za-z0-9]+)\/([A-Za-z0-9]+)(?![\w])/g, "\\frac{$1}{$2}")
+    .replace(/->/g, "\\to")
+    .replace(/=>/g, "\\Rightarrow")
+    .replace(/<=/g, "\\le")
+    .replace(/>=/g, "\\ge")
+    .replace(/!=/g, "\\ne");
+  text = text.replace(/\^(\(([^()]*)\)|([A-Za-z0-9]+))/g, (_, _raw, grouped, simple) => `^{${grouped || simple}}`);
+  text = text.replace(/\^\{([^{}^]*\^[^{}]*)\}/g, (_, body) => `^{${normalizePlainPowers(body)}}`);
+  return text;
+}
+
+function normalizePlainPowers(text) {
+  return String(text || "").replace(/\^(\(([^()]*)\)|([A-Za-z0-9]+))/g, (_, _raw, grouped, simple) => `^{${grouped || simple}}`);
+}
+
+function renderLatexishMath(target, latex) {
+  target.replaceChildren();
+  if (!latex) return;
+  appendLatexishSegment(target, latex);
+}
+
+function appendLatexishSegment(target, text) {
+  let cursor = 0;
+  while (cursor < text.length) {
+    const next = findNextLatexCommand(text, cursor);
+    if (!next) {
+      appendScratchText(target, text.slice(cursor));
+      return;
+    }
+    if (next.index > cursor) appendScratchText(target, text.slice(cursor, next.index));
+    cursor = appendScratchCommand(target, text, next.index);
+  }
+}
+
+function findNextLatexCommand(text, from) {
+  const commands = ["\\dfrac", "\\frac", "\\sqrt", "\\int", "\\ln", "\\log", "\\sin", "\\cos", "\\tan", "\\sec", "\\csc", "\\cot", "\\arcsin", "\\arccos", "\\arctan", "\\pi", "\\theta", "\\le", "\\ge", "\\ne", "\\pm", "\\to", "\\Rightarrow", "\\,"];
+  let found = null;
+  for (const command of commands) {
+    const index = text.indexOf(command, from);
+    if (index !== -1 && (!found || index < found.index)) found = { command, index };
+  }
+  return found;
+}
+
+function appendScratchCommand(target, text, index) {
+  if (text.startsWith("\\dfrac", index)) {
+    const first = readBraceGroup(text, index + 6);
+    const second = first ? readBraceGroup(text, first.end) : null;
+    if (first && second) {
+      appendScratchFraction(target, first.value, second.value, true);
+      return second.end;
+    }
+  }
+
+  if (text.startsWith("\\frac", index)) {
+    const first = readBraceGroup(text, index + 5);
+    const second = first ? readBraceGroup(text, first.end) : null;
+    if (first && second) {
+      appendScratchFraction(target, first.value, second.value, false);
+      return second.end;
+    }
+  }
+
+  if (text.startsWith("\\sqrt", index)) {
+    const group = readBraceGroup(text, index + 5);
+    if (group) {
+      target.append(createMathMlSqrt(group.value));
+      return group.end;
+    }
+  }
+
+  if (text.startsWith("\\int", index)) {
+    const integral = document.createElement("span");
+    integral.className = "scratch-integral";
+    const symbol = document.createElement("span");
+    symbol.className = "scratch-integral-symbol";
+    symbol.textContent = "∫";
+    integral.append(symbol);
+
+    let cursor = index + 4;
+    const lower = readScriptGroup(text, cursor, "_");
+    if (lower) {
+      cursor = lower.end;
+      const upper = readScriptGroup(text, cursor, "^");
+      if (upper) {
+        cursor = upper.end;
+        const scripts = document.createElement("span");
+        scripts.className = "scratch-integral-scripts";
+        const top = document.createElement("span");
+        top.className = "scratch-integral-upper";
+        const bottom = document.createElement("span");
+        bottom.className = "scratch-integral-lower";
+        appendLatexishSegment(top, upper.value);
+        appendLatexishSegment(bottom, lower.value);
+        scripts.append(top, bottom);
+        integral.append(scripts);
+      } else {
+        const bottom = document.createElement("sub");
+        bottom.className = "scratch-integral-lower-inline";
+        appendLatexishSegment(bottom, lower.value);
+        integral.append(bottom);
+      }
+    } else {
+      const upper = readScriptGroup(text, cursor, "^");
+      if (upper) {
+        cursor = upper.end;
+        const top = document.createElement("sup");
+        top.className = "scratch-integral-upper-inline";
+        appendLatexishSegment(top, upper.value);
+        integral.append(top);
+      }
+    }
+
+    target.append(integral);
+    return cursor;
+  }
+
+  const commandMap = {
+    "\\ln": "ln",
+    "\\log": "log",
+    "\\sin": "sin",
+    "\\cos": "cos",
+    "\\tan": "tan",
+    "\\sec": "sec",
+    "\\csc": "csc",
+    "\\cot": "cot",
+    "\\arcsin": "arcsin",
+    "\\arccos": "arccos",
+    "\\arctan": "arctan",
+    "\\pi": "π",
+    "\\theta": "θ",
+    "\\le": "≤",
+    "\\ge": "≥",
+    "\\ne": "≠",
+    "\\pm": "±",
+    "\\to": "→",
+    "\\Rightarrow": "⇒",
+    "\\,": " "
+  };
+  const command = Object.keys(commandMap)
+    .sort((a, b) => b.length - a.length)
+    .find((item) => text.startsWith(item, index));
+  if (!command) {
+    appendScratchText(target, text[index]);
+    return index + 1;
+  }
+  const span = document.createElement("span");
+  span.className = uprightScratchCommand(command) ? "scratch-upright" : "scratch-var";
+  span.textContent = commandMap[command];
+  target.append(span);
+  return index + command.length;
+}
+
+function uprightScratchCommand(command) {
+  return !["\\theta"].includes(command);
+}
+
+function appendScratchFraction(target, numerator, denominator, displayStyle) {
+  const frac = document.createElement("span");
+  frac.className = displayStyle ? "scratch-frac scratch-frac-display" : "scratch-frac scratch-frac-inline";
+  const top = document.createElement("span");
+  top.className = "scratch-frac-top";
+  const bottom = document.createElement("span");
+  bottom.className = "scratch-frac-bottom";
+  appendLatexishSegment(top, numerator);
+  appendLatexishSegment(bottom, denominator);
+  frac.append(top, bottom);
+  target.append(frac);
+}
+
+function createMathMlSqrt(value) {
+  return createMathMlExpression(`\\sqrt{${value}}`);
+}
+
+function createMathMlExpression(value) {
+  const math = createMathMlElement("math");
+  math.classList.add("scratch-mathml-line");
+  math.setAttribute("display", "inline");
+  const row = createMathMlElement("mrow");
+  appendMathMlContent(row, String(value || ""));
+  math.append(row);
+  return math;
+}
+
+function appendMathMlContent(target, value) {
+  const text = String(value || "");
+  let cursor = 0;
+  while (cursor < text.length) {
+    if (/\s/.test(text[cursor])) {
+      cursor += 1;
+      continue;
+    }
+
+    if (text.startsWith("^{", cursor) && target.lastChild) {
+      const group = readBraceGroup(text, cursor + 1);
+      if (group) {
+        const base = target.lastChild;
+        base.remove();
+        const sup = createMathMlElement("msup");
+        const exponent = createMathMlElement("mrow");
+        appendMathMlContent(exponent, group.value);
+        sup.append(base, exponent);
+        target.append(sup);
+        cursor = group.end;
+        continue;
+      }
+    }
+
+    if (text.startsWith("\\dfrac", cursor) || text.startsWith("\\frac", cursor)) {
+      const commandLength = text.startsWith("\\dfrac", cursor) ? 6 : 5;
+      const numerator = readBraceGroup(text, cursor + commandLength);
+      const denominator = numerator ? readBraceGroup(text, numerator.end) : null;
+      if (numerator && denominator) {
+        const frac = createMathMlElement("mfrac");
+        if (commandLength === 5) frac.setAttribute("displaystyle", "false");
+        const top = createMathMlElement("mrow");
+        const bottom = createMathMlElement("mrow");
+        appendMathMlContent(top, numerator.value);
+        appendMathMlContent(bottom, denominator.value);
+        frac.append(top, bottom);
+        target.append(frac);
+        cursor = denominator.end;
+        continue;
+      }
+    }
+
+    if (text.startsWith("\\sqrt", cursor)) {
+      const group = readBraceGroup(text, cursor + 5);
+      if (group) {
+        const sqrt = createMathMlElement("msqrt");
+        const row = createMathMlElement("mrow");
+        appendMathMlContent(row, group.value);
+        sqrt.append(row);
+        target.append(sqrt);
+        cursor = group.end;
+        continue;
+      }
+    }
+
+    if (text.startsWith("\\int", cursor)) {
+      cursor = appendMathMlIntegral(target, text, cursor);
+      continue;
+    }
+
+    if (text.startsWith("\\mathbb", cursor)) {
+      const group = readBraceGroup(text, cursor + 7);
+      if (group) {
+        target.append(createMathMlToken("mi", doubleStruckSymbol(group.value), { mathvariant: "normal" }));
+        cursor = group.end;
+        continue;
+      }
+    }
+
+    const command = mathMlCommandAt(text, cursor);
+    if (command) {
+      appendMathMlCommand(target, command);
+      cursor += command.length;
+      continue;
+    }
+
+    const number = text.slice(cursor).match(/^\d+(?:\.\d+)?/);
+    if (number) {
+      target.append(createMathMlToken("mn", number[0]));
+      cursor += number[0].length;
+      continue;
+    }
+
+    const letter = text.slice(cursor).match(/^[A-Za-zπθℕℤℚℝℂ]/);
+    if (letter) {
+      const token = letter[0];
+      target.append(createMathMlIdentifier(token));
+      cursor += token.length;
+      continue;
+    }
+
+    target.append(createMathMlToken(mathMlOperatorTag(text[cursor]), displayMathMlOperator(text[cursor])));
+    cursor += 1;
+  }
+}
+
+function appendMathMlIntegral(target, text, index) {
+  const integral = createMathMlToken("mo", "∫");
+  let cursor = index + 4;
+  const lower = readScriptGroup(text, cursor, "_");
+  if (lower) {
+    cursor = lower.end;
+    const upper = readScriptGroup(text, cursor, "^");
+    if (upper) {
+      cursor = upper.end;
+      const node = createMathMlElement("msubsup");
+      const lowerRow = createMathMlElement("mrow");
+      const upperRow = createMathMlElement("mrow");
+      appendMathMlContent(lowerRow, lower.value);
+      appendMathMlContent(upperRow, upper.value);
+      node.append(integral, lowerRow, upperRow);
+      target.append(node);
+      return cursor;
+    }
+    const node = createMathMlElement("msub");
+    const lowerRow = createMathMlElement("mrow");
+    appendMathMlContent(lowerRow, lower.value);
+    node.append(integral, lowerRow);
+    target.append(node);
+    return cursor;
+  }
+  const upper = readScriptGroup(text, cursor, "^");
+  if (upper) {
+    cursor = upper.end;
+    const node = createMathMlElement("msup");
+    const upperRow = createMathMlElement("mrow");
+    appendMathMlContent(upperRow, upper.value);
+    node.append(integral, upperRow);
+    target.append(node);
+    return cursor;
+  }
+  target.append(integral);
+  return cursor;
+}
+
+function mathMlCommandAt(text, index) {
+  const commands = ["\\Rightarrow", "\\subseteq", "\\emptyset", "\\arcsin", "\\arccos", "\\arctan", "\\notin", "\\subset", "\\theta", "\\sin", "\\cos", "\\tan", "\\sec", "\\csc", "\\cot", "\\log", "\\cup", "\\cap", "\\ln", "\\pi", "\\le", "\\ge", "\\ne", "\\pm", "\\to", "\\in", "\\,"];
+  return commands.find((command) => text.startsWith(command, index));
+}
+
+function appendMathMlCommand(target, command) {
+  const functionNames = new Set(["\\sin", "\\cos", "\\tan", "\\sec", "\\csc", "\\cot", "\\arcsin", "\\arccos", "\\arctan", "\\log", "\\ln"]);
+  if (functionNames.has(command)) {
+    target.append(createMathMlToken("mi", command.slice(1), { mathvariant: "normal" }));
+    return;
+  }
+  const commandMap = {
+    "\\theta": ["mi", "θ"],
+    "\\pi": ["mi", "π", "normal"],
+    "\\le": ["mo", "≤"],
+    "\\ge": ["mo", "≥"],
+    "\\ne": ["mo", "≠"],
+    "\\pm": ["mo", "±"],
+    "\\to": ["mo", "→"],
+    "\\Rightarrow": ["mo", "⇒"],
+    "\\in": ["mo", "∈"],
+    "\\notin": ["mo", "∉"],
+    "\\subset": ["mo", "⊂"],
+    "\\subseteq": ["mo", "⊆"],
+    "\\cup": ["mo", "∪"],
+    "\\cap": ["mo", "∩"],
+    "\\emptyset": ["mi", "∅", "normal"],
+    "\\,": ["mspace", ""]
+  };
+  const [tag, value, variant] = commandMap[command] || ["mtext", command];
+  const token = createMathMlToken(tag, value);
+  if (tag === "mspace") token.setAttribute("width", "0.22em");
+  if (variant) token.setAttribute("mathvariant", variant);
+  target.append(token);
+}
+
+function createMathMlIdentifier(token) {
+  if (token === "π") return createMathMlToken("mi", "π", { mathvariant: "normal" });
+  if (/^[ℕℤℚℝℂ]$/.test(token)) return createMathMlToken("mi", token, { mathvariant: "normal" });
+  return createMathMlToken("mi", token);
+}
+
+function doubleStruckSymbol(value) {
+  const symbols = {
+    N: "ℕ",
+    Z: "ℤ",
+    Q: "ℚ",
+    R: "ℝ",
+    C: "ℂ"
+  };
+  return symbols[String(value || "").trim()] || String(value || "");
+}
+
+function mathMlOperatorTag(token) {
+  return /[+\-*/=()[\]{}|,∈∉⊂⊆∪∩]/.test(token) ? "mo" : "mtext";
+}
+
+function displayMathMlOperator(token) {
+  if (token === "*") return "·";
+  if (token === "-") return "−";
+  return token;
+}
+
+function createMathMlElement(tag) {
+  return document.createElementNS("http://www.w3.org/1998/Math/MathML", tag);
+}
+
+function createMathMlToken(tag, value, attributes = {}) {
+  const token = createMathMlElement(tag);
+  token.textContent = value;
+  Object.entries(attributes).forEach(([key, attributeValue]) => {
+    token.setAttribute(key, attributeValue);
+  });
+  return token;
+}
+
+function appendScratchText(target, text) {
+  let cursor = 0;
+  while (cursor < text.length) {
+    const powerIndex = findPowerStart(text, cursor);
+    if (powerIndex === -1) {
+      appendScratchRuns(target, text.slice(cursor));
+      return;
+    }
+    if (powerIndex > cursor) appendScratchRuns(target, text.slice(cursor, powerIndex));
+    const group = readBraceGroup(text, powerIndex + 1);
+    if (!group) {
+      appendScratchRuns(target, text.slice(powerIndex, powerIndex + 2));
+      cursor = powerIndex + 2;
+      continue;
+    }
+    const sup = document.createElement("sup");
+    sup.className = "scratch-sup";
+    appendLatexishSegment(sup, group.value);
+    target.append(sup);
+    cursor = group.end;
+  }
+}
+
+function appendScratchRuns(target, text) {
+  const tokenPattern = /([A-Za-z]+|[πθ]|\([^)]+\)|\{[^}]+\})\/([A-Za-z]+|[πθ]|\([^)]+\)|\{[^}]+\})/g;
+  let cursor = 0;
+  let match = tokenPattern.exec(text);
+  while (match) {
+    if (match.index > cursor) target.append(document.createTextNode(displayScratchOperators(text.slice(cursor, match.index))));
+    appendScratchRunToken(target, match[0]);
+    cursor = tokenPattern.lastIndex;
+    match = tokenPattern.exec(text);
+  }
+  if (cursor < text.length) target.append(document.createTextNode(displayScratchOperators(text.slice(cursor))));
+}
+
+function appendScratchRunToken(target, text) {
+  const fraction = text.match(/^(.+)\/(.+)$/);
+  if (fraction) {
+    appendScratchFraction(target, stripWrappingGroup(fraction[1]), stripWrappingGroup(fraction[2]), false);
+    return;
+  }
+
+  const identifierPattern = /([A-Za-z]+|[πθ])/g;
+  let cursor = 0;
+  let match = identifierPattern.exec(text);
+  while (match) {
+    if (match.index > cursor) target.append(document.createTextNode(displayScratchOperators(text.slice(cursor, match.index))));
+    const token = match[0];
+    const span = document.createElement("span");
+    span.className = scratchTokenClass(token);
+    span.textContent = displayScratchOperators(token);
+    target.append(span);
+    cursor = identifierPattern.lastIndex;
+    match = identifierPattern.exec(text);
+  }
+  if (cursor < text.length) target.append(document.createTextNode(displayScratchOperators(text.slice(cursor))));
+}
+
+function stripWrappingGroup(value) {
+  const text = String(value || "");
+  if ((text.startsWith("(") && text.endsWith(")")) || (text.startsWith("{") && text.endsWith("}"))) {
+    return text.slice(1, -1);
+  }
+  return text;
+}
+
+function findPowerStart(text, from) {
+  let index = text.indexOf("^{", from);
+  while (index !== -1) {
+    const previous = text[index - 1] || "";
+    if (/[A-Za-z0-9πθ})]/.test(previous)) return index;
+    index = text.indexOf("^{", index + 2);
+  }
+  return -1;
+}
+
+function scratchTokenClass(token) {
+  const upright = new Set(["sin", "cos", "tan", "sec", "csc", "cot", "arcsin", "arccos", "arctan", "ln", "log", "d"]);
+  if (upright.has(token.toLowerCase()) || token === "π") return "scratch-upright";
+  return token.length === 1 ? "scratch-var" : "scratch-upright";
+}
+
+function displayScratchOperators(text) {
+  return String(text)
+    .replace(/\*/g, "·")
+    .replace(/\+-/g, "−")
+    .replace(/-/g, "−");
+}
+
+function readBraceGroup(text, start) {
+  if (text[start] !== "{") return null;
+  let depth = 0;
+  for (let index = start; index < text.length; index += 1) {
+    if (text[index] === "{") depth += 1;
+    if (text[index] === "}") depth -= 1;
+    if (depth === 0) {
+      return {
+        value: text.slice(start + 1, index),
+        end: index + 1
+      };
+    }
+  }
+  return null;
+}
+
+function readScriptGroup(text, start, marker) {
+  if (text[start] !== marker) return null;
+  if (text[start + 1] === "{") {
+    return readBraceGroup(text, start + 1);
+  }
+  const match = text.slice(start + 1).match(/^[-+]?[A-Za-z0-9πθ]+/);
+  if (!match) return null;
+  return {
+    value: match[0],
+    end: start + 1 + match[0].length
+  };
+}
+
+function createScratchpad() {
+  const title = `Scratchpad ${state.scratchpads.scratchpads.length + 1}`;
+  const pad = {
+    id: createId("scratchpad"),
+    title,
+    text: "",
+    updatedAt: new Date().toISOString()
+  };
+  state.scratchpads.scratchpads.unshift(pad);
+  state.scratchpads.activeScratchpadId = pad.id;
+  saveScratchpads();
+  renderScratchpad();
+  setScratchpadStatus("New scratchpad created.");
+}
+
+function renameScratchpad() {
+  const pad = activeScratchpad();
+  if (!pad) return;
+  const title = window.prompt("Scratchpad name", pad.title);
+  if (!title || !title.trim()) return;
+  pad.title = title.trim().slice(0, 80);
+  pad.updatedAt = new Date().toISOString();
+  saveScratchpads();
+  renderScratchpad();
+  setScratchpadStatus("Scratchpad renamed.");
+}
+
+function switchScratchpad(id) {
+  if (!state.scratchpads.scratchpads.some((pad) => pad.id === id)) return;
+  state.scratchpads.activeScratchpadId = id;
+  saveScratchpads();
+  renderScratchpad();
+}
+
+function insertScratchpadText(value) {
+  const input = els.scratchpadInput;
+  const start = input.selectionStart ?? input.value.length;
+  const end = input.selectionEnd ?? input.value.length;
+  input.value = `${input.value.slice(0, start)}${value}${input.value.slice(end)}`;
+  const caret = start + value.length;
+  input.focus();
+  input.setSelectionRange(caret, caret);
+  handleScratchpadInput();
+}
+
+function scratchpadLatexText() {
+  return String(activeScratchpad()?.text || "")
+    .split("\n")
+    .map((line) => normalizePlainMathLine(line))
+    .join("\n");
+}
+
+function scratchpadMarkdownText() {
+  return scratchpadLatexText()
+    .split("\n")
+    .map((line) => (line.trim() ? `$$${line}$$` : ""))
+    .join("\n");
+}
+
+function scratchpadPlainText() {
+  return String(activeScratchpad()?.text || "");
+}
+
+function exportScratchpadLatex() {
+  const pad = activeScratchpad();
+  const title = safeFilename(pad?.title || "carry-scratchpad");
+  const blob = new Blob([scratchpadLatexText()], { type: "application/x-tex" });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = `${title}.tex`;
+  anchor.click();
+  URL.revokeObjectURL(url);
+  setScratchpadStatus("LaTeX exported.");
+}
+
+function importScratchpadLatex(event) {
+  const file = event.target.files?.[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.addEventListener("load", () => {
+    const text = latexToPlainScratchpad(String(reader.result || ""));
+    const pad = {
+      id: createId("scratchpad"),
+      title: file.name.replace(/\.[^.]+$/, "") || "Imported LaTeX",
+      text,
+      updatedAt: new Date().toISOString()
+    };
+    state.scratchpads.scratchpads.unshift(pad);
+    state.scratchpads.activeScratchpadId = pad.id;
+    saveScratchpads();
+    renderScratchpad();
+    setScratchpadStatus("LaTeX imported as a new scratchpad.");
+    event.target.value = "";
+  });
+  reader.readAsText(file);
+}
+
+function latexToPlainScratchpad(latex) {
+  return String(latex || "")
+    .replace(/\$\$/g, "")
+    .split("\n")
+    .map((line) => line
+      .replace(/\\int_\{([^}]*)\}\^\{([^}]*)\}/g, "int_$1^$2")
+      .replace(/\\int/g, "int")
+      .replace(/\\frac\{([^{}]*)\}\{([^{}]*)\}/g, "$1/$2")
+      .replace(/\\sqrt\{([^{}]*)\}/g, "sqrt($1)")
+      .replace(/\^\{([^{}]*)\}/g, "^($1)")
+      .replace(/\\,/g, " ")
+      .replace(/\\pi/g, "pi")
+      .replace(/\\theta/g, "theta")
+      .replace(/\\le/g, "<=")
+      .replace(/\\ge/g, ">=")
+      .replace(/\\ne/g, "!=")
+      .replace(/\\pm/g, "+/-")
+      .replace(/\\to/g, "->")
+      .replace(/\\Rightarrow/g, "=>")
+      .replace(/\\(sin|cos|tan|sec|csc|cot|arcsin|arccos|arctan|ln|log)\b/g, "$1")
+      .trim())
+    .join("\n")
+    .trim();
+}
+
+function safeFilename(value) {
+  return String(value || "carry-scratchpad")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 80) || "carry-scratchpad";
+}
+
+async function copyScratchpad(kind) {
+  const text = kind === "latex"
+    ? scratchpadLatexText()
+    : kind === "markdown"
+      ? scratchpadMarkdownText()
+      : scratchpadPlainText();
+  await copyText(text);
+  const label = kind === "latex" ? "LaTeX" : kind === "markdown" ? "Markdown" : "plain text";
+  setScratchpadStatus(`Copied ${label}.`);
+}
+
+async function copyText(text) {
+  if (navigator.clipboard?.writeText) {
+    await navigator.clipboard.writeText(text);
+    return;
+  }
+  const area = document.createElement("textarea");
+  area.value = text;
+  area.style.position = "fixed";
+  area.style.opacity = "0";
+  document.body.append(area);
+  area.select();
+  document.execCommand("copy");
+  area.remove();
+}
+
+function setScratchpadStatus(message) {
+  els.scratchpadStatus.textContent = message;
 }
 
 function updateProgressPanel() {
