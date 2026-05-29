@@ -1,6 +1,6 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-alpha.34";
+const APP_VERSION = "0.1.0-alpha.35";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 
@@ -7233,17 +7233,10 @@ function appendMathMlContent(target, value) {
       continue;
     }
 
-    if (text.startsWith("^{", cursor) && target.lastChild) {
-      const group = readBraceGroup(text, cursor + 1);
-      if (group) {
-        const base = target.lastChild;
-        base.remove();
-        const sup = createMathMlElement("msup");
-        const exponent = createMathMlElement("mrow");
-        appendMathMlContent(exponent, group.value);
-        sup.append(base, exponent);
-        target.append(sup);
-        cursor = group.end;
+    if ((text[cursor] === "_" || text[cursor] === "^") && target.lastChild) {
+      const scriptedCursor = appendMathMlScript(target, text, cursor);
+      if (scriptedCursor !== cursor) {
+        cursor = scriptedCursor;
         continue;
       }
     }
@@ -7317,6 +7310,50 @@ function appendMathMlContent(target, value) {
     target.append(createMathMlToken(mathMlOperatorTag(text[cursor]), displayMathMlOperator(text[cursor])));
     cursor += 1;
   }
+}
+
+function appendMathMlScript(target, text, cursor) {
+  const firstMarker = text[cursor];
+  const first = readScriptGroup(text, cursor, firstMarker);
+  if (!first) return cursor;
+
+  let nextCursor = first.end;
+  const secondMarker = firstMarker === "_" ? "^" : "_";
+  const second = readScriptGroup(text, nextCursor, secondMarker);
+  if (second) nextCursor = second.end;
+
+  const base = target.lastChild;
+  base.remove();
+  const baseNode = unwrapScriptBase(base);
+  const lower = firstMarker === "_" ? first : second;
+  const upper = firstMarker === "^" ? first : second;
+  const node = lower && upper
+    ? createMathMlElement("msubsup")
+    : lower
+      ? createMathMlElement("msub")
+      : createMathMlElement("msup");
+
+  if (lower && upper) {
+    node.append(baseNode, createMathMlRow(lower.value), createMathMlRow(upper.value));
+  } else if (lower) {
+    node.append(baseNode, createMathMlRow(lower.value));
+  } else {
+    node.append(baseNode, createMathMlRow(upper.value));
+  }
+
+  target.append(node);
+  return nextCursor;
+}
+
+function unwrapScriptBase(node) {
+  if (!["msub", "msup"].includes(node.localName)) return node;
+  return node.firstChild || node;
+}
+
+function createMathMlRow(value) {
+  const row = createMathMlElement("mrow");
+  appendMathMlContent(row, value);
+  return row;
 }
 
 function appendMathMlIntegral(target, text, index) {
