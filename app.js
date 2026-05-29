@@ -1,6 +1,6 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-alpha.36";
+const APP_VERSION = "0.1.0-alpha.37";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 
@@ -7018,6 +7018,17 @@ function normalizePlainMathLine(line) {
     .replace(/[≠]/g, "!=")
     .replace(/[→]/g, "->")
     .replace(/[⇒]/g, "=>")
+    .replace(/⇔/g, "\\iff")
+    .replace(/∧/g, "\\land")
+    .replace(/∨/g, "\\lor")
+    .replace(/¬/g, "\\neg")
+    .replace(/∀/g, "\\forall")
+    .replace(/∃/g, "\\exists")
+    .replace(/∴/g, "\\therefore")
+    .replace(/∵/g, "\\because")
+    .replace(/⊕/g, "\\oplus")
+    .replace(/⊢/g, "\\vdash")
+    .replace(/⊨/g, "\\models")
     .replace(/∉/g, "\\notin")
     .replace(/∈/g, "\\in")
     .replace(/⊆/g, "\\subseteq")
@@ -7041,8 +7052,11 @@ function normalizePlainMathLine(line) {
     .replace(/(?<!\\)\bint\s+([^=\n]+?)\s*d([A-Za-z])\b/gi, "\\int $1\\,d$2")
     .replace(/\b(d[A-Za-z])\/(d[A-Za-z])\b/g, "\\dfrac{$1}{$2}")
     .replace(/(?<![\\\w])([A-Za-z0-9]+)\/([A-Za-z0-9]+)(?![\w])/g, "\\frac{$1}{$2}")
-    .replace(/->/g, "\\to")
+    .replace(/<=>/g, "\\iff")
     .replace(/=>/g, "\\Rightarrow")
+    .replace(/->/g, "\\to")
+    .replace(/&&/g, "\\land")
+    .replace(/(^|\s)\|\|(?=\s|$)/g, "$1\\lor")
     .replace(/<=/g, "\\le")
     .replace(/>=/g, "\\ge")
     .replace(/!=/g, "\\ne");
@@ -7491,7 +7505,7 @@ function appendMathMlIntegral(target, text, index) {
 }
 
 function mathMlCommandAt(text, index) {
-  const commands = ["\\Rightarrow", "\\subseteq", "\\emptyset", "\\arcsin", "\\arccos", "\\arctan", "\\notin", "\\subset", "\\theta", "\\sin", "\\cos", "\\tan", "\\sec", "\\csc", "\\cot", "\\log", "\\cup", "\\cap", "\\ln", "\\pi", "\\le", "\\ge", "\\ne", "\\pm", "\\to", "\\in", "\\,"];
+  const commands = ["\\Rightarrow", "\\therefore", "\\subseteq", "\\emptyset", "\\because", "\\arcsin", "\\arccos", "\\arctan", "\\forall", "\\exists", "\\models", "\\notin", "\\subset", "\\theta", "\\vdash", "\\land", "\\oplus", "\\lor", "\\neg", "\\iff", "\\sin", "\\cos", "\\tan", "\\sec", "\\csc", "\\cot", "\\log", "\\cup", "\\cap", "\\ln", "\\pi", "\\le", "\\ge", "\\ne", "\\pm", "\\to", "\\in", "\\,"];
   return commands.find((command) => text.startsWith(command, index));
 }
 
@@ -7510,6 +7524,17 @@ function appendMathMlCommand(target, command) {
     "\\pm": ["mo", "±"],
     "\\to": ["mo", "→"],
     "\\Rightarrow": ["mo", "⇒"],
+    "\\iff": ["mo", "⇔"],
+    "\\land": ["mo", "∧"],
+    "\\lor": ["mo", "∨"],
+    "\\neg": ["mo", "¬"],
+    "\\forall": ["mo", "∀"],
+    "\\exists": ["mo", "∃"],
+    "\\therefore": ["mo", "∴"],
+    "\\because": ["mo", "∵"],
+    "\\oplus": ["mo", "⊕"],
+    "\\vdash": ["mo", "⊢"],
+    "\\models": ["mo", "⊨"],
     "\\in": ["mo", "∈"],
     "\\notin": ["mo", "∉"],
     "\\subset": ["mo", "⊂"],
@@ -7544,7 +7569,7 @@ function doubleStruckSymbol(value) {
 }
 
 function mathMlOperatorTag(token) {
-  return /[+\-*/=()[\]{}|,∈∉⊂⊆∪∩]/.test(token) ? "mo" : "mtext";
+  return /[+\-*/=()[\]{}|,∈∉⊂⊆∪∩∧∨¬∀∃∴∵⊕⊢⊨⇔]/.test(token) ? "mo" : "mtext";
 }
 
 function displayMathMlOperator(token) {
@@ -7824,6 +7849,17 @@ function latexToPlainScratchpad(latex) {
       .replace(/\\ge/g, ">=")
       .replace(/\\ne/g, "!=")
       .replace(/\\pm/g, "+/-")
+      .replace(/\\land/g, "∧")
+      .replace(/\\lor/g, "∨")
+      .replace(/\\neg/g, "¬")
+      .replace(/\\forall/g, "∀")
+      .replace(/\\exists/g, "∃")
+      .replace(/\\therefore/g, "∴")
+      .replace(/\\because/g, "∵")
+      .replace(/\\oplus/g, "⊕")
+      .replace(/\\vdash/g, "⊢")
+      .replace(/\\models/g, "⊨")
+      .replace(/\\iff/g, "⇔")
       .replace(/\\to/g, "->")
       .replace(/\\Rightarrow/g, "=>")
       .replace(/\\(sin|cos|tan|sec|csc|cot|arcsin|arccos|arctan|ln|log)\b/g, "$1")
