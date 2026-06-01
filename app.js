@@ -1,6 +1,6 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-alpha.40";
+const APP_VERSION = "0.1.0-alpha.53";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 
@@ -132,6 +132,20 @@ const topicGroups = [
     ]
   },
   {
+    name: "Differential Equations",
+    sections: [
+      {
+        title: "Change Over Time",
+        lessons: [
+          { id: "differential-equations.slope-fields", title: "Slope fields" },
+          { id: "differential-equations.separable", title: "Separable equations" },
+          { id: "differential-equations.first-order-models", title: "First-order models" },
+          { id: "differential-equations.second-order-models", title: "Second-order models" }
+        ]
+      }
+    ]
+  },
+  {
     name: "Linear Algebra",
     sections: [
       {
@@ -196,6 +210,21 @@ const topicGroups = [
     ]
   },
   {
+    name: "Probability",
+    sections: [
+      {
+        title: "Chance and Counting",
+        lessons: [
+          { id: "probability.sample-spaces", title: "Sample spaces" },
+          { id: "probability.basic-probability", title: "Basic probability" },
+          { id: "probability.counting", title: "Counting" },
+          { id: "probability.conditional-probability", title: "Conditional probability" },
+          { id: "probability.random-variables", title: "Random variables" }
+        ]
+      }
+    ]
+  },
+  {
     name: "Real Analysis",
     sections: [
       {
@@ -222,6 +251,91 @@ const topicGroups = [
           { id: "abstract-algebra.fields", title: "Fields" },
           { id: "abstract-algebra.homomorphisms", title: "Homomorphisms" },
           { id: "abstract-algebra.examples-counterexamples", title: "Examples and counterexamples" }
+        ]
+      }
+    ]
+  }
+];
+
+const PHYSICS_DEFAULT_TOPIC = "Physics Foundations";
+const PHYSICS_DEFAULT_WORKSPACE = "physics.units";
+const MATH_DEFAULT_TOPIC = "Arithmetic";
+const MATH_DEFAULT_WORKSPACE = "arithmetic.long-addition.3x3";
+
+const physicsTopicGroups = [
+  {
+    name: "Physics Foundations",
+    sections: [
+      {
+        title: "Measurement and Models",
+        lessons: [
+          { id: "physics.units", title: "Units and dimensions" },
+          { id: "physics.scalars-vectors", title: "Scalars and vectors" },
+          { id: "physics.graphs", title: "Graphs and models" }
+        ]
+      }
+    ]
+  },
+  {
+    name: "Mechanics",
+    sections: [
+      {
+        title: "Motion and Forces",
+        lessons: [
+          { id: "physics.kinematics", title: "Kinematics" },
+          { id: "physics.forces", title: "Forces" },
+          { id: "physics.energy", title: "Energy" },
+          { id: "physics.momentum", title: "Momentum" }
+        ]
+      }
+    ]
+  },
+  {
+    name: "Waves",
+    sections: [
+      {
+        title: "Oscillations and Waves",
+        lessons: [
+          { id: "physics.oscillations", title: "Oscillations" },
+          { id: "physics.waves", title: "Wave properties" },
+          { id: "physics.sound", title: "Sound" }
+        ]
+      }
+    ]
+  },
+  {
+    name: "Electricity and Magnetism",
+    sections: [
+      {
+        title: "Charge and Circuits",
+        lessons: [
+          { id: "physics.charge-fields", title: "Charge and fields" },
+          { id: "physics.circuits", title: "Circuits" },
+          { id: "physics.magnetism", title: "Magnetism" }
+        ]
+      }
+    ]
+  },
+  {
+    name: "Thermodynamics",
+    sections: [
+      {
+        title: "Heat and Matter",
+        lessons: [
+          { id: "physics.temperature-heat", title: "Temperature and heat" },
+          { id: "physics.ideal-gas", title: "Ideal gas law" }
+        ]
+      }
+    ]
+  },
+  {
+    name: "Modern Physics",
+    sections: [
+      {
+        title: "Modern Ideas",
+        lessons: [
+          { id: "physics.quantum", title: "Quantum basics" },
+          { id: "physics.relativity", title: "Relativity basics" }
         ]
       }
     ]
@@ -1185,6 +1299,77 @@ const calculusConceptWorkspaces = {
   }
 };
 
+const differentialEquationsConceptWorkspaces = {
+  "differential-equations.slope-fields": {
+    id: "differential-equations.slope-fields",
+    topic: "Differential Equations",
+    title: "Slope fields",
+    type: "concept",
+    figure: "diff-eq-slope-fields",
+    intro: [
+      "A differential equation describes a relationship involving a function and its derivatives.",
+      "A slope field draws the local slope at many points.",
+      "A solution curve follows the small slope marks without crossing them sharply."
+    ],
+    problems: [
+      { prompt: "For <math>dy/dx = x</math>, what slope appears when <math>x = 0</math>?", answer: "0", hint: "Substitute x = 0 into the right side.", label: "slope field zero" },
+      { prompt: "For <math>dy/dx = y</math>, what slope appears when <math>y = 2</math>?", answer: "2", hint: "The slope equals the current y-value.", label: "slope field y" },
+      { prompt: "A solution curve should follow the small slope marks or ignore them?", answer: "follow", answers: ["follow", "follows", "follow them"], hint: "The marks show the derivative at nearby points.", label: "solution curve behavior" }
+    ]
+  },
+  "differential-equations.separable": {
+    id: "differential-equations.separable",
+    topic: "Differential Equations",
+    title: "Separable equations",
+    type: "concept",
+    figure: "diff-eq-separable",
+    intro: [
+      "A separable differential equation can move all y terms to one side and all x terms to the other.",
+      "After separating variables, integrate both sides.",
+      "A constant of integration appears after integrating."
+    ],
+    problems: [
+      { prompt: "In <math>dy/dx = 3x y</math>, which factor belongs with <math>dy</math> when separating: <math>1/y</math> or <math>3x</math>?", answer: "1/y", answers: ["1/y", "\\frac{1}{y}", "one over y"], hint: "Move y to the left so the y terms stay with dy.", label: "separable y side" },
+      { prompt: "After writing <math>(1/y)dy = 3x dx</math>, what operation comes next?", answer: "integrate", answers: ["integrate", "integration"], hint: "Separate first, then integrate both sides.", label: "separable next move" },
+      { prompt: "What constant is usually added after indefinite integration?", answer: "c", answers: ["c", "+c", "C", "+C"], hint: "Use the constant of integration.", label: "constant of integration" }
+    ]
+  },
+  "differential-equations.first-order-models": {
+    id: "differential-equations.first-order-models",
+    topic: "Differential Equations",
+    title: "First-order models",
+    type: "concept",
+    figure: "diff-eq-first-order",
+    intro: [
+      "First-order models use a first derivative to describe change.",
+      "Exponential growth has rate proportional to the current amount.",
+      "Equilibrium occurs when the derivative is zero."
+    ],
+    problems: [
+      { prompt: "In <math>dP/dt = kP</math>, the rate is proportional to what quantity?", answer: "p", answers: ["p", "P", "population", "the population"], hint: "The right side is k times P.", label: "growth proportional amount" },
+      { prompt: "If <math>dP/dt = 0</math>, is P changing at that instant?", answer: "no", answers: ["no", "false"], hint: "A zero derivative means no instantaneous change.", label: "equilibrium change" },
+      { prompt: "In <math>dT/dt = -k(T - A)</math>, what value is the surrounding temperature?", answer: "a", answers: ["a", "A"], hint: "A is the ambient or surrounding temperature.", label: "newton cooling ambient" }
+    ]
+  },
+  "differential-equations.second-order-models": {
+    id: "differential-equations.second-order-models",
+    topic: "Differential Equations",
+    title: "Second-order models",
+    type: "concept",
+    figure: "diff-eq-second-order",
+    intro: [
+      "Second-order equations involve a second derivative.",
+      "In motion, the second derivative of position is acceleration.",
+      "Springs and oscillators are common second-order models."
+    ],
+    problems: [
+      { prompt: "If <math>x(t)</math> is position, what does <math>x''(t)</math> represent?", answer: "acceleration", hint: "The first derivative is velocity; the second is acceleration.", label: "second derivative meaning" },
+      { prompt: "A spring that repeats back and forth is called an oscillation or a limit?", answer: "oscillation", answers: ["oscillation", "oscillator"], hint: "Repeated back-and-forth motion is oscillation.", label: "spring motion" },
+      { prompt: "Which derivative appears in a second-order equation: first or second?", answer: "second", answers: ["second", "2nd"], hint: "Second-order means the highest derivative is second.", label: "order meaning" }
+    ]
+  }
+};
+
 const linearAlgebraConceptWorkspaces = {
   "linear-algebra.vectors": {
     id: "linear-algebra.vectors",
@@ -1605,6 +1790,94 @@ const numberTheoryConceptWorkspaces = {
   }
 };
 
+const probabilityConceptWorkspaces = {
+  "probability.sample-spaces": {
+    id: "probability.sample-spaces",
+    topic: "Probability",
+    title: "Sample spaces",
+    type: "concept",
+    figure: "probability-sample-space",
+    intro: [
+      "A sample space lists every possible outcome.",
+      "An event is a subset of the sample space.",
+      "Probability starts by naming what can happen."
+    ],
+    problems: [
+      { prompt: "When flipping one coin, how many outcomes are in the sample space?", answer: "2", hint: "Heads and tails.", label: "coin sample space size" },
+      { prompt: "For one die, is rolling an even number an outcome or an event?", answer: "event", hint: "It contains several outcomes: 2, 4, and 6.", label: "event meaning" },
+      { prompt: "For one die, how many outcomes are possible?", answer: "6", hint: "A standard die has faces 1 through 6.", label: "die outcomes" }
+    ]
+  },
+  "probability.basic-probability": {
+    id: "probability.basic-probability",
+    topic: "Probability",
+    title: "Basic probability",
+    type: "concept",
+    figure: "probability-basic",
+    intro: [
+      "Probability compares favorable outcomes to all equally likely outcomes.",
+      "A probability of 0 is impossible; a probability of 1 is certain.",
+      "Probabilities can be written as fractions, decimals, or percents."
+    ],
+    problems: [
+      { prompt: "A fair die has 6 outcomes. What is the probability of rolling a 3?", answer: "1/6", hint: "One favorable outcome out of six total outcomes.", label: "single die probability" },
+      { prompt: "What is the probability of getting heads on a fair coin?", answer: "1/2", answers: ["1/2", "0.5", "50%"], hint: "One favorable outcome out of two.", label: "coin probability" },
+      { prompt: "If an event is certain, what is its probability?", answer: "1", answers: ["1", "100%"], hint: "Certain means it always happens.", label: "certain probability" }
+    ]
+  },
+  "probability.counting": {
+    id: "probability.counting",
+    topic: "Probability",
+    title: "Counting",
+    type: "concept",
+    figure: "probability-counting",
+    intro: [
+      "Counting methods help find the size of a sample space.",
+      "If choices happen in sequence, multiply the number of choices.",
+      "Order matters for permutations and not for combinations."
+    ],
+    problems: [
+      { prompt: "A shirt has 3 colors and 2 sizes. How many color-size choices are possible?", answer: "6", hint: "Multiply 3 choices by 2 choices.", label: "product rule" },
+      { prompt: "If order matters, are you counting permutations or combinations?", answer: "permutations", answers: ["permutation", "permutations"], hint: "Permutations care about order.", label: "order matters" },
+      { prompt: "If order does not matter, are you counting permutations or combinations?", answer: "combinations", answers: ["combination", "combinations"], hint: "Combinations choose groups without order.", label: "order not matter" }
+    ]
+  },
+  "probability.conditional-probability": {
+    id: "probability.conditional-probability",
+    topic: "Probability",
+    title: "Conditional probability",
+    type: "concept",
+    figure: "probability-conditional",
+    intro: [
+      "Conditional probability asks how likely something is after new information is known.",
+      "The condition narrows the sample space.",
+      "The notation P(A | B) means probability of A given B."
+    ],
+    problems: [
+      { prompt: "In <math>P(A | B)</math>, which event is given as known?", answer: "b", answers: ["b", "B"], hint: "The event after the vertical bar is the condition.", label: "given event" },
+      { prompt: "A die roll is known to be even. How many possible outcomes remain?", answer: "3", hint: "The even outcomes are 2, 4, and 6.", label: "conditional sample space" },
+      { prompt: "If a die roll is known to be even, what is the probability it is 6?", answer: "1/3", hint: "Only three outcomes remain, and one of them is 6.", label: "conditional die probability" }
+    ]
+  },
+  "probability.random-variables": {
+    id: "probability.random-variables",
+    topic: "Probability",
+    title: "Random variables",
+    type: "concept",
+    figure: "probability-random-variable",
+    intro: [
+      "A random variable assigns a number to each outcome.",
+      "A distribution lists the possible values and their probabilities.",
+      "Expected value is the long-run average value."
+    ],
+    problems: [
+      { prompt: "A random variable turns outcomes into numbers or angles?", answer: "numbers", answers: ["number", "numbers"], hint: "It assigns numerical values to outcomes.", label: "random variable meaning" },
+      { prompt: "For a fair coin where heads is 1 and tails is 0, what is the expected value?", answer: "1/2", answers: ["1/2", "0.5"], hint: "Average the two equally likely values 1 and 0.", label: "coin expected value" },
+      { prompt: "A probability distribution lists values and what else?", answer: "probabilities", answers: ["probability", "probabilities"], hint: "Each value needs a chance attached to it.", label: "distribution parts" }
+    ]
+  }
+};
+
 const realAnalysisConceptWorkspaces = {
   "real-analysis.sets": {
     id: "real-analysis.sets",
@@ -1798,6 +2071,298 @@ const abstractAlgebraConceptWorkspaces = {
   }
 };
 
+const physicsConceptWorkspaces = {
+  "physics.units": {
+    id: "physics.units",
+    topic: "Physics Foundations",
+    title: "Units and dimensions",
+    type: "concept",
+    figure: "physics-units",
+    intro: [
+      "Physics quantities include a number and a unit.",
+      "Units help check whether an equation can make sense.",
+      "Dimensions describe the kind of quantity, such as length, time, mass, or force."
+    ],
+    problems: [
+      { prompt: "Speed has units of distance divided by what?", answer: "time", hint: "Meters per second means meters divided by seconds.", label: "speed unit denominator" },
+      { prompt: "Which is a unit of force: newton or joule?", answer: "newton", answers: ["newton", "n"], hint: "A joule is a unit of energy.", label: "force unit" },
+      { prompt: "What does the unit m/s measure: speed or mass?", answer: "speed", hint: "Meters per second compares distance to time.", label: "meters per second meaning" }
+    ]
+  },
+  "physics.scalars-vectors": {
+    id: "physics.scalars-vectors",
+    topic: "Physics Foundations",
+    title: "Scalars and vectors",
+    type: "concept",
+    figure: "physics-vectors",
+    intro: [
+      "A scalar has magnitude only.",
+      "A vector has magnitude and direction.",
+      "Velocity, force, acceleration, and displacement are vectors."
+    ],
+    problems: [
+      { prompt: "Is speed a scalar or vector?", answer: "scalar", hint: "Speed has size but no direction.", label: "speed type" },
+      { prompt: "Is velocity a scalar or vector?", answer: "vector", hint: "Velocity includes direction.", label: "velocity type" },
+      { prompt: "A 10 N force east is a scalar or vector?", answer: "vector", hint: "The direction east matters.", label: "force type" }
+    ]
+  },
+  "physics.graphs": {
+    id: "physics.graphs",
+    topic: "Physics Foundations",
+    title: "Graphs and models",
+    type: "concept",
+    figure: "physics-graphs",
+    intro: [
+      "Graphs show how one quantity changes with another.",
+      "The slope of a position-time graph is velocity.",
+      "The area under a velocity-time graph is displacement."
+    ],
+    problems: [
+      { prompt: "On a position-time graph, slope represents what?", answer: "velocity", hint: "Change in position divided by change in time is velocity.", label: "position graph slope" },
+      { prompt: "On a velocity-time graph, area represents what?", answer: "displacement", hint: "Velocity times time gives displacement.", label: "velocity graph area" },
+      { prompt: "A horizontal position-time graph means the object is moving or at rest?", answer: "atrest", answers: ["at rest", "rest", "not moving"], hint: "Position is not changing.", label: "horizontal position graph" }
+    ]
+  },
+  "physics.kinematics": {
+    id: "physics.kinematics",
+    topic: "Mechanics",
+    title: "Kinematics",
+    type: "concept",
+    figure: "physics-kinematics",
+    intro: [
+      "Kinematics describes motion without asking what caused it.",
+      "Velocity is change in position over time.",
+      "Acceleration is change in velocity over time."
+    ],
+    problems: [
+      { prompt: "If an object moves 20 m in 4 s, what is its average speed in m/s?", answer: "5", hint: "Divide distance by time: 20 / 4.", label: "average speed" },
+      { prompt: "Acceleration is change in velocity over what?", answer: "time", hint: "Acceleration measures how quickly velocity changes.", label: "acceleration denominator" },
+      { prompt: "If velocity is constant, acceleration is what number?", answer: "0", hint: "No change in velocity means zero acceleration.", label: "constant velocity acceleration" }
+    ]
+  },
+  "physics.forces": {
+    id: "physics.forces",
+    topic: "Mechanics",
+    title: "Forces",
+    type: "concept",
+    figure: "physics-forces",
+    intro: [
+      "A force is a push or pull.",
+      "Net force is the total force after combining directions.",
+      "Newton's second law is F = ma."
+    ],
+    problems: [
+      { prompt: "What is the net force on a 2 kg mass accelerating at 3 m/s^2?", answer: "6", hint: "Use F = ma: 2 times 3.", label: "net force" },
+      { prompt: "Balanced forces give zero or nonzero net force?", answer: "zero", answers: ["zero", "0"], hint: "Balanced means they cancel.", label: "balanced force" },
+      { prompt: "Does friction usually oppose motion or cause no effect?", answer: "oppose", answers: ["opposes", "opposes motion", "oppose motion"], hint: "Friction acts against slipping or sliding.", label: "friction direction" }
+    ]
+  },
+  "physics.energy": {
+    id: "physics.energy",
+    topic: "Mechanics",
+    title: "Energy",
+    type: "concept",
+    figure: "physics-energy",
+    intro: [
+      "Energy is the capacity to do work or cause change.",
+      "Kinetic energy is energy of motion.",
+      "Gravitational potential energy depends on height."
+    ],
+    problems: [
+      { prompt: "Kinetic energy belongs to motion or height?", answer: "motion", hint: "Kinetic means moving.", label: "kinetic energy meaning" },
+      { prompt: "What happens to gravitational potential energy when height increases?", answer: "increases", answers: ["increase", "goes up"], hint: "Greater height means greater mgh.", label: "height energy" },
+      { prompt: "Work transfers what quantity: energy or charge?", answer: "energy", hint: "Work is a way of transferring energy.", label: "work transfer" }
+    ]
+  },
+  "physics.momentum": {
+    id: "physics.momentum",
+    topic: "Mechanics",
+    title: "Momentum",
+    type: "concept",
+    figure: "physics-momentum",
+    intro: [
+      "Momentum measures mass in motion.",
+      "Momentum is p = mv.",
+      "In an isolated system, total momentum is conserved."
+    ],
+    problems: [
+      { prompt: "What is the momentum of a 3 kg object moving at 4 m/s?", answer: "12", hint: "Use p = mv: 3 times 4.", label: "momentum" },
+      { prompt: "Momentum depends on mass and what?", answer: "velocity", hint: "p = mv.", label: "momentum factor" },
+      { prompt: "In an isolated collision, total momentum is conserved: yes or no?", answer: "yes", answers: ["yes", "true"], hint: "Momentum conservation is the key collision rule.", label: "momentum conservation" }
+    ]
+  },
+  "physics.oscillations": {
+    id: "physics.oscillations",
+    topic: "Waves",
+    title: "Oscillations",
+    type: "concept",
+    figure: "physics-oscillations",
+    intro: [
+      "An oscillation repeats around an equilibrium position.",
+      "Period is the time for one cycle.",
+      "Frequency is cycles per second."
+    ],
+    problems: [
+      { prompt: "Time for one full cycle is period or frequency?", answer: "period", hint: "Period is measured in seconds per cycle.", label: "cycle time" },
+      { prompt: "Cycles per second is called what?", answer: "frequency", hint: "Frequency counts cycles each second.", label: "cycles per second" },
+      { prompt: "If period doubles, frequency increases or decreases?", answer: "decreases", answers: ["decrease", "goes down"], hint: "Frequency is inverse to period.", label: "period frequency relation" }
+    ]
+  },
+  "physics.waves": {
+    id: "physics.waves",
+    topic: "Waves",
+    title: "Wave properties",
+    type: "concept",
+    figure: "physics-waves",
+    intro: [
+      "A wave transfers energy through space or a medium.",
+      "Wavelength is distance from one matching point to the next.",
+      "Wave speed equals frequency times wavelength."
+    ],
+    problems: [
+      { prompt: "In v = f lambda, what does f represent?", answer: "frequency", hint: "f is the number of cycles per second.", label: "wave frequency" },
+      { prompt: "If frequency is 2 Hz and wavelength is 3 m, what is wave speed?", answer: "6", hint: "Use v = f lambda: 2 times 3.", label: "wave speed" },
+      { prompt: "Does a wave transfer energy or mass overall?", answer: "energy", hint: "Waves carry energy without transporting matter overall.", label: "wave transfer" }
+    ]
+  },
+  "physics.sound": {
+    id: "physics.sound",
+    topic: "Waves",
+    title: "Sound",
+    type: "concept",
+    figure: "physics-sound",
+    intro: [
+      "Sound is a mechanical wave.",
+      "Sound needs a medium such as air, water, or a solid.",
+      "Pitch is related to frequency."
+    ],
+    problems: [
+      { prompt: "Does sound need a medium?", answer: "yes", answers: ["yes", "true"], hint: "Sound cannot travel through empty space.", label: "sound medium" },
+      { prompt: "Higher frequency means higher or lower pitch?", answer: "higher", hint: "Pitch rises as frequency rises.", label: "pitch frequency" },
+      { prompt: "Sound in air is longitudinal or transverse?", answer: "longitudinal", hint: "Air compressions move along the direction of travel.", label: "sound wave type" }
+    ]
+  },
+  "physics.charge-fields": {
+    id: "physics.charge-fields",
+    topic: "Electricity and Magnetism",
+    title: "Charge and fields",
+    type: "concept",
+    figure: "physics-charge-fields",
+    intro: [
+      "Electric charge comes in positive and negative types.",
+      "Like charges repel and opposite charges attract.",
+      "An electric field describes force per unit charge."
+    ],
+    problems: [
+      { prompt: "Do like charges attract or repel?", answer: "repel", answers: ["repel", "repels"], hint: "Two positives or two negatives push apart.", label: "like charges" },
+      { prompt: "Do opposite charges attract or repel?", answer: "attract", answers: ["attract", "attracts"], hint: "Positive and negative pull together.", label: "opposite charges" },
+      { prompt: "Electric field is force per unit what?", answer: "charge", hint: "E = F / q.", label: "field denominator" }
+    ]
+  },
+  "physics.circuits": {
+    id: "physics.circuits",
+    topic: "Electricity and Magnetism",
+    title: "Circuits",
+    type: "concept",
+    figure: "physics-circuits",
+    intro: [
+      "Current is the flow of electric charge.",
+      "Voltage is energy per unit charge.",
+      "Ohm's law is V = IR."
+    ],
+    problems: [
+      { prompt: "Using V = IR, what is V when I = 2 A and R = 5 ohms?", answer: "10", hint: "Multiply current by resistance.", label: "ohms law voltage" },
+      { prompt: "Current measures flow of what?", answer: "charge", hint: "Electric current is moving charge.", label: "current meaning" },
+      { prompt: "In a series circuit, current is the same through each component: yes or no?", answer: "yes", answers: ["yes", "true"], hint: "There is only one path in series.", label: "series current" }
+    ]
+  },
+  "physics.magnetism": {
+    id: "physics.magnetism",
+    topic: "Electricity and Magnetism",
+    title: "Magnetism",
+    type: "concept",
+    figure: "physics-magnetism",
+    intro: [
+      "Magnets have north and south poles.",
+      "Moving charges can create magnetic fields.",
+      "Magnetic forces depend on direction."
+    ],
+    problems: [
+      { prompt: "A moving charge can create an electric field or magnetic field?", answer: "magneticfield", answers: ["magnetic field", "magnetic"], hint: "Moving charge is connected to magnetism.", label: "moving charge field" },
+      { prompt: "Like magnetic poles attract or repel?", answer: "repel", answers: ["repel", "repels"], hint: "North-north or south-south push apart.", label: "like poles" },
+      { prompt: "Opposite magnetic poles attract or repel?", answer: "attract", answers: ["attract", "attracts"], hint: "North and south pull together.", label: "opposite poles" }
+    ]
+  },
+  "physics.temperature-heat": {
+    id: "physics.temperature-heat",
+    topic: "Thermodynamics",
+    title: "Temperature and heat",
+    type: "concept",
+    figure: "physics-heat",
+    intro: [
+      "Temperature measures average microscopic kinetic energy.",
+      "Heat is energy transferred because of temperature difference.",
+      "Heat flows spontaneously from hotter to colder objects."
+    ],
+    problems: [
+      { prompt: "Heat flows naturally from hot to cold or cold to hot?", answer: "hottocold", answers: ["hot to cold", "hotter to colder"], hint: "Thermal energy flows from higher temperature to lower temperature.", label: "heat direction" },
+      { prompt: "Temperature is related to average kinetic energy: yes or no?", answer: "yes", answers: ["yes", "true"], hint: "Microscopic motion is tied to temperature.", label: "temperature meaning" },
+      { prompt: "Heat is energy transfer caused by what difference?", answer: "temperature", hint: "A temperature difference drives heat transfer.", label: "heat cause" }
+    ]
+  },
+  "physics.ideal-gas": {
+    id: "physics.ideal-gas",
+    topic: "Thermodynamics",
+    title: "Ideal gas law",
+    type: "concept",
+    figure: "physics-ideal-gas",
+    intro: [
+      "The ideal gas law connects pressure, volume, amount, and temperature.",
+      "The equation is PV = nRT.",
+      "Temperature must be measured on an absolute scale."
+    ],
+    problems: [
+      { prompt: "In PV = nRT, what letter represents pressure?", answer: "p", hint: "P is pressure.", label: "pressure letter" },
+      { prompt: "In PV = nRT, what letter represents volume?", answer: "v", hint: "V is volume.", label: "volume letter" },
+      { prompt: "For gas laws, temperature should be in kelvin or celsius?", answer: "kelvin", answers: ["kelvin", "k"], hint: "Kelvin is the absolute temperature scale.", label: "absolute temperature" }
+    ]
+  },
+  "physics.quantum": {
+    id: "physics.quantum",
+    topic: "Modern Physics",
+    title: "Quantum basics",
+    type: "concept",
+    figure: "physics-quantum",
+    intro: [
+      "Quantum physics describes matter and light at small scales.",
+      "Energy can come in discrete packets called quanta.",
+      "A photon is a quantum of light."
+    ],
+    problems: [
+      { prompt: "A photon is a quantum of what?", answer: "light", hint: "Photons are light particles/quanta.", label: "photon meaning" },
+      { prompt: "Quantum energy levels are continuous or discrete?", answer: "discrete", hint: "Quantum levels come in allowed steps.", label: "energy levels" },
+      { prompt: "At small scales, quantum physics or classical physics is usually needed?", answer: "quantumphysics", answers: ["quantum physics", "quantum"], hint: "Quantum effects dominate atoms and particles.", label: "small scale physics" }
+    ]
+  },
+  "physics.relativity": {
+    id: "physics.relativity",
+    topic: "Modern Physics",
+    title: "Relativity basics",
+    type: "concept",
+    figure: "physics-relativity",
+    intro: [
+      "Relativity becomes important at very high speeds or strong gravity.",
+      "The speed of light in vacuum is constant for all inertial observers.",
+      "Mass and energy are related by E = mc^2."
+    ],
+    problems: [
+      { prompt: "In E = mc^2, c represents the speed of what?", answer: "light", hint: "c is the speed of light in vacuum.", label: "c meaning" },
+      { prompt: "Relativity matters most at slow speeds or near light speed?", answer: "nearlightspeed", answers: ["near light speed", "near the speed of light", "light speed"], hint: "Everyday speeds are usually well approximated by classical mechanics.", label: "relativity speed" },
+      { prompt: "Mass and energy are related: yes or no?", answer: "yes", answers: ["yes", "true"], hint: "That is the meaning of E = mc^2.", label: "mass energy relation" }
+    ]
+  }
+};
+
 const conceptWorkspaces = {
   ...arithmeticConceptWorkspaces,
   ...preAlgebraConceptWorkspaces,
@@ -1806,12 +2371,15 @@ const conceptWorkspaces = {
   ...trigonometryConceptWorkspaces,
   ...precalculusConceptWorkspaces,
   ...calculusConceptWorkspaces,
+  ...differentialEquationsConceptWorkspaces,
   ...linearAlgebraConceptWorkspaces,
   ...proofsConceptWorkspaces,
   ...setTheoryConceptWorkspaces,
   ...numberTheoryConceptWorkspaces,
+  ...probabilityConceptWorkspaces,
   ...realAnalysisConceptWorkspaces,
-  ...abstractAlgebraConceptWorkspaces
+  ...abstractAlgebraConceptWorkspaces,
+  ...physicsConceptWorkspaces
 };
 
 const workspaceRegistry = {
@@ -1826,9 +2394,11 @@ const workspaceRegistry = {
   "Geometry": { id: "geometry.placeholders", title: "Shape reasoning", status: "planned" },
   "Trigonometry": { id: "trigonometry.placeholders", title: "Identity studio", status: "planned" },
   "Calculus": { id: "calculus.placeholders", title: "Limits and derivatives", status: "planned" },
+  "Differential Equations": { id: "differential-equations.placeholders", title: "Change over time", status: "planned" },
   "Linear Algebra": { id: "linear-algebra.placeholders", title: "Vector spaces", status: "planned" },
   "Set Theory": { id: "set-theory.placeholders", title: "Sets and relations", status: "planned" },
   "Number Theory": { id: "number-theory.placeholders", title: "Divisibility and congruence", status: "planned" },
+  "Probability": { id: "probability.placeholders", title: "Chance and counting", status: "planned" },
   "Real Analysis": { id: "real-analysis.placeholders", title: "Definitions and proofs", status: "planned" },
   "Abstract Algebra": { id: "abstract-algebra.placeholders", title: "Groups and examples", status: "planned" },
   "Proofs": { id: "proofs.placeholders", title: "Proof construction", status: "planned" }
@@ -2204,16 +2774,19 @@ const els = {};
 document.addEventListener("DOMContentLoaded", () => {
   cacheElements();
   if (els.appVersion) els.appVersion.textContent = `v${APP_VERSION}`;
-  state.activeSurface = state.scratchpads.activeSurface || "learn";
-  state.activeTopic = state.progress.currentTopic || "Arithmetic";
-  state.activeWorkspaceId = state.progress.currentWorkspaceId || "arithmetic.long-addition.3x3";
+  const routeState = resolveRouteFromPath();
+  state.activeSurface = routeState?.surface || state.scratchpads.activeSurface || "learn";
+  state.activeTopic = routeState?.topic || state.progress.currentTopic || "Arithmetic";
+  state.activeWorkspaceId = routeState?.workspaceId || state.progress.currentWorkspaceId || "arithmetic.long-addition.3x3";
   state.mode = state.progress.preferences.mode || "guided";
+  ensureSurfaceWorkspace();
   renderSurface();
   renderTopics();
   renderWorkspace();
   renderScratchpad();
   bindEvents();
   updateProgressPanel();
+  updateUrlFromState({ replace: true });
 });
 
 function cacheElements() {
@@ -2251,6 +2824,7 @@ function cacheElements() {
   els.modeTabs = Array.from(document.querySelectorAll(".mode-tab"));
   els.appVersion = document.querySelector("#appVersion");
   els.learnSurface = document.querySelector("#learnSurface");
+  els.physicsSurface = document.querySelector("#physicsSurface");
   els.scratchpadSurface = document.querySelector("#scratchpadSurface");
   els.lessonPanel = document.querySelector("#lessonPanel");
   els.scratchpadPanel = document.querySelector("#scratchpadPanel");
@@ -2347,6 +2921,116 @@ function uniqueList(items) {
   return [...new Set(items.filter(Boolean))];
 }
 
+function isPhysicsWorkspaceId(id) {
+  return String(id || "").startsWith("physics.");
+}
+
+function slugifyRoutePart(value) {
+  return String(value || "")
+    .toLowerCase()
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+function routeSurfaceForWorkspace(id) {
+  return isPhysicsWorkspaceId(id) ? "physics" : "learn";
+}
+
+function routePrefixForSurface(surface) {
+  if (surface === "physics") return "physics";
+  if (surface === "scratchpad") return "scratchpad";
+  return "math";
+}
+
+function routeGroupsForSurface(surface) {
+  return surface === "physics" ? physicsTopicGroups : topicGroups;
+}
+
+function findRouteMatch(surface, topicSlug, lessonSlug) {
+  for (const group of routeGroupsForSurface(surface)) {
+    if (slugifyRoutePart(group.name) !== topicSlug) continue;
+    const lesson = lessonsForGroup(group).find((item) => slugifyRoutePart(item.title) === lessonSlug);
+    if (lesson) return { surface, topic: group.name, workspaceId: lesson.id };
+  }
+  return null;
+}
+
+function findRouteForWorkspace(workspaceId) {
+  const surface = routeSurfaceForWorkspace(workspaceId);
+  for (const group of routeGroupsForSurface(surface)) {
+    const lesson = lessonsForGroup(group).find((item) => item.id === workspaceId);
+    if (lesson) {
+      return {
+        surface,
+        topic: group.name,
+        path: `/${routePrefixForSurface(surface)}/${slugifyRoutePart(group.name)}/${slugifyRoutePart(lesson.title)}`
+      };
+    }
+  }
+  return null;
+}
+
+function resolveRouteFromPath() {
+  const parts = window.location.pathname.split("/").filter(Boolean);
+  if (parts.length === 0) return null;
+  if (parts[0] === "scratchpad") return { surface: "scratchpad" };
+  if (parts[0] !== "math" && parts[0] !== "physics") return null;
+  if (parts.length < 3) return null;
+  return findRouteMatch(parts[0] === "physics" ? "physics" : "learn", parts[1], parts[2]);
+}
+
+function updateUrlFromState(options = {}) {
+  const route = state.activeSurface === "scratchpad"
+    ? { path: "/scratchpad" }
+    : findRouteForWorkspace(state.activeWorkspaceId);
+  if (!route) return;
+  const nextUrl = `${route.path}${window.location.search}`;
+  if (nextUrl === `${window.location.pathname}${window.location.search}`) return;
+  const method = options.replace ? "replaceState" : "pushState";
+  window.history[method]({}, "", nextUrl);
+}
+
+function applyRouteState(routeState) {
+  if (!routeState) return;
+  state.activeSurface = routeState.surface;
+  if (routeState.topic) state.activeTopic = routeState.topic;
+  if (routeState.workspaceId) {
+    state.activeWorkspaceId = routeState.workspaceId;
+    state.showIntro = workspaceRegistry[state.activeWorkspaceId]?.status !== "planned";
+  }
+  ensureSurfaceWorkspace();
+  renderSurface();
+  renderTopics();
+  if (state.activeSurface === "scratchpad") {
+    renderScratchpad();
+  } else {
+    renderWorkspace();
+  }
+  saveProgress("Opened route");
+}
+
+function currentTopicGroups() {
+  return state.activeSurface === "physics" ? physicsTopicGroups : topicGroups;
+}
+
+function ensureSurfaceWorkspace() {
+  if (state.activeSurface === "physics") {
+    if (!isPhysicsWorkspaceId(state.activeWorkspaceId)) {
+      state.activeTopic = PHYSICS_DEFAULT_TOPIC;
+      state.activeWorkspaceId = PHYSICS_DEFAULT_WORKSPACE;
+      state.showIntro = true;
+    }
+    return;
+  }
+
+  if (state.activeSurface !== "scratchpad" && isPhysicsWorkspaceId(state.activeWorkspaceId)) {
+    state.activeTopic = MATH_DEFAULT_TOPIC;
+    state.activeWorkspaceId = MATH_DEFAULT_WORKSPACE;
+    state.showIntro = true;
+  }
+}
+
 function saveProgress(activity) {
   state.progress.currentTopic = state.activeTopic;
   state.progress.currentWorkspaceId = state.activeWorkspaceId;
@@ -2364,7 +3048,7 @@ function saveProgress(activity) {
 
 function renderTopics() {
   els.topicList.innerHTML = "";
-  for (const group of topicGroups) {
+  for (const group of currentTopicGroups()) {
     const details = document.createElement("details");
     details.className = "topic-group";
     details.open = group.name === state.activeTopic;
@@ -2500,9 +3184,11 @@ function setWorkspaceView(view) {
 
 function renderSurface() {
   const isScratchpad = state.activeSurface === "scratchpad";
+  const isPhysics = state.activeSurface === "physics";
   els.lessonPanel.hidden = isScratchpad;
   els.scratchpadPanel.hidden = !isScratchpad;
-  els.learnSurface.setAttribute("aria-pressed", isScratchpad ? "false" : "true");
+  els.learnSurface.setAttribute("aria-pressed", !isScratchpad && !isPhysics ? "true" : "false");
+  els.physicsSurface.setAttribute("aria-pressed", isPhysics ? "true" : "false");
   els.scratchpadSurface.setAttribute("aria-pressed", isScratchpad ? "true" : "false");
   if (isScratchpad) {
     els.scratchpadInput?.focus({ preventScroll: true });
@@ -2511,10 +3197,17 @@ function renderSurface() {
 
 function setSurface(surface) {
   state.activeSurface = surface;
+  ensureSurfaceWorkspace();
   state.scratchpads.activeSurface = surface;
   saveScratchpads();
   renderSurface();
-  if (surface === "scratchpad") renderScratchpad();
+  renderTopics();
+  if (surface === "scratchpad") {
+    renderScratchpad();
+  } else {
+    renderWorkspace();
+  }
+  updateUrlFromState();
 }
 
 function renderIntroWorkspace(workspace) {
@@ -2561,7 +3254,7 @@ function renderIntroCopy(workspace) {
   sections.className = "intro-sections";
   sections.append(
     createIntroSection("Core idea", items),
-    createIntroSection("Worked example", introWorkedExampleItems(workspace)),
+    createWorkedExampleSection(workspace),
     createIntroSection("What you will practice", introPracticeItems(workspace)),
     createIntroSection("Answer format", introAnswerFormatItems(workspace))
   );
@@ -2584,6 +3277,123 @@ function createIntroSection(title, items) {
 
   section.append(heading, list);
   return section;
+}
+
+function createWorkedExampleSection(workspace) {
+  const rows = introWorkedExampleRows(workspace);
+  if (!rows) return createIntroSection("Worked example", introWorkedExampleItems(workspace));
+
+  const section = document.createElement("section");
+  section.className = "intro-section";
+
+  const heading = document.createElement("h4");
+  heading.textContent = "Worked example";
+
+  const work = document.createElement("div");
+  work.className = "intro-worked-lines";
+  if (rows.filter((row) => splitTopLevelEquals(normalizePlainMathLine(row.math))).length > 1) {
+    work.classList.add("align-equals");
+  }
+
+  for (const row of rows) {
+    const line = document.createElement("div");
+    line.className = "intro-worked-line";
+
+    const math = document.createElement("div");
+    math.className = "intro-worked-math";
+    appendAlignedMathLine(math, normalizePlainMathLine(row.math), "intro", work.classList.contains("align-equals"));
+
+    const note = document.createElement("p");
+    note.className = "intro-worked-note";
+    setMathText(note, row.note);
+
+    line.append(math, note);
+    work.append(line);
+  }
+
+  section.append(heading, work);
+  return section;
+}
+
+function appendAlignedMathLine(target, latex, prefix, align = true) {
+  const split = splitTopLevelEquals(latex);
+  if (!split || !align) {
+    target.append(createMathMlExpression(latex));
+    return;
+  }
+
+  target.classList.add(`${prefix}-line-math-aligned`);
+  const left = document.createElement("span");
+  left.className = `${prefix}-align-left`;
+  const equals = document.createElement("span");
+  equals.className = `${prefix}-align-equals`;
+  const right = document.createElement("span");
+  right.className = `${prefix}-align-right`;
+  left.append(createMathMlExpression(split.left));
+  equals.textContent = "=";
+  right.append(createMathMlExpression(split.right));
+  target.append(left, equals, right);
+}
+
+function introWorkedExampleRows(workspace) {
+  if (workspace.type === "addition") {
+    return [
+      { math: "6 + 7 = 13", note: "Write 3 in ones and carry 1." },
+      { math: "8 + 5 + 1 = 14", note: "Write 4 in tens and carry 1." },
+      { math: "4 + 2 + 1 = 7", note: "The sum is 743." }
+    ];
+  }
+
+  if (workspace.type === "subtraction") {
+    return [
+      { math: "15 - 8 = 7", note: "Borrow because 5 is too small." },
+      { math: "13 - 7 = 6", note: "Borrow again in the tens column." },
+      { math: "5 - 2 = 3", note: "The difference is 367." }
+    ];
+  }
+
+  if (workspace.type === "multiplication") {
+    return [
+      { math: "247 × 6 = 1482", note: "Build the ones partial row." },
+      { math: "247 × 80 = 19760", note: "Shift one place for tens." },
+      { math: "247 × 300 = 74100", note: "Shift two places for hundreds." }
+    ];
+  }
+
+  if (workspace.type === "division") {
+    return [
+      { math: "8 ÷ 4 = 2", note: "First quotient digit." },
+      { math: "6 ÷ 4 = 1 r 2", note: "Carry the remainder forward." },
+      { math: "24 ÷ 4 = 6", note: "Final quotient digit." }
+    ];
+  }
+
+  if (workspace.type === "equation") {
+    return [
+      { math: "x + 7 = 12", note: "Start with the equation." },
+      { math: "x + 7 - 7 = 12 - 7", note: "Subtract 7 from both sides." },
+      { math: "x = 5", note: "Simplify." }
+    ];
+  }
+
+  if (workspace.type === "inequality") {
+    return [
+      { math: "x + 4 > 9", note: "Start with the inequality." },
+      { math: "x + 4 - 4 > 9 - 4", note: "Subtract 4 from both sides." },
+      { math: "x > 5", note: "Direction stays the same." }
+    ];
+  }
+
+  if (workspace.type === "factoring" || workspace.type === "quadratic") {
+    return [
+      { math: "x^2 + 5x + 6", note: "Find a pair with product 6 and sum 5." },
+      { math: "2 × 3 = 6", note: "Product matches c." },
+      { math: "2 + 3 = 5", note: "Sum matches b." },
+      { math: "x^2 + 5x + 6 = (x + 2)(x + 3)", note: "Write the factors." }
+    ];
+  }
+
+  return conceptWorkedExampleRows(workspace);
 }
 
 function introWorkedExampleItems(workspace) {
@@ -2699,6 +3509,145 @@ function introPracticeItems(workspace) {
     "Use Check to validate the smallest current step.",
     "Use Hint when the next move is not clear."
   ];
+}
+
+function conceptWorkedExampleRows(workspace) {
+  const examples = {
+    "arithmetic.estimation": [
+      { math: "296 + 401", note: "Round before calculating." },
+      { math: "300 + 400 = 700", note: "Use a nearby estimate." }
+    ],
+    "arithmetic.fractions": [
+      { math: "\\frac{8}{12} = \\frac{8 ÷ 4}{12 ÷ 4}", note: "Divide top and bottom by 4." },
+      { math: "\\frac{8}{12} = \\frac{2}{3}", note: "Write the simplified fraction." }
+    ],
+    "arithmetic.decimals": [
+      { math: "0.6 = 0.60", note: "Use the same number of decimal places." },
+      { math: "0.60 > 0.54", note: "Compare hundredths." }
+    ],
+    "arithmetic.percents": [
+      { math: "25% = \\frac{1}{4}", note: "Rewrite the percent." },
+      { math: "\\frac{1}{4} × 40 = 10", note: "Find one quarter." }
+    ],
+    "arithmetic.ratios": [
+      { math: "10:15 = 2:3", note: "Divide both parts by 5." }
+    ],
+    "arithmetic.order-of-operations": [
+      { math: "5 + 2 × 6 = 5 + 12", note: "Multiply first." },
+      { math: "5 + 12 = 17", note: "Then add." }
+    ],
+    "arithmetic.mixed-review": [
+      { math: "98 + 203", note: "Estimate first." },
+      { math: "100 + 200 = 300", note: "Check the size." },
+      { math: "98 + 203 = 301", note: "Now calculate exactly." }
+    ],
+    "prealgebra.exponents": [
+      { math: "2^5 = 2 × 2 × 2 × 2 × 2", note: "An exponent counts equal factors." },
+      { math: "2^5 = 32", note: "Multiply the factors." }
+    ],
+    "algebra.rational-expressions": [
+      { math: "\\frac{12x}{18} = \\frac{12 ÷ 6}{18 ÷ 6}x", note: "Reduce the numerical factor." },
+      { math: "\\frac{12x}{18} = \\frac{2x}{3}", note: "Keep the variable factor." }
+    ],
+    "trigonometry.right-triangles": [
+      { math: "\\sin\\,\\theta = \\frac{\\text{opposite}}{\\text{hypotenuse}}", note: "Choose the side across from the angle." },
+      { math: "\\sin\\,\\theta = \\frac{6}{10}", note: "Substitute the side lengths." },
+      { math: "\\frac{6}{10} = \\frac{3}{5}", note: "Simplify if needed." }
+    ],
+    "trigonometry.identities": [
+      { math: "\\sin^2 x + \\cos^2 x = 1", note: "Start with the Pythagorean identity." },
+      { math: "\\frac{1}{4} + \\cos^2 x = 1", note: "Substitute the known value." },
+      { math: "\\cos^2 x = \\frac{3}{4}", note: "Subtract from 1." }
+    ],
+    "precalculus.sequences": [
+      { math: "1, \\frac{1}{3}, \\frac{1}{9}", note: "Each term is multiplied by the same ratio." },
+      { math: "\\frac{1}{9} × \\frac{1}{3} = \\frac{1}{27}", note: "Continue the pattern." }
+    ],
+    "calculus.limits": [
+      { math: "x \\to 2", note: "Look near the input, not only at the point." },
+      { math: "f(x) \\to 5", note: "The nearby outputs approach 5." }
+    ],
+    "differential-equations.slope-fields": [
+      { math: "\\frac{dy}{dx} = x", note: "The slope depends on the x-position." },
+      { math: "x = 2 \\Rightarrow \\frac{dy}{dx} = 2", note: "Each mark at x = 2 has slope 2." }
+    ],
+    "differential-equations.separable": [
+      { math: "\\frac{dy}{dx} = 3xy", note: "Start with a separable equation." },
+      { math: "\\frac{1}{y}\\,dy = 3x\\,dx", note: "Move y terms with dy and x terms with dx." },
+      { math: "\\int \\frac{1}{y}\\,dy = \\int 3x\\,dx", note: "Integrate both sides." }
+    ],
+    "differential-equations.first-order-models": [
+      { math: "\\frac{dP}{dt} = kP", note: "Growth rate is proportional to current amount." },
+      { math: "\\frac{dP}{dt} = 0", note: "Zero derivative means equilibrium." }
+    ],
+    "differential-equations.second-order-models": [
+      { math: "x'(t) = v(t)", note: "First derivative is velocity." },
+      { math: "x''(t) = a(t)", note: "Second derivative is acceleration." },
+      { math: "m x'' + kx = 0", note: "A basic spring model." }
+    ],
+    "probability.sample-spaces": [
+      { math: "S = \\{H, T\\}", note: "List every possible coin-flip outcome." },
+      { math: "A = \\{H\\}", note: "An event is a subset of the sample space." }
+    ],
+    "probability.basic-probability": [
+      { math: "P(A) = \\frac{\\text{favorable}}{\\text{total}}", note: "Use equally likely outcomes." },
+      { math: "P(3) = \\frac{1}{6}", note: "One die face out of six." }
+    ],
+    "probability.counting": [
+      { math: "3 \\times 2 = 6", note: "Multiply choices made in sequence." },
+      { math: "\\text{color} \\times \\text{size}", note: "Each color pairs with each size." }
+    ],
+    "probability.conditional-probability": [
+      { math: "P(A | B)", note: "Read as probability of A given B." },
+      { math: "\\{2,4,6\\}", note: "Given even, only three die outcomes remain." }
+    ],
+    "probability.random-variables": [
+      { math: "X(H) = 1", note: "Assign a number to heads." },
+      { math: "X(T) = 0", note: "Assign a number to tails." },
+      { math: "E[X] = \\frac{1}{2}", note: "Average the equally likely values." }
+    ],
+    "real-analysis.sequences": [
+      { math: "\\frac{3}{n} \\to 0", note: "The denominator grows without bound." }
+    ],
+    "physics.units": [
+      { math: "\\text{speed} = \\frac{20\\,\\text{m}}{4\\,\\text{s}}", note: "Divide distance by time." },
+      { math: "\\text{speed} = 5\\,\\frac{\\text{m}}{\\text{s}}", note: "Keep the unit with the number." }
+    ],
+    "physics.kinematics": [
+      { math: "v = \\frac{\\Delta x}{\\Delta t}", note: "Velocity compares position change to time." },
+      { math: "v = \\frac{20\\,\\text{m}}{4\\,\\text{s}} = 5\\,\\frac{\\text{m}}{\\text{s}}", note: "Substitute the measured values." }
+    ],
+    "physics.forces": [
+      { math: "F = ma", note: "Use Newton's second law." },
+      { math: "F = 2\\,\\text{kg} \\cdot 3\\,\\frac{\\text{m}}{\\text{s}^2}", note: "Substitute mass and acceleration." },
+      { math: "F = 6\\,\\text{N}", note: "Force is measured in newtons." }
+    ],
+    "physics.momentum": [
+      { math: "p = mv", note: "Momentum combines mass and velocity." },
+      { math: "p = 3\\,\\text{kg} \\cdot 4\\,\\frac{\\text{m}}{\\text{s}}", note: "Substitute the values." },
+      { math: "p = 12\\,\\text{kg}\\,\\frac{\\text{m}}{\\text{s}}", note: "Keep direction if velocity has one." }
+    ],
+    "physics.waves": [
+      { math: "v = f\\lambda", note: "Wave speed equals frequency times wavelength." },
+      { math: "v = 2\\,\\text{Hz} \\cdot 3\\,\\text{m}", note: "Substitute the values." },
+      { math: "v = 6\\,\\frac{\\text{m}}{\\text{s}}", note: "The wave moves six meters each second." }
+    ],
+    "physics.circuits": [
+      { math: "V = IR", note: "Use Ohm's law." },
+      { math: "V = 2\\,\\text{A} \\cdot 5\\,\\text{Ω}", note: "Substitute current and resistance." },
+      { math: "V = 10\\,\\text{V}", note: "Voltage is measured in volts." }
+    ],
+    "physics.ideal-gas": [
+      { math: "PV = nRT", note: "Pressure, volume, amount, and temperature move together." },
+      { math: "T = \\text{kelvin}", note: "Use an absolute temperature scale." }
+    ],
+    "physics.relativity": [
+      { math: "E = mc^2", note: "Mass and energy are connected." },
+      { math: "c = \\text{speed of light}", note: "Relativity becomes important near this speed." }
+    ]
+  };
+
+  return examples[workspace.id] || null;
 }
 
 function conceptWorkedExampleItems(workspace) {
@@ -3112,6 +4061,18 @@ function introAnswerFormatItems(workspace) {
 function createIntroFigure(workspace) {
   if (!["addition", "subtraction", "multiplication", "division", "concept", "equation", "inequality", "quadratic"].includes(workspace.type)) return null;
 
+  if (shouldUseDiagramIntroFigure(workspace.figure)) {
+    const figure = document.createElement("figure");
+    const caption = document.createElement("figcaption");
+    caption.textContent = introFigureCaption(workspace);
+    figure.className = `intro-figure ${workspace.type}-figure geometry-figure`;
+    figure.append(createDiagramIntroSvg(workspace.figure), caption);
+    return figure;
+  }
+
+  const staticMathFigure = createStaticMathIntroFigure(workspace);
+  if (staticMathFigure) return staticMathFigure;
+
   const figure = document.createElement("figure");
   figure.className = `intro-figure ${workspace.type}-figure`;
   if (isDiagramFigure(workspace.figure)) {
@@ -3198,9 +4159,92 @@ function createIntroFigure(workspace) {
   return figure;
 }
 
+function shouldUseDiagramIntroFigure(figure) {
+  return isPhysicsDiagramFigure(figure) || (isDiagramFigure(figure) && !staticMathFigureRows({ figure }));
+}
+
+function createStaticMathIntroFigure(workspace) {
+  const rows = staticMathFigureRows(workspace);
+  if (!rows) return null;
+
+  const figure = document.createElement("figure");
+  figure.className = `intro-figure intro-math-figure ${workspace.type}-figure`;
+
+  const stack = document.createElement("div");
+  stack.className = "intro-math-stack";
+  if (rows.filter((row) => splitTopLevelEquals(normalizePlainMathLine(row))).length > 1) {
+    stack.classList.add("align-equals");
+  }
+  for (const row of rows) {
+    const item = document.createElement("div");
+    item.className = "intro-math-row";
+    appendAlignedMathLine(item, normalizePlainMathLine(row), "intro", stack.classList.contains("align-equals"));
+    stack.append(item);
+  }
+
+  const caption = document.createElement("figcaption");
+  caption.textContent = introFigureCaption(workspace);
+  figure.append(stack, caption);
+  return figure;
+}
+
+function staticMathFigureRows(workspace) {
+  const byFigure = {
+    "fraction-bar": ["\\frac{3}{4}", "\\frac{6}{8} = \\frac{3}{4}"],
+    "mixed-review": ["38 + 47 = 85", "96 ÷ 8 = 12"],
+    "operation-order": ["3 + 4 × 5 = 23"],
+    "factor-pairs": ["6 × 7 = 42"],
+    "expression-terms": ["2x + x = 3x"],
+    "polynomial-terms": ["3x^2 + 5x^2 = 8x^2"],
+    "factoring-pairs": ["x^2 + 5x + 6 = (x + 2)(x + 3)", "2 + 3 = 5", "2 × 3 = 6"],
+    "rational-cancel": ["\\frac{(x - 3)(x + 3)}{x - 3} = x + 3"],
+    "quadratic-roots": ["(x - 2)(x - 3) = 0", "x = 2 \\quad \\text{or} \\quad x = 3"],
+    "geometry-circle": ["C = \\pi d", "A = \\pi r^2"],
+    "geometry-area-volume": ["A = lw", "V = lwh"],
+    "trig-right-triangle": ["\\sin\\,\\theta = \\frac{\\text{opposite}}{\\text{hypotenuse}}", "\\cos\\,\\theta = \\frac{\\text{adjacent}}{\\text{hypotenuse}}", "\\tan\\,\\theta = \\frac{\\text{opposite}}{\\text{adjacent}}"],
+    "trig-identities": ["\\sin^2 \\theta + \\cos^2 \\theta = 1", "\\tan\\,x = \\frac{\\sin\\,x}{\\cos\\,x}"],
+    "precalc-exponential-log": ["\\log_b(b^x) = x"],
+    "calc-derivatives": ["\\frac{d}{dx} x^2 = 2x"],
+    "calc-integrals": ["\\int_0^1 x^2\\,dx"],
+    "diff-eq-slope-fields": ["\\frac{dy}{dx} = x", "x = 0 \\Rightarrow \\frac{dy}{dx} = 0"],
+    "diff-eq-separable": ["\\frac{dy}{dx} = 3xy", "\\frac{1}{y}\\,dy = 3x\\,dx"],
+    "diff-eq-first-order": ["\\frac{dP}{dt} = kP", "\\frac{dT}{dt} = -k(T - A)"],
+    "diff-eq-second-order": ["x''(t) = a(t)", "m x'' + kx = 0"],
+    "probability-sample-space": ["S = \\{H, T\\}", "A \\subseteq S"],
+    "probability-basic": ["P(A) = \\frac{\\text{favorable}}{\\text{total}}", "P(3) = \\frac{1}{6}"],
+    "probability-counting": ["3 \\times 2 = 6", "\\text{multiply choices}"],
+    "probability-conditional": ["P(A | B)", "\\text{condition narrows the sample space}"],
+    "probability-random-variable": ["X(H)=1", "X(T)=0", "E[X] = \\frac{1}{2}"],
+    "real-limits": ["\\lim_{x \\to a} f(x) = L"],
+    "abstract-rings": ["a(b + c) = ab + ac"],
+    "abstract-fields": ["a · a^{-1} = 1"],
+    "abstract-homomorphisms": ["f(a + b) = f(a) + f(b)"],
+    "physics-units": ["\\text{speed} = \\frac{\\text{distance}}{\\text{time}}", "\\frac{\\text{m}}{\\text{s}}"],
+    "physics-vectors": ["v = \\text{magnitude} + \\text{direction}", "10\\,\\text{N} \\to"],
+    "physics-graphs": ["\\text{slope} = \\frac{\\Delta x}{\\Delta t}", "\\text{area under }v(t) = \\Delta x"],
+    "physics-kinematics": ["v = \\frac{\\Delta x}{\\Delta t}", "a = \\frac{\\Delta v}{\\Delta t}"],
+    "physics-forces": ["F = ma", "2\\,\\text{kg} \\cdot 3\\,\\frac{\\text{m}}{\\text{s}^2} = 6\\,\\text{N}"],
+    "physics-energy": ["K = \\frac{1}{2}mv^2", "U = mgh"],
+    "physics-momentum": ["p = mv", "3\\,\\text{kg} \\cdot 4\\,\\frac{\\text{m}}{\\text{s}} = 12\\,\\text{kg}\\,\\frac{\\text{m}}{\\text{s}}"],
+    "physics-oscillations": ["f = \\frac{1}{T}", "T = \\frac{1}{f}"],
+    "physics-waves": ["v = f\\lambda", "2\\,\\text{Hz} \\cdot 3\\,\\text{m} = 6\\,\\frac{\\text{m}}{\\text{s}}"],
+    "physics-sound": ["\\text{higher }f \\Rightarrow \\text{higher pitch}", "\\text{sound needs a medium}"],
+    "physics-circuits": ["V = IR", "2\\,\\text{A} \\cdot 5\\,\\text{Ω} = 10\\,\\text{V}"],
+    "physics-magnetism": ["\\text{moving charge} \\Rightarrow \\text{magnetic field}", "N\\;S \\Rightarrow \\text{attract}"],
+    "physics-heat": ["Q: \\text{hot} \\to \\text{cold}", "\\Delta T \\Rightarrow \\text{heat transfer}"],
+    "physics-ideal-gas": ["PV = nRT"],
+    "physics-quantum": ["E = hf", "\\text{photon} = \\text{quantum of light}"],
+    "physics-relativity": ["E = mc^2", "v \\approx c \\Rightarrow \\text{relativity matters}"]
+  };
+
+  if (workspace.type === "equation") return ["x + 7 = 12", "x = 5"];
+  if (workspace.type === "inequality") return ["x > 5"];
+  return byFigure[workspace.figure] || null;
+}
+
 function isDiagramFigure(figure) {
-  if (!figure) return false;
-  const diagramPrefixes = ["geometry-", "trig-", "precalc-", "calc-", "linear-", "proof-", "set-", "number-", "real-", "abstract-"];
+  if (!figure || staticMathFigureRows({ figure })) return false;
+  const diagramPrefixes = ["geometry-", "trig-", "precalc-", "calc-", "linear-", "proof-", "set-", "number-", "real-", "abstract-", "physics-"];
   const diagramFigures = new Set([
     "place-value",
     "number-line",
@@ -3226,6 +4270,19 @@ function isDiagramFigure(figure) {
     "quadratic-roots"
   ]);
   return diagramPrefixes.some((prefix) => figure.startsWith(prefix)) || diagramFigures.has(figure);
+}
+
+function isPhysicsDiagramFigure(figure) {
+  return new Set([
+    "physics-vectors",
+    "physics-graphs",
+    "physics-sound",
+    "physics-charge-fields",
+    "physics-magnetism",
+    "physics-heat",
+    "physics-quantum",
+    "physics-relativity"
+  ]).has(figure);
 }
 
 function createDiagramIntroSvg(figure) {
@@ -4001,6 +5058,103 @@ function createDiagramIntroSvg(figure) {
       svgElement("path", { class: "geometry-line result", d: "M 232 124 L 268 154 M 268 124 L 232 154" })
     );
     svgText(svg, "check the operation", 116, 146, "geometry-note");
+  } else if (figure === "physics-vectors") {
+    svg.append(
+      svgElement("line", { class: "geometry-grid-line", x1: 54, y1: 132, x2: 306, y2: 132 }),
+      svgElement("line", { class: "geometry-grid-line", x1: 86, y1: 36, x2: 86, y2: 150 }),
+      svgElement("path", { class: "geometry-line active", d: "M 86 132 L 244 54" }),
+      svgElement("path", { class: "geometry-line active", d: "M 230 52 L 246 53 L 238 67" }),
+      svgElement("path", { class: "geometry-line result", d: "M 86 132 H 244 V 54" })
+    );
+    svgText(svg, "magnitude", 144, 82, "geometry-note");
+    svgText(svg, "direction", 210, 42, "geometry-note");
+    svgText(svg, "vector", 102, 158, "geometry-label geometry-math active");
+  } else if (figure === "physics-graphs") {
+    svg.append(
+      svgElement("line", { class: "geometry-line", x1: 56, y1: 132, x2: 312, y2: 132 }),
+      svgElement("line", { class: "geometry-line", x1: 82, y1: 36, x2: 82, y2: 150 }),
+      svgElement("path", { class: "geometry-line active", d: "M 92 122 L 278 58" }),
+      svgElement("path", { class: "geometry-shape result", d: "M 154 132 L 154 100 L 238 72 L 238 132 Z" }),
+      svgElement("path", { class: "geometry-line", d: "M 120 112 H 188 V 88" })
+    );
+    svgText(svg, "slope", 156, 94, "geometry-note");
+    svgText(svg, "area", 176, 124, "geometry-note");
+    svgText(svg, "time", 262, 154, "geometry-note");
+  } else if (figure === "physics-sound") {
+    svg.append(
+      svgElement("path", { class: "geometry-line active", d: "M 48 70 C 70 38 92 102 114 70 S 158 38 180 70 S 224 102 246 70 S 290 38 312 70" }),
+      svgElement("path", { class: "geometry-line result", d: "M 52 122 C 64 98 76 146 88 122 S 112 98 124 122 S 148 146 160 122 S 184 98 196 122 S 220 146 232 122 S 256 98 268 122 S 292 146 304 122" })
+    );
+    svgText(svg, "lower pitch", 74, 42, "geometry-note");
+    svgText(svg, "higher pitch", 214, 154, "geometry-note");
+    svgText(svg, "frequency controls pitch", 108, 94, "geometry-note");
+  } else if (figure === "physics-magnetism") {
+    svg.append(
+      svgElement("rect", { class: "geometry-shape active", x: 90, y: 72, width: 76, height: 42, rx: 5 }),
+      svgElement("rect", { class: "geometry-shape result", x: 166, y: 72, width: 76, height: 42, rx: 5 }),
+      svgElement("path", { class: "geometry-line active", d: "M 104 68 C 122 32 210 32 230 68" }),
+      svgElement("path", { class: "geometry-line result", d: "M 104 118 C 122 154 210 154 230 118" }),
+      svgElement("path", { class: "geometry-line active", d: "M 218 58 L 232 68 L 216 76" })
+    );
+    svgText(svg, "N", 126, 100, "geometry-label geometry-math active", "middle");
+    svgText(svg, "S", 204, 100, "geometry-label geometry-math result", "middle");
+    svgText(svg, "field loops", 138, 42, "geometry-note");
+    svgText(svg, "opposite poles attract", 108, 154, "geometry-note");
+  } else if (figure === "physics-heat") {
+    svg.append(
+      svgElement("circle", { class: "geometry-shape active", cx: 104, cy: 90, r: 38 }),
+      svgElement("circle", { class: "geometry-shape result", cx: 256, cy: 90, r: 38 }),
+      svgElement("path", { class: "geometry-line active", d: "M 146 90 H 214" }),
+      svgElement("path", { class: "geometry-line active", d: "M 202 78 L 216 90 L 202 102" })
+    );
+    svgText(svg, "hot", 84, 96, "geometry-label active");
+    svgText(svg, "cold", 232, 96, "geometry-label result");
+    svgText(svg, "heat flows from higher temperature", 74, 150, "geometry-note");
+  } else if (figure === "physics-quantum") {
+    svg.append(
+      svgElement("path", { class: "geometry-line active", d: "M 48 90 C 66 62 84 118 102 90 S 138 62 156 90 S 192 118 210 90" }),
+      svgElement("path", { class: "geometry-line active", d: "M 218 90 H 254" }),
+      svgElement("path", { class: "geometry-line active", d: "M 242 80 L 256 90 L 242 100" }),
+      svgElement("rect", { class: "geometry-shape result", x: 266, y: 66, width: 44, height: 48, rx: 6 })
+    );
+    svgText(svg, "light wave", 70, 54, "geometry-note");
+    svgText(svg, "photon", 266, 140, "geometry-note");
+    svgText(svg, "E = hf", 258, 96, "geometry-label geometry-math result");
+  } else if (figure === "physics-relativity") {
+    svg.append(
+      svgElement("circle", { class: "geometry-shape active", cx: 104, cy: 90, r: 34 }),
+      svgElement("path", { class: "geometry-line active", d: "M 142 90 H 210" }),
+      svgElement("path", { class: "geometry-line active", d: "M 198 78 L 212 90 L 198 102" }),
+      svgElement("path", { class: "geometry-line result", d: "M 258 54 L 268 82 L 300 82 L 274 100 L 284 132 L 258 112 L 232 132 L 242 100 L 216 82 L 248 82 Z" })
+    );
+    svgText(svg, "mass", 84, 96, "geometry-note");
+    svgText(svg, "energy", 232, 154, "geometry-note");
+    svgText(svg, "E = mc^2", 146, 58, "geometry-label geometry-math result");
+  } else if (figure === "physics-charge-fields") {
+    svg.append(
+      svgElement("line", { class: "geometry-grid-line", x1: 42, y1: 92, x2: 318, y2: 92 }),
+      svgElement("circle", { class: "geometry-shape active", cx: 116, cy: 58, r: 20 }),
+      svgElement("circle", { class: "geometry-shape active", cx: 244, cy: 58, r: 20 }),
+      svgElement("circle", { class: "geometry-shape active", cx: 116, cy: 126, r: 20 }),
+      svgElement("circle", { class: "geometry-shape result", cx: 244, cy: 126, r: 20 })
+    );
+    svgText(svg, "+", 116, 66, "geometry-label geometry-math active", "middle");
+    svgText(svg, "+", 244, 66, "geometry-label geometry-math active", "middle");
+    svgText(svg, "+", 116, 134, "geometry-label geometry-math active", "middle");
+    svgText(svg, "−", 244, 134, "geometry-label geometry-math result", "middle");
+
+    svg.append(
+      svgElement("path", { class: "geometry-line active", d: "M 94 58 H 60" }),
+      svgElement("path", { class: "geometry-line active", d: "M 70 48 L 58 58 L 70 68" }),
+      svgElement("path", { class: "geometry-line active", d: "M 266 58 H 300" }),
+      svgElement("path", { class: "geometry-line active", d: "M 290 48 L 302 58 L 290 68" }),
+      svgElement("path", { class: "geometry-line result", d: "M 138 126 H 174" }),
+      svgElement("path", { class: "geometry-line result", d: "M 164 116 L 176 126 L 164 136" }),
+      svgElement("path", { class: "geometry-line result", d: "M 222 126 H 186" }),
+      svgElement("path", { class: "geometry-line result", d: "M 196 116 L 184 126 L 196 136" })
+    );
+    svgText(svg, "same sign: repel", 180, 28, "geometry-note", "middle");
+    svgText(svg, "opposite signs: attract", 180, 164, "geometry-note", "middle");
   }
 
   return svg;
@@ -4332,6 +5486,10 @@ function conceptFigureCaption(figure) {
     "calc-integrals": "Integrals accumulate area or total change.",
     "calc-applications": "Calculus connects rates, totals, and optimization.",
     "calc-series": "Series add ordered terms and track partial sums.",
+    "diff-eq-slope-fields": "Slope fields turn a differential equation into local direction marks.",
+    "diff-eq-separable": "Separable equations move variables to opposite sides before integration.",
+    "diff-eq-first-order": "First-order models describe change with a first derivative.",
+    "diff-eq-second-order": "Second-order models connect position, velocity, and acceleration.",
     "linear-vectors": "Vectors encode size and direction with coordinates.",
     "linear-matrices": "Matrices organize linear rules in rows and columns.",
     "linear-transformations": "Linear transformations move vectors while preserving linear structure.",
@@ -4356,6 +5514,11 @@ function conceptFigureCaption(figure) {
     "number-euclidean": "The Euclidean algorithm finds a GCD by remainders.",
     "number-modular": "Modular arithmetic tracks remainders after wrapping.",
     "number-congruences": "Congruences say two numbers share a remainder system.",
+    "probability-sample-space": "Sample spaces list all possible outcomes.",
+    "probability-basic": "Basic probability compares favorable outcomes to all outcomes.",
+    "probability-counting": "Counting rules organize multi-step choices.",
+    "probability-conditional": "Conditional probability narrows what outcomes remain possible.",
+    "probability-random-variable": "Random variables assign numbers to outcomes.",
     "real-sets": "Intervals and bounds make sets of real numbers precise.",
     "real-sequences": "Sequences converge when their tails stay close to one value.",
     "real-limits": "Epsilon bands make approaching a limit precise.",
@@ -4366,7 +5529,24 @@ function conceptFigureCaption(figure) {
     "abstract-rings": "Rings combine addition, multiplication, and distributivity.",
     "abstract-fields": "Fields make division by nonzero elements possible.",
     "abstract-homomorphisms": "Homomorphisms preserve algebraic structure across maps.",
-    "abstract-examples": "Examples and counterexamples test definitions precisely."
+    "abstract-examples": "Examples and counterexamples test definitions precisely.",
+    "physics-units": "Units show what kind of quantity a formula produces.",
+    "physics-vectors": "Vectors need both size and direction.",
+    "physics-graphs": "Graphs turn motion into slopes and areas.",
+    "physics-kinematics": "Kinematics compares changes in position, velocity, and time.",
+    "physics-forces": "Net force connects mass and acceleration.",
+    "physics-energy": "Energy formulas track motion and stored height.",
+    "physics-momentum": "Momentum combines mass with velocity.",
+    "physics-oscillations": "Period and frequency are reciprocal ways to measure repetition.",
+    "physics-waves": "Wave speed comes from frequency times wavelength.",
+    "physics-sound": "Sound is a mechanical wave with pitch tied to frequency.",
+    "physics-charge-fields": "The signs of two charges determine whether they push apart or pull together.",
+    "physics-circuits": "Ohm's law connects voltage, current, and resistance.",
+    "physics-magnetism": "Magnetism is tied to poles and moving charge.",
+    "physics-heat": "Heat transfer follows temperature differences.",
+    "physics-ideal-gas": "The ideal gas law links pressure, volume, amount, and temperature.",
+    "physics-quantum": "Quantum ideas describe light and energy in discrete packets.",
+    "physics-relativity": "Relativity matters near light speed and connects mass with energy."
   };
   return captions[figure] || captions["mixed-review"];
 }
@@ -5046,11 +6226,12 @@ function openLinkedWorkspace(model) {
   state.showIntro = false;
   renderTopics();
   renderWorkspace();
+  updateUrlFromState();
   saveProgress(`Opened ${workspaceRegistry[model.workspaceId].title.toLowerCase()}`);
 }
 
 function findLesson(id) {
-  for (const group of topicGroups) {
+  for (const group of [...topicGroups, ...physicsTopicGroups]) {
     const lesson = lessonsForGroup(group).find((item) => item.id === id);
     if (lesson) return lesson;
   }
@@ -6571,13 +7752,14 @@ function bindEvents() {
     state.activeStep = 0;
     state.showIntro = workspaceRegistry[state.activeWorkspaceId]?.status !== "planned";
     state.selectedProblemIndex = 0;
-    setSurface("learn");
     renderTopics();
     renderWorkspace();
+    updateUrlFromState();
     saveProgress(`Opened ${button.textContent}`);
   });
 
   els.learnSurface.addEventListener("click", () => setSurface("learn"));
+  els.physicsSurface.addEventListener("click", () => setSurface("physics"));
   els.scratchpadSurface.addEventListener("click", () => setSurface("scratchpad"));
 
   els.modeTabs.forEach((tab) => {
@@ -6657,6 +7839,7 @@ function bindEvents() {
   });
   window.addEventListener("resize", drawOverlays);
   document.addEventListener("keydown", handlePageKeydown);
+  window.addEventListener("popstate", () => applyRouteState(resolveRouteFromPath()));
 }
 
 function refreshCheckButton() {
@@ -6737,6 +7920,7 @@ function applyCustomProblem() {
     state.showIntro = false;
     renderTopics();
     renderWorkspace();
+    updateUrlFromState();
     saveProgress("Moved to long division with remainders");
     return;
   }
@@ -6883,8 +8067,10 @@ function importProgress(event) {
       els.modeTabs.forEach((item) => {
         item.setAttribute("aria-selected", item.dataset.mode === state.mode ? "true" : "false");
       });
+      ensureSurfaceWorkspace();
       renderTopics();
       renderWorkspace();
+      updateUrlFromState({ replace: true });
       saveProgress("Imported progress");
       setStatus("Progress imported.", "correct");
     } catch {
@@ -7044,9 +8230,9 @@ function normalizePlainMathLine(line) {
     .replace(/ℝ/g, "\\mathbb{R}")
     .replace(/ℂ/g, "\\mathbb{C}")
     .replace(/\+\/-/g, "\\pm")
-    .replace(/\btheta\b/gi, "\\theta")
-    .replace(/\bpi\b/gi, "\\pi")
-    .replace(/\b(sin|cos|tan|sec|csc|cot|arcsin|arccos|arctan|ln|log)\b/gi, "\\$1")
+    .replace(/(?<!\\)\btheta\b/gi, "\\theta")
+    .replace(/(?<!\\)\bpi\b/gi, "\\pi")
+    .replace(/(?<!\\)\b(sin|cos|tan|sec|csc|cot|arcsin|arccos|arctan|ln|log)\b/gi, "\\$1")
     .replace(/sqrt\(([^()]*)\)/gi, (_, body) => `\\sqrt{${normalizePlainPowers(body)}}`)
     .replace(/\be\^\(([^()]*)\)/gi, (_, body) => `e^{${normalizePlainPowers(body)}}`)
     .replace(/(?<!\\)\bint\[([^,\]]+),([^\]]+)\]\s+([^=\n]+?)\s*d([A-Za-z])\b/gi, "\\int_{$1}^{$2} $3\\,d$4")
@@ -7054,7 +8240,9 @@ function normalizePlainMathLine(line) {
     .replace(/(?<!\\)\bint\s+([^=\n]+?)\s*d([A-Za-z])\b/gi, "\\int $1\\,d$2")
     .replace(/(?<!\\)\bint\b/gi, "\\int")
     .replace(/\b(d[A-Za-z])\/(d[A-Za-z])\b/g, "\\dfrac{$1}{$2}")
+    .replace(/\\?\b(sin|cos|tan|sec|csc|cot|ln|log)\s+([A-Za-zθπ])\s*\/\s*\\?\b(sin|cos|tan|sec|csc|cot|ln|log)\s+([A-Za-zθπ])\b/gi, "\\frac{\\$1 $2}{\\$3 $4}")
     .replace(/(?<![\\\w])([A-Za-z0-9]+)\/([A-Za-z0-9]+)(?![\w])/g, "\\frac{$1}{$2}")
+    .replace(/(?<![\\\w])([A-Za-z0-9]+)\s+\/\s+([A-Za-z0-9]+)(?![\w])/g, "\\frac{$1}{$2}")
     .replace(/<=>/g, "\\iff")
     .replace(/=>/g, "\\Rightarrow")
     .replace(/->/g, "\\to")
@@ -7530,12 +8718,12 @@ function appendMathMlIntegral(target, text, index) {
 }
 
 function mathMlCommandAt(text, index) {
-  const commands = ["\\Rightarrow", "\\therefore", "\\subseteq", "\\emptyset", "\\because", "\\arcsin", "\\arccos", "\\arctan", "\\forall", "\\exists", "\\models", "\\notin", "\\subset", "\\theta", "\\vdash", "\\quad", "\\land", "\\oplus", "\\lor", "\\neg", "\\iff", "\\sin", "\\cos", "\\tan", "\\sec", "\\csc", "\\cot", "\\log", "\\cup", "\\cap", "\\ln", "\\pi", "\\le", "\\ge", "\\ne", "\\pm", "\\to", "\\in", "\\;", "\\,"];
+  const commands = ["\\Rightarrow", "\\rightarrow", "\\therefore", "\\subseteq", "\\emptyset", "\\because", "\\arcsin", "\\arccos", "\\arctan", "\\forall", "\\exists", "\\lambda", "\\approx", "\\models", "\\Delta", "\\Omega", "\\notin", "\\subset", "\\theta", "\\vdash", "\\times", "\\quad", "\\land", "\\oplus", "\\cdot", "\\div", "\\lim", "\\lor", "\\neg", "\\iff", "\\sin", "\\cos", "\\tan", "\\sec", "\\csc", "\\cot", "\\log", "\\cup", "\\cap", "\\ln", "\\pi", "\\le", "\\ge", "\\ne", "\\pm", "\\to", "\\in", "\\;", "\\,"];
   return commands.find((command) => text.startsWith(command, index));
 }
 
 function appendMathMlCommand(target, command) {
-  const functionNames = new Set(["\\sin", "\\cos", "\\tan", "\\sec", "\\csc", "\\cot", "\\arcsin", "\\arccos", "\\arctan", "\\log", "\\ln"]);
+  const functionNames = new Set(["\\sin", "\\cos", "\\tan", "\\sec", "\\csc", "\\cot", "\\arcsin", "\\arccos", "\\arctan", "\\log", "\\ln", "\\lim"]);
   if (functionNames.has(command)) {
     target.append(createMathMlToken("mi", command.slice(1), { mathvariant: "normal" }));
     return;
@@ -7546,8 +8734,10 @@ function appendMathMlCommand(target, command) {
     "\\le": ["mo", "≤"],
     "\\ge": ["mo", "≥"],
     "\\ne": ["mo", "≠"],
+    "\\approx": ["mo", "≈"],
     "\\pm": ["mo", "±"],
     "\\to": ["mo", "→"],
+    "\\rightarrow": ["mo", "→"],
     "\\Rightarrow": ["mo", "⇒"],
     "\\iff": ["mo", "⇔"],
     "\\land": ["mo", "∧"],
@@ -7558,6 +8748,12 @@ function appendMathMlCommand(target, command) {
     "\\therefore": ["mo", "∴"],
     "\\because": ["mo", "∵"],
     "\\oplus": ["mo", "⊕"],
+    "\\lambda": ["mi", "λ"],
+    "\\Delta": ["mi", "Δ", "normal"],
+    "\\Omega": ["mi", "Ω", "normal"],
+    "\\times": ["mo", "×"],
+    "\\cdot": ["mo", "·"],
+    "\\div": ["mo", "÷"],
     "\\vdash": ["mo", "⊢"],
     "\\models": ["mo", "⊨"],
     "\\in": ["mo", "∈"],
@@ -7596,7 +8792,7 @@ function doubleStruckSymbol(value) {
 }
 
 function mathMlOperatorTag(token) {
-  return /[+\-*/=()[\]{}|,∈∉⊂⊆∪∩∧∨¬∀∃∴∵⊕⊢⊨⇔]/.test(token) ? "mo" : "mtext";
+  return /[+\-*/=()[\]{}|,×÷·∈∉⊂⊆∪∩∧∨¬∀∃∴∵⊕⊢⊨⇔]/.test(token) ? "mo" : "mtext";
 }
 
 function displayMathMlOperator(token) {

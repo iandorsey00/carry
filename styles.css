@@ -906,6 +906,137 @@ button {
   align-items: center;
 }
 
+.intro-math-figure {
+  padding-block: 18px;
+}
+
+.intro-math-stack {
+  display: grid;
+  gap: 8px;
+  justify-items: start;
+}
+
+.intro-math-stack.align-equals {
+  grid-template-columns: minmax(0, max-content) max-content minmax(0, 1fr);
+  column-gap: 8px;
+  row-gap: 8px;
+  align-items: baseline;
+  justify-items: stretch;
+}
+
+.intro-math-row {
+  max-width: 100%;
+  overflow-x: auto;
+  color: var(--text);
+  font-size: 24px;
+  line-height: 1.35;
+}
+
+.intro-math-stack.align-equals .intro-math-row {
+  display: contents;
+}
+
+.intro-math-row .scratch-mathml-line {
+  font-size: 1em;
+}
+
+.intro-line-math-aligned {
+  display: contents;
+}
+
+.intro-align-left {
+  justify-self: end;
+}
+
+.intro-align-equals {
+  color: var(--text);
+  font-size: 0.92em;
+  font-weight: 500;
+}
+
+.intro-align-right {
+  min-width: 0;
+}
+
+.intro-worked-lines {
+  display: grid;
+  gap: 8px;
+}
+
+.intro-worked-lines.align-equals {
+  grid-template-columns: minmax(0, max-content) max-content minmax(0, max-content) minmax(160px, 1fr);
+  column-gap: 8px;
+  row-gap: 8px;
+  align-items: baseline;
+}
+
+.intro-worked-line {
+  display: grid;
+  grid-template-columns: minmax(180px, max-content) minmax(160px, 1fr);
+  gap: 14px;
+  align-items: baseline;
+}
+
+.intro-worked-lines.align-equals .intro-worked-line {
+  display: contents;
+}
+
+.intro-worked-lines.align-equals .intro-worked-math {
+  display: contents;
+}
+
+.intro-worked-math {
+  min-width: 0;
+  overflow-x: auto;
+  color: var(--text);
+  font-size: 19px;
+  line-height: 1.35;
+}
+
+.intro-worked-math .scratch-mathml-line {
+  font-size: 1em;
+}
+
+.intro-worked-note {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.intro-worked-lines.align-equals .intro-worked-note {
+  grid-column: 4;
+}
+
+.intro-worked-note.has-math {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.2em;
+  align-items: baseline;
+}
+
+@media (max-width: 720px) {
+  .intro-worked-line,
+  .intro-worked-lines.align-equals {
+    grid-template-columns: 1fr;
+  }
+
+  .intro-worked-lines.align-equals .intro-worked-line,
+  .intro-worked-lines.align-equals .intro-worked-math {
+    display: grid;
+  }
+
+  .intro-worked-lines.align-equals .intro-worked-math {
+    grid-template-columns: minmax(0, max-content) max-content minmax(0, 1fr);
+    column-gap: 8px;
+  }
+
+  .intro-worked-lines.align-equals .intro-worked-note {
+    grid-column: auto;
+    margin-bottom: 6px;
+  }
+}
+
 .intro-cell {
   display: flex;
   min-width: 44px;
