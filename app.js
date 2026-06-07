@@ -1,6 +1,6 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-alpha.53";
+const APP_VERSION = "0.1.0-alpha.54";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 
@@ -3216,7 +3216,7 @@ function renderIntroWorkspace(workspace) {
   state.currentModel = null;
   els.introTitle.textContent = "Overview";
   renderIntroCopy(workspace);
-  els.stepText.textContent = `Read the ${workspace.title.toLowerCase()} overview, then start a problem.`;
+  els.stepText.textContent = `Read the ${workspace.title.toLowerCase()} guide, then start a problem.`;
 }
 
 function renderIntroCopy(workspace) {
@@ -3255,7 +3255,9 @@ function renderIntroCopy(workspace) {
   sections.append(
     createIntroSection("Core idea", items),
     createWorkedExampleSection(workspace),
-    createIntroSection("What you will practice", introPracticeItems(workspace)),
+    createIntroSection("Why it works", introWhyItems(workspace)),
+    createIntroSection("Common mistake", introCommonMistakeItems(workspace)),
+    createIntroSection("Practice focus", introPracticeItems(workspace)),
     createIntroSection("Answer format", introAnswerFormatItems(workspace))
   );
   els.introCopy.replaceChildren(...[figure, sections].filter(Boolean));
@@ -3509,6 +3511,205 @@ function introPracticeItems(workspace) {
     "Use Check to validate the smallest current step.",
     "Use Hint when the next move is not clear."
   ];
+}
+
+function introWhyItems(workspace) {
+  if (workspace.type === "addition") {
+    return [
+      "Each column represents a place value.",
+      "Ten ones become one ten, ten tens become one hundred, and so on.",
+      "Carries keep the total value the same while moving it to the correct column."
+    ];
+  }
+
+  if (workspace.type === "subtraction") {
+    return [
+      "Borrowing rewrites the same number using a neighboring place value.",
+      "One ten can be exchanged for ten ones, and one hundred can be exchanged for ten tens.",
+      "The value of the top number stays the same; only its form changes."
+    ];
+  }
+
+  if (workspace.type === "multiplication") {
+    return [
+      "Long multiplication breaks one factor into ones, tens, and hundreds.",
+      "Each partial product is a smaller multiplication with the correct place shift.",
+      "Adding the partial products recombines the whole product."
+    ];
+  }
+
+  if (workspace.type === "division") {
+    return [
+      "Long division repeatedly asks how many groups fit into the current part of the dividend.",
+      "Multiplying checks the size of the chosen quotient digit.",
+      "Subtracting leaves the remainder that carries into the next place."
+    ];
+  }
+
+  if (workspace.type === "equation") {
+    return [
+      "An equation is balanced when both sides have the same value.",
+      "Doing the same operation to both sides keeps that balance.",
+      "The goal is to rewrite the equation until the variable is alone."
+    ];
+  }
+
+  if (workspace.type === "inequality") {
+    return [
+      "An inequality compares two sides instead of making them equal.",
+      "Most inverse operations preserve the comparison.",
+      "Multiplying or dividing by a negative reverses order, so the sign must flip."
+    ];
+  }
+
+  if (workspace.type === "system") {
+    return [
+      "A system solution must satisfy every equation at the same time.",
+      "Substitution and elimination reduce two unknowns to one unknown.",
+      "The final ordered pair should work in both original equations."
+    ];
+  }
+
+  if (workspace.type === "factoring" || workspace.type === "quadratic") {
+    return [
+      "Factoring rewrites an expression as a product without changing its value.",
+      "Multiplying the factors back out checks the rewrite.",
+      "For quadratics, factored form makes zeros easier to see."
+    ];
+  }
+
+  if (workspace.type === "concept") {
+    return conceptWhyItems(workspace);
+  }
+
+  return [
+    "The rule connects the notation to one small action.",
+    "Checking a small action prevents a mistake from spreading.",
+    "The same pattern can then be reused on new numbers."
+  ];
+}
+
+function conceptWhyItems(workspace) {
+  if (workspace.topic === "Probability") {
+    return [
+      "Probability compares an event with the outcomes that could happen.",
+      "A clear sample space makes the denominator clear.",
+      "Changing the known information can change the sample space."
+    ];
+  }
+
+  if (workspace.topic === "Differential Equations") {
+    return [
+      "A differential equation describes how a quantity changes, not only what it is.",
+      "Derivatives connect a current state to a rate of change.",
+      "Solutions are functions whose derivatives match the rule."
+    ];
+  }
+
+  if (workspace.topic === "Calculus") {
+    return [
+      "Calculus studies change and accumulation.",
+      "Derivatives measure local rate; integrals collect small pieces into totals.",
+      "Limits make those ideas precise."
+    ];
+  }
+
+  if (workspace.topic === "Physics Foundations" || isPhysicsWorkspaceId(workspace.id)) {
+    return [
+      "Physics formulas connect quantities with units and meaning.",
+      "The units help check whether a calculation is reasonable.",
+      "A diagram or model should match the formula, not replace it."
+    ];
+  }
+
+  if (workspace.topic === "Proofs") {
+    return [
+      "Proofs are controlled chains of reasons.",
+      "Each step should follow from definitions, earlier facts, or a named rule.",
+      "A counterexample can disprove a universal claim with one failing case."
+    ];
+  }
+
+  if (workspace.topic === "Set Theory") {
+    return [
+      "Set notation makes collections precise.",
+      "Membership asks about individual objects; subsets ask about whole collections.",
+      "Operations such as union and intersection describe how collections overlap."
+    ];
+  }
+
+  if (workspace.topic === "Number Theory") {
+    return [
+      "Number theory often turns division into structure.",
+      "Remainders, factors, and multiples reveal patterns.",
+      "Definitions matter because small wording changes can change the answer."
+    ];
+  }
+
+  if (workspace.topic === "Real Analysis") {
+    return [
+      "Analysis makes calculus ideas precise using definitions.",
+      "The focus is often on what happens arbitrarily close to a value.",
+      "Examples and counterexamples test whether the definition really applies."
+    ];
+  }
+
+  if (workspace.topic === "Abstract Algebra") {
+    return [
+      "Abstract algebra studies operations through their rules.",
+      "The same structure can appear in numbers, symmetries, functions, or matrices.",
+      "Checking a definition means checking every required rule."
+    ];
+  }
+
+  return [
+    "The lesson gives one rule or relationship to recognize.",
+    "The worked example uses different values so the practice answer is not copied.",
+    "The question asks you to transfer the rule to the current case."
+  ];
+}
+
+function introCommonMistakeItems(workspace) {
+  if (workspace.type === "addition") {
+    return ["Writing the whole column total in one box instead of carrying the tens part."];
+  }
+  if (workspace.type === "subtraction") {
+    return ["Borrowing changes both columns: the lending digit decreases and the receiving column gains ten."];
+  }
+  if (workspace.type === "multiplication") {
+    return ["Forgetting the zero or place shift on tens and hundreds partial products."];
+  }
+  if (workspace.type === "division") {
+    return ["Choosing a quotient digit that makes the product larger than the current partial dividend."];
+  }
+  if (workspace.type === "equation") {
+    return ["Changing only one side of the equation. Balance requires the same operation on both sides."];
+  }
+  if (workspace.type === "inequality") {
+    return ["Forgetting to reverse the inequality when multiplying or dividing by a negative number."];
+  }
+  if (workspace.type === "system") {
+    return ["Finding a value for one variable but not checking it in both original equations."];
+  }
+  if (workspace.type === "factoring" || workspace.type === "quadratic") {
+    return ["Choosing numbers that add correctly but do not multiply to the constant term."];
+  }
+  if (workspace.topic === "Probability") {
+    return ["Counting favorable outcomes correctly but using the wrong total sample space."];
+  }
+  if (workspace.topic === "Differential Equations") {
+    return ["Treating a derivative rule like ordinary algebra and losing the differential or chain-rule factor."];
+  }
+  if (workspace.topic === "Calculus") {
+    return ["Applying a memorized derivative or integral rule without checking the inside function."];
+  }
+  if (isPhysicsWorkspaceId(workspace.id)) {
+    return ["Calculating with the numbers while ignoring the units or direction."];
+  }
+  if (workspace.topic === "Proofs") {
+    return ["Giving an example when the claim requires a proof for every case."];
+  }
+  return ["Copying the worked example's answer instead of applying the same rule to the active question."];
 }
 
 function conceptWorkedExampleRows(workspace) {
@@ -8466,6 +8667,13 @@ function appendMathMlContent(target, value) {
       continue;
     }
 
+    const parenthesized = readParenthesizedGroup(text, cursor);
+    if (parenthesized) {
+      target.append(createMathMlFencedGroup("(", parenthesized.value, ")"));
+      cursor = parenthesized.end;
+      continue;
+    }
+
     if (text.startsWith("\\dfrac", cursor) || text.startsWith("\\frac", cursor)) {
       const commandLength = text.startsWith("\\dfrac", cursor) ? 6 : 5;
       const numerator = readBraceGroup(text, cursor + commandLength);
@@ -8544,6 +8752,42 @@ function appendMathMlContent(target, value) {
     target.append(createMathMlToken(mathMlOperatorTag(text[cursor]), displayMathMlOperator(text[cursor])));
     cursor += 1;
   }
+}
+
+function readParenthesizedGroup(text, start) {
+  if (text[start] !== "(") return null;
+  let cursor = start + 1;
+  let depth = 1;
+  let braceDepth = 0;
+
+  while (cursor < text.length) {
+    const char = text[cursor];
+    if (char === "{") braceDepth += 1;
+    else if (char === "}") braceDepth = Math.max(0, braceDepth - 1);
+    else if (braceDepth === 0 && char === "(") depth += 1;
+    else if (braceDepth === 0 && char === ")") {
+      depth -= 1;
+      if (depth === 0) {
+        return {
+          value: text.slice(start + 1, cursor),
+          end: cursor + 1
+        };
+      }
+    }
+    cursor += 1;
+  }
+
+  return null;
+}
+
+function createMathMlFencedGroup(open, value, close) {
+  const wrapper = createMathMlElement("mrow");
+  wrapper.append(
+    createMathMlToken("mo", open, { stretchy: "true", fence: "true" }),
+    createMathMlRow(value),
+    createMathMlToken("mo", close, { stretchy: "true", fence: "true" })
+  );
+  return wrapper;
 }
 
 function readMatrixLiteral(text, start) {

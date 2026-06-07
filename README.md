@@ -1,6 +1,6 @@
 # Carry
 
-Version: `0.1.0-alpha.53`
+Version: `0.1.0-alpha.54`
 
 Carry is a local-first math and physics learning studio designed to run fully in the browser.
 
