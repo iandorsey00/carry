@@ -6,13 +6,13 @@
     <meta name="theme-color" content="#f7f7f8">
     <meta
       name="description"
-      content="Carry is a local-first math and physics learning studio for focused, browser-based practice."
+      content="Carry is a local-first math, physics, scratchpad, and puzzle learning studio for focused browser-based practice."
     >
     <title>Carry</title>
     <link rel="icon" type="image/png" sizes="512x512" href="./assets/carry-icon.png">
     <link rel="apple-touch-icon" href="./assets/carry-icon.png">
     <link rel="manifest" href="./manifest.webmanifest">
-    <link rel="stylesheet" href="./styles.css?v=0.1.0-alpha.54">
+    <link rel="stylesheet" href="./styles.css?v=0.1.0-alpha.56">
   </head>
   <body>
     <div class="app-shell">
@@ -23,6 +23,7 @@
         <nav class="surface-switch" aria-label="Carry workspaces">
           <button class="surface-tab" id="learnSurface" type="button" aria-pressed="true">Math</button>
           <button class="surface-tab" id="physicsSurface" type="button" aria-pressed="false">Physics</button>
+          <button class="surface-tab" id="gamesSurface" type="button" aria-pressed="false">Games</button>
           <button class="surface-tab" id="scratchpadSurface" type="button" aria-pressed="false">Scratchpad</button>
         </nav>
       </header>
@@ -327,12 +328,113 @@
               </p>
             </div>
           </section>
+
+          <section class="sudoku-panel" id="sudokuPanel" aria-labelledby="sudokuTitle" hidden>
+            <div class="sudoku-header">
+              <div>
+                <p class="eyebrow">Games</p>
+                <h2 id="sudokuTitle">Games</h2>
+              </div>
+              <div class="game-tabs" role="tablist" aria-label="Games">
+                <button class="game-tab" type="button" data-game="sudoku" aria-selected="true">Sudoku</button>
+                <button class="game-tab" type="button" data-game="mod-clock" aria-selected="false">Mod Clock</button>
+              </div>
+            </div>
+
+            <div class="sudoku-game" id="sudokuGame">
+              <div class="sudoku-controls" aria-label="Sudoku settings">
+                <label>
+                  <span>Size</span>
+                  <select id="sudokuSize">
+                    <option value="4">4 × 4</option>
+                    <option value="6">6 × 6</option>
+                    <option value="9" selected>9 × 9</option>
+                  </select>
+                </label>
+                <label>
+                  <span>Difficulty</span>
+                  <select id="sudokuDifficulty">
+                    <option value="easy" selected>Easy</option>
+                    <option value="medium">Medium</option>
+                    <option value="hard">Hard</option>
+                  </select>
+                </label>
+                <button class="tool-button compact" id="newSudoku" type="button">New</button>
+              </div>
+
+              <div class="sudoku-status" id="sudokuStatus" aria-live="polite">
+                Choose a square, then enter a number.
+              </div>
+
+              <div class="sudoku-layout">
+                <div class="sudoku-board" id="sudokuBoard" aria-label="Sudoku board"></div>
+                <div class="sudoku-side">
+                  <div class="sudoku-pad" id="sudokuPad" aria-label="Sudoku number pad"></div>
+                  <div class="sudoku-actions">
+                    <button class="tool-button" id="checkSudoku" type="button">
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="m20 6-11 11-5-5"></path>
+                      </svg>
+                      Check
+                    </button>
+                    <button class="tool-button" id="clearSudoku" type="button">
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M3 6h18"></path>
+                        <path d="M8 6V4h8v2"></path>
+                        <path d="M19 6l-1 14H6L5 6"></path>
+                      </svg>
+                      Clear
+                    </button>
+                  </div>
+                  <p class="sudoku-note">
+                    Easy is the default. Larger boards and harder puzzles add more open squares.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mod-clock-game" id="modClockGame" hidden>
+              <div class="sudoku-controls" aria-label="Mod Clock settings">
+                <label>
+                  <span>Difficulty</span>
+                  <select id="modClockDifficulty">
+                    <option value="easy" selected>Easy</option>
+                    <option value="medium">Medium</option>
+                    <option value="hard">Hard</option>
+                  </select>
+                </label>
+                <button class="tool-button compact" id="newModClock" type="button">New</button>
+              </div>
+
+              <div class="sudoku-status" id="modClockStatus" aria-live="polite">
+                Choose where the move lands.
+              </div>
+
+              <div class="mod-clock-layout">
+                <div class="mod-clock-dial" id="modClockDial" aria-label="Modular arithmetic clock"></div>
+                <div class="mod-clock-side">
+                  <p class="mod-clock-prompt" id="modClockPrompt"></p>
+                  <div class="sudoku-actions">
+                    <button class="tool-button" id="checkModClock" type="button">
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="m20 6-11 11-5-5"></path>
+                      </svg>
+                      Check
+                    </button>
+                  </div>
+                  <p class="sudoku-note">
+                    Mod Clock asks where repeated counting lands after wrapping around.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
         </div>
 
       </main>
 
       <footer class="site-footer">
-        Carry <span id="appVersion">v0.1.0-alpha.54</span> © 2026 Ian Dorsey · Open source under the MIT License
+        Carry <span id="appVersion">v0.1.0-alpha.56</span> © 2026 Ian Dorsey · Open source under the MIT License
       </footer>
     </div>
 
@@ -406,6 +508,6 @@
         }
       };
     </script>
-    <script src="./app.js?v=0.1.0-alpha.54" defer></script>
+    <script src="./app.js?v=0.1.0-alpha.56" defer></script>
   </body>
 </html>

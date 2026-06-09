@@ -1,8 +1,9 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-alpha.54";
+const APP_VERSION = "0.1.0-alpha.56";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
+const GAMES_STORAGE_KEY = "carry.games.v1";
 
 const topicGroups = [
   {
@@ -2404,9 +2405,32 @@ const workspaceRegistry = {
   "Proofs": { id: "proofs.placeholders", title: "Proof construction", status: "planned" }
 };
 
+const sudokuBoards = {
+  4: {
+    blockRows: 2,
+    blockCols: 2,
+    solution: "1234341221434321",
+    clues: { easy: 10, medium: 8, hard: 6 }
+  },
+  6: {
+    blockRows: 2,
+    blockCols: 3,
+    solution: "123456456123231564564231312645645312",
+    clues: { easy: 22, medium: 16, hard: 12 }
+  },
+  9: {
+    blockRows: 3,
+    blockCols: 3,
+    solution: "534678912672195348198342567859761423426853791713924856961537284287419635345286179",
+    basePuzzle: "530070000600195000098000060800060003400803001700020006060000280000419005000080079",
+    clues: { easy: 42, medium: 32, hard: 26 }
+  }
+};
+
 const state = {
   progress: loadProgress(),
   scratchpads: loadScratchpads(),
+  games: loadGames(),
   activeSurface: "learn",
   mode: "guided",
   activeTopic: "Arithmetic",
@@ -2784,12 +2808,15 @@ document.addEventListener("DOMContentLoaded", () => {
   renderTopics();
   renderWorkspace();
   renderScratchpad();
+  renderGames();
   bindEvents();
   updateProgressPanel();
   updateUrlFromState({ replace: true });
 });
 
 function cacheElements() {
+  els.workspaceLayout = document.querySelector(".workspace-layout");
+  els.topicPanel = document.querySelector(".topic-panel");
   els.topicList = document.querySelector("#topicList");
   els.currentTopic = document.querySelector("#currentTopic");
   els.lessonTitle = document.querySelector("#lessonTitle");
@@ -2825,9 +2852,28 @@ function cacheElements() {
   els.appVersion = document.querySelector("#appVersion");
   els.learnSurface = document.querySelector("#learnSurface");
   els.physicsSurface = document.querySelector("#physicsSurface");
+  els.gamesSurface = document.querySelector("#gamesSurface");
   els.scratchpadSurface = document.querySelector("#scratchpadSurface");
   els.lessonPanel = document.querySelector("#lessonPanel");
   els.scratchpadPanel = document.querySelector("#scratchpadPanel");
+  els.sudokuPanel = document.querySelector("#sudokuPanel");
+  els.gameTabs = Array.from(document.querySelectorAll(".game-tab"));
+  els.sudokuGame = document.querySelector("#sudokuGame");
+  els.sudokuBoard = document.querySelector("#sudokuBoard");
+  els.sudokuPad = document.querySelector("#sudokuPad");
+  els.sudokuStatus = document.querySelector("#sudokuStatus");
+  els.sudokuSize = document.querySelector("#sudokuSize");
+  els.sudokuDifficulty = document.querySelector("#sudokuDifficulty");
+  els.newSudoku = document.querySelector("#newSudoku");
+  els.checkSudoku = document.querySelector("#checkSudoku");
+  els.clearSudoku = document.querySelector("#clearSudoku");
+  els.modClockGame = document.querySelector("#modClockGame");
+  els.modClockDial = document.querySelector("#modClockDial");
+  els.modClockPrompt = document.querySelector("#modClockPrompt");
+  els.modClockStatus = document.querySelector("#modClockStatus");
+  els.modClockDifficulty = document.querySelector("#modClockDifficulty");
+  els.newModClock = document.querySelector("#newModClock");
+  els.checkModClock = document.querySelector("#checkModClock");
   els.scratchpadInput = document.querySelector("#scratchpadInput");
   els.scratchpadPreview = document.querySelector("#scratchpadPreview");
   els.scratchpadList = document.querySelector("#scratchpadList");
@@ -2913,6 +2959,60 @@ function loadScratchpads() {
   }
 }
 
+function loadGames() {
+  const fallback = {
+    version: 1,
+    activeGame: "sudoku",
+    sudoku: {
+      size: 9,
+      difficulty: "easy",
+      seed: 0,
+      selected: null,
+      entries: {}
+    },
+    modClock: {
+      difficulty: "easy",
+      seed: 0,
+      selected: null,
+      checked: false
+    }
+  };
+
+  try {
+    const stored = localStorage.getItem(GAMES_STORAGE_KEY);
+    if (!stored) return fallback;
+    const parsed = JSON.parse(stored);
+    return {
+      ...fallback,
+      ...parsed,
+      activeGame: ["sudoku", "mod-clock"].includes(parsed.activeGame) ? parsed.activeGame : fallback.activeGame,
+      sudoku: {
+        ...fallback.sudoku,
+        ...(parsed.sudoku || {}),
+        entries: parsed.sudoku?.entries || {}
+      },
+      modClock: {
+        ...fallback.modClock,
+        ...(parsed.modClock || {})
+      }
+    };
+  } catch {
+    return fallback;
+  }
+}
+
+function saveGames(activity) {
+  localStorage.setItem(GAMES_STORAGE_KEY, JSON.stringify(state.games, null, 2));
+  if (activity) {
+    state.progress.recentActivity = [
+      { label: activity, at: new Date().toISOString() },
+      ...state.progress.recentActivity.filter((item) => item.label !== activity)
+    ].slice(0, 8);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state.progress, null, 2));
+    updateProgressPanel();
+  }
+}
+
 function createId(prefix) {
   return `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 }
@@ -2939,6 +3039,7 @@ function routeSurfaceForWorkspace(id) {
 
 function routePrefixForSurface(surface) {
   if (surface === "physics") return "physics";
+  if (surface === "games") return "games";
   if (surface === "scratchpad") return "scratchpad";
   return "math";
 }
@@ -2975,6 +3076,12 @@ function resolveRouteFromPath() {
   const parts = window.location.pathname.split("/").filter(Boolean);
   if (parts.length === 0) return null;
   if (parts[0] === "scratchpad") return { surface: "scratchpad" };
+  if (parts[0] === "games") {
+    return {
+      surface: "games",
+      game: parts[1] === "mod-clock" ? "mod-clock" : "sudoku"
+    };
+  }
   if (parts[0] !== "math" && parts[0] !== "physics") return null;
   if (parts.length < 3) return null;
   return findRouteMatch(parts[0] === "physics" ? "physics" : "learn", parts[1], parts[2]);
@@ -2983,6 +3090,8 @@ function resolveRouteFromPath() {
 function updateUrlFromState(options = {}) {
   const route = state.activeSurface === "scratchpad"
     ? { path: "/scratchpad" }
+    : state.activeSurface === "games"
+      ? { path: `/games/${state.games.activeGame === "mod-clock" ? "mod-clock" : "sudoku"}` }
     : findRouteForWorkspace(state.activeWorkspaceId);
   if (!route) return;
   const nextUrl = `${route.path}${window.location.search}`;
@@ -2994,6 +3103,7 @@ function updateUrlFromState(options = {}) {
 function applyRouteState(routeState) {
   if (!routeState) return;
   state.activeSurface = routeState.surface;
+  if (routeState.game) state.games.activeGame = routeState.game;
   if (routeState.topic) state.activeTopic = routeState.topic;
   if (routeState.workspaceId) {
     state.activeWorkspaceId = routeState.workspaceId;
@@ -3004,6 +3114,8 @@ function applyRouteState(routeState) {
   renderTopics();
   if (state.activeSurface === "scratchpad") {
     renderScratchpad();
+  } else if (state.activeSurface === "games") {
+    renderGames();
   } else {
     renderWorkspace();
   }
@@ -3015,6 +3127,8 @@ function currentTopicGroups() {
 }
 
 function ensureSurfaceWorkspace() {
+  if (state.activeSurface === "games") return;
+
   if (state.activeSurface === "physics") {
     if (!isPhysicsWorkspaceId(state.activeWorkspaceId)) {
       state.activeTopic = PHYSICS_DEFAULT_TOPIC;
@@ -3182,16 +3296,428 @@ function setWorkspaceView(view) {
   els.workspaceTools.hidden = !isProblem;
 }
 
+function currentSudokuSettings() {
+  const requestedSize = Number.parseInt(state.games.sudoku.size, 10);
+  const size = sudokuBoards[requestedSize] ? requestedSize : 9;
+  const difficulty = ["easy", "medium", "hard"].includes(state.games.sudoku.difficulty)
+    ? state.games.sudoku.difficulty
+    : "easy";
+  const seed = Number.isFinite(Number(state.games.sudoku.seed)) ? Number(state.games.sudoku.seed) : 0;
+  return { size, difficulty, seed, config: sudokuBoards[size] };
+}
+
+function seededRandom(seed) {
+  let value = Math.abs(Math.trunc(seed)) % 2147483647;
+  if (value === 0) value = 1;
+  return () => {
+    value = (value * 48271) % 2147483647;
+    return value / 2147483647;
+  };
+}
+
+function shuffledSudokuIndexes(size, difficulty, seed) {
+  const difficultyOffset = { easy: 11, medium: 37, hard: 73 }[difficulty] || 11;
+  const random = seededRandom((size * 1009) + (seed * 7919) + difficultyOffset);
+  const indexes = Array.from({ length: size * size }, (_, index) => index);
+  for (let index = indexes.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(random() * (index + 1));
+    [indexes[index], indexes[swapIndex]] = [indexes[swapIndex], indexes[index]];
+  }
+  return indexes;
+}
+
+function sudokuPuzzleFor(size, difficulty, seed) {
+  const config = sudokuBoards[size];
+  const clueCount = config.clues[difficulty] || config.clues.easy;
+  const clues = new Set(shuffledSudokuIndexes(size, difficulty, seed).slice(0, clueCount));
+  return Array.from(config.solution, (digit, index) => (clues.has(index) ? digit : "0")).join("");
+}
+
+function sudokuValues() {
+  const { size, difficulty, seed, config } = currentSudokuSettings();
+  const puzzle = sudokuPuzzleFor(size, difficulty, seed);
+  const entries = state.games.sudoku.entries || {};
+  const values = Array.from({ length: size * size }, (_, index) => {
+    if (puzzle[index] !== "0") return puzzle[index];
+    return String(entries[index] || "");
+  });
+  return { size, difficulty, seed, config, puzzle, solution: config.solution, values };
+}
+
+function sudokuConflictIndexes(values, size, config) {
+  const conflicts = new Set();
+  const markGroup = (indexes) => {
+    const seen = new Map();
+    indexes.forEach((index) => {
+      const value = values[index];
+      if (!value) return;
+      if (!seen.has(value)) {
+        seen.set(value, [index]);
+      } else {
+        seen.get(value).push(index);
+      }
+    });
+    seen.forEach((group) => {
+      if (group.length > 1) group.forEach((index) => conflicts.add(index));
+    });
+  };
+
+  for (let row = 0; row < size; row += 1) {
+    markGroup(Array.from({ length: size }, (_, col) => row * size + col));
+  }
+  for (let col = 0; col < size; col += 1) {
+    markGroup(Array.from({ length: size }, (_, row) => row * size + col));
+  }
+  for (let blockRow = 0; blockRow < size; blockRow += config.blockRows) {
+    for (let blockCol = 0; blockCol < size; blockCol += config.blockCols) {
+      const indexes = [];
+      for (let row = 0; row < config.blockRows; row += 1) {
+        for (let col = 0; col < config.blockCols; col += 1) {
+          indexes.push((blockRow + row) * size + blockCol + col);
+        }
+      }
+      markGroup(indexes);
+    }
+  }
+  return conflicts;
+}
+
+function renderSudoku() {
+  if (!els.sudokuBoard || !els.sudokuPad) return;
+  const { size, difficulty, config, puzzle, solution, values } = sudokuValues();
+  const storedSelected = state.games.sudoku.selected;
+  const selected = Number.isInteger(storedSelected) && storedSelected >= 0 && storedSelected < size * size
+    ? storedSelected
+    : null;
+  const conflicts = sudokuConflictIndexes(values, size, config);
+  const checked = Boolean(state.games.sudoku.checked);
+  const selectedValue = selected !== null ? values[selected] : "";
+
+  els.sudokuSize.value = String(size);
+  els.sudokuDifficulty.value = difficulty;
+  els.sudokuBoard.className = `sudoku-board sudoku-board-${size}`;
+  els.sudokuBoard.style.setProperty("--sudoku-size", size);
+  els.sudokuBoard.setAttribute("aria-label", `${size} by ${size} Sudoku board`);
+  els.sudokuBoard.innerHTML = "";
+
+  values.forEach((value, index) => {
+    const row = Math.floor(index / size);
+    const col = index % size;
+    const isGiven = puzzle[index] !== "0";
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "sudoku-cell";
+    button.dataset.index = String(index);
+    button.textContent = value;
+    button.setAttribute("aria-label", `Row ${row + 1}, column ${col + 1}${isGiven ? `, given ${value}` : value ? `, ${value}` : ", empty"}`);
+    if (isGiven) button.classList.add("given");
+    if (selected === index) button.classList.add("selected");
+    if (selectedValue && value === selectedValue) button.classList.add("same-value");
+    if (conflicts.has(index)) button.classList.add("conflict");
+    if (checked && !isGiven && value && value !== solution[index]) button.classList.add("wrong");
+    if ((col + 1) % config.blockCols === 0 && col < size - 1) button.classList.add("block-right");
+    if ((row + 1) % config.blockRows === 0 && row < size - 1) button.classList.add("block-bottom");
+    els.sudokuBoard.append(button);
+  });
+
+  els.sudokuPad.innerHTML = "";
+  for (let value = 1; value <= size; value += 1) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.dataset.sudokuValue = String(value);
+    button.textContent = String(value);
+    button.setAttribute("aria-label", `Enter ${value}`);
+    if (String(value) === selectedValue) button.classList.add("active");
+    els.sudokuPad.append(button);
+  }
+  const erase = document.createElement("button");
+  erase.type = "button";
+  erase.dataset.sudokuValue = "";
+  erase.className = "sudoku-erase";
+  erase.textContent = "Erase";
+  els.sudokuPad.append(erase);
+
+  els.sudokuStatus.textContent = sudokuStatusMessage({ values, solution, puzzle, conflicts, checked, selected, size });
+}
+
+function sudokuStatusMessage({ values, solution, puzzle, conflicts, checked, selected, size }) {
+  const filled = values.filter(Boolean).length;
+  const remaining = (size * size) - filled;
+  const complete = remaining === 0;
+  const wrongCount = values.reduce((count, value, index) => {
+    if (puzzle[index] !== "0" || !value) return count;
+    return value === solution[index] ? count : count + 1;
+  }, 0);
+
+  if (complete && wrongCount === 0 && conflicts.size === 0) return "Solved. Nice work.";
+  if (conflicts.size > 0) return "A row, column, or box has the same number twice.";
+  if (checked && wrongCount > 0) return "Some entries do not match the solution yet.";
+  if (checked && remaining > 0) return `No mistakes so far. ${remaining} ${remaining === 1 ? "square" : "squares"} left.`;
+  if (selected !== null && puzzle[selected] !== "0") return "That square is given. Choose an open square.";
+  if (selected !== null) return "Enter a number, or use Backspace to erase.";
+  return "Choose a square, then enter a number.";
+}
+
+function renderGames() {
+  const activeGame = state.games.activeGame === "mod-clock" ? "mod-clock" : "sudoku";
+  state.games.activeGame = activeGame;
+  els.gameTabs.forEach((tab) => {
+    tab.setAttribute("aria-selected", tab.dataset.game === activeGame ? "true" : "false");
+  });
+  els.sudokuGame.hidden = activeGame !== "sudoku";
+  els.modClockGame.hidden = activeGame !== "mod-clock";
+  renderSudoku();
+  renderModClock();
+}
+
+function setActiveGame(game) {
+  state.games.activeGame = game === "mod-clock" ? "mod-clock" : "sudoku";
+  saveGames(`Opened ${state.games.activeGame === "mod-clock" ? "Mod Clock" : "Sudoku"}`);
+  renderGames();
+  updateUrlFromState();
+}
+
+function updateSudokuSettings(partial, activity) {
+  state.games.sudoku = {
+    ...state.games.sudoku,
+    ...partial,
+    entries: partial.entries || {},
+    selected: partial.selected ?? null,
+    checked: false
+  };
+  saveGames(activity);
+  renderSudoku();
+}
+
+function selectSudokuCell(index) {
+  const { size } = currentSudokuSettings();
+  if (!Number.isInteger(index) || index < 0 || index >= size * size) return;
+  state.games.sudoku.selected = index;
+  saveGames();
+  renderSudoku();
+}
+
+function setSudokuValue(value) {
+  const { size, puzzle } = sudokuValues();
+  const selected = Number.isInteger(state.games.sudoku.selected) ? state.games.sudoku.selected : null;
+  if (selected === null || selected < 0 || selected >= size * size || puzzle[selected] !== "0") return;
+  const entries = { ...(state.games.sudoku.entries || {}) };
+  if (value) {
+    entries[selected] = String(value);
+  } else {
+    delete entries[selected];
+  }
+  state.games.sudoku.entries = entries;
+  state.games.sudoku.checked = false;
+  saveGames("Updated Sudoku");
+  renderSudoku();
+}
+
+function moveSudokuSelection(deltaRow, deltaCol) {
+  const { size } = currentSudokuSettings();
+  const current = Number.isInteger(state.games.sudoku.selected) ? state.games.sudoku.selected : 0;
+  const row = Math.min(size - 1, Math.max(0, Math.floor(current / size) + deltaRow));
+  const col = Math.min(size - 1, Math.max(0, (current % size) + deltaCol));
+  selectSudokuCell(row * size + col);
+}
+
+function checkSudoku() {
+  state.games.sudoku.checked = true;
+  saveGames("Checked Sudoku");
+  renderSudoku();
+}
+
+function clearSudoku() {
+  state.games.sudoku.entries = {};
+  state.games.sudoku.checked = false;
+  saveGames("Cleared Sudoku");
+  renderSudoku();
+}
+
+function newSudoku() {
+  updateSudokuSettings({
+    seed: (Number(state.games.sudoku.seed) || 0) + 1,
+    entries: {},
+    selected: null
+  }, "Started a new Sudoku");
+}
+
+function currentModClockSettings() {
+  const difficulty = ["easy", "medium", "hard"].includes(state.games.modClock.difficulty)
+    ? state.games.modClock.difficulty
+    : "easy";
+  const seed = Number.isFinite(Number(state.games.modClock.seed)) ? Number(state.games.modClock.seed) : 0;
+  return { difficulty, seed };
+}
+
+function modClockProblem() {
+  const { difficulty, seed } = currentModClockSettings();
+  const random = seededRandom(seed + { easy: 101, medium: 503, hard: 907 }[difficulty]);
+  const options = {
+    easy: { moduli: [5, 6, 8, 10], minMove: 2, maxMove: 13 },
+    medium: { moduli: [9, 10, 12], minMove: 8, maxMove: 28 },
+    hard: { moduli: [11, 13, 17], minMove: 14, maxMove: 48 }
+  }[difficulty];
+  const modulus = options.moduli[Math.floor(random() * options.moduli.length)];
+  const start = Math.floor(random() * modulus);
+  const move = options.minMove + Math.floor(random() * (options.maxMove - options.minMove + 1));
+  const answer = (start + move) % modulus;
+  return { difficulty, modulus, start, move, answer };
+}
+
+function renderModClock() {
+  if (!els.modClockDial) return;
+  const problem = modClockProblem();
+  const selected = Number.isInteger(state.games.modClock.selected) ? state.games.modClock.selected : null;
+  const checked = Boolean(state.games.modClock.checked);
+  els.modClockDifficulty.value = problem.difficulty;
+  els.modClockPrompt.textContent = `Start at ${problem.start}. Move forward ${problem.move}. Where do you land modulo ${problem.modulus}?`;
+  els.modClockDial.innerHTML = "";
+  els.modClockDial.style.setProperty("--modulus", problem.modulus);
+
+  for (let value = 0; value < problem.modulus; value += 1) {
+    const angle = ((value / problem.modulus) * Math.PI * 2) - (Math.PI / 2);
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "mod-clock-node";
+    button.dataset.modValue = String(value);
+    button.textContent = String(value);
+    button.style.left = `${50 + Math.cos(angle) * 39}%`;
+    button.style.top = `${50 + Math.sin(angle) * 39}%`;
+    button.setAttribute("aria-label", `Residue ${value}`);
+    if (value === problem.start) button.classList.add("start");
+    if (value === selected) button.classList.add("selected");
+    if (checked && value === selected && value !== problem.answer) button.classList.add("wrong");
+    if (checked && value === problem.answer) button.classList.add("correct");
+    els.modClockDial.append(button);
+  }
+
+  const center = document.createElement("div");
+  center.className = "mod-clock-center";
+  center.textContent = `+${problem.move}`;
+  els.modClockDial.append(center);
+
+  if (checked && selected === problem.answer) {
+    els.modClockStatus.textContent = "Correct. Wrapping lands there.";
+  } else if (checked && selected !== null) {
+    els.modClockStatus.textContent = `Not quite. Count ${problem.move} steps from ${problem.start} and wrap at ${problem.modulus}.`;
+  } else if (selected !== null) {
+    els.modClockStatus.textContent = "Press Check when ready.";
+  } else {
+    els.modClockStatus.textContent = "Choose where the move lands.";
+  }
+}
+
+function selectModClockValue(value) {
+  const problem = modClockProblem();
+  if (!Number.isInteger(value) || value < 0 || value >= problem.modulus) return;
+  state.games.modClock.selected = value;
+  state.games.modClock.checked = false;
+  saveGames("Updated Mod Clock");
+  renderModClock();
+}
+
+function checkModClock() {
+  state.games.modClock.checked = true;
+  saveGames("Checked Mod Clock");
+  renderModClock();
+}
+
+function newModClock() {
+  state.games.modClock.seed = (Number(state.games.modClock.seed) || 0) + 1;
+  state.games.modClock.selected = null;
+  state.games.modClock.checked = false;
+  saveGames("Started a new Mod Clock");
+  renderModClock();
+}
+
+function handleSudokuKeydown(event) {
+  if (state.activeSurface !== "games" || event.defaultPrevented) return false;
+  if (state.games.activeGame === "mod-clock") return handleModClockKeydown(event);
+  if (isFormControl(event.target) && !event.target.classList?.contains("sudoku-cell")) return false;
+
+  const { size } = currentSudokuSettings();
+  if (/^\d$/.test(event.key) && Number(event.key) >= 1 && Number(event.key) <= size) {
+    event.preventDefault();
+    setSudokuValue(event.key);
+    return true;
+  }
+  if (event.key === "Backspace" || event.key === "Delete" || event.key === "0") {
+    event.preventDefault();
+    setSudokuValue("");
+    return true;
+  }
+  if (event.key === "Enter") {
+    event.preventDefault();
+    checkSudoku();
+    return true;
+  }
+  const moves = {
+    ArrowUp: [-1, 0],
+    ArrowDown: [1, 0],
+    ArrowLeft: [0, -1],
+    ArrowRight: [0, 1]
+  };
+  if (moves[event.key]) {
+    event.preventDefault();
+    moveSudokuSelection(...moves[event.key]);
+    return true;
+  }
+  return false;
+}
+
+function handleModClockKeydown(event) {
+  if (isFormControl(event.target) && !event.target.classList?.contains("mod-clock-node")) return false;
+  const problem = modClockProblem();
+  if (/^\d$/.test(event.key)) {
+    const nextText = `${state.games.modClock.pendingDigits || ""}${event.key}`.slice(-2);
+    const value = Number.parseInt(nextText, 10);
+    event.preventDefault();
+    state.games.modClock.pendingDigits = value < problem.modulus ? nextText : event.key;
+    selectModClockValue(Number.parseInt(state.games.modClock.pendingDigits, 10));
+    return true;
+  }
+  if (event.key === "Backspace" || event.key === "Delete") {
+    event.preventDefault();
+    state.games.modClock.selected = null;
+    state.games.modClock.pendingDigits = "";
+    state.games.modClock.checked = false;
+    saveGames();
+    renderModClock();
+    return true;
+  }
+  if (event.key === "ArrowLeft" || event.key === "ArrowDown" || event.key === "ArrowRight" || event.key === "ArrowUp") {
+    event.preventDefault();
+    const delta = event.key === "ArrowLeft" || event.key === "ArrowDown" ? -1 : 1;
+    const current = Number.isInteger(state.games.modClock.selected) ? state.games.modClock.selected : problem.start;
+    selectModClockValue((current + delta + problem.modulus) % problem.modulus);
+    return true;
+  }
+  if (event.key === "Enter") {
+    event.preventDefault();
+    checkModClock();
+    return true;
+  }
+  return false;
+}
+
 function renderSurface() {
   const isScratchpad = state.activeSurface === "scratchpad";
   const isPhysics = state.activeSurface === "physics";
-  els.lessonPanel.hidden = isScratchpad;
+  const isGames = state.activeSurface === "games";
+  els.lessonPanel.hidden = isScratchpad || isGames;
   els.scratchpadPanel.hidden = !isScratchpad;
-  els.learnSurface.setAttribute("aria-pressed", !isScratchpad && !isPhysics ? "true" : "false");
+  els.sudokuPanel.hidden = !isGames;
+  els.topicPanel.hidden = isScratchpad || isGames;
+  els.workspaceLayout.classList.toggle("single-column", isScratchpad || isGames);
+  els.learnSurface.setAttribute("aria-pressed", !isScratchpad && !isPhysics && !isGames ? "true" : "false");
   els.physicsSurface.setAttribute("aria-pressed", isPhysics ? "true" : "false");
+  els.gamesSurface.setAttribute("aria-pressed", isGames ? "true" : "false");
   els.scratchpadSurface.setAttribute("aria-pressed", isScratchpad ? "true" : "false");
   if (isScratchpad) {
     els.scratchpadInput?.focus({ preventScroll: true });
+  } else if (isGames) {
+    renderGames();
   }
 }
 
@@ -3204,6 +3730,8 @@ function setSurface(surface) {
   renderTopics();
   if (surface === "scratchpad") {
     renderScratchpad();
+  } else if (surface === "games") {
+    renderGames();
   } else {
     renderWorkspace();
   }
@@ -7961,7 +8489,11 @@ function bindEvents() {
 
   els.learnSurface.addEventListener("click", () => setSurface("learn"));
   els.physicsSurface.addEventListener("click", () => setSurface("physics"));
+  els.gamesSurface.addEventListener("click", () => setSurface("games"));
   els.scratchpadSurface.addEventListener("click", () => setSurface("scratchpad"));
+  els.gameTabs.forEach((tab) => {
+    tab.addEventListener("click", () => setActiveGame(tab.dataset.game));
+  });
 
   els.modeTabs.forEach((tab) => {
     tab.addEventListener("click", () => {
@@ -8028,6 +8560,53 @@ function bindEvents() {
   els.copyScratchMarkdown.addEventListener("click", () => copyScratchpad("markdown"));
   els.exportScratchLatex.addEventListener("click", exportScratchpadLatex);
   els.importScratchLatex.addEventListener("change", importScratchpadLatex);
+  els.sudokuBoard.addEventListener("click", (event) => {
+    const cell = event.target.closest(".sudoku-cell");
+    if (!cell) return;
+    selectSudokuCell(Number.parseInt(cell.dataset.index, 10));
+  });
+  els.sudokuPad.addEventListener("click", (event) => {
+    const button = event.target.closest("button[data-sudoku-value]");
+    if (!button) return;
+    setSudokuValue(button.dataset.sudokuValue);
+  });
+  els.sudokuSize.addEventListener("change", () => {
+    updateSudokuSettings({
+      size: Number.parseInt(els.sudokuSize.value, 10),
+      difficulty: state.games.sudoku.difficulty,
+      seed: 0,
+      entries: {},
+      selected: null
+    }, "Changed Sudoku size");
+  });
+  els.sudokuDifficulty.addEventListener("change", () => {
+    updateSudokuSettings({
+      size: state.games.sudoku.size,
+      difficulty: els.sudokuDifficulty.value,
+      seed: 0,
+      entries: {},
+      selected: null
+    }, "Changed Sudoku difficulty");
+  });
+  els.newSudoku.addEventListener("click", newSudoku);
+  els.checkSudoku.addEventListener("click", checkSudoku);
+  els.clearSudoku.addEventListener("click", clearSudoku);
+  els.modClockDial.addEventListener("click", (event) => {
+    const button = event.target.closest(".mod-clock-node");
+    if (!button) return;
+    selectModClockValue(Number.parseInt(button.dataset.modValue, 10));
+  });
+  els.modClockDifficulty.addEventListener("change", () => {
+    state.games.modClock.difficulty = els.modClockDifficulty.value;
+    state.games.modClock.seed = 0;
+    state.games.modClock.selected = null;
+    state.games.modClock.checked = false;
+    state.games.modClock.pendingDigits = "";
+    saveGames("Changed Mod Clock difficulty");
+    renderModClock();
+  });
+  els.newModClock.addEventListener("click", newModClock);
+  els.checkModClock.addEventListener("click", checkModClock);
   els.scratchpadToolbar.addEventListener("click", (event) => {
     const button = event.target.closest("button[data-insert]");
     if (!button) return;
@@ -8078,6 +8657,7 @@ function startCurrentLesson() {
 
 function handlePageKeydown(event) {
   if (event.defaultPrevented) return;
+  if (handleSudokuKeydown(event)) return;
   if (event.key === "Enter") {
     if (isFormControl(event.target) && !event.target.classList?.contains("digit-input")) return;
     event.preventDefault();

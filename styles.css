@@ -17,6 +17,12 @@
   --complete: #2457d6;
   --complete-soft: #e8eefc;
   --focus: #111111;
+  --sudoku-ink: #123c44;
+  --sudoku-surface: #fbfefd;
+  --sudoku-soft: #e6f4f2;
+  --sudoku-given: #eef3f4;
+  --sudoku-selected: #d7eeea;
+  --sudoku-wrong: #f4e1d9;
   --radius: 8px;
   --font: Helvetica, Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --math-font: KaTeX_Main, "Latin Modern Math", "STIX Two Math", "Cambria Math", "Times New Roman", serif;
@@ -41,6 +47,12 @@
     --complete: #9bb7ff;
     --complete-soft: #243154;
     --focus: #ffffff;
+    --sudoku-ink: #a8d9d2;
+    --sudoku-surface: #182223;
+    --sudoku-soft: #203938;
+    --sudoku-given: #263033;
+    --sudoku-selected: #254844;
+    --sudoku-wrong: #4b2d25;
   }
 }
 
@@ -64,6 +76,7 @@ body {
 
 button,
 input,
+select,
 textarea {
   font: inherit;
 }
@@ -242,6 +255,10 @@ button {
   max-width: 1440px;
   margin: 0 auto;
   align-items: start;
+}
+
+.workspace-layout.single-column {
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .site-footer {
@@ -626,6 +643,302 @@ button {
   border-radius: var(--radius);
   background: var(--surface);
   overflow: auto;
+}
+
+.sudoku-panel {
+  display: grid;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.sudoku-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: start;
+}
+
+.sudoku-header h2 {
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.15;
+}
+
+.game-tabs {
+  display: inline-flex;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-muted);
+}
+
+.game-tab {
+  min-height: 36px;
+  padding: 0 12px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.game-tab[aria-selected="true"] {
+  border-color: var(--sudoku-ink);
+  background: var(--surface);
+  color: var(--sudoku-ink);
+}
+
+.sudoku-game,
+.mod-clock-game {
+  display: grid;
+  gap: 14px;
+}
+
+.sudoku-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: end;
+  justify-content: flex-end;
+}
+
+.sudoku-controls label {
+  display: grid;
+  gap: 4px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.sudoku-controls select {
+  min-height: 36px;
+  min-width: 112px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.sudoku-status {
+  min-height: 40px;
+  padding: 10px 12px;
+  border: 1px solid color-mix(in srgb, var(--sudoku-ink) 28%, var(--line));
+  border-radius: var(--radius);
+  background: var(--sudoku-soft);
+  color: var(--text);
+  font-weight: 700;
+}
+
+.sudoku-layout {
+  display: grid;
+  grid-template-columns: minmax(280px, 560px) minmax(190px, 260px);
+  gap: 18px;
+  align-items: start;
+}
+
+.sudoku-board {
+  --sudoku-size: 9;
+  display: grid;
+  grid-template-columns: repeat(var(--sudoku-size), minmax(0, 1fr));
+  width: min(100%, 560px);
+  aspect-ratio: 1;
+  border: 2px solid var(--sudoku-ink);
+  border-radius: var(--radius);
+  background: var(--sudoku-surface);
+  overflow: hidden;
+}
+
+.sudoku-cell {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-right: 1px solid color-mix(in srgb, var(--sudoku-ink) 28%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--sudoku-ink) 28%, transparent);
+  border-radius: 0;
+  background: var(--sudoku-surface);
+  color: var(--text);
+  cursor: pointer;
+  font-size: var(--sudoku-cell-font, 1.45rem);
+  font-weight: 800;
+  line-height: 1;
+}
+
+.sudoku-board-4 {
+  --sudoku-cell-font: 2.4rem;
+}
+
+.sudoku-board-6 {
+  --sudoku-cell-font: 1.85rem;
+}
+
+.sudoku-board-9 {
+  --sudoku-cell-font: 1.45rem;
+}
+
+.sudoku-cell.given {
+  background: var(--sudoku-given);
+  color: color-mix(in srgb, var(--text) 88%, var(--sudoku-ink));
+}
+
+.sudoku-cell.same-value:not(.selected) {
+  background: color-mix(in srgb, var(--sudoku-soft) 66%, var(--surface));
+}
+
+.sudoku-cell.selected {
+  background: var(--sudoku-selected);
+  box-shadow: inset 0 0 0 3px var(--sudoku-ink);
+}
+
+.sudoku-cell.conflict,
+.sudoku-cell.wrong {
+  background: var(--sudoku-wrong);
+  color: var(--incorrect);
+}
+
+.sudoku-cell.block-right {
+  border-right-width: 2px;
+  border-right-color: var(--sudoku-ink);
+}
+
+.sudoku-cell.block-bottom {
+  border-bottom-width: 2px;
+  border-bottom-color: var(--sudoku-ink);
+}
+
+.sudoku-side {
+  display: grid;
+  gap: 12px;
+}
+
+.sudoku-pad {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.sudoku-pad button {
+  min-height: 48px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.sudoku-pad button.active {
+  border-color: var(--sudoku-ink);
+  background: var(--sudoku-soft);
+  color: var(--sudoku-ink);
+}
+
+.sudoku-pad .sudoku-erase {
+  grid-column: 1 / -1;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.sudoku-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.sudoku-note {
+  margin: 0;
+  color: var(--muted);
+}
+
+.mod-clock-layout {
+  display: grid;
+  grid-template-columns: minmax(260px, 440px) minmax(220px, 1fr);
+  gap: 18px;
+  align-items: center;
+}
+
+.mod-clock-dial {
+  position: relative;
+  width: min(100%, 440px);
+  aspect-ratio: 1;
+  border: 2px solid var(--sudoku-ink);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at center, var(--surface) 0 34%, transparent 35%),
+    var(--sudoku-soft);
+}
+
+.mod-clock-node {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  transform: translate(-50%, -50%);
+  border: 1px solid color-mix(in srgb, var(--sudoku-ink) 38%, var(--line));
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.mod-clock-node.start {
+  border-color: var(--sudoku-ink);
+  background: color-mix(in srgb, var(--sudoku-soft) 82%, var(--surface));
+}
+
+.mod-clock-node.selected {
+  box-shadow: 0 0 0 3px var(--sudoku-ink);
+}
+
+.mod-clock-node.correct {
+  background: var(--correct-soft);
+  color: var(--correct);
+}
+
+.mod-clock-node.wrong {
+  background: var(--incorrect-soft);
+  color: var(--incorrect);
+}
+
+.mod-clock-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 30%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border: 1px solid color-mix(in srgb, var(--sudoku-ink) 32%, var(--line));
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--sudoku-ink);
+  font-size: 24px;
+  font-weight: 900;
+}
+
+.mod-clock-side {
+  display: grid;
+  gap: 12px;
+  align-content: center;
+}
+
+.mod-clock-prompt {
+  margin: 0;
+  color: var(--text);
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.25;
 }
 
 .scratch-line {
@@ -1828,6 +2141,37 @@ button {
 
   .scratchpad-layout {
     grid-template-columns: 1fr;
+  }
+
+  .sudoku-header,
+  .sudoku-layout,
+  .mod-clock-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .sudoku-controls {
+    justify-content: start;
+  }
+
+  .game-tabs {
+    width: 100%;
+  }
+
+  .game-tab {
+    flex: 1;
+  }
+
+  .sudoku-board {
+    width: 100%;
+  }
+
+  .mod-clock-dial {
+    width: 100%;
+  }
+
+  .mod-clock-node {
+    width: 38px;
+    height: 38px;
   }
 
   .lesson-setup {

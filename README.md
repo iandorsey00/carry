@@ -1,12 +1,12 @@
 # Carry
 
-Version: `0.1.0-alpha.54`
+Version: `0.1.0-alpha.56`
 
-Carry is a local-first math and physics learning studio designed to run fully in the browser.
+Carry is a local-first math, physics, scratchpad, and puzzle learning studio designed to run fully in the browser.
 
-Carry opens directly into a focused learning workspace. It currently includes implemented Arithmetic, Pre-Algebra, Algebra, Geometry, Trigonometry, Precalculus, Calculus, Differential Equations, Linear Algebra, Proofs, Set Theory, Number Theory, Probability, Real Analysis, Abstract Algebra, and Physics lessons. Math coverage includes guided long addition, subtraction, multiplication, division, division with remainders, equation transformations, inequality transformations, systems, factoring, quadratics, angles, triangles, circles, area and volume, coordinate geometry, proof basics, unit circle values, right-triangle ratios, trig graphs, identities, inverse trig, functions, transformations, polynomial and rational functions, exponential and log functions, sequences, complex numbers, limits, derivatives, integrals, calculus applications, series, slope fields, separable equations, first-order and second-order differential equation models, vectors, matrices, linear transformations, determinants, eigenvalues, vector spaces, logic, quantifiers, induction, contradiction, construction, counterexamples, set notation, subsets, set operations, relations, functions as maps, countability, divisibility, primes, GCD and LCM, the Euclidean algorithm, modular arithmetic, congruences, sample spaces, basic probability, counting, conditional probability, random variables, real sequences, epsilon-delta limits, continuity, differentiability, Riemann integration, groups, rings, fields, homomorphisms, and abstract examples. Physics coverage includes units, vectors, graphs, kinematics, forces, energy, momentum, oscillations, waves, sound, electric charge and fields, circuits, magnetism, thermodynamics, ideal gases, quantum ideas, and relativity. Carry also includes a local-first Scratchpad for typing plain math or LaTeX-ish notation, previewing readable notation, and copying or importing/exporting clean plain text, LaTeX-ish notation, or Markdown. Progress and scratchpads are stored privately in the browser with `localStorage`, with JSON export and import controls for learner progress backup or transfer.
+Carry opens directly into a focused learning workspace. It currently includes implemented Arithmetic, Pre-Algebra, Algebra, Geometry, Trigonometry, Precalculus, Calculus, Differential Equations, Linear Algebra, Proofs, Set Theory, Number Theory, Probability, Real Analysis, Abstract Algebra, and Physics lessons. Math coverage includes guided long addition, subtraction, multiplication, division, division with remainders, equation transformations, inequality transformations, systems, factoring, quadratics, angles, triangles, circles, area and volume, coordinate geometry, proof basics, unit circle values, right-triangle ratios, trig graphs, identities, inverse trig, functions, transformations, polynomial and rational functions, exponential and log functions, sequences, complex numbers, limits, derivatives, integrals, calculus applications, series, slope fields, separable equations, first-order and second-order differential equation models, vectors, matrices, linear transformations, determinants, eigenvalues, vector spaces, logic, quantifiers, induction, contradiction, construction, counterexamples, set notation, subsets, set operations, relations, functions as maps, countability, divisibility, primes, GCD and LCM, the Euclidean algorithm, modular arithmetic, congruences, sample spaces, basic probability, counting, conditional probability, random variables, real sequences, epsilon-delta limits, continuity, differentiability, Riemann integration, groups, rings, fields, homomorphisms, and abstract examples. Physics coverage includes units, vectors, graphs, kinematics, forces, energy, momentum, oscillations, waves, sound, electric charge and fields, circuits, magnetism, thermodynamics, ideal gases, quantum ideas, and relativity. Carry also includes a local-first Scratchpad for typing plain math or LaTeX-ish notation, previewing readable notation, and copying or importing/exporting clean plain text, LaTeX-ish notation, or Markdown. The Games section currently includes Sudoku with adjustable board size, difficulty, keyboard input, and local browser persistence, plus Mod Clock for visual modular arithmetic practice. Progress, scratchpads, and games are stored privately in the browser with `localStorage`, with JSON export and import controls for learner progress backup or transfer.
 
-Lessons use readable paths such as `/math/arithmetic/long-addition`, `/math/differential-equations/separable-equations`, `/math/probability/basic-probability`, and `/physics/thermodynamics/ideal-gas-law`. Static hosts should rewrite unknown app paths to `index.html`.
+Lessons use readable paths such as `/math/arithmetic/long-addition`, `/math/differential-equations/separable-equations`, `/math/probability/basic-probability`, `/physics/thermodynamics/ideal-gas-law`, `/games/sudoku`, and `/games/mod-clock`. Static hosts should rewrite unknown app paths to `index.html`.
 
 ## Run
 
@@ -16,7 +16,7 @@ Open `index.html` in a browser, or serve the directory with any static file serv
 
 - `index.html` provides the static app shell.
 - `styles.css` defines the shared interface system, light and dark themes, grid layout, focus states, and responsive behavior.
-- `app.js` contains the client-side workspace registry, progress persistence, lesson renderers, validation, hints, problem guardrails, and import/export flow.
+- `app.js` contains the client-side workspace registry, progress and game persistence, lesson renderers, validation, hints, problem guardrails, and import/export flow.
 - `assets/carry-icon.png` provides the app icon and favicon.
 
 ## Versioning
@@ -26,6 +26,7 @@ Carry uses pre-1.0 semantic versions while the curriculum and interaction model 
 ## Current Guardrails
 
 - Progress stays local to the current browser unless exported as JSON.
+- Scratchpads and games stay local to the current browser.
 - No login, accounts, email, passwords, or server-side learner profiles are used.
 - Long subtraction defaults to non-negative answers.
 - Exact long division accepts three-digit dividends and one- or two-digit divisors with no final remainder.
