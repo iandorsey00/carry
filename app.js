@@ -1,6 +1,6 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-alpha.59";
+const APP_VERSION = "0.1.0-alpha.60";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 const GAMES_STORAGE_KEY = "carry.games.v1";
@@ -2763,7 +2763,7 @@ function supplementBroadPractice() {
 
   addPractice("proofs.logic", [
     { prompt: "In the statement if A then B, which part is the conclusion?", answer: "b", answers: ["b", "B"], hint: "The conclusion follows then.", label: "identify conclusion", feedback: "Separate the if part from the then part." },
-    { prompt: "If A implies B and B is false, what can you conclude about A?", answer: "false", answers: ["false", "a is false", "not a", "¬a"], hint: "If A were true, B would have to be true.", label: "contrapositive reasoning", feedback: "This is reasoning by contrapositive." },
+    { prompt: "If A implies B and B is false, what can you conclude about A?", answer: "a is false", answers: ["false", "a is false", "not a", "¬a"], choices: [{ value: "a is false", label: "A is false" }, { value: "b is true", label: "B is true" }, { value: "a is true", label: "A is true" }], hint: "If A were true, B would have to be true.", label: "contrapositive reasoning", feedback: "This is reasoning by contrapositive." },
     { prompt: "What word joins two statements so both must be true?", answer: "and", answers: ["and", "conjunction"], hint: "A and B requires both pieces.", label: "logical and", feedback: "Conjunction means both." }
   ]);
 
@@ -8637,10 +8637,17 @@ function checkCurrentStep() {
   }
 }
 
+let lastPointerCheckAt = 0;
+
 function requestStepCheck(event) {
   event?.preventDefault?.();
   event?.stopPropagation?.();
   event?.stopImmediatePropagation?.();
+  if (event && event.type !== "keydown") {
+    const now = window.performance?.now?.() || Date.now();
+    if (now - lastPointerCheckAt < 180) return;
+    lastPointerCheckAt = now;
+  }
   if (state.showIntro) {
     startCurrentLesson();
     return;
@@ -8768,6 +8775,11 @@ function validateInput(input, announce) {
   return correct;
 }
 
+const ANSWER_NORMALIZE_LIMIT = 160;
+const ANSWER_CACHE_LIMIT = 1200;
+const answerValueCache = new Map();
+const answerVariantCache = new Map();
+
 function validateGuidedConceptInput(input) {
   if (!input.value.trim()) {
     input.classList.remove("correct", "incorrect", "hint");
@@ -8819,7 +8831,9 @@ function isCorrectAnswer(input) {
 }
 
 function answerValue(value) {
-  return String(value || "")
+  const key = String(value || "").slice(0, ANSWER_NORMALIZE_LIMIT);
+  if (answerValueCache.has(key)) return answerValueCache.get(key);
+  const normalized = key
     .replace(/<\/?math>/g, "")
     .trim()
     .toLowerCase()
@@ -8832,10 +8846,30 @@ function answerValue(value) {
     .replace(/·/g, "*")
     .replace(/\bdegrees?\b|\bdeg\b|°/g, "")
     .replace(/\s+/g, "");
+  if (answerValueCache.size > ANSWER_CACHE_LIMIT) answerValueCache.clear();
+  answerValueCache.set(key, normalized);
+  return normalized;
 }
 
 function acceptedAnswersForInput(input) {
-  const explicit = input.dataset.answers ? JSON.parse(input.dataset.answers) : [input.dataset.expected];
+  const cacheKey = [
+    input.dataset.answers || "",
+    input.dataset.expected || "",
+    input.dataset.label || "",
+    input.dataset.prompt || ""
+  ].join("\n");
+  if (input.__carryAcceptedAnswersKey === cacheKey && input.__carryAcceptedAnswers) {
+    return input.__carryAcceptedAnswers;
+  }
+
+  let explicit = [input.dataset.expected];
+  if (input.dataset.answers) {
+    try {
+      explicit = JSON.parse(input.dataset.answers);
+    } catch {
+      explicit = [input.dataset.expected];
+    }
+  }
   const answers = new Set(explicit.map(String));
   const expected = answerValue(input.dataset.expected);
   const label = answerValue(input.dataset.label);
@@ -8845,7 +8879,10 @@ function acceptedAnswersForInput(input) {
     answers.add(alias);
   }
 
-  return [...answers];
+  const accepted = [...answers].slice(0, 40).map((answer) => String(answer).slice(0, ANSWER_NORMALIZE_LIMIT));
+  input.__carryAcceptedAnswersKey = cacheKey;
+  input.__carryAcceptedAnswers = accepted;
+  return accepted;
 }
 
 function semanticAnswerAliases(expected, label, prompt) {
@@ -8882,6 +8919,7 @@ function semanticAnswerAliases(expected, label, prompt) {
 
 function answerVariants(value) {
   const compact = answerValue(value);
+  if (answerVariantCache.has(compact)) return new Set(answerVariantCache.get(compact));
   const loose = compact
     .replace(/\btimes\b/g, "*")
     .replace(/\bplus\b/g, "+")
@@ -8902,6 +8940,8 @@ function answerVariants(value) {
     const [numerator, denominator] = compact.split("/").map(Number);
     if (denominator !== 0) variants.add(String(numerator / denominator));
   }
+  if (answerVariantCache.size > ANSWER_CACHE_LIMIT) answerVariantCache.clear();
+  answerVariantCache.set(compact, [...variants]);
   return variants;
 }
 
