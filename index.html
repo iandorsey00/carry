@@ -12,7 +12,7 @@
     <link rel="icon" type="image/png" sizes="512x512" href="./assets/carry-icon.png">
     <link rel="apple-touch-icon" href="./assets/carry-icon.png">
     <link rel="manifest" href="./manifest.webmanifest">
-    <link rel="stylesheet" href="./styles.css?v=0.1.0-alpha.56">
+    <link rel="stylesheet" href="./styles.css?v=0.1.0-alpha.57">
   </head>
   <body>
     <div class="app-shell">
@@ -338,6 +338,10 @@
               <div class="game-tabs" role="tablist" aria-label="Games">
                 <button class="game-tab" type="button" data-game="sudoku" aria-selected="true">Sudoku</button>
                 <button class="game-tab" type="button" data-game="mod-clock" aria-selected="false">Mod Clock</button>
+                <button class="game-tab" type="button" data-game="prime-factors" aria-selected="false">Prime Factors</button>
+                <button class="game-tab" type="button" data-game="gcd-race" aria-selected="false">GCD</button>
+                <button class="game-tab" type="button" data-game="divisibility" aria-selected="false">Divisibility</button>
+                <button class="game-tab" type="button" data-game="residue-match" aria-selected="false">Residues</button>
               </div>
             </div>
 
@@ -428,13 +432,133 @@
                 </div>
               </div>
             </div>
+
+            <div class="number-game" id="primeFactorsGame" data-number-game="prime-factors" hidden>
+              <div class="sudoku-controls" aria-label="Prime Factor settings">
+                <label>
+                  <span>Difficulty</span>
+                  <select data-number-difficulty="prime-factors">
+                    <option value="easy" selected>Easy</option>
+                    <option value="medium">Medium</option>
+                    <option value="hard">Hard</option>
+                  </select>
+                </label>
+                <button class="tool-button compact" type="button" data-number-new="prime-factors">New</button>
+              </div>
+              <div class="sudoku-status" data-number-status="prime-factors" aria-live="polite"></div>
+              <div class="number-game-layout">
+                <div>
+                  <p class="mod-clock-prompt" data-number-prompt="prime-factors"></p>
+                  <div class="number-choice-grid" data-number-choices="prime-factors"></div>
+                </div>
+                <div class="mod-clock-side">
+                  <button class="tool-button" type="button" data-number-check="prime-factors">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="m20 6-11 11-5-5"></path>
+                    </svg>
+                    Check
+                  </button>
+                  <p class="sudoku-note">Choose every prime that divides the number.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="number-game" id="gcdRaceGame" data-number-game="gcd-race" hidden>
+              <div class="sudoku-controls" aria-label="GCD settings">
+                <label>
+                  <span>Difficulty</span>
+                  <select data-number-difficulty="gcd-race">
+                    <option value="easy" selected>Easy</option>
+                    <option value="medium">Medium</option>
+                    <option value="hard">Hard</option>
+                  </select>
+                </label>
+                <button class="tool-button compact" type="button" data-number-new="gcd-race">New</button>
+              </div>
+              <div class="sudoku-status" data-number-status="gcd-race" aria-live="polite"></div>
+              <div class="number-game-layout">
+                <div>
+                  <p class="mod-clock-prompt" data-number-prompt="gcd-race"></p>
+                  <div class="number-choice-grid" data-number-choices="gcd-race"></div>
+                </div>
+                <div class="mod-clock-side">
+                  <button class="tool-button" type="button" data-number-check="gcd-race">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="m20 6-11 11-5-5"></path>
+                    </svg>
+                    Check
+                  </button>
+                  <p class="sudoku-note">Find the greatest whole number that divides both values.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="number-game" id="divisibilityGame" data-number-game="divisibility" hidden>
+              <div class="sudoku-controls" aria-label="Divisibility settings">
+                <label>
+                  <span>Difficulty</span>
+                  <select data-number-difficulty="divisibility">
+                    <option value="easy" selected>Easy</option>
+                    <option value="medium">Medium</option>
+                    <option value="hard">Hard</option>
+                  </select>
+                </label>
+                <button class="tool-button compact" type="button" data-number-new="divisibility">New</button>
+              </div>
+              <div class="sudoku-status" data-number-status="divisibility" aria-live="polite"></div>
+              <div class="number-game-layout">
+                <div>
+                  <p class="mod-clock-prompt" data-number-prompt="divisibility"></p>
+                  <div class="number-choice-grid wide" data-number-choices="divisibility"></div>
+                </div>
+                <div class="mod-clock-side">
+                  <button class="tool-button" type="button" data-number-check="divisibility">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="m20 6-11 11-5-5"></path>
+                    </svg>
+                    Check
+                  </button>
+                  <p class="sudoku-note">Pick the rule that explains why the divisibility claim works.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="number-game" id="residueMatchGame" data-number-game="residue-match" hidden>
+              <div class="sudoku-controls" aria-label="Residue Match settings">
+                <label>
+                  <span>Difficulty</span>
+                  <select data-number-difficulty="residue-match">
+                    <option value="easy" selected>Easy</option>
+                    <option value="medium">Medium</option>
+                    <option value="hard">Hard</option>
+                  </select>
+                </label>
+                <button class="tool-button compact" type="button" data-number-new="residue-match">New</button>
+              </div>
+              <div class="sudoku-status" data-number-status="residue-match" aria-live="polite"></div>
+              <div class="number-game-layout">
+                <div>
+                  <p class="mod-clock-prompt" data-number-prompt="residue-match"></p>
+                  <div class="number-choice-grid" data-number-choices="residue-match"></div>
+                </div>
+                <div class="mod-clock-side">
+                  <button class="tool-button" type="button" data-number-check="residue-match">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="m20 6-11 11-5-5"></path>
+                    </svg>
+                    Check
+                  </button>
+                  <p class="sudoku-note">Choose every number with the same remainder.</p>
+                </div>
+              </div>
+            </div>
           </section>
         </div>
 
       </main>
 
       <footer class="site-footer">
-        Carry <span id="appVersion">v0.1.0-alpha.56</span> © 2026 Ian Dorsey · Open source under the MIT License
+        Carry <span id="appVersion">v0.1.0-alpha.57</span> © 2026 Ian Dorsey · Open source under the MIT License
       </footer>
     </div>
 
@@ -508,6 +632,6 @@
         }
       };
     </script>
-    <script src="./app.js?v=0.1.0-alpha.56" defer></script>
+    <script src="./app.js?v=0.1.0-alpha.57" defer></script>
   </body>
 </html>

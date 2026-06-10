@@ -669,6 +669,8 @@ button {
 
 .game-tabs {
   display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
   padding: 3px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -693,7 +695,8 @@ button {
 }
 
 .sudoku-game,
-.mod-clock-game {
+.mod-clock-game,
+.number-game {
   display: grid;
   gap: 14px;
 }
@@ -939,6 +942,53 @@ button {
   font-size: 22px;
   font-weight: 800;
   line-height: 1.25;
+}
+
+.number-game-layout {
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) minmax(190px, 260px);
+  gap: 18px;
+  align-items: start;
+}
+
+.number-choice-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(84px, 1fr));
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.number-choice-grid.wide {
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+}
+
+.number-choice-grid button {
+  min-height: 54px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.number-choice-grid button.selected {
+  border-color: var(--sudoku-ink);
+  background: var(--sudoku-soft);
+  color: var(--sudoku-ink);
+}
+
+.number-choice-grid button.correct {
+  border-color: var(--correct);
+  background: var(--correct-soft);
+  color: var(--correct);
+}
+
+.number-choice-grid button.wrong {
+  border-color: var(--incorrect);
+  background: var(--incorrect-soft);
+  color: var(--incorrect);
 }
 
 .scratch-line {
@@ -2145,7 +2195,8 @@ button {
 
   .sudoku-header,
   .sudoku-layout,
-  .mod-clock-layout {
+  .mod-clock-layout,
+  .number-game-layout {
     grid-template-columns: 1fr;
   }
 

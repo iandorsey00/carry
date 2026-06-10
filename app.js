@@ -1,9 +1,10 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-alpha.56";
+const APP_VERSION = "0.1.0-alpha.57";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 const GAMES_STORAGE_KEY = "carry.games.v1";
+const GAME_IDS = ["sudoku", "mod-clock", "prime-factors", "gcd-race", "divisibility", "residue-match"];
 
 const topicGroups = [
   {
@@ -2421,8 +2422,6 @@ const sudokuBoards = {
   9: {
     blockRows: 3,
     blockCols: 3,
-    solution: "534678912672195348198342567859761423426853791713924856961537284287419635345286179",
-    basePuzzle: "530070000600195000098000060800060003400803001700020006060000280000419005000080079",
     clues: { easy: 42, medium: 32, hard: 26 }
   }
 };
@@ -2874,6 +2873,11 @@ function cacheElements() {
   els.modClockDifficulty = document.querySelector("#modClockDifficulty");
   els.newModClock = document.querySelector("#newModClock");
   els.checkModClock = document.querySelector("#checkModClock");
+  els.numberGamePanels = Array.from(document.querySelectorAll("[data-number-game]"));
+  els.numberGamePrompts = Object.fromEntries(Array.from(document.querySelectorAll("[data-number-prompt]")).map((item) => [item.dataset.numberPrompt, item]));
+  els.numberGameStatuses = Object.fromEntries(Array.from(document.querySelectorAll("[data-number-status]")).map((item) => [item.dataset.numberStatus, item]));
+  els.numberGameChoices = Object.fromEntries(Array.from(document.querySelectorAll("[data-number-choices]")).map((item) => [item.dataset.numberChoices, item]));
+  els.numberGameDifficulties = Object.fromEntries(Array.from(document.querySelectorAll("[data-number-difficulty]")).map((item) => [item.dataset.numberDifficulty, item]));
   els.scratchpadInput = document.querySelector("#scratchpadInput");
   els.scratchpadPreview = document.querySelector("#scratchpadPreview");
   els.scratchpadList = document.querySelector("#scratchpadList");
@@ -2968,12 +2972,39 @@ function loadGames() {
       difficulty: "easy",
       seed: 0,
       selected: null,
-      entries: {}
+      entries: {},
+      puzzle: "",
+      solution: "",
+      signature: ""
     },
     modClock: {
       difficulty: "easy",
       seed: 0,
       selected: null,
+      checked: false
+    },
+    primeFactors: {
+      difficulty: "easy",
+      seed: 0,
+      selected: [],
+      checked: false
+    },
+    gcdRace: {
+      difficulty: "easy",
+      seed: 0,
+      selected: null,
+      checked: false
+    },
+    divisibility: {
+      difficulty: "easy",
+      seed: 0,
+      selected: null,
+      checked: false
+    },
+    residueMatch: {
+      difficulty: "easy",
+      seed: 0,
+      selected: [],
       checked: false
     }
   };
@@ -2985,7 +3016,7 @@ function loadGames() {
     return {
       ...fallback,
       ...parsed,
-      activeGame: ["sudoku", "mod-clock"].includes(parsed.activeGame) ? parsed.activeGame : fallback.activeGame,
+      activeGame: GAME_IDS.includes(parsed.activeGame) ? parsed.activeGame : fallback.activeGame,
       sudoku: {
         ...fallback.sudoku,
         ...(parsed.sudoku || {}),
@@ -2994,6 +3025,22 @@ function loadGames() {
       modClock: {
         ...fallback.modClock,
         ...(parsed.modClock || {})
+      },
+      primeFactors: {
+        ...fallback.primeFactors,
+        ...(parsed.primeFactors || {})
+      },
+      gcdRace: {
+        ...fallback.gcdRace,
+        ...(parsed.gcdRace || {})
+      },
+      divisibility: {
+        ...fallback.divisibility,
+        ...(parsed.divisibility || {})
+      },
+      residueMatch: {
+        ...fallback.residueMatch,
+        ...(parsed.residueMatch || {})
       }
     };
   } catch {
@@ -3077,9 +3124,10 @@ function resolveRouteFromPath() {
   if (parts.length === 0) return null;
   if (parts[0] === "scratchpad") return { surface: "scratchpad" };
   if (parts[0] === "games") {
+    const game = GAME_IDS.includes(parts[1]) ? parts[1] : "sudoku";
     return {
       surface: "games",
-      game: parts[1] === "mod-clock" ? "mod-clock" : "sudoku"
+      game
     };
   }
   if (parts[0] !== "math" && parts[0] !== "physics") return null;
@@ -3091,7 +3139,7 @@ function updateUrlFromState(options = {}) {
   const route = state.activeSurface === "scratchpad"
     ? { path: "/scratchpad" }
     : state.activeSurface === "games"
-      ? { path: `/games/${state.games.activeGame === "mod-clock" ? "mod-clock" : "sudoku"}` }
+      ? { path: `/games/${GAME_IDS.includes(state.games.activeGame) ? state.games.activeGame : "sudoku"}` }
     : findRouteForWorkspace(state.activeWorkspaceId);
   if (!route) return;
   const nextUrl = `${route.path}${window.location.search}`;
@@ -3315,33 +3363,71 @@ function seededRandom(seed) {
   };
 }
 
+function shuffleWithRandom(items, random) {
+  const result = [...items];
+  for (let index = result.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(random() * (index + 1));
+    [result[index], result[swapIndex]] = [result[swapIndex], result[index]];
+  }
+  return result;
+}
+
 function shuffledSudokuIndexes(size, difficulty, seed) {
   const difficultyOffset = { easy: 11, medium: 37, hard: 73 }[difficulty] || 11;
   const random = seededRandom((size * 1009) + (seed * 7919) + difficultyOffset);
-  const indexes = Array.from({ length: size * size }, (_, index) => index);
-  for (let index = indexes.length - 1; index > 0; index -= 1) {
-    const swapIndex = Math.floor(random() * (index + 1));
-    [indexes[index], indexes[swapIndex]] = [indexes[swapIndex], indexes[index]];
-  }
-  return indexes;
+  return shuffleWithRandom(Array.from({ length: size * size }, (_, index) => index), random);
 }
 
-function sudokuPuzzleFor(size, difficulty, seed) {
+function shuffledSudokuUnits(size, unitSize, random) {
+  const unitCount = size / unitSize;
+  return shuffleWithRandom(Array.from({ length: unitCount }, (_, unit) => unit), random)
+    .flatMap((unit) => shuffleWithRandom(Array.from({ length: unitSize }, (_, offset) => unit * unitSize + offset), random));
+}
+
+function generateSudokuSolution(size, seed) {
   const config = sudokuBoards[size];
+  const random = seededRandom((size * 1543) + (seed * 9973) + 19);
+  const rows = shuffledSudokuUnits(size, config.blockRows, random);
+  const cols = shuffledSudokuUnits(size, config.blockCols, random);
+  const digits = shuffleWithRandom(Array.from({ length: size }, (_, index) => String(index + 1)), random);
+  const baseValue = (row, col) => (row * config.blockCols + Math.floor(row / config.blockRows) + col) % size;
+  return rows.flatMap((row) => cols.map((col) => digits[baseValue(row, col)])).join("");
+}
+
+function generateSudokuPuzzle(size, difficulty, seed) {
+  const config = sudokuBoards[size];
+  const solution = generateSudokuSolution(size, seed);
   const clueCount = config.clues[difficulty] || config.clues.easy;
   const clues = new Set(shuffledSudokuIndexes(size, difficulty, seed).slice(0, clueCount));
-  return Array.from(config.solution, (digit, index) => (clues.has(index) ? digit : "0")).join("");
+  const puzzle = Array.from(solution, (digit, index) => (clues.has(index) ? digit : "0")).join("");
+  return { puzzle, solution };
+}
+
+function ensureSudokuPuzzle() {
+  const { size, difficulty, seed } = currentSudokuSettings();
+  const signature = `${size}:${difficulty}:${seed}`;
+  if (state.games.sudoku.signature === signature && state.games.sudoku.puzzle && state.games.sudoku.solution) return;
+  const generated = generateSudokuPuzzle(size, difficulty, seed);
+  state.games.sudoku.puzzle = generated.puzzle;
+  state.games.sudoku.solution = generated.solution;
+  state.games.sudoku.signature = signature;
+  state.games.sudoku.entries = {};
+  state.games.sudoku.selected = null;
+  state.games.sudoku.checked = false;
+  saveGames();
 }
 
 function sudokuValues() {
   const { size, difficulty, seed, config } = currentSudokuSettings();
-  const puzzle = sudokuPuzzleFor(size, difficulty, seed);
+  ensureSudokuPuzzle();
+  const puzzle = state.games.sudoku.puzzle || generateSudokuPuzzle(size, difficulty, seed).puzzle;
+  const solution = state.games.sudoku.solution || generateSudokuSolution(size, seed);
   const entries = state.games.sudoku.entries || {};
   const values = Array.from({ length: size * size }, (_, index) => {
     if (puzzle[index] !== "0") return puzzle[index];
     return String(entries[index] || "");
   });
-  return { size, difficulty, seed, config, puzzle, solution: config.solution, values };
+  return { size, difficulty, seed, config, puzzle, solution, values };
 }
 
 function sudokuConflictIndexes(values, size, config) {
@@ -3459,20 +3545,24 @@ function sudokuStatusMessage({ values, solution, puzzle, conflicts, checked, sel
 }
 
 function renderGames() {
-  const activeGame = state.games.activeGame === "mod-clock" ? "mod-clock" : "sudoku";
+  const activeGame = GAME_IDS.includes(state.games.activeGame) ? state.games.activeGame : "sudoku";
   state.games.activeGame = activeGame;
   els.gameTabs.forEach((tab) => {
     tab.setAttribute("aria-selected", tab.dataset.game === activeGame ? "true" : "false");
   });
   els.sudokuGame.hidden = activeGame !== "sudoku";
   els.modClockGame.hidden = activeGame !== "mod-clock";
+  els.numberGamePanels.forEach((panel) => {
+    panel.hidden = panel.dataset.numberGame !== activeGame;
+  });
   renderSudoku();
   renderModClock();
+  renderNumberGames();
 }
 
 function setActiveGame(game) {
-  state.games.activeGame = game === "mod-clock" ? "mod-clock" : "sudoku";
-  saveGames(`Opened ${state.games.activeGame === "mod-clock" ? "Mod Clock" : "Sudoku"}`);
+  state.games.activeGame = GAME_IDS.includes(game) ? game : "sudoku";
+  saveGames(`Opened ${gameLabel(state.games.activeGame)}`);
   renderGames();
   updateUrlFromState();
 }
@@ -3631,9 +3721,276 @@ function newModClock() {
   renderModClock();
 }
 
+function gameLabel(game) {
+  return {
+    sudoku: "Sudoku",
+    "mod-clock": "Mod Clock",
+    "prime-factors": "Prime Factors",
+    "gcd-race": "GCD",
+    divisibility: "Divisibility",
+    "residue-match": "Residues"
+  }[game] || "Sudoku";
+}
+
+function gameStateKey(game) {
+  return {
+    "prime-factors": "primeFactors",
+    "gcd-race": "gcdRace",
+    divisibility: "divisibility",
+    "residue-match": "residueMatch"
+  }[game];
+}
+
+function gcd(a, b) {
+  let left = Math.abs(a);
+  let right = Math.abs(b);
+  while (right) {
+    [left, right] = [right, left % right];
+  }
+  return left;
+}
+
+function uniqueShuffledChoices(values, random, limit = values.length) {
+  return shuffleWithRandom([...new Set(values.map(String))], random).slice(0, limit);
+}
+
+function currentNumberGameState(game) {
+  const key = gameStateKey(game);
+  const fallback = { difficulty: "easy", seed: 0, selected: [], checked: false };
+  const stored = state.games[key] || fallback;
+  return {
+    ...fallback,
+    ...stored,
+    difficulty: ["easy", "medium", "hard"].includes(stored.difficulty) ? stored.difficulty : "easy",
+    seed: Number.isFinite(Number(stored.seed)) ? Number(stored.seed) : 0
+  };
+}
+
+function primeFactorProblem(settings) {
+  const random = seededRandom(settings.seed * 1201 + { easy: 17, medium: 29, hard: 43 }[settings.difficulty]);
+  const pools = {
+    easy: [2, 3, 5, 7],
+    medium: [2, 3, 5, 7, 11],
+    hard: [2, 3, 5, 7, 11, 13]
+  };
+  const pool = pools[settings.difficulty];
+  const factorCount = settings.difficulty === "easy" ? 2 : settings.difficulty === "medium" ? 3 : 4;
+  const factors = shuffleWithRandom(pool, random).slice(0, factorCount);
+  const number = factors.reduce((product, factor) => product * factor, 1);
+  const choices = uniqueShuffledChoices([...factors, ...pool, 17, 19], random, 8);
+  return {
+    multi: true,
+    prompt: `Select every prime factor of ${number}.`,
+    choices: choices.map((value) => ({ value, label: value })),
+    answers: factors.map(String),
+    emptyStatus: "Choose every prime factor.",
+    success: "Correct. Those are exactly the prime factors.",
+    hint: "Prime factors are prime numbers that divide the number with no remainder."
+  };
+}
+
+function gcdRaceProblem(settings) {
+  const random = seededRandom(settings.seed * 1423 + { easy: 31, medium: 47, hard: 61 }[settings.difficulty]);
+  const gcdOptions = {
+    easy: [2, 3, 4, 5, 6],
+    medium: [6, 8, 9, 10, 12],
+    hard: [12, 15, 18, 21, 24]
+  }[settings.difficulty];
+  const common = gcdOptions[Math.floor(random() * gcdOptions.length)];
+  let leftFactor = 2 + Math.floor(random() * (settings.difficulty === "hard" ? 14 : 8));
+  let rightFactor = 2 + Math.floor(random() * (settings.difficulty === "hard" ? 14 : 8));
+  while (gcd(leftFactor, rightFactor) !== 1) rightFactor += 1;
+  const left = common * leftFactor;
+  const right = common * rightFactor;
+  const choices = uniqueShuffledChoices([common, leftFactor, rightFactor, common * 2, common + 1, Math.max(1, common - 1)], random, 6);
+  return {
+    multi: false,
+    prompt: `Find gcd(${left}, ${right}).`,
+    choices: choices.map((value) => ({ value, label: value })),
+    answers: [String(common)],
+    emptyStatus: "Choose the greatest common divisor.",
+    success: "Correct. That is the greatest divisor shared by both numbers.",
+    hint: "The gcd is the largest number that divides both values."
+  };
+}
+
+function divisibilityProblem(settings) {
+  const random = seededRandom(settings.seed * 1609 + { easy: 71, medium: 83, hard: 97 }[settings.difficulty]);
+  const rules = [
+    { divisor: 2, label: "The last digit is even.", make: () => 100 + 2 * Math.floor(random() * 400) },
+    { divisor: 3, label: "The digit sum is divisible by 3.", make: () => 123 + 3 * Math.floor(random() * 250) },
+    { divisor: 4, label: "The last two digits are divisible by 4.", make: () => 200 + 4 * Math.floor(random() * 220) },
+    { divisor: 5, label: "The number ends in 0 or 5.", make: () => 105 + 5 * Math.floor(random() * 180) },
+    { divisor: 6, label: "The number is divisible by 2 and 3.", make: () => 102 + 6 * Math.floor(random() * 160) },
+    { divisor: 9, label: "The digit sum is divisible by 9.", make: () => 108 + 9 * Math.floor(random() * 110) },
+    { divisor: 10, label: "The number ends in 0.", make: () => 120 + 10 * Math.floor(random() * 90) }
+  ];
+  const available = settings.difficulty === "easy" ? rules.slice(0, 4) : settings.difficulty === "medium" ? rules.slice(0, 6) : rules;
+  const rule = available[Math.floor(random() * available.length)];
+  const number = rule.make();
+  const choices = shuffleWithRandom(rules.map((item) => item.label), random).slice(0, 5);
+  if (!choices.includes(rule.label)) choices[0] = rule.label;
+  return {
+    multi: false,
+    prompt: `${number} is divisible by ${rule.divisor}. Which rule explains why?`,
+    choices: shuffleWithRandom(choices, random).map((label) => ({ value: label, label })),
+    answers: [rule.label],
+    emptyStatus: "Choose the matching divisibility rule.",
+    success: "Correct. That rule proves the claim.",
+    hint: "Use the rule that directly matches the divisor in the prompt."
+  };
+}
+
+function residueMatchProblem(settings) {
+  const random = seededRandom(settings.seed * 1777 + { easy: 109, medium: 127, hard: 149 }[settings.difficulty]);
+  const modulusOptions = {
+    easy: [3, 4, 5],
+    medium: [5, 6, 7],
+    hard: [7, 8, 9, 11]
+  }[settings.difficulty];
+  const modulus = modulusOptions[Math.floor(random() * modulusOptions.length)];
+  const residue = Math.floor(random() * modulus);
+  const answers = [];
+  let base = residue;
+  while (answers.length < 4) {
+    answers.push(base);
+    base += modulus;
+  }
+  const distractors = [];
+  while (distractors.length < 6) {
+    const value = Math.floor(random() * (settings.difficulty === "hard" ? 90 : 50));
+    if (value % modulus !== residue) distractors.push(value);
+  }
+  const choices = uniqueShuffledChoices([...answers, ...distractors], random, 9);
+  const answerSet = choices.filter((value) => Number(value) % modulus === residue);
+  return {
+    multi: true,
+    prompt: `Select every number congruent to ${residue} modulo ${modulus}.`,
+    choices: choices.map((value) => ({ value, label: value })),
+    answers: answerSet,
+    emptyStatus: "Choose every number with that remainder.",
+    success: "Correct. Each selected number has the same remainder.",
+    hint: `A number is congruent to ${residue} modulo ${modulus} when division by ${modulus} leaves remainder ${residue}.`
+  };
+}
+
+function numberGameProblem(game) {
+  const settings = currentNumberGameState(game);
+  if (game === "prime-factors") return primeFactorProblem(settings);
+  if (game === "gcd-race") return gcdRaceProblem(settings);
+  if (game === "divisibility") return divisibilityProblem(settings);
+  return residueMatchProblem(settings);
+}
+
+function selectedNumberGameValues(game) {
+  const key = gameStateKey(game);
+  const stored = state.games[key];
+  if (!stored) return [];
+  if (Array.isArray(stored.selected)) return stored.selected.map(String);
+  return stored.selected === null || stored.selected === undefined ? [] : [String(stored.selected)];
+}
+
+function numberGameIsCorrect(game, problem) {
+  const selected = selectedNumberGameValues(game).sort();
+  const answers = problem.answers.map(String).sort();
+  return selected.length === answers.length && selected.every((value, index) => value === answers[index]);
+}
+
+function renderNumberGames() {
+  ["prime-factors", "gcd-race", "divisibility", "residue-match"].forEach((game) => {
+    const key = gameStateKey(game);
+    const stored = state.games[key];
+    const problem = numberGameProblem(game);
+    const selected = new Set(selectedNumberGameValues(game));
+    const checked = Boolean(stored?.checked);
+    const choicesEl = els.numberGameChoices[game];
+    const statusEl = els.numberGameStatuses[game];
+    const promptEl = els.numberGamePrompts[game];
+    const difficultyEl = els.numberGameDifficulties[game];
+    if (!choicesEl || !statusEl || !promptEl || !difficultyEl) return;
+
+    difficultyEl.value = currentNumberGameState(game).difficulty;
+    promptEl.textContent = problem.prompt;
+    choicesEl.innerHTML = "";
+    problem.choices.forEach((choice, index) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.dataset.numberGame = game;
+      button.dataset.numberValue = choice.value;
+      button.textContent = choice.label;
+      button.setAttribute("aria-label", `${index + 1}. ${choice.label}`);
+      if (selected.has(String(choice.value))) button.classList.add("selected");
+      if (checked && problem.answers.map(String).includes(String(choice.value))) button.classList.add("correct");
+      if (checked && selected.has(String(choice.value)) && !problem.answers.map(String).includes(String(choice.value))) button.classList.add("wrong");
+      choicesEl.append(button);
+    });
+
+    if (checked && numberGameIsCorrect(game, problem)) {
+      statusEl.textContent = problem.success;
+    } else if (checked) {
+      statusEl.textContent = problem.hint;
+    } else if (selected.size > 0) {
+      statusEl.textContent = "Press Check when ready.";
+    } else {
+      statusEl.textContent = problem.emptyStatus;
+    }
+  });
+}
+
+function toggleNumberGameChoice(game, value) {
+  const key = gameStateKey(game);
+  const problem = numberGameProblem(game);
+  const stored = state.games[key];
+  if (!stored) return;
+  if (problem.multi) {
+    const selected = new Set(selectedNumberGameValues(game));
+    if (selected.has(String(value))) {
+      selected.delete(String(value));
+    } else {
+      selected.add(String(value));
+    }
+    stored.selected = [...selected];
+  } else {
+    stored.selected = String(value);
+  }
+  stored.checked = false;
+  saveGames(`Updated ${gameLabel(game)}`);
+  renderNumberGames();
+}
+
+function checkNumberGame(game) {
+  const key = gameStateKey(game);
+  if (!state.games[key]) return;
+  state.games[key].checked = true;
+  saveGames(`Checked ${gameLabel(game)}`);
+  renderNumberGames();
+}
+
+function newNumberGame(game) {
+  const key = gameStateKey(game);
+  if (!state.games[key]) return;
+  state.games[key].seed = (Number(state.games[key].seed) || 0) + 1;
+  state.games[key].selected = Array.isArray(state.games[key].selected) ? [] : null;
+  state.games[key].checked = false;
+  saveGames(`Started a new ${gameLabel(game)}`);
+  renderNumberGames();
+}
+
+function setNumberGameDifficulty(game, difficulty) {
+  const key = gameStateKey(game);
+  if (!state.games[key]) return;
+  state.games[key].difficulty = difficulty;
+  state.games[key].seed = 0;
+  state.games[key].selected = Array.isArray(state.games[key].selected) ? [] : null;
+  state.games[key].checked = false;
+  saveGames(`Changed ${gameLabel(game)} difficulty`);
+  renderNumberGames();
+}
+
 function handleSudokuKeydown(event) {
   if (state.activeSurface !== "games" || event.defaultPrevented) return false;
   if (state.games.activeGame === "mod-clock") return handleModClockKeydown(event);
+  if (gameStateKey(state.games.activeGame)) return handleNumberGameKeydown(event);
   if (isFormControl(event.target) && !event.target.classList?.contains("sudoku-cell")) return false;
 
   const { size } = currentSudokuSettings();
@@ -3661,6 +4018,25 @@ function handleSudokuKeydown(event) {
   if (moves[event.key]) {
     event.preventDefault();
     moveSudokuSelection(...moves[event.key]);
+    return true;
+  }
+  return false;
+}
+
+function handleNumberGameKeydown(event) {
+  const game = state.games.activeGame;
+  if (isFormControl(event.target) && !event.target.closest?.("[data-number-choices]")) return false;
+  if (event.key === "Enter") {
+    event.preventDefault();
+    checkNumberGame(game);
+    return true;
+  }
+  if (/^[1-9]$/.test(event.key)) {
+    const problem = numberGameProblem(game);
+    const choice = problem.choices[Number(event.key) - 1];
+    if (!choice) return false;
+    event.preventDefault();
+    toggleNumberGameChoice(game, choice.value);
     return true;
   }
   return false;
@@ -8607,6 +8983,27 @@ function bindEvents() {
   });
   els.newModClock.addEventListener("click", newModClock);
   els.checkModClock.addEventListener("click", checkModClock);
+  els.numberGamePanels.forEach((panel) => {
+    panel.addEventListener("click", (event) => {
+      const choice = event.target.closest("button[data-number-value]");
+      if (choice) {
+        toggleNumberGameChoice(choice.dataset.numberGame, choice.dataset.numberValue);
+        return;
+      }
+      const check = event.target.closest("button[data-number-check]");
+      if (check) {
+        checkNumberGame(check.dataset.numberCheck);
+        return;
+      }
+      const next = event.target.closest("button[data-number-new]");
+      if (next) {
+        newNumberGame(next.dataset.numberNew);
+      }
+    });
+  });
+  Object.entries(els.numberGameDifficulties).forEach(([game, select]) => {
+    select.addEventListener("change", () => setNumberGameDifficulty(game, select.value));
+  });
   els.scratchpadToolbar.addEventListener("click", (event) => {
     const button = event.target.closest("button[data-insert]");
     if (!button) return;
