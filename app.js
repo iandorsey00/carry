@@ -1,6 +1,6 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-alpha.57";
+const APP_VERSION = "0.1.0-alpha.59";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 const GAMES_STORAGE_KEY = "carry.games.v1";
@@ -6718,6 +6718,7 @@ function getActiveWorkspace() {
 }
 
 function buildConceptModel(workspace) {
+  const answers = workspace.problem.answers || [workspace.problem.answer];
   return {
     ...workspace.problem,
     sourceWorkspaceId: workspace.id,
@@ -6728,7 +6729,8 @@ function buildConceptModel(workspace) {
         col: 2,
         kind: "conceptAnswer",
         expected: workspace.problem.answer,
-        answers: workspace.problem.answers || [workspace.problem.answer],
+        answers,
+        choices: workspace.problem.choices || conceptChoicesForProblem(workspace.problem, answers),
         sequence: 0,
         label: workspace.problem.label || "answer",
         hint: workspace.problem.hint,
@@ -6748,10 +6750,60 @@ function renderConceptGrid(model) {
   text.className = "concept-prompt";
   setMathText(text, model.prompt);
 
-  const answerLabel = document.createElement("label");
-  answerLabel.className = "concept-answer-label";
-  answerLabel.textContent = "Answer";
+  const answerPanel = document.createElement("div");
+  answerPanel.className = "concept-answer-panel";
 
+  const answerTitle = document.createElement("div");
+  answerTitle.className = "concept-answer-title";
+  answerTitle.textContent = model.cells[0].choices?.length ? "Choose an answer" : "Enter an answer";
+
+  const input = createConceptAnswerInput(model);
+
+  answerPanel.append(answerTitle);
+  if (model.cells[0].choices?.length) {
+    const choiceGrid = document.createElement("div");
+    choiceGrid.className = "concept-choice-grid";
+    choiceGrid.setAttribute("role", "radiogroup");
+    choiceGrid.setAttribute("aria-label", model.cells[0].label);
+    model.cells[0].choices.forEach((choice) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "concept-choice-button";
+      button.value = choice.value;
+      button.dataset.choiceValue = choice.value;
+      button.setAttribute("role", "radio");
+      button.setAttribute("aria-checked", "false");
+      setMathText(button, choice.label);
+      button.addEventListener("click", () => selectConceptChoice(input, choice.value));
+      choiceGrid.append(button);
+    });
+    input.classList.add("concept-answer-choice-control");
+    input.readOnly = true;
+    input.placeholder = "No answer selected";
+    answerPanel.append(choiceGrid, input);
+  } else {
+    const answerLabel = document.createElement("label");
+    answerLabel.className = "concept-answer-label";
+    answerLabel.textContent = "Answer";
+    answerLabel.append(input);
+    answerPanel.append(answerLabel);
+  }
+
+  prompt.append(text, answerPanel);
+  if (model.workspaceId) {
+    const openWorkspace = document.createElement("button");
+    openWorkspace.className = "tool-button compact concept-action";
+    openWorkspace.type = "button";
+    openWorkspace.textContent = "Open long division";
+    openWorkspace.addEventListener("click", () => {
+      openLinkedWorkspace(model);
+    });
+    prompt.append(openWorkspace);
+  }
+  els.grid.append(prompt);
+}
+
+function createConceptAnswerInput(model) {
   const input = document.createElement("input");
   input.className = "digit-input concept-answer-input";
   input.inputMode = "text";
@@ -6778,20 +6830,93 @@ function renderConceptGrid(model) {
   input.addEventListener("focus", (event) => {
     event.target.select();
   });
+  return input;
+}
 
-  answerLabel.append(input);
-  prompt.append(text, answerLabel);
-  if (model.workspaceId) {
-    const openWorkspace = document.createElement("button");
-    openWorkspace.className = "tool-button compact concept-action";
-    openWorkspace.type = "button";
-    openWorkspace.textContent = "Open long division";
-    openWorkspace.addEventListener("click", () => {
-      openLinkedWorkspace(model);
-    });
-    prompt.append(openWorkspace);
+function conceptChoicesForProblem(problem, answers) {
+  const prompt = stripMathTags(problem.prompt || "");
+  const answer = String(problem.answer || "");
+  const normalizedAnswer = answerValue(answer);
+  if (["yes", "true", "no", "false"].includes(normalizedAnswer)) {
+    return [
+      { value: "yes", label: "Yes" },
+      { value: "no", label: "No" }
+    ];
   }
-  els.grid.append(prompt);
+
+  const explicitOptions = optionsFromPrompt(prompt);
+  if (explicitOptions.length >= 2 && explicitOptions.length <= 5) {
+    return prioritizeAnswerChoice(explicitOptions, answers).map((value) => ({ value, label: value }));
+  }
+
+  const label = answerValue(problem.label);
+  if (label.includes("symbol")) {
+    const symbols = symbolChoicesForAnswer(answer);
+    if (symbols.length) return symbols.map((value) => ({ value, label: value }));
+  }
+
+  return [];
+}
+
+function optionsFromPrompt(prompt) {
+  const text = String(prompt || "")
+    .replace(/\?/g, "")
+    .replace(/\.$/, "")
+    .replace(/\s+/g, " ");
+  const colonMatch = text.match(/:\s*([^?]+)$/);
+  const closerMatch = text.match(/\bcloser to\s+(.+)$/i);
+  const chooseMatch = text.match(/\b(?:which|what)\s+(?:is|are)\s+[^:]*\b(?:larger|greater|smaller|closest)\b:?\s+(.+)$/i);
+  const source = colonMatch ? colonMatch[1] : closerMatch ? closerMatch[1] : chooseMatch ? chooseMatch[1] : text;
+  if (!/\bor\b/i.test(source) && !/,/.test(source)) return [];
+  const pieces = source
+    .replace(/\bwhich is (?:larger|greater|smaller)\b:?/i, "")
+    .replace(/\bwhat is .* closest to\b:?/i, "")
+    .split(/\s*,\s*|\s+or\s+/i)
+    .map((item) => item.trim().replace(/^or\s+/i, "").replace(/^["'“”]+|["'“”]+$/g, ""))
+    .filter(Boolean);
+  return pieces
+    .filter((item) => item.length <= 32)
+    .filter((item) => !/^(what|which|is|are|does|do|answer)$/i.test(item));
+}
+
+function prioritizeAnswerChoice(options, answers) {
+  const normalizedAnswers = new Set((answers || []).map((item) => answerValue(item)));
+  const unique = [];
+  options.forEach((option) => {
+    if (!unique.some((item) => answerValue(item) === answerValue(option))) unique.push(option);
+  });
+  if (!unique.some((option) => normalizedAnswers.has(answerValue(option)))) return [];
+  return unique;
+}
+
+function symbolChoicesForAnswer(answer) {
+  const symbols = ["∈", "∉", "⊂", "⊆", "∪", "∩", "≡", "≤", "≥", "⊥"];
+  if (!symbols.some((symbol) => answerValue(symbol) === answerValue(answer))) return [];
+  return symbols.slice(0, 6).includes(answer) ? symbols.slice(0, 6) : [answer, ...symbols.filter((symbol) => symbol !== answer).slice(0, 5)];
+}
+
+function selectConceptChoice(input, value) {
+  if (input.disabled) return;
+  input.value = value;
+  input.classList.remove("incorrect", "correct", "hint");
+  syncConceptChoiceButtons(input);
+  if (state.mode === "guided") validateGuidedConceptInput(input);
+  if (state.mode === "practice") validateInput(input, false);
+  if (state.mode === "explore") markExploreInput(input);
+}
+
+function syncConceptChoiceButtons(input) {
+  const card = input.closest(".concept-card");
+  if (!card) return;
+  const value = answerValue(input.value);
+  card.querySelectorAll(".concept-choice-button").forEach((button) => {
+    const selected = value && answerValue(button.dataset.choiceValue) === value;
+    button.classList.toggle("selected", Boolean(selected));
+    button.setAttribute("aria-checked", selected ? "true" : "false");
+    button.classList.toggle("correct", input.classList.contains("correct") && selected);
+    button.classList.toggle("incorrect", input.classList.contains("incorrect") && selected);
+    button.disabled = input.disabled;
+  });
 }
 
 function buildEquationModel(problem) {
@@ -8261,6 +8386,7 @@ function setActiveStep() {
     if (!input) return;
     input.classList.toggle("active", state.mode === "guided" && index === state.activeStep);
     input.disabled = state.mode === "guided" && index > state.activeStep;
+    syncConceptChoiceButtons(input);
   });
 
   const activeInput = activeStep ? inputForStep(activeStep) : null;
@@ -8493,7 +8619,7 @@ function checkCurrentStep() {
       setStatus(`Correct. Continue with ${activeStep?.label || input.dataset.label || "the next box"}.`, "correct");
       return;
     }
-    setStatus(input.inputMode === "numeric" ? "Try another digit." : "Try another entry.", "incorrect");
+    setStatus(input.classList.contains("concept-answer-choice-control") ? "Choose an answer." : input.inputMode === "numeric" ? "Try another digit." : "Try another entry.", "incorrect");
     input.classList.add("incorrect");
     input.focus({ preventScroll: true });
     return;
@@ -8630,6 +8756,7 @@ function validateInput(input, announce) {
   const correct = isCorrectAnswer(input);
   input.classList.toggle("correct", correct);
   input.classList.toggle("incorrect", input.value.length > 0 && !correct);
+  syncConceptChoiceButtons(input);
   if (correct) {
     state.checkedCells.set(input.dataset.cellId, input.value);
   } else {
@@ -8644,7 +8771,8 @@ function validateInput(input, announce) {
 function validateGuidedConceptInput(input) {
   if (!input.value.trim()) {
     input.classList.remove("correct", "incorrect", "hint");
-    setStatus("Enter the answer, then check it.", "");
+    syncConceptChoiceButtons(input);
+    setStatus(input.classList.contains("concept-answer-choice-control") ? "Choose an answer, then check it." : "Enter the answer, then check it.", "");
     return;
   }
 
@@ -8783,6 +8911,7 @@ function normalizeAnswerInput(value) {
 
 function markExploreInput(input) {
   input.classList.remove("correct", "incorrect", "hint");
+  syncConceptChoiceButtons(input);
 }
 
 function showHint() {
@@ -8807,6 +8936,7 @@ function completeLesson() {
   visibleInputs().forEach((input) => {
     input.classList.remove("active");
     input.disabled = false;
+    syncConceptChoiceButtons(input);
   });
   els.grid.querySelectorAll(".carry-slot").forEach((input) => {
     input.classList.remove("active");
@@ -9313,13 +9443,13 @@ function renderScratchpadPreview() {
   els.scratchpadPreview.replaceChildren();
   const lines = String(pad?.text || "").split("\n");
   const normalizedLines = lines.map((line) => normalizePlainMathLine(line));
-  const alignEquals = normalizedLines.filter(Boolean).length > 1
-    && normalizedLines.filter((line) => splitTopLevelEquals(line)).length > 1;
+  const alignRelations = normalizedLines.filter(Boolean).length > 1
+    && normalizedLines.filter((line) => splitTopLevelRelation(line)).length > 1;
 
   lines.forEach((line, index) => {
     const row = document.createElement("div");
     row.className = `scratch-line ${line.trim() ? "" : "scratch-line-empty"}`.trim();
-    if (alignEquals) row.classList.add("scratch-line-aligned");
+    if (alignRelations) row.classList.add("scratch-line-aligned");
 
     const number = document.createElement("span");
     number.className = "scratch-line-number";
@@ -9327,18 +9457,18 @@ function renderScratchpadPreview() {
 
     const math = document.createElement("div");
     math.className = "scratch-line-math";
-    renderScratchpadLineMath(math, normalizedLines[index], alignEquals);
+    renderScratchpadLineMath(math, normalizedLines[index], alignRelations);
 
     row.append(number, math);
     els.scratchpadPreview.append(row);
   });
 }
 
-function renderScratchpadLineMath(target, latex, alignEquals) {
+function renderScratchpadLineMath(target, latex, alignRelations) {
   target.replaceChildren();
   if (!latex) return;
 
-  const split = alignEquals ? splitTopLevelEquals(latex) : null;
+  const split = alignRelations ? splitTopLevelRelation(latex) : null;
   if (!split) {
     target.append(createMathMlExpression(latex));
     return;
@@ -9352,21 +9482,29 @@ function renderScratchpadLineMath(target, latex, alignEquals) {
   const right = document.createElement("span");
   right.className = "scratch-align-right";
   left.append(createMathMlExpression(split.left));
-  equals.textContent = "=";
+  equals.append(createMathMlExpression(split.operator));
   right.append(createMathMlExpression(split.right));
   target.append(left, equals, right);
 }
 
 function splitTopLevelEquals(text) {
+  return splitTopLevelRelation(text, ["="]);
+}
+
+function splitTopLevelRelation(text, allowedOperators) {
+  const operators = allowedOperators || ["\\Rightarrow", "\\iff", "\\equiv", "\\approx", "\\le", "\\ge", "\\ne", "\\to", "=", "<", ">", "≤", "≥", "≠", "≡", "≈"];
   let depth = 0;
   for (let index = 0; index < text.length; index += 1) {
     const char = text[index];
     if (char === "{") depth += 1;
     if (char === "}") depth = Math.max(0, depth - 1);
-    if (char === "=" && depth === 0) {
+    if (depth !== 0) continue;
+    const operator = operators.find((item) => text.startsWith(item, index));
+    if (operator) {
       return {
         left: text.slice(0, index).trimEnd(),
-        right: text.slice(index + 1).trimStart()
+        operator,
+        right: text.slice(index + operator.length).trimStart()
       };
     }
   }
@@ -9382,12 +9520,19 @@ function normalizePlainMathLine(line) {
     .replace(/[≤]/g, "<=")
     .replace(/[≥]/g, ">=")
     .replace(/[≠]/g, "!=")
+    .replace(/[≡]/g, "\\equiv")
+    .replace(/[⊥]/g, "\\bot")
+    .replace(/[⊤]/g, "\\top")
+    .replace(/[⌊]/g, "\\lfloor ")
+    .replace(/[⌋]/g, " \\rfloor")
+    .replace(/[⌈]/g, "\\lceil ")
+    .replace(/[⌉]/g, " \\rceil")
     .replace(/[→]/g, "->")
     .replace(/[⇒]/g, "=>")
     .replace(/⇔/g, "\\iff")
     .replace(/∧/g, "\\land")
     .replace(/∨/g, "\\lor")
-    .replace(/¬/g, "\\neg")
+    .replace(/¬\s*/g, "\\neg ")
     .replace(/∀/g, "\\forall")
     .replace(/∃/g, "\\exists")
     .replace(/∴/g, "\\therefore")
@@ -9410,6 +9555,9 @@ function normalizePlainMathLine(line) {
     .replace(/\+\/-/g, "\\pm")
     .replace(/(?<!\\)\btheta\b/gi, "\\theta")
     .replace(/(?<!\\)\bpi\b/gi, "\\pi")
+    .replace(/(?<!\\)\bmod\s*\{([^{}]+)\}/gi, "\\pmod{$1}")
+    .replace(/(?<!\\)\bmod\s+([A-Za-z0-9]+)\b/gi, "\\pmod{$1}")
+    .replace(/(?<!\\)\bmod\b/gi, "\\bmod")
     .replace(/(?<!\\)\b(sin|cos|tan|sec|csc|cot|arcsin|arccos|arctan|ln|log)\b/gi, "\\$1")
     .replace(/sqrt\(([^()]*)\)/gi, (_, body) => `\\sqrt{${normalizePlainPowers(body)}}`)
     .replace(/\be\^\(([^()]*)\)/gi, (_, body) => `e^{${normalizePlainPowers(body)}}`)
@@ -9471,7 +9619,7 @@ function appendLatexishSegment(target, text) {
 }
 
 function findNextLatexCommand(text, from) {
-  const commands = ["\\dfrac", "\\frac", "\\sqrt", "\\int", "\\ln", "\\log", "\\sin", "\\cos", "\\tan", "\\sec", "\\csc", "\\cot", "\\arcsin", "\\arccos", "\\arctan", "\\pi", "\\theta", "\\le", "\\ge", "\\ne", "\\pm", "\\to", "\\Rightarrow", "\\,"];
+  const commands = ["\\dfrac", "\\frac", "\\sqrt", "\\int", "\\lfloor", "\\rfloor", "\\lceil", "\\rceil", "\\pmod", "\\bmod", "\\ln", "\\log", "\\sin", "\\cos", "\\tan", "\\sec", "\\csc", "\\cot", "\\arcsin", "\\arccos", "\\arctan", "\\pi", "\\theta", "\\equiv", "\\le", "\\ge", "\\ne", "\\bot", "\\top", "\\pm", "\\to", "\\Rightarrow", "\\,"];
   let found = null;
   for (const command of commands) {
     const index = text.indexOf(command, from);
@@ -9553,6 +9701,16 @@ function appendScratchCommand(target, text, index) {
     return cursor;
   }
 
+  if (text.startsWith("\\pmod", index)) {
+    const group = readBraceGroup(text, index + 5);
+    if (group) {
+      appendScratchText(target, " (mod ");
+      appendLatexishSegment(target, group.value);
+      appendScratchText(target, ")");
+      return group.end;
+    }
+  }
+
   const commandMap = {
     "\\ln": "ln",
     "\\log": "log",
@@ -9567,9 +9725,17 @@ function appendScratchCommand(target, text, index) {
     "\\arctan": "arctan",
     "\\pi": "π",
     "\\theta": "θ",
+    "\\lfloor": "⌊",
+    "\\rfloor": "⌋",
+    "\\lceil": "⌈",
+    "\\rceil": "⌉",
     "\\le": "≤",
     "\\ge": "≥",
     "\\ne": "≠",
+    "\\equiv": "≡",
+    "\\bot": "⊥",
+    "\\top": "⊤",
+    "\\bmod": " mod ",
     "\\pm": "±",
     "\\to": "→",
     "\\Rightarrow": "⇒",
@@ -9690,6 +9856,20 @@ function appendMathMlContent(target, value) {
       const group = readBraceGroup(text, cursor + 5);
       if (group) {
         target.append(createMathMlToken("mtext", group.value));
+        cursor = group.end;
+        continue;
+      }
+    }
+
+    if (text.startsWith("\\pmod", cursor)) {
+      const group = readBraceGroup(text, cursor + 5);
+      if (group) {
+        target.append(createMathMlToken("mo", "("));
+        target.append(createMathMlToken("mtext", "mod"));
+        const row = createMathMlElement("mrow");
+        appendMathMlContent(row, group.value);
+        target.append(row);
+        target.append(createMathMlToken("mo", ")"));
         cursor = group.end;
         continue;
       }
@@ -9939,7 +10119,7 @@ function appendMathMlIntegral(target, text, index) {
 }
 
 function mathMlCommandAt(text, index) {
-  const commands = ["\\Rightarrow", "\\rightarrow", "\\therefore", "\\subseteq", "\\emptyset", "\\because", "\\arcsin", "\\arccos", "\\arctan", "\\forall", "\\exists", "\\lambda", "\\approx", "\\models", "\\Delta", "\\Omega", "\\notin", "\\subset", "\\theta", "\\vdash", "\\times", "\\quad", "\\land", "\\oplus", "\\cdot", "\\div", "\\lim", "\\lor", "\\neg", "\\iff", "\\sin", "\\cos", "\\tan", "\\sec", "\\csc", "\\cot", "\\log", "\\cup", "\\cap", "\\ln", "\\pi", "\\le", "\\ge", "\\ne", "\\pm", "\\to", "\\in", "\\;", "\\,"];
+  const commands = ["\\Rightarrow", "\\rightarrow", "\\therefore", "\\subseteq", "\\emptyset", "\\because", "\\arcsin", "\\arccos", "\\arctan", "\\lfloor", "\\rfloor", "\\lceil", "\\rceil", "\\forall", "\\exists", "\\lambda", "\\approx", "\\equiv", "\\models", "\\bmod", "\\Delta", "\\Omega", "\\notin", "\\subset", "\\theta", "\\vdash", "\\times", "\\quad", "\\land", "\\oplus", "\\cdot", "\\bot", "\\top", "\\div", "\\lim", "\\lor", "\\neg", "\\iff", "\\sin", "\\cos", "\\tan", "\\sec", "\\csc", "\\cot", "\\log", "\\cup", "\\cap", "\\ln", "\\pi", "\\le", "\\ge", "\\ne", "\\pm", "\\to", "\\in", "\\;", "\\,"];
   return commands.find((command) => text.startsWith(command, index));
 }
 
@@ -9955,7 +10135,12 @@ function appendMathMlCommand(target, command) {
     "\\le": ["mo", "≤"],
     "\\ge": ["mo", "≥"],
     "\\ne": ["mo", "≠"],
+    "\\equiv": ["mo", "≡"],
     "\\approx": ["mo", "≈"],
+    "\\lfloor": ["mo", "⌊"],
+    "\\rfloor": ["mo", "⌋"],
+    "\\lceil": ["mo", "⌈"],
+    "\\rceil": ["mo", "⌉"],
     "\\pm": ["mo", "±"],
     "\\to": ["mo", "→"],
     "\\rightarrow": ["mo", "→"],
@@ -9968,6 +10153,8 @@ function appendMathMlCommand(target, command) {
     "\\exists": ["mo", "∃"],
     "\\therefore": ["mo", "∴"],
     "\\because": ["mo", "∵"],
+    "\\bot": ["mo", "⊥"],
+    "\\top": ["mo", "⊤"],
     "\\oplus": ["mo", "⊕"],
     "\\lambda": ["mi", "λ"],
     "\\Delta": ["mi", "Δ", "normal"],
@@ -9977,6 +10164,7 @@ function appendMathMlCommand(target, command) {
     "\\div": ["mo", "÷"],
     "\\vdash": ["mo", "⊢"],
     "\\models": ["mo", "⊨"],
+    "\\bmod": ["mtext", "mod"],
     "\\in": ["mo", "∈"],
     "\\notin": ["mo", "∉"],
     "\\subset": ["mo", "⊂"],
@@ -10013,7 +10201,7 @@ function doubleStruckSymbol(value) {
 }
 
 function mathMlOperatorTag(token) {
-  return /[+\-*/=()[\]{}|,×÷·∈∉⊂⊆∪∩∧∨¬∀∃∴∵⊕⊢⊨⇔]/.test(token) ? "mo" : "mtext";
+  return /[+\-*/=<>()[\]{}|,×÷·∈∉⊂⊆∪∩∧∨¬∀∃∴∵⊕⊢⊨⊥⊤⇔≡≈≤≥≠⌊⌋⌈⌉]/.test(token) ? "mo" : "mtext";
 }
 
 function displayMathMlOperator(token) {
@@ -10294,6 +10482,16 @@ function latexToPlainScratchpad(latex) {
       .replace(/\\le/g, "<=")
       .replace(/\\ge/g, ">=")
       .replace(/\\ne/g, "!=")
+      .replace(/\\equiv/g, "≡")
+      .replace(/\\approx/g, "≈")
+      .replace(/\\bot/g, "⊥")
+      .replace(/\\top/g, "⊤")
+      .replace(/\\lfloor/g, "⌊")
+      .replace(/\\rfloor/g, "⌋")
+      .replace(/\\lceil/g, "⌈")
+      .replace(/\\rceil/g, "⌉")
+      .replace(/\\pmod\{([^{}]*)\}/g, "mod $1")
+      .replace(/\\bmod/g, "mod")
       .replace(/\\pm/g, "+/-")
       .replace(/\\land/g, "∧")
       .replace(/\\lor/g, "∨")
