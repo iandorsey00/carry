@@ -1,10 +1,12 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-alpha.61";
+const APP_VERSION = "0.1.0-alpha.64";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 const GAMES_STORAGE_KEY = "carry.games.v1";
+const TOOLS_STORAGE_KEY = "carry.tools.v1";
 const GAME_IDS = ["sudoku", "mod-clock", "prime-factors", "gcd-race", "divisibility", "residue-match"];
+const TOOL_IDS = ["random-number", "normal-simulator", "unit-circle", "complex-plane", "number-theory"];
 
 const topicGroups = [
   {
@@ -2430,6 +2432,7 @@ const state = {
   progress: loadProgress(),
   scratchpads: loadScratchpads(),
   games: loadGames(),
+  tools: loadTools(),
   activeSurface: "learn",
   mode: "guided",
   activeTopic: "Arithmetic",
@@ -2799,6 +2802,8 @@ document.addEventListener("DOMContentLoaded", () => {
   if (els.appVersion) els.appVersion.textContent = `v${APP_VERSION}`;
   const routeState = resolveRouteFromPath();
   state.activeSurface = routeState?.surface || state.scratchpads.activeSurface || "learn";
+  if (routeState?.tool) state.tools.activeTool = routeState.tool;
+  if (routeState?.game) state.games.activeGame = routeState.game;
   state.activeTopic = routeState?.topic || state.progress.currentTopic || "Arithmetic";
   state.activeWorkspaceId = routeState?.workspaceId || state.progress.currentWorkspaceId || "arithmetic.long-addition.3x3";
   state.mode = state.progress.preferences.mode || "guided";
@@ -2807,6 +2812,7 @@ document.addEventListener("DOMContentLoaded", () => {
   renderTopics();
   renderWorkspace();
   renderScratchpad();
+  renderTools();
   renderGames();
   bindEvents();
   updateProgressPanel();
@@ -2851,10 +2857,14 @@ function cacheElements() {
   els.appVersion = document.querySelector("#appVersion");
   els.learnSurface = document.querySelector("#learnSurface");
   els.physicsSurface = document.querySelector("#physicsSurface");
+  els.toolsSurface = document.querySelector("#toolsSurface");
   els.gamesSurface = document.querySelector("#gamesSurface");
   els.scratchpadSurface = document.querySelector("#scratchpadSurface");
   els.lessonPanel = document.querySelector("#lessonPanel");
   els.scratchpadPanel = document.querySelector("#scratchpadPanel");
+  els.toolsPanel = document.querySelector("#toolsPanel");
+  els.toolTabs = Array.from(document.querySelectorAll(".tool-tab"));
+  els.toolPanels = Array.from(document.querySelectorAll("[data-tool-panel]"));
   els.sudokuPanel = document.querySelector("#sudokuPanel");
   els.gameTabs = Array.from(document.querySelectorAll(".game-tab"));
   els.sudokuGame = document.querySelector("#sudokuGame");
@@ -2866,6 +2876,38 @@ function cacheElements() {
   els.newSudoku = document.querySelector("#newSudoku");
   els.checkSudoku = document.querySelector("#checkSudoku");
   els.clearSudoku = document.querySelector("#clearSudoku");
+  els.randomNumberMin = document.querySelector("#randomNumberMin");
+  els.randomNumberMax = document.querySelector("#randomNumberMax");
+  els.randomNumberDecimals = document.querySelector("#randomNumberDecimals");
+  els.randomNumberPlaces = document.querySelector("#randomNumberPlaces");
+  els.randomNumberAutoCopy = document.querySelector("#randomNumberAutoCopy");
+  els.copyRandomNumber = document.querySelector("#copyRandomNumber");
+  els.generateRandomNumber = document.querySelector("#generateRandomNumber");
+  els.randomNumberOutput = document.querySelector("#randomNumberOutput");
+  els.randomNumberStatus = document.querySelector("#randomNumberStatus");
+  els.randomNumberHistory = document.querySelector("#randomNumberHistory");
+  els.normalMin = document.querySelector("#normalMin");
+  els.normalMax = document.querySelector("#normalMax");
+  els.normalSampleSize = document.querySelector("#normalSampleSize");
+  els.normalTrials = document.querySelector("#normalTrials");
+  els.runNormalSimulation = document.querySelector("#runNormalSimulation");
+  els.normalStatus = document.querySelector("#normalStatus");
+  els.normalBars = document.querySelector("#normalBars");
+  els.normalResults = document.querySelector("#normalResults");
+  els.unitCircleAngle = document.querySelector("#unitCircleAngle");
+  els.unitCircleFigure = document.querySelector("#unitCircleFigure");
+  els.unitCircleResults = document.querySelector("#unitCircleResults");
+  els.complexRadius = document.querySelector("#complexRadius");
+  els.complexAngle = document.querySelector("#complexAngle");
+  els.complexFigure = document.querySelector("#complexFigure");
+  els.complexResults = document.querySelector("#complexResults");
+  els.factorInput = document.querySelector("#factorInput");
+  els.calculateFactors = document.querySelector("#calculateFactors");
+  els.factorResults = document.querySelector("#factorResults");
+  els.gcdLeft = document.querySelector("#gcdLeft");
+  els.gcdRight = document.querySelector("#gcdRight");
+  els.calculateGcd = document.querySelector("#calculateGcd");
+  els.gcdResults = document.querySelector("#gcdResults");
   els.modClockGame = document.querySelector("#modClockGame");
   els.modClockDial = document.querySelector("#modClockDial");
   els.modClockPrompt = document.querySelector("#modClockPrompt");
@@ -3048,8 +3090,89 @@ function loadGames() {
   }
 }
 
+function loadTools() {
+  const fallback = {
+    version: 1,
+    activeTool: "random-number",
+    randomNumber: {
+      min: 0,
+      max: 99,
+      decimals: false,
+      decimalPlaces: 2,
+      autoCopy: false,
+      value: null,
+      history: []
+    },
+    normalSimulator: {
+      min: 0,
+      max: 99,
+      sampleSize: 30,
+      trials: 1000,
+      result: null
+    },
+    unitCircle: {
+      angle: "pi/4"
+    },
+    complexPlane: {
+      radius: 1,
+      angle: "pi/4"
+    },
+    numberTheory: {
+      factorInput: 84,
+      gcdLeft: 84,
+      gcdRight: 126
+    }
+  };
+
+  try {
+    const stored = localStorage.getItem(TOOLS_STORAGE_KEY);
+    if (!stored) return fallback;
+    const parsed = JSON.parse(stored);
+    return {
+      ...fallback,
+      ...parsed,
+      activeTool: TOOL_IDS.includes(parsed.activeTool) ? parsed.activeTool : fallback.activeTool,
+      randomNumber: {
+        ...fallback.randomNumber,
+        ...(parsed.randomNumber || {}),
+        history: Array.isArray(parsed.randomNumber?.history) ? parsed.randomNumber.history.slice(0, 8) : []
+      },
+      normalSimulator: {
+        ...fallback.normalSimulator,
+        ...(parsed.normalSimulator || {})
+      },
+      unitCircle: {
+        ...fallback.unitCircle,
+        ...(parsed.unitCircle || {})
+      },
+      complexPlane: {
+        ...fallback.complexPlane,
+        ...(parsed.complexPlane || {})
+      },
+      numberTheory: {
+        ...fallback.numberTheory,
+        ...(parsed.numberTheory || {})
+      }
+    };
+  } catch {
+    return fallback;
+  }
+}
+
 function saveGames(activity) {
   localStorage.setItem(GAMES_STORAGE_KEY, JSON.stringify(state.games, null, 2));
+  if (activity) {
+    state.progress.recentActivity = [
+      { label: activity, at: new Date().toISOString() },
+      ...state.progress.recentActivity.filter((item) => item.label !== activity)
+    ].slice(0, 8);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state.progress, null, 2));
+    updateProgressPanel();
+  }
+}
+
+function saveTools(activity) {
+  localStorage.setItem(TOOLS_STORAGE_KEY, JSON.stringify(state.tools, null, 2));
   if (activity) {
     state.progress.recentActivity = [
       { label: activity, at: new Date().toISOString() },
@@ -3086,6 +3209,7 @@ function routeSurfaceForWorkspace(id) {
 
 function routePrefixForSurface(surface) {
   if (surface === "physics") return "physics";
+  if (surface === "tools") return "tools";
   if (surface === "games") return "games";
   if (surface === "scratchpad") return "scratchpad";
   return "math";
@@ -3123,6 +3247,13 @@ function resolveRouteFromPath() {
   const parts = window.location.pathname.split("/").filter(Boolean);
   if (parts.length === 0) return null;
   if (parts[0] === "scratchpad") return { surface: "scratchpad" };
+  if (parts[0] === "tools") {
+    const tool = TOOL_IDS.includes(parts[1]) ? parts[1] : "random-number";
+    return {
+      surface: "tools",
+      tool
+    };
+  }
   if (parts[0] === "games") {
     const game = GAME_IDS.includes(parts[1]) ? parts[1] : "sudoku";
     return {
@@ -3138,6 +3269,8 @@ function resolveRouteFromPath() {
 function updateUrlFromState(options = {}) {
   const route = state.activeSurface === "scratchpad"
     ? { path: "/scratchpad" }
+    : state.activeSurface === "tools"
+      ? { path: `/tools/${TOOL_IDS.includes(state.tools.activeTool) ? state.tools.activeTool : "random-number"}` }
     : state.activeSurface === "games"
       ? { path: `/games/${GAME_IDS.includes(state.games.activeGame) ? state.games.activeGame : "sudoku"}` }
     : findRouteForWorkspace(state.activeWorkspaceId);
@@ -3152,6 +3285,7 @@ function applyRouteState(routeState) {
   if (!routeState) return;
   state.activeSurface = routeState.surface;
   if (routeState.game) state.games.activeGame = routeState.game;
+  if (routeState.tool) state.tools.activeTool = routeState.tool;
   if (routeState.topic) state.activeTopic = routeState.topic;
   if (routeState.workspaceId) {
     state.activeWorkspaceId = routeState.workspaceId;
@@ -3162,6 +3296,8 @@ function applyRouteState(routeState) {
   renderTopics();
   if (state.activeSurface === "scratchpad") {
     renderScratchpad();
+  } else if (state.activeSurface === "tools") {
+    renderTools();
   } else if (state.activeSurface === "games") {
     renderGames();
   } else {
@@ -3175,6 +3311,7 @@ function currentTopicGroups() {
 }
 
 function ensureSurfaceWorkspace() {
+  if (state.activeSurface === "tools") return;
   if (state.activeSurface === "games") return;
 
   if (state.activeSurface === "physics") {
@@ -3327,7 +3464,7 @@ function renderWorkspace() {
 }
 
 function workspaceStartStatus(workspace) {
-  if (workspace.type === "concept") return "Enter the answer, then check it.";
+  if (workspace.type === "concept") return "Choose an answer, then check it.";
   if (["equation", "inequality", "system", "factoring", "quadratic"].includes(workspace.type)) {
     return "Enter the active step, then check it.";
   }
@@ -3630,6 +3767,435 @@ function newSudoku() {
     entries: {},
     selected: null
   }, "Started a new Sudoku");
+}
+
+function cryptoUint32() {
+  if (window.crypto?.getRandomValues) {
+    const values = new Uint32Array(1);
+    window.crypto.getRandomValues(values);
+    return values[0];
+  }
+  return Math.floor(Math.random() * 4294967296);
+}
+
+function cryptoUnit() {
+  const high = cryptoUint32() >>> 5;
+  const low = cryptoUint32() >>> 6;
+  return ((high * 67108864) + low) / 9007199254740992;
+}
+
+function randomIntegerInclusive(min, max) {
+  const low = Math.ceil(Math.min(min, max));
+  const high = Math.floor(Math.max(min, max));
+  const range = high - low + 1;
+  if (!Number.isFinite(range) || range <= 1) return low;
+  if (range > 4294967296) {
+    return low + Math.floor(cryptoUnit() * range);
+  }
+  const limit = 4294967296 - (4294967296 % range);
+  let value = cryptoUint32();
+  while (value >= limit) value = cryptoUint32();
+  return low + (value % range);
+}
+
+function clampRandomNumberSettings(settings) {
+  const min = Number.isFinite(Number(settings.min)) ? Number(settings.min) : 0;
+  const max = Number.isFinite(Number(settings.max)) ? Number(settings.max) : 99;
+  const decimalPlaces = Math.min(6, Math.max(1, Math.trunc(Number(settings.decimalPlaces) || 2)));
+  return {
+    min,
+    max,
+    decimals: Boolean(settings.decimals),
+    decimalPlaces,
+    autoCopy: Boolean(settings.autoCopy)
+  };
+}
+
+function currentRandomNumberSettings() {
+  return clampRandomNumberSettings(state.tools.randomNumber || {});
+}
+
+function formatRandomNumber(value, decimals, decimalPlaces) {
+  if (!decimals) return String(value);
+  return Number(value).toFixed(decimalPlaces).replace(/\.?0+$/u, "");
+}
+
+function generateRandomNumberValue(settings) {
+  const min = Math.min(settings.min, settings.max);
+  const max = Math.max(settings.min, settings.max);
+  if (!settings.decimals) return randomIntegerInclusive(min, max);
+  const raw = min + (cryptoUnit() * (max - min));
+  return Number(raw.toFixed(settings.decimalPlaces));
+}
+
+function updateRandomNumberSettings() {
+  const next = clampRandomNumberSettings({
+    min: els.randomNumberMin.value,
+    max: els.randomNumberMax.value,
+    decimals: els.randomNumberDecimals.checked,
+    decimalPlaces: els.randomNumberPlaces.value,
+    autoCopy: els.randomNumberAutoCopy.checked
+  });
+  state.tools.randomNumber = {
+    ...state.tools.randomNumber,
+    ...next
+  };
+  saveTools("Changed Random Number settings");
+  renderRandomNumber();
+}
+
+function generateRandomNumber() {
+  const settings = currentRandomNumberSettings();
+  const value = generateRandomNumberValue(settings);
+  const formatted = formatRandomNumber(value, settings.decimals, settings.decimalPlaces);
+  state.tools.randomNumber = {
+    ...state.tools.randomNumber,
+    ...settings,
+    value: formatted,
+    history: [formatted, ...(state.tools.randomNumber.history || [])].slice(0, 8)
+  };
+  saveTools("Generated a random number");
+  renderRandomNumber();
+  if (settings.autoCopy || state.tools.randomNumber.autoCopy) copyText(formatted);
+}
+
+function renderRandomNumber() {
+  if (!els.randomNumberOutput) return;
+  const settings = currentRandomNumberSettings();
+  const value = state.tools.randomNumber?.value;
+  const history = Array.isArray(state.tools.randomNumber?.history) ? state.tools.randomNumber.history : [];
+  els.randomNumberMin.value = String(settings.min);
+  els.randomNumberMax.value = String(settings.max);
+  els.randomNumberDecimals.checked = settings.decimals;
+  els.randomNumberPlaces.value = String(settings.decimalPlaces);
+  els.randomNumberAutoCopy.checked = Boolean(state.tools.randomNumber?.autoCopy);
+  els.randomNumberPlaces.disabled = !settings.decimals;
+  els.randomNumberOutput.textContent = value === null || value === undefined ? "—" : String(value);
+  els.randomNumberStatus.textContent = settings.decimals
+    ? `Range ${Math.min(settings.min, settings.max)} to ${Math.max(settings.min, settings.max)}, up to ${settings.decimalPlaces} decimal places.`
+    : `Range ${Math.ceil(Math.min(settings.min, settings.max))} to ${Math.floor(Math.max(settings.min, settings.max))}, whole numbers only.`;
+  els.randomNumberHistory.innerHTML = "";
+  if (!history.length) {
+    const empty = document.createElement("li");
+    empty.textContent = "No numbers yet.";
+    els.randomNumberHistory.append(empty);
+    return;
+  }
+  history.forEach((item) => {
+    const li = document.createElement("li");
+    li.textContent = item;
+    els.randomNumberHistory.append(li);
+  });
+}
+
+function setActiveTool(tool) {
+  state.tools.activeTool = TOOL_IDS.includes(tool) ? tool : "random-number";
+  saveTools(`Opened ${toolLabel(state.tools.activeTool)}`);
+  renderTools();
+  updateUrlFromState();
+}
+
+function toolLabel(tool) {
+  return {
+    "random-number": "Random Number",
+    "normal-simulator": "Normal Simulator",
+    "unit-circle": "Unit Circle",
+    "complex-plane": "Complex Plane",
+    "number-theory": "Number Theory"
+  }[tool] || "Random Number";
+}
+
+function renderTools() {
+  const activeTool = TOOL_IDS.includes(state.tools.activeTool) ? state.tools.activeTool : "random-number";
+  state.tools.activeTool = activeTool;
+  els.toolTabs.forEach((tab) => {
+    tab.setAttribute("aria-selected", tab.dataset.tool === activeTool ? "true" : "false");
+  });
+  els.toolPanels.forEach((panel) => {
+    panel.hidden = panel.dataset.toolPanel !== activeTool;
+  });
+  populateAngleSelects();
+  renderRandomNumber();
+  renderNormalSimulator();
+  renderUnitCircle();
+  renderComplexPlane();
+  renderNumberTheoryTools();
+}
+
+function copyText(text) {
+  if (!text) return Promise.resolve(false);
+  if (!navigator.clipboard?.writeText) return Promise.resolve(false);
+  return navigator.clipboard.writeText(text).then(() => true).catch(() => false);
+}
+
+function copyRandomNumber() {
+  const value = state.tools.randomNumber?.value;
+  if (value === null || value === undefined) {
+    els.randomNumberStatus.textContent = "Generate a number before copying.";
+    return;
+  }
+  copyText(String(value)).then((copied) => {
+    els.randomNumberStatus.textContent = copied ? "Copied." : "Copy was unavailable in this browser.";
+  });
+}
+
+function clampNormalSettings(settings) {
+  return {
+    min: Number.isFinite(Number(settings.min)) ? Number(settings.min) : 0,
+    max: Number.isFinite(Number(settings.max)) ? Number(settings.max) : 99,
+    sampleSize: Math.min(1000, Math.max(1, Math.trunc(Number(settings.sampleSize) || 30))),
+    trials: Math.min(5000, Math.max(10, Math.trunc(Number(settings.trials) || 1000)))
+  };
+}
+
+function updateNormalSettings() {
+  state.tools.normalSimulator = {
+    ...state.tools.normalSimulator,
+    ...clampNormalSettings({
+      min: els.normalMin.value,
+      max: els.normalMax.value,
+      sampleSize: els.normalSampleSize.value,
+      trials: els.normalTrials.value
+    })
+  };
+  saveTools("Changed Normal Simulator settings");
+  renderNormalSimulator();
+}
+
+function runNormalSimulation() {
+  const settings = clampNormalSettings({
+    min: els.normalMin.value,
+    max: els.normalMax.value,
+    sampleSize: els.normalSampleSize.value,
+    trials: els.normalTrials.value
+  });
+  const min = Math.min(settings.min, settings.max);
+  const max = Math.max(settings.min, settings.max);
+  const averages = [];
+  for (let trial = 0; trial < settings.trials; trial += 1) {
+    let sum = 0;
+    for (let draw = 0; draw < settings.sampleSize; draw += 1) {
+      sum += min + (cryptoUnit() * (max - min));
+    }
+    averages.push(sum / settings.sampleSize);
+  }
+  const mean = averages.reduce((sum, value) => sum + value, 0) / averages.length;
+  const variance = averages.reduce((sum, value) => sum + ((value - mean) ** 2), 0) / averages.length;
+  const bins = Array.from({ length: 12 }, () => 0);
+  averages.forEach((value) => {
+    const ratio = max === min ? 0 : (value - min) / (max - min);
+    const index = Math.min(bins.length - 1, Math.max(0, Math.floor(ratio * bins.length)));
+    bins[index] += 1;
+  });
+  state.tools.normalSimulator = {
+    ...state.tools.normalSimulator,
+    ...settings,
+    result: {
+      mean,
+      standardDeviation: Math.sqrt(variance),
+      min: Math.min(...averages),
+      max: Math.max(...averages),
+      bins
+    }
+  };
+  saveTools("Ran Normal Simulator");
+  renderNormalSimulator();
+}
+
+function renderNormalSimulator() {
+  if (!els.normalMin) return;
+  const settings = clampNormalSettings(state.tools.normalSimulator || {});
+  const result = state.tools.normalSimulator?.result;
+  els.normalMin.value = String(settings.min);
+  els.normalMax.value = String(settings.max);
+  els.normalSampleSize.value = String(settings.sampleSize);
+  els.normalTrials.value = String(settings.trials);
+  els.normalStatus.textContent = `Average ${settings.sampleSize} random values from ${Math.min(settings.min, settings.max)} to ${Math.max(settings.min, settings.max)}, repeated ${settings.trials} times.`;
+  els.normalBars.innerHTML = "";
+  const bins = result?.bins || [];
+  const peak = Math.max(1, ...bins);
+  if (!bins.length) {
+    const empty = document.createElement("div");
+    empty.className = "distribution-empty";
+    empty.textContent = "Run the simulator to see the averages cluster.";
+    els.normalBars.append(empty);
+  } else {
+    bins.forEach((count) => {
+      const bar = document.createElement("div");
+      bar.className = "distribution-bar";
+      bar.style.height = `${Math.max(4, (count / peak) * 100)}%`;
+      bar.title = `${count} trials`;
+      els.normalBars.append(bar);
+    });
+  }
+  renderDefinitionList(els.normalResults, result ? [
+    ["Mean of averages", formatNumber(result.mean, 3)],
+    ["Standard deviation", formatNumber(result.standardDeviation, 3)],
+    ["Smallest average", formatNumber(result.min, 3)],
+    ["Largest average", formatNumber(result.max, 3)]
+  ] : [["Result", "Run the simulator."]]);
+}
+
+const exactAngles = [
+  { value: "0", label: "0", rad: 0, cos: "1", sin: "0" },
+  { value: "pi/6", label: "π/6", rad: Math.PI / 6, cos: "√3/2", sin: "1/2" },
+  { value: "pi/4", label: "π/4", rad: Math.PI / 4, cos: "√2/2", sin: "√2/2" },
+  { value: "pi/3", label: "π/3", rad: Math.PI / 3, cos: "1/2", sin: "√3/2" },
+  { value: "pi/2", label: "π/2", rad: Math.PI / 2, cos: "0", sin: "1" },
+  { value: "2pi/3", label: "2π/3", rad: (2 * Math.PI) / 3, cos: "-1/2", sin: "√3/2" },
+  { value: "3pi/4", label: "3π/4", rad: (3 * Math.PI) / 4, cos: "-√2/2", sin: "√2/2" },
+  { value: "5pi/6", label: "5π/6", rad: (5 * Math.PI) / 6, cos: "-√3/2", sin: "1/2" },
+  { value: "pi", label: "π", rad: Math.PI, cos: "-1", sin: "0" },
+  { value: "7pi/6", label: "7π/6", rad: (7 * Math.PI) / 6, cos: "-√3/2", sin: "-1/2" },
+  { value: "5pi/4", label: "5π/4", rad: (5 * Math.PI) / 4, cos: "-√2/2", sin: "-√2/2" },
+  { value: "4pi/3", label: "4π/3", rad: (4 * Math.PI) / 3, cos: "-1/2", sin: "-√3/2" },
+  { value: "3pi/2", label: "3π/2", rad: (3 * Math.PI) / 2, cos: "0", sin: "-1" },
+  { value: "5pi/3", label: "5π/3", rad: (5 * Math.PI) / 3, cos: "1/2", sin: "-√3/2" },
+  { value: "7pi/4", label: "7π/4", rad: (7 * Math.PI) / 4, cos: "√2/2", sin: "-√2/2" },
+  { value: "11pi/6", label: "11π/6", rad: (11 * Math.PI) / 6, cos: "√3/2", sin: "-1/2" }
+];
+
+function populateAngleSelects() {
+  [els.unitCircleAngle, els.complexAngle].forEach((select) => {
+    if (!select || select.options.length) return;
+    exactAngles.forEach((angle) => {
+      const option = document.createElement("option");
+      option.value = angle.value;
+      option.textContent = angle.label;
+      select.append(option);
+    });
+  });
+}
+
+function angleByValue(value) {
+  return exactAngles.find((angle) => angle.value === value) || exactAngles[2];
+}
+
+function renderCircleFigure(svg, angle, radius = 1) {
+  if (!svg) return;
+  svg.innerHTML = "";
+  const pointRadius = Math.min(95, Math.max(0, Number(radius) * 75));
+  const x = Math.cos(angle.rad) * pointRadius;
+  const y = -Math.sin(angle.rad) * pointRadius;
+  svg.append(svgEl("circle", { cx: 0, cy: 0, r: 76, class: "circle-guide" }));
+  svg.append(svgEl("line", { x1: -100, y1: 0, x2: 100, y2: 0, class: "circle-axis" }));
+  svg.append(svgEl("line", { x1: 0, y1: 100, x2: 0, y2: -100, class: "circle-axis" }));
+  svg.append(svgEl("line", { x1: 0, y1: 0, x2: x, y2: y, class: "circle-radius" }));
+  svg.append(svgEl("circle", { cx: x, cy: y, r: 6, class: "circle-point" }));
+}
+
+function svgEl(name, attributes) {
+  const element = document.createElementNS("http://www.w3.org/2000/svg", name);
+  Object.entries(attributes).forEach(([key, value]) => element.setAttribute(key, value));
+  return element;
+}
+
+function renderUnitCircle() {
+  if (!els.unitCircleAngle) return;
+  const angle = angleByValue(state.tools.unitCircle?.angle);
+  els.unitCircleAngle.value = angle.value;
+  renderCircleFigure(els.unitCircleFigure, angle, 1);
+  renderDefinitionList(els.unitCircleResults, [
+    ["Angle", angle.label],
+    ["Coordinate", `(${angle.cos}, ${angle.sin})`],
+    ["cos θ", angle.cos],
+    ["sin θ", angle.sin]
+  ]);
+}
+
+function scaleExact(value, radius) {
+  const r = Number(radius);
+  if (r === 1) return value;
+  if (value === "0") return "0";
+  if (value === "1") return String(r);
+  if (value === "-1") return String(-r);
+  return `${r}(${value})`;
+}
+
+function renderComplexPlane() {
+  if (!els.complexAngle) return;
+  const radius = Math.max(0, Number(state.tools.complexPlane?.radius) || 1);
+  const angle = angleByValue(state.tools.complexPlane?.angle);
+  els.complexRadius.value = String(radius);
+  els.complexAngle.value = angle.value;
+  renderCircleFigure(els.complexFigure, angle, radius);
+  const real = scaleExact(angle.cos, radius);
+  const imaginary = scaleExact(angle.sin, radius);
+  renderDefinitionList(els.complexResults, [
+    ["Polar form", `${radius} cis ${angle.label}`],
+    ["Coordinate", `(${real}, ${imaginary})`],
+    ["Complex form", formatComplexForm(real, imaginary)]
+  ]);
+}
+
+function formatComplexForm(real, imaginary) {
+  if (imaginary === "0") return real;
+  if (real === "0") return `${imaginary}i`;
+  if (imaginary.startsWith("-")) return `${real} − ${imaginary.slice(1)}i`;
+  return `${real} + ${imaginary}i`;
+}
+
+function primeFactorsOf(value) {
+  let n = Math.abs(Math.trunc(Number(value) || 0));
+  if (n < 2) return [];
+  const factors = [];
+  let divisor = 2;
+  while (divisor * divisor <= n) {
+    while (n % divisor === 0) {
+      factors.push(divisor);
+      n /= divisor;
+    }
+    divisor += divisor === 2 ? 1 : 2;
+  }
+  if (n > 1) factors.push(n);
+  return factors;
+}
+
+function renderNumberTheoryTools() {
+  if (!els.factorInput) return;
+  const settings = state.tools.numberTheory || {};
+  els.factorInput.value = String(settings.factorInput ?? 84);
+  els.gcdLeft.value = String(settings.gcdLeft ?? 84);
+  els.gcdRight.value = String(settings.gcdRight ?? 126);
+  const factors = primeFactorsOf(settings.factorInput);
+  renderDefinitionList(els.factorResults, [
+    ["Prime factors", factors.length ? factors.join(" × ") : "none"],
+    ["Distinct primes", factors.length ? [...new Set(factors)].join(", ") : "none"]
+  ]);
+  const gcdValue = gcd(settings.gcdLeft, settings.gcdRight);
+  renderDefinitionList(els.gcdResults, [
+    ["GCD", String(gcdValue)],
+    ["Check", `${gcdValue} divides both numbers`]
+  ]);
+}
+
+function updateNumberTheoryTools(kind) {
+  state.tools.numberTheory = {
+    ...state.tools.numberTheory,
+    factorInput: Math.abs(Math.trunc(Number(els.factorInput.value) || 0)),
+    gcdLeft: Math.trunc(Number(els.gcdLeft.value) || 0),
+    gcdRight: Math.trunc(Number(els.gcdRight.value) || 0)
+  };
+  saveTools(kind === "gcd" ? "Calculated GCD" : "Calculated prime factors");
+  renderNumberTheoryTools();
+}
+
+function renderDefinitionList(target, rows) {
+  if (!target) return;
+  target.innerHTML = "";
+  rows.forEach(([term, value]) => {
+    const div = document.createElement("div");
+    const dt = document.createElement("dt");
+    const dd = document.createElement("dd");
+    dt.textContent = term;
+    dd.textContent = value;
+    div.append(dt, dd);
+    target.append(div);
+  });
+}
+
+function formatNumber(value, places = 2) {
+  return Number(value).toFixed(places).replace(/\.?0+$/u, "");
 }
 
 function currentModClockSettings() {
@@ -4080,18 +4646,23 @@ function handleModClockKeydown(event) {
 function renderSurface() {
   const isScratchpad = state.activeSurface === "scratchpad";
   const isPhysics = state.activeSurface === "physics";
+  const isTools = state.activeSurface === "tools";
   const isGames = state.activeSurface === "games";
-  els.lessonPanel.hidden = isScratchpad || isGames;
+  els.lessonPanel.hidden = isScratchpad || isTools || isGames;
   els.scratchpadPanel.hidden = !isScratchpad;
+  els.toolsPanel.hidden = !isTools;
   els.sudokuPanel.hidden = !isGames;
-  els.topicPanel.hidden = isScratchpad || isGames;
-  els.workspaceLayout.classList.toggle("single-column", isScratchpad || isGames);
-  els.learnSurface.setAttribute("aria-pressed", !isScratchpad && !isPhysics && !isGames ? "true" : "false");
+  els.topicPanel.hidden = isScratchpad || isTools || isGames;
+  els.workspaceLayout.classList.toggle("single-column", isScratchpad || isTools || isGames);
+  els.learnSurface.setAttribute("aria-pressed", !isScratchpad && !isPhysics && !isTools && !isGames ? "true" : "false");
   els.physicsSurface.setAttribute("aria-pressed", isPhysics ? "true" : "false");
+  els.toolsSurface.setAttribute("aria-pressed", isTools ? "true" : "false");
   els.gamesSurface.setAttribute("aria-pressed", isGames ? "true" : "false");
   els.scratchpadSurface.setAttribute("aria-pressed", isScratchpad ? "true" : "false");
   if (isScratchpad) {
     els.scratchpadInput?.focus({ preventScroll: true });
+  } else if (isTools) {
+    renderTools();
   } else if (isGames) {
     renderGames();
   }
@@ -4106,6 +4677,8 @@ function setSurface(surface) {
   renderTopics();
   if (surface === "scratchpad") {
     renderScratchpad();
+  } else if (surface === "tools") {
+    renderTools();
   } else if (surface === "games") {
     renderGames();
   } else {
@@ -6719,6 +7292,7 @@ function getActiveWorkspace() {
 
 function buildConceptModel(workspace) {
   const answers = workspace.problem.answers || [workspace.problem.answer];
+  const choices = workspace.problem.choices || conceptChoicesForProblem(workspace.problem, answers);
   return {
     ...workspace.problem,
     sourceWorkspaceId: workspace.id,
@@ -6730,7 +7304,8 @@ function buildConceptModel(workspace) {
         kind: "conceptAnswer",
         expected: workspace.problem.answer,
         answers,
-        choices: workspace.problem.choices || conceptChoicesForProblem(workspace.problem, answers),
+        choices,
+        correctChoices: correctChoiceValues(choices, answers, workspace.problem),
         sequence: 0,
         label: workspace.problem.label || "answer",
         hint: workspace.problem.hint,
@@ -6816,6 +7391,7 @@ function createConceptAnswerInput(model) {
   input.dataset.label = model.cells[0].label;
   input.dataset.feedback = model.cells[0].feedback || "";
   input.dataset.prompt = model.prompt;
+  input.dataset.correctChoices = JSON.stringify(model.cells[0].correctChoices || []);
   input.dataset.sequence = "0";
   input.setAttribute("aria-label", model.cells[0].label);
 
@@ -6846,7 +7422,8 @@ function conceptChoicesForProblem(problem, answers) {
 
   const explicitOptions = optionsFromPrompt(prompt);
   if (explicitOptions.length >= 2 && explicitOptions.length <= 5) {
-    return prioritizeAnswerChoice(explicitOptions, answers).map((value) => ({ value, label: value }));
+    const prioritized = prioritizeAnswerChoice(explicitOptions, answers);
+    if (prioritized.length) return prioritized.map((value) => ({ value, label: value }));
   }
 
   const label = answerValue(problem.label);
@@ -6855,7 +7432,118 @@ function conceptChoicesForProblem(problem, answers) {
     if (symbols.length) return symbols.map((value) => ({ value, label: value }));
   }
 
-  return [];
+  return generatedAnswerChoices(problem, answers);
+}
+
+function correctChoiceValues(choices, answers, problem) {
+  const correct = choices
+    .filter((choice) => isChoiceAccepted(choice.value, answers, problem))
+    .map((choice) => String(choice.value));
+  if (correct.length) return correct;
+  return [String(problem.answer || answers?.[0] || "")];
+}
+
+function isChoiceAccepted(value, answers, problem) {
+  const prompt = answerValue(problem.prompt);
+  const label = answerValue(problem.label);
+  const choiceValue = answerValue(value);
+  return (answers || []).some((answer) => {
+    const expected = answerValue(answer);
+    if (choiceValue === expected) return true;
+    if (answerVariants(answer).has(choiceValue)) return true;
+    return semanticAnswerAliases(expected, label, prompt).some((alias) => answerValue(alias) === choiceValue);
+  });
+}
+
+function generatedAnswerChoices(problem, answers) {
+  const answer = String(problem.answer || answers?.[0] || "");
+  const normalized = answerValue(answer);
+  const prompt = answerValue(problem.prompt);
+  const label = answerValue(problem.label);
+  const choices = [answer];
+
+  if (/^-?\d+$/.test(normalized)) {
+    choices.push(...numericDistractors(Number(normalized), prompt, label));
+  } else if (/^-?\d+(?:\.\d+)?$/.test(normalized)) {
+    choices.push(...decimalDistractors(Number(normalized)));
+  } else if (/^-?\d+\/-?\d+$/.test(normalized)) {
+    choices.push(...fractionDistractors(normalized));
+  } else if (/^-?\d+,?-?\d+$/.test(normalized) || /^\(-?\d+,-?\d+\)$/.test(normalized)) {
+    choices.push(...coordinateDistractors(answer));
+  } else {
+    choices.push(...textDistractors(answer, prompt, label));
+  }
+
+  return stableChoiceOrder(uniqueChoiceValues(choices).slice(0, 4), `${problem.prompt || ""}:${answer}`)
+    .map((value) => ({ value: String(value), label: displayChoiceLabel(value) }));
+}
+
+function stableChoiceOrder(values, seedText) {
+  let seed = 0;
+  String(seedText || "").split("").forEach((char) => {
+    seed = ((seed * 31) + char.charCodeAt(0)) >>> 0;
+  });
+  return shuffleWithRandom(values, seededRandom(seed || 1));
+}
+
+function uniqueChoiceValues(values) {
+  const result = [];
+  values.filter((value) => value !== null && value !== undefined && String(value).trim()).forEach((value) => {
+    if (!result.some((item) => answerValue(item) === answerValue(value))) result.push(String(value));
+  });
+  return result;
+}
+
+function numericDistractors(value, prompt, label) {
+  if (label.includes("angle") || prompt.includes("degree")) return [value + 30, Math.max(0, value - 30), 180 - value];
+  if (label.includes("percent")) return [value * 10, value / 10, value + 10];
+  if (Math.abs(value) <= 10) return [value + 1, value - 1, -value || value + 2];
+  return [value + 1, value - 1, value + 10, Math.max(0, value - 10)];
+}
+
+function decimalDistractors(value) {
+  return [value + 0.1, value - 0.1, value * 10].map((item) => Number(item.toFixed(3)));
+}
+
+function fractionDistractors(value) {
+  const [rawNumerator, rawDenominator] = value.split("/").map(Number);
+  const denominator = rawDenominator || 1;
+  return [
+    `${rawNumerator + 1}/${denominator}`,
+    `${rawNumerator}/${denominator + 1}`,
+    `${denominator}/${rawNumerator || 1}`
+  ];
+}
+
+function coordinateDistractors(value) {
+  const compact = answerValue(value).replace(/[()]/g, "");
+  const [x, y] = compact.split(",").map(Number);
+  if (!Number.isFinite(x) || !Number.isFinite(y)) return ["(0,0)", "(1,0)", "(0,1)"];
+  return [`(${y},${x})`, `(${-x},${y})`, `(${x},${-y})`];
+}
+
+function textDistractors(answer, prompt, label) {
+  const pools = [
+    { test: "direction|shift", values: ["up", "down", "left", "right"] },
+    { test: "angle", values: ["acute", "right", "obtuse", "straight"] },
+    { test: "triangle", values: ["equilateral", "isosceles", "scalene", "right"] },
+    { test: "quadrant", values: ["I", "II", "III", "IV"] },
+    { test: "property|identity|inverse|closure|commutative|associative|distributive|transitive", values: ["closure", "identity", "inverse", "commutative", "associative", "distributive", "transitive"] },
+    { test: "proof|logic|quantifier|contradiction|construction|counterexample|induction|hypothesis|conclusion", values: ["hypothesis", "conclusion", "contradiction", "counterexample", "base case", "inductive step", "exists", "for all"] },
+    { test: "set|subset|member|function|relation", values: ["set", "subset", "element", "relation", "function", "union", "intersection"] },
+    { test: "physics|unit|force|energy|momentum|charge|wave|light|heat", values: ["force", "energy", "momentum", "light", "heat", "charge", "mass", "time"] },
+    { test: "number|prime|factor|multiple|divisor", values: ["prime", "composite", "factor", "multiple", "divisor", "remainder"] }
+  ];
+  const haystack = `${prompt} ${label} ${answerValue(answer)}`;
+  const pool = pools.find((item) => new RegExp(item.test).test(haystack))?.values || ["0", "1", "not enough information", "cannot be determined"];
+  return pool.filter((item) => answerValue(item) !== answerValue(answer));
+}
+
+function displayChoiceLabel(value) {
+  return String(value)
+    .replace(/\bforall\b/g, "for all")
+    .replace(/\bthereexists\b/g, "there exists")
+    .replace(/\batleastone\b/g, "at least one");
 }
 
 function optionsFromPrompt(prompt) {
@@ -8820,6 +9508,15 @@ function feedbackForInput(input) {
 }
 
 function isCorrectAnswer(input) {
+  if (input.classList.contains("concept-answer-choice-control")) {
+    let correctChoices = [];
+    try {
+      correctChoices = JSON.parse(input.dataset.correctChoices || "[]");
+    } catch {
+      correctChoices = [];
+    }
+    return correctChoices.map(String).includes(String(input.value));
+  }
   const answers = acceptedAnswersForInput(input);
   const userValue = answerValue(input.value);
   if (answers.some((answer) => answerValue(answer) === userValue)) return true;
@@ -9035,8 +9732,12 @@ function bindEvents() {
 
   els.learnSurface.addEventListener("click", () => setSurface("learn"));
   els.physicsSurface.addEventListener("click", () => setSurface("physics"));
+  els.toolsSurface.addEventListener("click", () => setSurface("tools"));
   els.gamesSurface.addEventListener("click", () => setSurface("games"));
   els.scratchpadSurface.addEventListener("click", () => setSurface("scratchpad"));
+  els.toolTabs.forEach((tab) => {
+    tab.addEventListener("click", () => setActiveTool(tab.dataset.tool));
+  });
   els.gameTabs.forEach((tab) => {
     tab.addEventListener("click", () => setActiveGame(tab.dataset.game));
   });
@@ -9078,7 +9779,7 @@ function bindEvents() {
   els.hintStep.addEventListener("click", showHint);
   els.startLesson.addEventListener("click", startCurrentLesson);
   els.autoAdvance.addEventListener("change", () => {
-    saveProgress("Changed options");
+    saveProgress("Changed status settings");
     setStatus(els.autoAdvance.checked ? "Auto-advance is on." : "Auto-advance is off.", "");
   });
   els.newProblem.addEventListener("click", () => {
@@ -9137,6 +9838,35 @@ function bindEvents() {
   els.newSudoku.addEventListener("click", newSudoku);
   els.checkSudoku.addEventListener("click", checkSudoku);
   els.clearSudoku.addEventListener("click", clearSudoku);
+  els.generateRandomNumber.addEventListener("click", generateRandomNumber);
+  els.randomNumberMin.addEventListener("change", updateRandomNumberSettings);
+  els.randomNumberMax.addEventListener("change", updateRandomNumberSettings);
+  els.randomNumberDecimals.addEventListener("change", updateRandomNumberSettings);
+  els.randomNumberPlaces.addEventListener("change", updateRandomNumberSettings);
+  els.randomNumberAutoCopy.addEventListener("change", updateRandomNumberSettings);
+  els.copyRandomNumber.addEventListener("click", copyRandomNumber);
+  els.normalMin.addEventListener("change", updateNormalSettings);
+  els.normalMax.addEventListener("change", updateNormalSettings);
+  els.normalSampleSize.addEventListener("change", updateNormalSettings);
+  els.normalTrials.addEventListener("change", updateNormalSettings);
+  els.runNormalSimulation.addEventListener("click", runNormalSimulation);
+  els.unitCircleAngle.addEventListener("change", () => {
+    state.tools.unitCircle.angle = els.unitCircleAngle.value;
+    saveTools("Changed Unit Circle angle");
+    renderUnitCircle();
+  });
+  els.complexRadius.addEventListener("change", () => {
+    state.tools.complexPlane.radius = Math.max(0, Number(els.complexRadius.value) || 1);
+    saveTools("Changed Complex Plane radius");
+    renderComplexPlane();
+  });
+  els.complexAngle.addEventListener("change", () => {
+    state.tools.complexPlane.angle = els.complexAngle.value;
+    saveTools("Changed Complex Plane angle");
+    renderComplexPlane();
+  });
+  els.calculateFactors.addEventListener("click", () => updateNumberTheoryTools("factors"));
+  els.calculateGcd.addEventListener("click", () => updateNumberTheoryTools("gcd"));
   els.modClockDial.addEventListener("click", (event) => {
     const button = event.target.closest(".mod-clock-node");
     if (!button) return;
@@ -9224,6 +9954,7 @@ function startCurrentLesson() {
 
 function handlePageKeydown(event) {
   if (event.defaultPrevented) return;
+  if (handleToolsKeydown(event)) return;
   if (handleSudokuKeydown(event)) return;
   if (event.key === "Enter") {
     if (isFormControl(event.target) && !event.target.classList?.contains("digit-input")) return;
@@ -9243,6 +9974,25 @@ function handlePageKeydown(event) {
   event.preventDefault();
   activeInput.focus();
   insertDigit(activeInput, event.key);
+}
+
+function handleToolsKeydown(event) {
+  if (state.activeSurface !== "tools" || event.key !== "Enter") return false;
+  event.preventDefault();
+  if (state.tools.activeTool === "random-number") {
+    if (isFormControl(event.target)) updateRandomNumberSettings();
+    generateRandomNumber();
+    return true;
+  }
+  if (state.tools.activeTool === "normal-simulator") {
+    runNormalSimulation();
+    return true;
+  }
+  if (state.tools.activeTool === "number-theory") {
+    updateNumberTheoryTools(event.target === els.gcdLeft || event.target === els.gcdRight ? "gcd" : "factors");
+    return true;
+  }
+  return false;
 }
 
 function isFormControl(target) {

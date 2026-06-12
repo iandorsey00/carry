@@ -12,7 +12,7 @@
     <link rel="icon" type="image/png" sizes="512x512" href="/assets/carry-icon.png">
     <link rel="apple-touch-icon" href="/assets/carry-icon.png">
     <link rel="manifest" href="/manifest.webmanifest">
-    <link rel="stylesheet" href="/styles.css?v=0.1.0-alpha.61">
+    <link rel="stylesheet" href="/styles.css?v=0.1.0-alpha.64">
   </head>
   <body>
     <div class="app-shell">
@@ -23,6 +23,7 @@
         <nav class="surface-switch" aria-label="Carry workspaces">
           <button class="surface-tab" id="learnSurface" type="button" aria-pressed="true">Math</button>
           <button class="surface-tab" id="physicsSurface" type="button" aria-pressed="false">Physics</button>
+          <button class="surface-tab" id="toolsSurface" type="button" aria-pressed="false">Tools</button>
           <button class="surface-tab" id="gamesSurface" type="button" aria-pressed="false">Games</button>
           <button class="surface-tab" id="scratchpadSurface" type="button" aria-pressed="false">Scratchpad</button>
         </nav>
@@ -37,16 +38,13 @@
         </aside>
 
         <div class="workspace-main">
-          <details class="progress-panel" aria-label="Options">
+          <details class="progress-panel" aria-label="Status and data">
             <summary class="progress-summary">
-              <span>Options</span>
+              <span>Status &amp; Data</span>
               <span id="progressSummary">0 lessons</span>
             </summary>
             <div class="options-panel-body">
-              <section class="progress-section">
-                <h2>Next</h2>
-                <p id="stepText">Start with the ones column.</p>
-              </section>
+              <p class="sr-only" id="stepText">Start with the ones column.</p>
 
               <section class="progress-section">
                 <h2>Progress</h2>
@@ -84,28 +82,26 @@
               </section>
 
               <section class="progress-section">
-                <h2>Data</h2>
+                <h2>Data &amp; source</h2>
                 <div class="data-actions" aria-label="Progress controls">
-                  <button class="icon-button" id="exportProgress" type="button" aria-label="Export progress" title="Export progress">
+                  <button class="tool-button compact" id="exportProgress" type="button">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                       <path d="M12 3v12"></path>
                       <path d="m7 10 5 5 5-5"></path>
                       <path d="M5 21h14"></path>
                     </svg>
+                    Export
                   </button>
-                  <label class="icon-button file-action" aria-label="Import progress" title="Import progress">
+                  <label class="tool-button compact file-action">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                       <path d="M12 21V9"></path>
                       <path d="m17 14-5-5-5 5"></path>
                       <path d="M5 3h14"></path>
                     </svg>
+                    Import
                     <input id="importProgress" type="file" accept="application/json,.json">
                   </label>
                 </div>
-              </section>
-
-              <section class="progress-section">
-                <h2>Source</h2>
                 <p class="source-link">
                   <a href="https://github.com/iandorsey00/carry" rel="noopener noreferrer" target="_blank">GitHub repository</a>
                 </p>
@@ -333,6 +329,178 @@
               <p class="device-note compact" id="scratchpadStatus">
                 Scratchpads are saved privately in this browser.
               </p>
+            </div>
+          </section>
+
+          <section class="tools-panel" id="toolsPanel" aria-labelledby="toolsTitle" hidden>
+            <div class="tools-header">
+              <div>
+                <p class="eyebrow">Utilities</p>
+                <h2 id="toolsTitle">Tools</h2>
+              </div>
+              <div class="tool-tabs" role="tablist" aria-label="Tools">
+                <button class="tool-tab" type="button" data-tool="random-number" aria-selected="true">Random</button>
+                <button class="tool-tab" type="button" data-tool="normal-simulator" aria-selected="false">Normal</button>
+                <button class="tool-tab" type="button" data-tool="unit-circle" aria-selected="false">Unit Circle</button>
+                <button class="tool-tab" type="button" data-tool="complex-plane" aria-selected="false">Complex</button>
+                <button class="tool-tab" type="button" data-tool="number-theory" aria-selected="false">Number Theory</button>
+              </div>
+            </div>
+
+            <div class="tool-pane" id="randomNumberTool" data-tool-panel="random-number">
+              <div class="tool-controls" aria-label="Random number settings">
+                <label>
+                  <span>Minimum</span>
+                  <input id="randomNumberMin" type="number" value="0" inputmode="decimal">
+                </label>
+                <label>
+                  <span>Maximum</span>
+                  <input id="randomNumberMax" type="number" value="99" inputmode="decimal">
+                </label>
+                <label class="option-row compact-option">
+                  <input id="randomNumberDecimals" type="checkbox">
+                  <span>Allow decimals</span>
+                </label>
+                <label>
+                  <span>Places</span>
+                  <select id="randomNumberPlaces">
+                    <option value="1">1</option>
+                    <option value="2" selected>2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                  </select>
+                </label>
+                <label class="option-row compact-option">
+                  <input id="randomNumberAutoCopy" type="checkbox">
+                  <span>Copy automatically</span>
+                </label>
+              </div>
+
+              <div class="tool-status" id="randomNumberStatus" aria-live="polite">
+                Range 0 to 99, whole numbers only.
+              </div>
+
+              <div class="random-number-layout">
+                <output class="random-number-output" id="randomNumberOutput" aria-live="polite">—</output>
+                <div class="tool-side">
+                  <button class="tool-button" id="generateRandomNumber" type="button">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M16 3h5v5"></path>
+                      <path d="M4 20 21 3"></path>
+                      <path d="M21 16v5h-5"></path>
+                      <path d="M15 15l6 6"></path>
+                      <path d="M4 4l5 5"></path>
+                    </svg>
+                    Generate
+                  </button>
+                  <button class="tool-button" id="copyRandomNumber" type="button">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <rect x="9" y="9" width="11" height="11" rx="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    Copy
+                  </button>
+                  <section class="tool-history" aria-labelledby="randomNumberHistoryTitle">
+                    <h3 id="randomNumberHistoryTitle">Recent</h3>
+                    <ol id="randomNumberHistory"></ol>
+                  </section>
+                  <p class="sudoku-note">
+                    Uses browser crypto randomness when available. Decimal output is rounded to the selected places.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="tool-pane" id="normalSimulatorTool" data-tool-panel="normal-simulator" hidden>
+              <div class="tool-controls" aria-label="Normal simulator settings">
+                <label>
+                  <span>Minimum</span>
+                  <input id="normalMin" type="number" value="0" inputmode="decimal">
+                </label>
+                <label>
+                  <span>Maximum</span>
+                  <input id="normalMax" type="number" value="99" inputmode="decimal">
+                </label>
+                <label>
+                  <span>Draws per average</span>
+                  <input id="normalSampleSize" type="number" value="30" min="1" max="1000" step="1">
+                </label>
+                <label>
+                  <span>Trials</span>
+                  <input id="normalTrials" type="number" value="1000" min="10" max="5000" step="10">
+                </label>
+                <button class="tool-button compact" id="runNormalSimulation" type="button">Run</button>
+              </div>
+              <div class="tool-status" id="normalStatus" aria-live="polite">
+                Average 30 random values from 0 to 99, repeated 1000 times.
+              </div>
+              <div class="distribution-layout">
+                <div class="distribution-bars" id="normalBars" aria-label="Normal simulation histogram"></div>
+                <dl class="tool-results" id="normalResults"></dl>
+              </div>
+            </div>
+
+            <div class="tool-pane" id="unitCircleTool" data-tool-panel="unit-circle" hidden>
+              <div class="tool-controls" aria-label="Unit circle settings">
+                <label>
+                  <span>Angle</span>
+                  <select id="unitCircleAngle"></select>
+                </label>
+              </div>
+              <div class="circle-tool-layout">
+                <svg class="circle-tool-figure" id="unitCircleFigure" viewBox="-120 -120 240 240" role="img" aria-label="Unit circle point"></svg>
+                <dl class="tool-results" id="unitCircleResults"></dl>
+              </div>
+            </div>
+
+            <div class="tool-pane" id="complexPlaneTool" data-tool-panel="complex-plane" hidden>
+              <div class="tool-controls" aria-label="Complex coordinate settings">
+                <label>
+                  <span>Radius</span>
+                  <input id="complexRadius" type="number" value="1" min="0" step="1">
+                </label>
+                <label>
+                  <span>Angle</span>
+                  <select id="complexAngle"></select>
+                </label>
+              </div>
+              <div class="circle-tool-layout">
+                <svg class="circle-tool-figure" id="complexFigure" viewBox="-120 -120 240 240" role="img" aria-label="Complex coordinate point"></svg>
+                <dl class="tool-results" id="complexResults"></dl>
+              </div>
+            </div>
+
+            <div class="tool-pane" id="numberTheoryTool" data-tool-panel="number-theory" hidden>
+              <div class="tool-grid">
+                <section class="tool-card" aria-labelledby="factorToolTitle">
+                  <h3 id="factorToolTitle">Prime Factors</h3>
+                  <div class="tool-controls compact-controls">
+                    <label>
+                      <span>Number</span>
+                      <input id="factorInput" type="number" value="84" min="1" step="1">
+                    </label>
+                    <button class="tool-button compact" id="calculateFactors" type="button">Calculate</button>
+                  </div>
+                  <dl class="tool-results" id="factorResults"></dl>
+                </section>
+                <section class="tool-card" aria-labelledby="gcdToolTitle">
+                  <h3 id="gcdToolTitle">GCD</h3>
+                  <div class="tool-controls compact-controls">
+                    <label>
+                      <span>First</span>
+                      <input id="gcdLeft" type="number" value="84" step="1">
+                    </label>
+                    <label>
+                      <span>Second</span>
+                      <input id="gcdRight" type="number" value="126" step="1">
+                    </label>
+                    <button class="tool-button compact" id="calculateGcd" type="button">Calculate</button>
+                  </div>
+                  <dl class="tool-results" id="gcdResults"></dl>
+                </section>
+              </div>
             </div>
           </section>
 
@@ -565,7 +733,7 @@
       </main>
 
       <footer class="site-footer">
-        Carry <span id="appVersion">v0.1.0-alpha.61</span> © 2026 Ian Dorsey · Open source under the MIT License
+        Carry <span id="appVersion">v0.1.0-alpha.64</span> © 2026 Ian Dorsey · Open source under the MIT License
       </footer>
     </div>
 
@@ -639,6 +807,6 @@
         }
       };
     </script>
-    <script src="/app.js?v=0.1.0-alpha.61" defer></script>
+    <script src="/app.js?v=0.1.0-alpha.64" defer></script>
   </body>
 </html>

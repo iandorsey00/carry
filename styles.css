@@ -64,6 +64,18 @@
   display: none !important;
 }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 body {
   margin: 0;
   min-width: 320px;
@@ -335,7 +347,7 @@ button {
 
 .options-panel-body {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: minmax(180px, 1.1fr) minmax(180px, 1fr) minmax(180px, 1fr) minmax(210px, 1.1fr);
   gap: 16px;
   margin-top: 14px;
 }
@@ -645,7 +657,8 @@ button {
   overflow: auto;
 }
 
-.sudoku-panel {
+.sudoku-panel,
+.tools-panel {
   display: grid;
   gap: 14px;
   padding: 16px;
@@ -654,20 +667,23 @@ button {
   background: var(--surface);
 }
 
-.sudoku-header {
+.sudoku-header,
+.tools-header {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 16px;
   align-items: start;
 }
 
-.sudoku-header h2 {
+.sudoku-header h2,
+.tools-header h2 {
   margin: 0;
   font-size: 22px;
   line-height: 1.15;
 }
 
-.game-tabs {
+.game-tabs,
+.tool-tabs {
   display: inline-flex;
   flex-wrap: wrap;
   justify-content: flex-end;
@@ -677,7 +693,8 @@ button {
   background: var(--surface-muted);
 }
 
-.game-tab {
+.game-tab,
+.tool-tab {
   min-height: 36px;
   padding: 0 12px;
   border: 1px solid transparent;
@@ -688,7 +705,8 @@ button {
   font-weight: 800;
 }
 
-.game-tab[aria-selected="true"] {
+.game-tab[aria-selected="true"],
+.tool-tab[aria-selected="true"] {
   border-color: var(--sudoku-ink);
   background: var(--surface);
   color: var(--sudoku-ink);
@@ -696,12 +714,14 @@ button {
 
 .sudoku-game,
 .mod-clock-game,
-.number-game {
+.number-game,
+.tool-pane {
   display: grid;
   gap: 14px;
 }
 
-.sudoku-controls {
+.sudoku-controls,
+.tool-controls {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -709,7 +729,8 @@ button {
   justify-content: flex-end;
 }
 
-.sudoku-controls label {
+.sudoku-controls label,
+.tool-controls label {
   display: grid;
   gap: 4px;
   color: var(--muted);
@@ -718,7 +739,8 @@ button {
   text-transform: uppercase;
 }
 
-.sudoku-controls select {
+.sudoku-controls select,
+.tool-controls select {
   min-height: 36px;
   min-width: 112px;
   border: 1px solid var(--line);
@@ -727,7 +749,28 @@ button {
   color: var(--text);
 }
 
-.sudoku-status {
+.sudoku-controls input[type="number"],
+.tool-controls input[type="number"] {
+  min-height: 36px;
+  width: 112px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+  padding: 0 10px;
+}
+
+.compact-option {
+  min-height: 36px;
+  align-self: end;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+}
+
+.sudoku-status,
+.tool-status {
   min-height: 40px;
   padding: 10px 12px;
   border: 1px solid color-mix(in srgb, var(--sudoku-ink) 28%, var(--line));
@@ -859,6 +902,177 @@ button {
 .sudoku-note {
   margin: 0;
   color: var(--muted);
+}
+
+.random-number-layout {
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) minmax(220px, 320px);
+  gap: 18px;
+  align-items: stretch;
+}
+
+.random-number-output {
+  display: grid;
+  min-height: 260px;
+  place-items: center;
+  border: 2px solid var(--sudoku-ink);
+  border-radius: var(--radius);
+  background: var(--sudoku-surface);
+  color: var(--text);
+  font-size: clamp(4rem, 13vw, 9rem);
+  font-weight: 900;
+  line-height: 1;
+  text-align: center;
+}
+
+.tool-side {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+
+.tool-history {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.tool-history h3 {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  text-transform: uppercase;
+}
+
+.tool-history ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tool-history li {
+  min-height: 32px;
+  padding: 5px 9px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface-muted);
+  font-weight: 800;
+}
+
+.distribution-layout,
+.circle-tool-layout {
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) minmax(220px, 340px);
+  gap: 18px;
+  align-items: stretch;
+}
+
+.distribution-bars {
+  display: flex;
+  min-height: 260px;
+  align-items: end;
+  gap: 6px;
+  padding: 18px;
+  border: 2px solid var(--sudoku-ink);
+  border-radius: var(--radius);
+  background: var(--sudoku-surface);
+}
+
+.distribution-bar {
+  flex: 1;
+  min-width: 10px;
+  border-radius: 4px 4px 0 0;
+  background: var(--sudoku-ink);
+}
+
+.distribution-empty {
+  align-self: center;
+  width: 100%;
+  color: var(--muted);
+  text-align: center;
+  font-weight: 800;
+}
+
+.circle-tool-figure {
+  width: min(100%, 420px);
+  min-height: 300px;
+  border: 2px solid var(--sudoku-ink);
+  border-radius: var(--radius);
+  background: var(--sudoku-surface);
+}
+
+.circle-guide,
+.circle-axis {
+  fill: none;
+  stroke: color-mix(in srgb, var(--sudoku-ink) 34%, var(--line));
+  stroke-width: 2;
+}
+
+.circle-radius {
+  stroke: var(--sudoku-ink);
+  stroke-width: 4;
+}
+
+.circle-point {
+  fill: var(--accent);
+}
+
+.tool-results {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  align-content: start;
+}
+
+.tool-results div {
+  display: grid;
+  gap: 2px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+}
+
+.tool-results dt {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.tool-results dd {
+  margin: 0;
+  font-family: var(--math-font);
+  font-size: 20px;
+}
+
+.tool-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.tool-card {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.tool-card h3 {
+  margin: 0;
+}
+
+.compact-controls {
+  justify-content: start;
 }
 
 .mod-clock-layout {
@@ -2171,6 +2385,9 @@ button {
 }
 
 .data-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
   margin-top: 10px;
 }
 
@@ -2262,21 +2479,30 @@ button {
   }
 
   .sudoku-header,
+  .tools-header,
   .sudoku-layout,
+  .random-number-layout,
+  .distribution-layout,
+  .circle-tool-layout,
+  .tool-grid,
   .mod-clock-layout,
   .number-game-layout {
     grid-template-columns: 1fr;
   }
 
-  .sudoku-controls {
+  .sudoku-controls,
+  .tool-controls {
     justify-content: start;
   }
 
-  .game-tabs {
+  .game-tabs,
+  .tool-tabs {
     width: 100%;
+    justify-content: start;
   }
 
-  .game-tab {
+  .game-tab,
+  .tool-tab {
     flex: 1;
   }
 
