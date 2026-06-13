@@ -1205,6 +1205,39 @@ button {
   color: var(--incorrect);
 }
 
+.graph-game-figure {
+  width: min(100%, 460px);
+  min-height: 260px;
+  margin-bottom: 12px;
+  border: 2px solid var(--sudoku-ink);
+  border-radius: var(--radius);
+  background: var(--sudoku-surface);
+}
+
+.graph-edge {
+  stroke: color-mix(in srgb, var(--sudoku-ink) 40%, var(--line));
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+.graph-node circle {
+  fill: var(--surface);
+  stroke: var(--sudoku-ink);
+  stroke-width: 3;
+}
+
+.graph-node.target circle {
+  fill: var(--sudoku-soft);
+  stroke-width: 4;
+}
+
+.graph-node text {
+  fill: var(--text);
+  font-family: var(--font);
+  font-size: 17px;
+  font-weight: 900;
+}
+
 .scratch-line {
   display: grid;
   grid-template-columns: 32px minmax(0, 1fr);
@@ -2106,6 +2139,20 @@ button {
   background: var(--surface-muted);
   color: var(--muted);
   pointer-events: none;
+}
+
+.concept-answer-choice-control.sr-only {
+  position: absolute;
+  width: 1px;
+  min-width: 0;
+  max-width: none;
+  height: 1px;
+  min-height: 0;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  border: 0;
+  opacity: 0;
 }
 
 .concept-choice-grid {

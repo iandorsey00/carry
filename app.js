@@ -1,11 +1,11 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-alpha.64";
+const APP_VERSION = "0.1.0-alpha.71";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 const GAMES_STORAGE_KEY = "carry.games.v1";
 const TOOLS_STORAGE_KEY = "carry.tools.v1";
-const GAME_IDS = ["sudoku", "mod-clock", "prime-factors", "gcd-race", "divisibility", "residue-match"];
+const GAME_IDS = ["sudoku", "mod-clock", "prime-factors", "gcd-race", "divisibility", "residue-match", "graph-paths"];
 const TOOL_IDS = ["random-number", "normal-simulator", "unit-circle", "complex-plane", "number-theory"];
 
 const topicGroups = [
@@ -209,6 +209,21 @@ const topicGroups = [
           { id: "number-theory.euclidean-algorithm", title: "Euclidean algorithm" },
           { id: "number-theory.modular-arithmetic", title: "Modular arithmetic" },
           { id: "number-theory.congruences", title: "Congruences" }
+        ]
+      }
+    ]
+  },
+  {
+    name: "Graph Theory",
+    sections: [
+      {
+        title: "Graphs and Networks",
+        lessons: [
+          { id: "graph-theory.vertices-edges", title: "Vertices and edges" },
+          { id: "graph-theory.paths-cycles", title: "Paths and cycles" },
+          { id: "graph-theory.degree", title: "Degree" },
+          { id: "graph-theory.trees", title: "Trees" },
+          { id: "graph-theory.connectedness", title: "Connectedness" }
         ]
       }
     ]
@@ -1794,6 +1809,199 @@ const numberTheoryConceptWorkspaces = {
   }
 };
 
+const graphTheoryConceptWorkspaces = {
+  "graph-theory.vertices-edges": {
+    id: "graph-theory.vertices-edges",
+    topic: "Graph Theory",
+    title: "Vertices and edges",
+    type: "concept",
+    figure: "graph-vertices-edges",
+    intro: [
+      "A graph is a set of objects together with connections between them.",
+      "The objects are vertices, also called nodes.",
+      "The connections are edges."
+    ],
+    problems: [
+      {
+        prompt: "In graph theory, what is another common name for a vertex?",
+        answer: "node",
+        choices: [{ value: "node", label: "node" }, { value: "face", label: "face" }, { value: "angle", label: "angle" }, { value: "axis", label: "axis" }],
+        hint: "Vertices are the points of a graph; many network diagrams call them nodes.",
+        feedback: "A vertex is a node: one object in the graph.",
+        label: "vertex vocabulary"
+      },
+      {
+        prompt: "Which part of a graph shows a connection between two vertices?",
+        answer: "edge",
+        choices: [{ value: "edge", label: "edge" }, { value: "degree", label: "degree" }, { value: "tree", label: "tree" }, { value: "cycle", label: "cycle" }],
+        hint: "Edges are the lines or links joining vertices.",
+        feedback: "An edge is the connection between vertices.",
+        label: "edge vocabulary"
+      },
+      {
+        prompt: "A graph has 5 vertices and 4 edges. How many nodes does it have?",
+        answer: "5",
+        choices: [{ value: "4", label: "4" }, { value: "5", label: "5" }, { value: "9", label: "9" }, { value: "1", label: "1" }],
+        hint: "Nodes and vertices mean the same thing here.",
+        feedback: "The graph has 5 nodes because it has 5 vertices.",
+        label: "node count"
+      }
+    ]
+  },
+  "graph-theory.paths-cycles": {
+    id: "graph-theory.paths-cycles",
+    topic: "Graph Theory",
+    title: "Paths and cycles",
+    type: "concept",
+    figure: "graph-paths-cycles",
+    intro: [
+      "A path is a route through a graph that follows edges.",
+      "The length of a path is the number of edges used.",
+      "A cycle is a path that comes back to where it started without immediately retracing an edge."
+    ],
+    problems: [
+      {
+        prompt: "If a route uses 3 edges, what is its path length?",
+        answer: "3",
+        choices: [{ value: "2", label: "2" }, { value: "3", label: "3" }, { value: "4", label: "4" }, { value: "6", label: "6" }],
+        hint: "Path length counts edges, not vertices.",
+        feedback: "A path using 3 edges has length 3.",
+        label: "path length"
+      },
+      {
+        prompt: "What do we call a path that returns to its starting vertex?",
+        answer: "cycle",
+        choices: [{ value: "cycle", label: "cycle" }, { value: "degree", label: "degree" }, { value: "component", label: "component" }, { value: "leaf", label: "leaf" }],
+        hint: "Cycle has the same root idea as going around and returning.",
+        feedback: "A cycle returns to its starting vertex.",
+        label: "cycle vocabulary"
+      },
+      {
+        prompt: "For shortest path questions, what should you count?",
+        answer: "edges",
+        choices: [{ value: "edges", label: "edges" }, { value: "letters", label: "letters" }, { value: "regions", label: "regions" }, { value: "angles", label: "angles" }],
+        hint: "The Graph Paths game asks for the fewest edge steps.",
+        feedback: "Shortest path length counts edge steps.",
+        label: "shortest path count"
+      }
+    ]
+  },
+  "graph-theory.degree": {
+    id: "graph-theory.degree",
+    topic: "Graph Theory",
+    title: "Degree",
+    type: "concept",
+    figure: "graph-degree",
+    intro: [
+      "The degree of a vertex counts how many edges touch it.",
+      "A vertex with one edge touching it is often called a leaf in a tree.",
+      "Degree is a local measurement: it describes one vertex at a time."
+    ],
+    problems: [
+      {
+        prompt: "If 4 edges touch vertex A, what is the degree of A?",
+        answer: "4",
+        choices: [{ value: "1", label: "1" }, { value: "3", label: "3" }, { value: "4", label: "4" }, { value: "8", label: "8" }],
+        hint: "Degree counts touching edges.",
+        feedback: "Four touching edges means degree 4.",
+        label: "degree count"
+      },
+      {
+        prompt: "Degree describes which object?",
+        answer: "a vertex",
+        choices: [{ value: "a vertex", label: "a vertex" }, { value: "the whole plane", label: "the whole plane" }, { value: "a fraction", label: "a fraction" }, { value: "an angle only", label: "an angle only" }],
+        hint: "Ask: degree of which point?",
+        feedback: "Degree is attached to a vertex.",
+        label: "degree object"
+      },
+      {
+        prompt: "A vertex with degree 1 has how many edges touching it?",
+        answer: "1",
+        choices: [{ value: "0", label: "0" }, { value: "1", label: "1" }, { value: "2", label: "2" }, { value: "10", label: "10" }],
+        hint: "The degree is the count.",
+        feedback: "Degree 1 means one edge touches the vertex.",
+        label: "degree one"
+      }
+    ]
+  },
+  "graph-theory.trees": {
+    id: "graph-theory.trees",
+    topic: "Graph Theory",
+    title: "Trees",
+    type: "concept",
+    figure: "graph-trees",
+    intro: [
+      "A tree is a connected graph with no cycles.",
+      "Connected means every vertex can be reached from every other vertex.",
+      "No cycles means there is no closed loop."
+    ],
+    problems: [
+      {
+        prompt: "A tree is connected and has no what?",
+        answer: "cycles",
+        choices: [{ value: "cycles", label: "cycles" }, { value: "vertices", label: "vertices" }, { value: "edges", label: "edges" }, { value: "paths", label: "paths" }],
+        hint: "Trees may have vertices, edges, and paths. What they cannot have is a loop.",
+        feedback: "A tree has no cycles.",
+        label: "tree definition"
+      },
+      {
+        prompt: "Can a tree have a closed loop?",
+        answer: "no",
+        choices: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }],
+        hint: "A closed loop is a cycle.",
+        feedback: "A tree cannot have a closed loop.",
+        label: "tree loop"
+      },
+      {
+        prompt: "Which word means every vertex is reachable from every other vertex?",
+        answer: "connected",
+        choices: [{ value: "connected", label: "connected" }, { value: "prime", label: "prime" }, { value: "parallel", label: "parallel" }, { value: "acute", label: "acute" }],
+        hint: "Reachability is the core idea.",
+        feedback: "Connected means all vertices are mutually reachable.",
+        label: "connected meaning"
+      }
+    ]
+  },
+  "graph-theory.connectedness": {
+    id: "graph-theory.connectedness",
+    topic: "Graph Theory",
+    title: "Connectedness",
+    type: "concept",
+    figure: "graph-connectedness",
+    intro: [
+      "A graph is connected if every vertex can be reached from every other vertex.",
+      "If a graph is split into separated pieces, each piece is called a component.",
+      "Connectedness is about whether paths exist, not how short they are."
+    ],
+    problems: [
+      {
+        prompt: "If no path connects A to B, are A and B in the same connected component?",
+        answer: "no",
+        choices: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }],
+        hint: "Same component means there is a path between them.",
+        feedback: "Without a path, the vertices are in different components.",
+        label: "component membership"
+      },
+      {
+        prompt: "A graph with two separated pieces has how many connected components?",
+        answer: "2",
+        choices: [{ value: "1", label: "1" }, { value: "2", label: "2" }, { value: "3", label: "3" }, { value: "0", label: "0" }],
+        hint: "Each separated piece is one component.",
+        feedback: "Two separated pieces make two connected components.",
+        label: "component count"
+      },
+      {
+        prompt: "Connectedness asks whether what exists between vertices?",
+        answer: "a path",
+        choices: [{ value: "a path", label: "a path" }, { value: "a decimal", label: "a decimal" }, { value: "a numerator", label: "a numerator" }, { value: "a tangent", label: "a tangent" }],
+        hint: "Connected vertices can be reached by following edges.",
+        feedback: "Connectedness is about whether a path exists.",
+        label: "connected path"
+      }
+    ]
+  }
+};
+
 const probabilityConceptWorkspaces = {
   "probability.sample-spaces": {
     id: "probability.sample-spaces",
@@ -2380,6 +2588,7 @@ const conceptWorkspaces = {
   ...proofsConceptWorkspaces,
   ...setTheoryConceptWorkspaces,
   ...numberTheoryConceptWorkspaces,
+  ...graphTheoryConceptWorkspaces,
   ...probabilityConceptWorkspaces,
   ...realAnalysisConceptWorkspaces,
   ...abstractAlgebraConceptWorkspaces,
@@ -2402,6 +2611,7 @@ const workspaceRegistry = {
   "Linear Algebra": { id: "linear-algebra.placeholders", title: "Vector spaces", status: "planned" },
   "Set Theory": { id: "set-theory.placeholders", title: "Sets and relations", status: "planned" },
   "Number Theory": { id: "number-theory.placeholders", title: "Divisibility and congruence", status: "planned" },
+  "Graph Theory": { id: "graph-theory.placeholders", title: "Graphs and networks", status: "planned" },
   "Probability": { id: "probability.placeholders", title: "Chance and counting", status: "planned" },
   "Real Analysis": { id: "real-analysis.placeholders", title: "Definitions and proofs", status: "planned" },
   "Abstract Algebra": { id: "abstract-algebra.placeholders", title: "Groups and examples", status: "planned" },
@@ -2920,6 +3130,7 @@ function cacheElements() {
   els.numberGameStatuses = Object.fromEntries(Array.from(document.querySelectorAll("[data-number-status]")).map((item) => [item.dataset.numberStatus, item]));
   els.numberGameChoices = Object.fromEntries(Array.from(document.querySelectorAll("[data-number-choices]")).map((item) => [item.dataset.numberChoices, item]));
   els.numberGameDifficulties = Object.fromEntries(Array.from(document.querySelectorAll("[data-number-difficulty]")).map((item) => [item.dataset.numberDifficulty, item]));
+  els.graphPathsFigure = document.querySelector("#graphPathsFigure");
   els.scratchpadInput = document.querySelector("#scratchpadInput");
   els.scratchpadPreview = document.querySelector("#scratchpadPreview");
   els.scratchpadList = document.querySelector("#scratchpadList");
@@ -3048,6 +3259,12 @@ function loadGames() {
       seed: 0,
       selected: [],
       checked: false
+    },
+    graphPaths: {
+      difficulty: "easy",
+      seed: 0,
+      selected: null,
+      checked: false
     }
   };
 
@@ -3083,6 +3300,10 @@ function loadGames() {
       residueMatch: {
         ...fallback.residueMatch,
         ...(parsed.residueMatch || {})
+      },
+      graphPaths: {
+        ...fallback.graphPaths,
+        ...(parsed.graphPaths || {})
       }
     };
   } catch {
@@ -3672,9 +3893,9 @@ function sudokuStatusMessage({ values, solution, puzzle, conflicts, checked, sel
     return value === solution[index] ? count : count + 1;
   }, 0);
 
-  if (complete && wrongCount === 0 && conflicts.size === 0) return "Solved. Nice work.";
+  if (complete && wrongCount === 0 && conflicts.size === 0) return "Solved. Press Return or New for another board.";
   if (conflicts.size > 0) return "A row, column, or box has the same number twice.";
-  if (checked && wrongCount > 0) return "Some entries do not match the solution yet.";
+  if (checked && wrongCount > 0) return `${wrongCount} ${wrongCount === 1 ? "entry does" : "entries do"} not match the solution yet. Fix highlighted squares, then check again.`;
   if (checked && remaining > 0) return `No mistakes so far. ${remaining} ${remaining === 1 ? "square" : "squares"} left.`;
   if (selected !== null && puzzle[selected] !== "0") return "That square is given. Choose an open square.";
   if (selected !== null) return "Enter a number, or use Backspace to erase.";
@@ -3752,6 +3973,13 @@ function checkSudoku() {
   state.games.sudoku.checked = true;
   saveGames("Checked Sudoku");
   renderSudoku();
+}
+
+function isSudokuSolved() {
+  const { values, solution, puzzle, size, config } = sudokuValues();
+  if (values.filter(Boolean).length !== size * size) return false;
+  if (sudokuConflictIndexes(values, size, config).size > 0) return false;
+  return values.every((value, index) => puzzle[index] !== "0" || value === solution[index]);
 }
 
 function clearSudoku() {
@@ -4254,9 +4482,9 @@ function renderModClock() {
   els.modClockDial.append(center);
 
   if (checked && selected === problem.answer) {
-    els.modClockStatus.textContent = "Correct. Wrapping lands there.";
+    els.modClockStatus.textContent = `Correct. ${problem.start} + ${problem.move} leaves remainder ${problem.answer} modulo ${problem.modulus}. Press Return or New for another round.`;
   } else if (checked && selected !== null) {
-    els.modClockStatus.textContent = `Not quite. Count ${problem.move} steps from ${problem.start} and wrap at ${problem.modulus}.`;
+    els.modClockStatus.textContent = `Not quite. Count ${problem.move} steps from ${problem.start}; the landing value is ${problem.answer} modulo ${problem.modulus}.`;
   } else if (selected !== null) {
     els.modClockStatus.textContent = "Press Check when ready.";
   } else {
@@ -4279,6 +4507,10 @@ function checkModClock() {
   renderModClock();
 }
 
+function isModClockCorrect() {
+  return Boolean(state.games.modClock.checked) && state.games.modClock.selected === modClockProblem().answer;
+}
+
 function newModClock() {
   state.games.modClock.seed = (Number(state.games.modClock.seed) || 0) + 1;
   state.games.modClock.selected = null;
@@ -4294,7 +4526,8 @@ function gameLabel(game) {
     "prime-factors": "Prime Factors",
     "gcd-race": "GCD",
     divisibility: "Divisibility",
-    "residue-match": "Residues"
+    "residue-match": "Residues",
+    "graph-paths": "Graph Paths"
   }[game] || "Sudoku";
 }
 
@@ -4303,7 +4536,8 @@ function gameStateKey(game) {
     "prime-factors": "primeFactors",
     "gcd-race": "gcdRace",
     divisibility: "divisibility",
-    "residue-match": "residueMatch"
+    "residue-match": "residueMatch",
+    "graph-paths": "graphPaths"
   }[game];
 }
 
@@ -4440,11 +4674,98 @@ function residueMatchProblem(settings) {
   };
 }
 
+const graphPathLayouts = {
+  easy: {
+    nodes: {
+      A: [54, 120],
+      B: [138, 70],
+      C: [138, 170],
+      D: [234, 70],
+      E: [234, 170],
+      F: [316, 120]
+    },
+    edges: [["A", "B"], ["A", "C"], ["B", "D"], ["C", "E"], ["D", "F"], ["E", "F"], ["B", "C"], ["D", "E"]],
+    pairs: [["A", "F"], ["A", "E"], ["B", "F"]]
+  },
+  medium: {
+    nodes: {
+      A: [48, 122],
+      B: [112, 54],
+      C: [112, 188],
+      D: [188, 54],
+      E: [188, 188],
+      F: [260, 76],
+      G: [260, 166],
+      H: [326, 122]
+    },
+    edges: [["A", "B"], ["A", "C"], ["B", "D"], ["C", "E"], ["D", "F"], ["E", "G"], ["F", "H"], ["G", "H"], ["B", "E"], ["C", "D"], ["D", "E"], ["F", "G"]],
+    pairs: [["A", "H"], ["B", "G"], ["C", "F"]]
+  },
+  hard: {
+    nodes: {
+      A: [38, 124],
+      B: [96, 52],
+      C: [96, 190],
+      D: [164, 72],
+      E: [164, 170],
+      F: [230, 52],
+      G: [230, 190],
+      H: [300, 82],
+      I: [300, 162]
+    },
+    edges: [["A", "B"], ["A", "C"], ["B", "D"], ["C", "E"], ["D", "F"], ["E", "G"], ["F", "H"], ["G", "I"], ["H", "I"], ["D", "E"], ["B", "E"], ["C", "D"], ["F", "G"], ["E", "I"]],
+    pairs: [["A", "I"], ["B", "I"], ["C", "H"]]
+  }
+};
+
+function graphPathProblem(settings) {
+  const graph = graphPathLayouts[settings.difficulty] || graphPathLayouts.easy;
+  const random = seededRandom(settings.seed * 1999 + { easy: 163, medium: 181, hard: 197 }[settings.difficulty]);
+  const pair = graph.pairs[Math.floor(random() * graph.pairs.length)];
+  const answer = shortestPathLength(graph.edges, pair[0], pair[1]);
+  const choices = uniqueShuffledChoices([answer, answer + 1, Math.max(1, answer - 1), answer + 2], random, 4);
+  return {
+    multi: false,
+    graph,
+    start: pair[0],
+    end: pair[1],
+    prompt: `What is the shortest path length from ${pair[0]} to ${pair[1]}?`,
+    choices: choices.map((value) => ({ value, label: `${value} ${Number(value) === 1 ? "edge" : "edges"}` })),
+    answers: [String(answer)],
+    emptyStatus: "Choose the fewest number of edges.",
+    success: "Correct. That is the shortest path length.",
+    hint: "Count edges, not nodes. Try tracing the shortest route without revisiting nodes."
+  };
+}
+
+function shortestPathLength(edges, start, end) {
+  const neighbors = new Map();
+  edges.forEach(([left, right]) => {
+    if (!neighbors.has(left)) neighbors.set(left, []);
+    if (!neighbors.has(right)) neighbors.set(right, []);
+    neighbors.get(left).push(right);
+    neighbors.get(right).push(left);
+  });
+  const queue = [[start, 0]];
+  const seen = new Set([start]);
+  while (queue.length) {
+    const [node, distance] = queue.shift();
+    if (node === end) return distance;
+    (neighbors.get(node) || []).forEach((next) => {
+      if (seen.has(next)) return;
+      seen.add(next);
+      queue.push([next, distance + 1]);
+    });
+  }
+  return 0;
+}
+
 function numberGameProblem(game) {
   const settings = currentNumberGameState(game);
   if (game === "prime-factors") return primeFactorProblem(settings);
   if (game === "gcd-race") return gcdRaceProblem(settings);
   if (game === "divisibility") return divisibilityProblem(settings);
+  if (game === "graph-paths") return graphPathProblem(settings);
   return residueMatchProblem(settings);
 }
 
@@ -4463,7 +4784,7 @@ function numberGameIsCorrect(game, problem) {
 }
 
 function renderNumberGames() {
-  ["prime-factors", "gcd-race", "divisibility", "residue-match"].forEach((game) => {
+  ["prime-factors", "gcd-race", "divisibility", "residue-match", "graph-paths"].forEach((game) => {
     const key = gameStateKey(game);
     const stored = state.games[key];
     const problem = numberGameProblem(game);
@@ -4477,6 +4798,7 @@ function renderNumberGames() {
 
     difficultyEl.value = currentNumberGameState(game).difficulty;
     promptEl.textContent = problem.prompt;
+    if (game === "graph-paths") renderGraphPathsFigure(problem);
     choicesEl.innerHTML = "";
     problem.choices.forEach((choice, index) => {
       const button = document.createElement("button");
@@ -4492,14 +4814,40 @@ function renderNumberGames() {
     });
 
     if (checked && numberGameIsCorrect(game, problem)) {
-      statusEl.textContent = problem.success;
+      statusEl.textContent = `${problem.success} Press Return or New for another round.`;
     } else if (checked) {
-      statusEl.textContent = problem.hint;
+      statusEl.textContent = numberGameWrongStatus(game, problem);
     } else if (selected.size > 0) {
       statusEl.textContent = "Press Check when ready.";
     } else {
       statusEl.textContent = problem.emptyStatus;
     }
+  });
+}
+
+function numberGameWrongStatus(game, problem) {
+  const selected = selectedNumberGameValues(game);
+  const selectedText = selected.length ? selected.join(", ") : "nothing";
+  const answerText = problem.answers.map(String).join(", ");
+  return `Not quite. You chose ${selectedText}. Correct ${problem.multi ? "choices are" : "choice is"} ${answerText}. ${problem.hint}`;
+}
+
+function renderGraphPathsFigure(problem) {
+  const svg = els.graphPathsFigure;
+  if (!svg || !problem?.graph) return;
+  svg.innerHTML = "";
+  problem.graph.edges.forEach(([left, right]) => {
+    const [x1, y1] = problem.graph.nodes[left];
+    const [x2, y2] = problem.graph.nodes[right];
+    svg.append(svgEl("line", { x1, y1, x2, y2, class: "graph-edge" }));
+  });
+  Object.entries(problem.graph.nodes).forEach(([node, [cx, cy]]) => {
+    const group = svgEl("g", { class: `graph-node ${node === problem.start || node === problem.end ? "target" : ""}` });
+    group.append(svgEl("circle", { cx, cy, r: 18 }));
+    const label = svgEl("text", { x: cx, y: cy + 6, "text-anchor": "middle" });
+    label.textContent = node;
+    group.append(label);
+    svg.append(group);
   });
 }
 
@@ -4530,6 +4878,12 @@ function checkNumberGame(game) {
   state.games[key].checked = true;
   saveGames(`Checked ${gameLabel(game)}`);
   renderNumberGames();
+}
+
+function isNumberGameCorrect(game) {
+  const key = gameStateKey(game);
+  if (!state.games[key]?.checked) return false;
+  return numberGameIsCorrect(game, numberGameProblem(game));
 }
 
 function newNumberGame(game) {
@@ -4572,7 +4926,11 @@ function handleSudokuKeydown(event) {
   }
   if (event.key === "Enter") {
     event.preventDefault();
-    checkSudoku();
+    if (isSudokuSolved()) {
+      newSudoku();
+    } else {
+      checkSudoku();
+    }
     return true;
   }
   const moves = {
@@ -4594,7 +4952,11 @@ function handleNumberGameKeydown(event) {
   if (isFormControl(event.target) && !event.target.closest?.("[data-number-choices]")) return false;
   if (event.key === "Enter") {
     event.preventDefault();
-    checkNumberGame(game);
+    if (isNumberGameCorrect(game)) {
+      newNumberGame(game);
+    } else {
+      checkNumberGame(game);
+    }
     return true;
   }
   if (/^[1-9]$/.test(event.key)) {
@@ -4637,7 +4999,11 @@ function handleModClockKeydown(event) {
   }
   if (event.key === "Enter") {
     event.preventDefault();
-    checkModClock();
+    if (isModClockCorrect()) {
+      newModClock();
+    } else {
+      checkModClock();
+    }
     return true;
   }
   return false;
@@ -5922,7 +6288,7 @@ function staticMathFigureRows(workspace) {
 
 function isDiagramFigure(figure) {
   if (!figure || staticMathFigureRows({ figure })) return false;
-  const diagramPrefixes = ["geometry-", "trig-", "precalc-", "calc-", "linear-", "proof-", "set-", "number-", "real-", "abstract-", "physics-"];
+  const diagramPrefixes = ["geometry-", "trig-", "precalc-", "calc-", "linear-", "proof-", "set-", "number-", "graph-", "real-", "abstract-", "physics-"];
   const diagramFigures = new Set([
     "place-value",
     "number-line",
@@ -6285,6 +6651,82 @@ function createDiagramIntroSvg(figure) {
     svgText(svg, "2", 108, 134, "geometry-label geometry-math");
     svgText(svg, "17", 224, 134, "geometry-label geometry-math");
     svgText(svg, "same remainder mod 5", 106, 58, "geometry-note");
+  } else if (figure === "graph-vertices-edges") {
+    drawGraphIntro(svg, [
+      { id: "A", x: 96, y: 72, className: "geometry-shape active" },
+      { id: "B", x: 194, y: 58, className: "geometry-shape active" },
+      { id: "C", x: 150, y: 124, className: "geometry-shape active" },
+      { id: "D", x: 256, y: 118, className: "geometry-shape result" }
+    ], [
+      { from: "A", to: "B", className: "geometry-line active" },
+      { from: "B", to: "C", className: "geometry-line active" },
+      { from: "B", to: "D", className: "geometry-line result" }
+    ]);
+    svgText(svg, "vertices", 72, 40, "geometry-note");
+    svgText(svg, "edges connect vertices", 160, 156, "geometry-note", "middle");
+  } else if (figure === "graph-paths-cycles") {
+    drawGraphIntro(svg, [
+      { id: "A", x: 92, y: 60, className: "geometry-shape active" },
+      { id: "B", x: 208, y: 60, className: "geometry-shape active" },
+      { id: "C", x: 242, y: 126, className: "geometry-shape active" },
+      { id: "D", x: 126, y: 126, className: "geometry-shape result" }
+    ], [
+      { from: "A", to: "B", className: "geometry-line active" },
+      { from: "B", to: "C", className: "geometry-line active" },
+      { from: "C", to: "D", className: "geometry-line result" },
+      { from: "D", to: "A", className: "geometry-line result" },
+      { from: "A", to: "C", className: "geometry-line" }
+    ]);
+    svgText(svg, "path A-B-C has length 2", 96, 38, "geometry-note");
+    svgText(svg, "cycle returns to A", 136, 158, "geometry-note");
+  } else if (figure === "graph-degree") {
+    drawGraphIntro(svg, [
+      { id: "A", x: 180, y: 92, className: "geometry-shape result", r: 17 },
+      { id: "B", x: 104, y: 48, className: "geometry-shape active" },
+      { id: "C", x: 96, y: 132, className: "geometry-shape active" },
+      { id: "D", x: 258, y: 56, className: "geometry-shape active" },
+      { id: "E", x: 266, y: 130, className: "geometry-shape" }
+    ], [
+      { from: "A", to: "B", className: "geometry-line active" },
+      { from: "A", to: "C", className: "geometry-line active" },
+      { from: "A", to: "D", className: "geometry-line active" },
+      { from: "D", to: "E", className: "geometry-line" }
+    ]);
+    svgText(svg, "three edges touch A", 106, 34, "geometry-note");
+    svgText(svg, "deg(A) = 3", 210, 102, "geometry-label geometry-math result");
+  } else if (figure === "graph-trees") {
+    drawGraphIntro(svg, [
+      { id: "A", x: 178, y: 42, className: "geometry-shape result" },
+      { id: "B", x: 116, y: 88, className: "geometry-shape active" },
+      { id: "C", x: 240, y: 88, className: "geometry-shape active" },
+      { id: "D", x: 84, y: 138, className: "geometry-shape" },
+      { id: "E", x: 148, y: 138, className: "geometry-shape" },
+      { id: "F", x: 240, y: 138, className: "geometry-shape" }
+    ], [
+      { from: "A", to: "B", className: "geometry-line result" },
+      { from: "A", to: "C", className: "geometry-line result" },
+      { from: "B", to: "D", className: "geometry-line active" },
+      { from: "B", to: "E", className: "geometry-line active" },
+      { from: "C", to: "F", className: "geometry-line active" }
+    ]);
+    svgText(svg, "connected", 56, 42, "geometry-note");
+    svgText(svg, "no cycle", 250, 42, "geometry-note");
+  } else if (figure === "graph-connectedness") {
+    drawGraphIntro(svg, [
+      { id: "A", x: 78, y: 72, className: "geometry-shape active" },
+      { id: "B", x: 144, y: 54, className: "geometry-shape active" },
+      { id: "C", x: 126, y: 126, className: "geometry-shape active" },
+      { id: "D", x: 238, y: 70, className: "geometry-shape result" },
+      { id: "E", x: 292, y: 126, className: "geometry-shape result" }
+    ], [
+      { from: "A", to: "B", className: "geometry-line active" },
+      { from: "B", to: "C", className: "geometry-line active" },
+      { from: "A", to: "C", className: "geometry-line active" },
+      { from: "D", to: "E", className: "geometry-line result" }
+    ]);
+    svgText(svg, "component 1", 76, 156, "geometry-note");
+    svgText(svg, "component 2", 228, 156, "geometry-note");
+    svgText(svg, "no path across the gap", 150, 98, "geometry-note");
   } else if (figure === "geometry-angles") {
     svg.append(
       svgElement("line", { class: "geometry-line", x1: 62, y1: 124, x2: 298, y2: 124 }),
@@ -6838,6 +7280,32 @@ function createDiagramIntroSvg(figure) {
   return svg;
 }
 
+function drawGraphIntro(svg, nodes, edges) {
+  const nodeById = new Map(nodes.map((node) => [node.id, node]));
+  for (const edge of edges) {
+    const from = nodeById.get(edge.from);
+    const to = nodeById.get(edge.to);
+    if (!from || !to) continue;
+    svg.append(svgElement("line", {
+      class: edge.className || "geometry-line",
+      x1: from.x,
+      y1: from.y,
+      x2: to.x,
+      y2: to.y
+    }));
+  }
+
+  for (const node of nodes) {
+    svg.append(svgElement("circle", {
+      class: node.className || "geometry-shape",
+      cx: node.x,
+      cy: node.y,
+      r: node.r || 15
+    }));
+    svgText(svg, node.label || node.id, node.x, node.y + 6, "geometry-label geometry-math", "middle");
+  }
+}
+
 function proofBox(svg, x, y, title, body) {
   svg.append(svgElement("rect", { class: "geometry-proof-box", x, y, width: 80, height: 74, rx: 8 }));
   svgText(svg, title, x + 40, y + 26, "geometry-label active", "middle");
@@ -7192,6 +7660,11 @@ function conceptFigureCaption(figure) {
     "number-euclidean": "The Euclidean algorithm finds a GCD by remainders.",
     "number-modular": "Modular arithmetic tracks remainders after wrapping.",
     "number-congruences": "Congruences say two numbers share a remainder system.",
+    "graph-vertices-edges": "Vertices are the objects; edges are the connections between them.",
+    "graph-paths-cycles": "A path follows edges; a cycle returns to its starting vertex.",
+    "graph-degree": "The degree of a vertex counts the edges that touch it.",
+    "graph-trees": "A tree is connected and has no cycles.",
+    "graph-connectedness": "Connected components are separated pieces with paths inside each piece.",
     "probability-sample-space": "Sample spaces list all possible outcomes.",
     "probability-basic": "Basic probability compares favorable outcomes to all outcomes.",
     "probability-counting": "Counting rules organize multi-step choices.",
@@ -7340,7 +7813,7 @@ function renderConceptGrid(model) {
     choiceGrid.className = "concept-choice-grid";
     choiceGrid.setAttribute("role", "radiogroup");
     choiceGrid.setAttribute("aria-label", model.cells[0].label);
-    model.cells[0].choices.forEach((choice) => {
+    model.cells[0].choices.forEach((choice, index) => {
       const button = document.createElement("button");
       button.type = "button";
       button.className = "concept-choice-button";
@@ -7348,13 +7821,15 @@ function renderConceptGrid(model) {
       button.dataset.choiceValue = choice.value;
       button.setAttribute("role", "radio");
       button.setAttribute("aria-checked", "false");
+      button.setAttribute("aria-label", `${index + 1}. ${stripMathTags(choice.label)}`);
       setMathText(button, choice.label);
       button.addEventListener("click", () => selectConceptChoice(input, choice.value));
       choiceGrid.append(button);
     });
-    input.classList.add("concept-answer-choice-control");
+    input.classList.add("concept-answer-choice-control", "sr-only");
     input.readOnly = true;
-    input.placeholder = "No answer selected";
+    input.tabIndex = -1;
+    input.setAttribute("aria-hidden", "true");
     answerPanel.append(choiceGrid, input);
   } else {
     const answerLabel = document.createElement("label");
@@ -9303,17 +9778,21 @@ function checkCurrentStep() {
   if (!input.value.trim()) {
     if (state.autoAdvancedToStep === state.activeStep) {
       input.classList.remove("incorrect");
-      input.focus({ preventScroll: true });
+      if (!input.classList.contains("concept-answer-choice-control")) input.focus({ preventScroll: true });
       setStatus(`Correct. Continue with ${activeStep?.label || input.dataset.label || "the next box"}.`, "correct");
       return;
     }
     setStatus(input.classList.contains("concept-answer-choice-control") ? "Choose an answer." : input.inputMode === "numeric" ? "Try another digit." : "Try another entry.", "incorrect");
     input.classList.add("incorrect");
-    input.focus({ preventScroll: true });
+    if (!input.classList.contains("concept-answer-choice-control")) input.focus({ preventScroll: true });
     return;
   }
 
   const correct = validateInput(input, true);
+  if (correct && input.classList.contains("concept-answer-input")) {
+    completeConceptAnswer(input);
+    return;
+  }
   if (correct && state.mode === "guided") {
     state.activeStep += 1;
     if (state.activeStep >= steps.length) {
@@ -9458,7 +9937,7 @@ function validateInput(input, announce) {
     state.checkedCells.delete(input.dataset.cellId);
   }
   if (announce) {
-    setStatus(correct ? "Correct. Continue to the next box." : feedbackForInput(input), correct ? "correct" : "incorrect");
+    setStatus(correct ? successForInput(input) : feedbackForInput(input), correct ? "correct" : "incorrect");
   }
   return correct;
 }
@@ -9482,13 +9961,23 @@ function validateGuidedConceptInput(input) {
     return;
   }
 
-  if (state.activeStep < orderedSteps().length) {
-    state.activeStep = orderedSteps().length;
-    completeLesson();
-  }
+  completeConceptAnswer(input);
+}
+
+function completeConceptAnswer(input) {
+  state.activeStep = orderedSteps().length;
+  completeLesson();
+  input.disabled = true;
+  syncConceptChoiceButtons(input);
+  setStatus(`${successForInput(input)} Press Return for the next problem.`, "complete");
 }
 
 function feedbackForInput(input) {
+  if (input.classList.contains("concept-answer-choice-control")) {
+    const selected = selectedChoiceLabel(input);
+    const hint = input.dataset.hint ? stripMathTags(input.dataset.hint) : "Use the main idea from the lesson, then compare the choices again.";
+    return selected ? `Not quite. You chose ${selected}. ${hint}` : hint;
+  }
   if (input.dataset.feedback) return input.dataset.feedback;
   const label = answerValue(input.dataset.label);
   const hint = input.dataset.hint;
@@ -9505,6 +9994,22 @@ function feedbackForInput(input) {
   if (label.includes("degree") || label.includes("polynomial")) return "Match variable powers carefully before combining or naming the degree.";
   if (hint) return `Not yet. ${stripMathTags(hint)}`;
   return input.inputMode === "numeric" ? "Try another digit." : "Try another entry.";
+}
+
+function successForInput(input) {
+  if (!input.classList.contains("concept-answer-choice-control")) return "Correct. Continue to the next box.";
+  if (input.dataset.feedback) return `Correct. ${stripMathTags(input.dataset.feedback)}`;
+  if (input.dataset.hint) return `Correct. ${stripMathTags(input.dataset.hint)}`;
+  const selected = selectedChoiceLabel(input);
+  return selected ? `Correct. ${selected} is the matching choice.` : "Correct. That choice matches the idea.";
+}
+
+function selectedChoiceLabel(input) {
+  const card = input.closest(".concept-card");
+  const value = answerValue(input.value);
+  const selected = Array.from(card?.querySelectorAll(".concept-choice-button") || [])
+    .find((button) => answerValue(button.dataset.choiceValue) === value);
+  return selected?.textContent?.trim() || input.value;
 }
 
 function isCorrectAnswer(input) {
@@ -9956,6 +10461,12 @@ function handlePageKeydown(event) {
   if (event.defaultPrevented) return;
   if (handleToolsKeydown(event)) return;
   if (handleSudokuKeydown(event)) return;
+  if (handleConceptChoiceKeydown(event)) return;
+  if (event.key === "Enter" && !state.showIntro && isCurrentProblemComplete() && event.target?.closest?.(".concept-card")) {
+    event.preventDefault();
+    startNextProblem();
+    return;
+  }
   if (event.key === "Enter") {
     if (isFormControl(event.target) && !event.target.classList?.contains("digit-input")) return;
     event.preventDefault();
@@ -9974,6 +10485,31 @@ function handlePageKeydown(event) {
   event.preventDefault();
   activeInput.focus();
   insertDigit(activeInput, event.key);
+}
+
+function handleConceptChoiceKeydown(event) {
+  if (state.showIntro || !/^[1-9]$/.test(event.key)) return false;
+  const card = els.grid.querySelector(".concept-card");
+  if (!card) return false;
+  if (
+    isFormControl(event.target)
+    && !event.target.closest?.(".concept-choice-grid")
+    && !event.target.classList?.contains("concept-answer-choice-control")
+  ) {
+    return false;
+  }
+
+  const input = card.querySelector(".concept-answer-choice-control");
+  if (!input || input.disabled) return false;
+
+  const choices = Array.from(card.querySelectorAll(".concept-choice-button"));
+  const choice = choices[Number(event.key) - 1];
+  if (!choice) return false;
+
+  event.preventDefault();
+  selectConceptChoice(input, choice.dataset.choiceValue);
+  choice.focus();
+  return true;
 }
 
 function handleToolsKeydown(event) {

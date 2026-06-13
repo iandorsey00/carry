@@ -12,7 +12,7 @@
     <link rel="icon" type="image/png" sizes="512x512" href="/assets/carry-icon.png">
     <link rel="apple-touch-icon" href="/assets/carry-icon.png">
     <link rel="manifest" href="/manifest.webmanifest">
-    <link rel="stylesheet" href="/styles.css?v=0.1.0-alpha.64">
+    <link rel="stylesheet" href="/styles.css?v=0.1.0-alpha.71">
   </head>
   <body>
     <div class="app-shell">
@@ -517,6 +517,7 @@
                 <button class="game-tab" type="button" data-game="gcd-race" aria-selected="false">GCD</button>
                 <button class="game-tab" type="button" data-game="divisibility" aria-selected="false">Divisibility</button>
                 <button class="game-tab" type="button" data-game="residue-match" aria-selected="false">Residues</button>
+                <button class="game-tab" type="button" data-game="graph-paths" aria-selected="false">Graph Paths</button>
               </div>
             </div>
 
@@ -727,13 +728,39 @@
                 </div>
               </div>
             </div>
+
+            <div class="number-game" id="graphPathsGame" data-number-game="graph-paths" hidden>
+              <div class="sudoku-controls" aria-label="Graph Paths settings">
+                <label>
+                  <span>Difficulty</span>
+                  <select data-number-difficulty="graph-paths">
+                    <option value="easy" selected>Easy</option>
+                    <option value="medium">Medium</option>
+                    <option value="hard">Hard</option>
+                  </select>
+                </label>
+                <button class="tool-button compact" type="button" data-number-new="graph-paths">New</button>
+                <button class="tool-button compact" type="button" data-number-check="graph-paths">Check</button>
+              </div>
+              <div class="sudoku-status" data-number-status="graph-paths" aria-live="polite"></div>
+              <div class="number-game-layout">
+                <div>
+                  <svg class="graph-game-figure" id="graphPathsFigure" viewBox="0 0 360 240" role="img" aria-label="Graph paths diagram"></svg>
+                  <p class="mod-clock-prompt" data-number-prompt="graph-paths"></p>
+                  <div class="number-choice-grid" data-number-choices="graph-paths"></div>
+                </div>
+                <div class="mod-clock-side">
+                  <p class="sudoku-note">A path follows edges from one node to another. Choose the fewest edges needed.</p>
+                </div>
+              </div>
+            </div>
           </section>
         </div>
 
       </main>
 
       <footer class="site-footer">
-        Carry <span id="appVersion">v0.1.0-alpha.64</span> © 2026 Ian Dorsey · Open source under the MIT License
+        Carry <span id="appVersion">v0.1.0-alpha.71</span> © 2026 Ian Dorsey · Open source under the MIT License
       </footer>
     </div>
 
@@ -807,6 +834,6 @@
         }
       };
     </script>
-    <script src="/app.js?v=0.1.0-alpha.64" defer></script>
+    <script src="/app.js?v=0.1.0-alpha.71" defer></script>
   </body>
 </html>
