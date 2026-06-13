@@ -1,6 +1,6 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-alpha.71";
+const APP_VERSION = "0.1.0-alpha.79";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 const GAMES_STORAGE_KEY = "carry.games.v1";
@@ -3129,6 +3129,7 @@ function cacheElements() {
   els.numberGamePrompts = Object.fromEntries(Array.from(document.querySelectorAll("[data-number-prompt]")).map((item) => [item.dataset.numberPrompt, item]));
   els.numberGameStatuses = Object.fromEntries(Array.from(document.querySelectorAll("[data-number-status]")).map((item) => [item.dataset.numberStatus, item]));
   els.numberGameChoices = Object.fromEntries(Array.from(document.querySelectorAll("[data-number-choices]")).map((item) => [item.dataset.numberChoices, item]));
+  els.numberGameVisuals = Object.fromEntries(Array.from(document.querySelectorAll("[data-number-visual]")).map((item) => [item.dataset.numberVisual, item]));
   els.numberGameDifficulties = Object.fromEntries(Array.from(document.querySelectorAll("[data-number-difficulty]")).map((item) => [item.dataset.numberDifficulty, item]));
   els.graphPathsFigure = document.querySelector("#graphPathsFigure");
   els.scratchpadInput = document.querySelector("#scratchpadInput");
@@ -4580,6 +4581,8 @@ function primeFactorProblem(settings) {
   const choices = uniqueShuffledChoices([...factors, ...pool, 17, 19], random, 8);
   return {
     multi: true,
+    number,
+    factors: factors.map(String),
     prompt: `Select every prime factor of ${number}.`,
     choices: choices.map((value) => ({ value, label: value })),
     answers: factors.map(String),
@@ -4605,6 +4608,9 @@ function gcdRaceProblem(settings) {
   const choices = uniqueShuffledChoices([common, leftFactor, rightFactor, common * 2, common + 1, Math.max(1, common - 1)], random, 6);
   return {
     multi: false,
+    left,
+    right,
+    common,
     prompt: `Find gcd(${left}, ${right}).`,
     choices: choices.map((value) => ({ value, label: value })),
     answers: [String(common)],
@@ -4665,6 +4671,8 @@ function residueMatchProblem(settings) {
   const answerSet = choices.filter((value) => Number(value) % modulus === residue);
   return {
     multi: true,
+    modulus,
+    residue,
     prompt: `Select every number congruent to ${residue} modulo ${modulus}.`,
     choices: choices.map((value) => ({ value, label: value })),
     answers: answerSet,
@@ -4799,6 +4807,7 @@ function renderNumberGames() {
     difficultyEl.value = currentNumberGameState(game).difficulty;
     promptEl.textContent = problem.prompt;
     if (game === "graph-paths") renderGraphPathsFigure(problem);
+    renderNumberGameVisual(game, problem, selected, checked);
     choicesEl.innerHTML = "";
     problem.choices.forEach((choice, index) => {
       const button = document.createElement("button");
@@ -4823,6 +4832,204 @@ function renderNumberGames() {
       statusEl.textContent = problem.emptyStatus;
     }
   });
+}
+
+function renderNumberGameVisual(game, problem, selected, checked) {
+  const visual = els.numberGameVisuals?.[game];
+  if (!visual) return;
+  visual.replaceChildren();
+  visual.className = `number-game-visual ${game}-visual`;
+
+  if (game === "prime-factors") {
+    renderPrimeFactorVisual(visual, problem, selected, checked);
+  } else if (game === "gcd-race") {
+    renderGcdVisual(visual, problem, selected, checked);
+  } else if (game === "residue-match") {
+    renderResidueVisual(visual, problem, selected, checked);
+  }
+}
+
+function renderPrimeFactorVisual(visual, problem, selected, checked) {
+  const selectedFactors = [...selected].map(Number).filter(Number.isFinite);
+  const hasSelection = selectedFactors.length > 0;
+  const product = selectedFactors.reduce((value, factor) => value * factor, 1);
+  const wholeRemainder = hasSelection && product > 0 && problem.number % product === 0;
+  const remaining = wholeRemainder ? problem.number / product : null;
+  const target = numberVisualBlock("target", "target number", problem.number);
+  const productState = checked
+    ? product === problem.number ? "correct" : "wrong"
+    : hasSelection ? "selected" : "empty";
+  const remainingState = hasSelection && !wholeRemainder ? "wrong" : "";
+  const selectedProduct = numberVisualBlock("product", "selected product", hasSelection ? product : "choose", productState);
+  const remainingBlock = numberVisualBlock("remaining", "remaining factor", hasSelection ? remaining ?? "not whole" : problem.number, remainingState);
+  const slots = document.createElement("div");
+  slots.className = "number-visual-slots";
+
+  if (hasSelection) {
+    selectedFactors.forEach((factor, index) => {
+      if (index) slots.append(numberVisualOperator("×"));
+      const factorState = checked
+        ? problem.answers.includes(String(factor)) ? "correct" : "wrong"
+        : "";
+      slots.append(numberVisualChip(factor, factorState));
+    });
+  } else {
+    slots.append(numberVisualChip("choose primes", "empty"));
+  }
+
+  visual.append(
+    numberVisualCaption("Build a product from prime choices"),
+    numberVisualRow(target, numberVisualOperator("="), selectedProduct, numberVisualOperator("×"), remainingBlock),
+    slots
+  );
+}
+
+function renderGcdVisual(visual, problem, selected, checked) {
+  const selectedValue = [...selected][0] || "?";
+  const selectedNumber = Number(selectedValue);
+  const hasSelection = selected.size > 0 && Number.isFinite(selectedNumber) && selectedNumber > 0;
+  const dividesLeft = hasSelection && problem.left % selectedNumber === 0;
+  const dividesRight = hasSelection && problem.right % selectedNumber === 0;
+  const isCorrect = numberGameIsCorrect("gcd-race", problem);
+  const centerValue = checked && !isCorrect
+    ? `${selectedValue} → ${problem.common}`
+    : selectedValue;
+  const centerClass = checked
+    ? isCorrect ? "correct" : "wrong"
+    : selected.size ? "selected" : "empty";
+  const venn = document.createElement("div");
+  venn.className = "gcd-venn";
+  venn.append(
+    numberVisualVennCircle("left number", problem.left, "left"),
+    numberVisualVennCircle("right number", problem.right, "right"),
+    numberVisualBlock("overlap", "candidate", centerValue, centerClass)
+  );
+
+  const checks = document.createElement("div");
+  checks.className = "number-visual-slots";
+  if (hasSelection) {
+    checks.append(
+      numberVisualChip(`divides ${problem.left}: ${dividesLeft ? "yes" : "no"}`, dividesLeft ? "correct" : "wrong"),
+      numberVisualChip(`divides ${problem.right}: ${dividesRight ? "yes" : "no"}`, dividesRight ? "correct" : "wrong")
+    );
+    if (checked && !isCorrect) checks.append(numberVisualChip(`greatest: ${problem.common}`, "correct"));
+  } else {
+    checks.append(numberVisualChip("choose a shared divisor", "empty"));
+  }
+
+  visual.append(
+    numberVisualCaption("Find the largest shared divisor"),
+    venn,
+    checks
+  );
+}
+
+function renderResidueVisual(visual, problem, selected, checked) {
+  const residues = residueWheelSvg(problem, selected, checked);
+
+  const selectedList = document.createElement("div");
+  selectedList.className = "residue-selected-list";
+  if (selected.size) {
+    [...selected].sort((a, b) => Number(a) - Number(b)).forEach((value) => {
+      const remainder = Number(value) % problem.modulus;
+      const stateClass = checked
+        ? remainder === problem.residue ? "correct" : "wrong"
+        : remainder === problem.residue ? "selected" : "";
+      selectedList.append(numberVisualChip(`${value} → ${remainder}`, stateClass));
+    });
+  } else {
+    selectedList.append(numberVisualChip("selected values appear here", "empty"));
+  }
+
+  visual.append(
+    numberVisualCaption(`Modulo ${problem.modulus}: target remainder ${problem.residue}`),
+    residues,
+    selectedList
+  );
+}
+
+function residueWheelSvg(problem, selected, checked) {
+  const svg = svgEl("svg", { class: "residue-wheel", viewBox: "0 0 220 220", "aria-hidden": "true" });
+  const selectedRemainders = new Set([...selected].map((value) => String(Number(value) % problem.modulus)));
+  svg.append(svgEl("circle", { class: "residue-wheel-ring", cx: 110, cy: 110, r: 78 }));
+
+  for (let index = 0; index < problem.modulus; index += 1) {
+    const angle = -Math.PI / 2 + (index / problem.modulus) * Math.PI * 2;
+    const x = 110 + Math.cos(angle) * 78;
+    const y = 110 + Math.sin(angle) * 78;
+    const selectedHere = selectedRemainders.has(String(index));
+    const stateClass = [
+      index === problem.residue ? "target" : "",
+      selectedHere ? "selected" : "",
+      checked && selectedHere && index !== problem.residue ? "wrong" : ""
+    ].filter(Boolean).join(" ");
+    const group = svgEl("g", { class: `residue-wheel-node ${stateClass}`.trim() });
+    group.append(svgEl("circle", { cx: x, cy: y, r: 18 }));
+    const text = svgEl("text", { x, y: y + 5, "text-anchor": "middle" });
+    text.textContent = index;
+    group.append(text);
+    svg.append(group);
+  }
+
+  return svg;
+}
+
+function numberVisualCaption(text) {
+  const caption = document.createElement("div");
+  caption.className = "number-visual-caption";
+  caption.textContent = text;
+  return caption;
+}
+
+function numberVisualRow(...items) {
+  const row = document.createElement("div");
+  row.className = "number-visual-row";
+  row.append(...items);
+  return row;
+}
+
+function numberVisualBlock(kind, label, value, stateClass = "") {
+  const block = document.createElement("div");
+  block.className = `number-visual-block ${kind} ${stateClass}`.trim();
+  const labelEl = document.createElement("span");
+  labelEl.className = "number-visual-label";
+  labelEl.textContent = label;
+  const valueEl = document.createElement("strong");
+  valueEl.textContent = String(value);
+  block.append(labelEl, valueEl);
+  return block;
+}
+
+function numberVisualVennCircle(label, value, side) {
+  const circle = document.createElement("div");
+  circle.className = `gcd-venn-circle ${side}`;
+  const labelEl = document.createElement("span");
+  labelEl.textContent = label;
+  const valueEl = document.createElement("strong");
+  valueEl.textContent = String(value);
+  circle.append(labelEl, valueEl);
+  return circle;
+}
+
+function numberVisualChip(value, stateClass = "") {
+  const chip = document.createElement("span");
+  chip.className = `number-visual-chip ${stateClass}`.trim();
+  chip.textContent = String(value);
+  return chip;
+}
+
+function numberVisualOperator(value) {
+  const operator = document.createElement("span");
+  operator.className = "number-visual-operator";
+  operator.textContent = value;
+  return operator;
+}
+
+function numberVisualHint(text) {
+  const hint = document.createElement("p");
+  hint.className = "number-visual-hint";
+  hint.textContent = text;
+  return hint;
 }
 
 function numberGameWrongStatus(game, problem) {
@@ -5092,18 +5299,103 @@ function renderIntroCopy(workspace) {
     ]
   };
   const items = workspace.intro || intros[workspace.type] || ["This interactive workspace is planned."];
-  const figure = createIntroFigure(workspace);
+  const figures = createIntroFigures(workspace);
   const sections = document.createElement("div");
   sections.className = "intro-sections";
-  sections.append(
-    createIntroSection("Core idea", items),
-    createWorkedExampleSection(workspace),
-    createIntroSection("Why it works", introWhyItems(workspace)),
-    createIntroSection("Common mistake", introCommonMistakeItems(workspace)),
-    createIntroSection("Practice focus", introPracticeItems(workspace)),
-    createIntroSection("Answer format", introAnswerFormatItems(workspace))
-  );
-  els.introCopy.replaceChildren(...[figure, sections].filter(Boolean));
+  sections.append(createIntroSection("Core idea", items), createWorkedExampleSection(workspace));
+
+  const explanation = introExplanationSection(workspace);
+  if (explanation?.items?.length) sections.append(createIntroSection(explanation.title, explanation.items));
+
+  const workspaceItems = introWorkspaceItems(workspace);
+  if (workspaceItems.length) sections.append(createIntroSection("In the workspace", workspaceItems));
+
+  els.introCopy.replaceChildren(...figures, sections);
+}
+
+function createIntroFigures(workspace) {
+  return [createIntroFigure(workspace), ...supplementalIntroFigures(workspace)].filter(Boolean);
+}
+
+function introExplanationSection(workspace) {
+  if (workspace.type === "concept") {
+    return { title: "What to notice", items: conceptNoticeItems(workspace) };
+  }
+  return { title: "Why it works", items: introWhyItems(workspace) };
+}
+
+function introWorkspaceItems(workspace) {
+  if (workspace.type === "addition") {
+    return [
+      "Use one digit per square.",
+      "Check validates the active column, then moves left.",
+      "Carry marks sit above the next column only when a column total reaches 10."
+    ];
+  }
+
+  if (workspace.type === "subtraction") {
+    return [
+      "Use one digit per square for the answer row.",
+      "Borrow marks show the changed top number before you subtract.",
+      "Check one column at a time so a borrow mistake stays local."
+    ];
+  }
+
+  if (workspace.type === "multiplication") {
+    return [
+      "Build one partial product row at a time.",
+      "Zeros mark the place shift for tens and hundreds rows.",
+      "The final sum has its own carry row."
+    ];
+  }
+
+  if (workspace.type === "division") {
+    return workspace.allowsRemainder
+      ? [
+          "Use the divide, multiply, subtract cycle from left to right.",
+          "The last nonzero amount is written as the final remainder.",
+          "If there is no remainder, write 0 when the lesson asks for it."
+        ]
+      : [
+          "Use the divide, multiply, subtract cycle from left to right.",
+          "This lesson uses problems that end with remainder 0.",
+          "A problem with a final remainder moves to the remainders lesson."
+        ];
+  }
+
+  if (workspace.type === "equation") {
+    return [
+      "Write the same operation on both sides before simplifying.",
+      "Each row should keep left side, relation, and right side aligned.",
+      "The last row names the value of the variable."
+    ];
+  }
+
+  if (workspace.type === "inequality") {
+    return [
+      "Use inverse operations as you would for equations.",
+      "Reverse the inequality only when multiplying or dividing by a negative number.",
+      "The last row should state the variable, comparison sign, and boundary value."
+    ];
+  }
+
+  if (workspace.type === "system") {
+    return [
+      "Show the method first: substitution or elimination.",
+      "Find one variable, substitute it back, then write the ordered pair.",
+      "The pair should work in both original equations."
+    ];
+  }
+
+  if (workspace.type === "factoring" || workspace.type === "quadratic") {
+    return [
+      "Name the expression shape before choosing a method.",
+      "For simple quadratics, look for a pair whose product and sum both fit.",
+      "Multiply the factors back out as a check."
+    ];
+  }
+
+  return [];
 }
 
 function createIntroSection(title, items) {
@@ -5308,54 +5600,6 @@ function introWorkedExampleItems(workspace) {
   ];
 }
 
-function introPracticeItems(workspace) {
-  if (workspace.type === "concept" && workspace.problems?.length) {
-    return [
-      "Read the question and identify the rule it is asking you to use.",
-      "Work with the active numbers in the problem area; the overview examples use different numbers.",
-      "After a miss, use the hint to choose the next attempt instead of guessing randomly."
-    ];
-  }
-
-  if (workspace.type === "equation") {
-    return [
-      "Write the same operation on both sides before simplifying.",
-      "Keep each row balanced: left side, relation, right side.",
-      "The final line should name the variable value."
-    ];
-  }
-
-  if (workspace.type === "inequality") {
-    return [
-      "Use inverse operations as you would for equations.",
-      "When multiplying or dividing by a negative number, reverse the inequality sign.",
-      "The final line should state the variable and the correct relation."
-    ];
-  }
-
-  if (workspace.type === "system") {
-    return [
-      "Show the method first: substitution or elimination.",
-      "Find one variable, substitute it back, then write the ordered pair.",
-      "Check the pair in both original equations."
-    ];
-  }
-
-  if (workspace.type === "factoring" || workspace.type === "quadratic") {
-    return [
-      "Identify the shape of the expression before choosing a method.",
-      "Use factor pairs, a greatest common factor, or a special pattern.",
-      "Check by multiplying the factors back out."
-    ];
-  }
-
-  return [
-    "Work in the highlighted place first.",
-    "Use Check to validate the smallest current step.",
-    "Use Hint when the next move is not clear."
-  ];
-}
-
 function introWhyItems(workspace) {
   if (workspace.type === "addition") {
     return [
@@ -5512,47 +5756,96 @@ function conceptWhyItems(workspace) {
   ];
 }
 
-function introCommonMistakeItems(workspace) {
-  if (workspace.type === "addition") {
-    return ["Writing the whole column total in one box instead of carrying the tens part."];
+function conceptNoticeItems(workspace) {
+  if (workspace.topic === "Arithmetic" && workspace.id === "arithmetic.place-value") {
+    return [
+      "Read the digit and its column together.",
+      "A digit in the hundreds column counts hundreds, not ones.",
+      "Expanded form is a quick way to check the value of each digit."
+    ];
   }
-  if (workspace.type === "subtraction") {
-    return ["Borrowing changes both columns: the lending digit decreases and the receiving column gains ten."];
+
+  if (workspace.id === "prealgebra.expressions") {
+    return [
+      "Like terms have the same variable part.",
+      "When you combine like terms, add the coefficients and keep the variable part.",
+      "Constants do not combine with variable terms."
+    ];
   }
-  if (workspace.type === "multiplication") {
-    return ["Forgetting the zero or place shift on tens and hundreds partial products."];
+
+  if (workspace.id === "algebra.polynomials") {
+    return [
+      "Polynomial terms are like terms only when the variable and exponent match.",
+      "Combine coefficients, not exponents.",
+      "A leftover unlike term stays in the expression."
+    ];
   }
-  if (workspace.type === "division") {
-    return ["Choosing a quotient digit that makes the product larger than the current partial dividend."];
+
+  if (workspace.topic === "Graph Theory") {
+    return [
+      "Count edges when a question asks for path length.",
+      "Count edges touching one vertex when a question asks for degree.",
+      "Connectedness asks whether a path exists, not whether the path is short."
+    ];
   }
-  if (workspace.type === "equation") {
-    return ["Changing only one side of the equation. Balance requires the same operation on both sides."];
-  }
-  if (workspace.type === "inequality") {
-    return ["Forgetting to reverse the inequality when multiplying or dividing by a negative number."];
-  }
-  if (workspace.type === "system") {
-    return ["Finding a value for one variable but not checking it in both original equations."];
-  }
-  if (workspace.type === "factoring" || workspace.type === "quadratic") {
-    return ["Choosing numbers that add correctly but do not multiply to the constant term."];
-  }
+
   if (workspace.topic === "Probability") {
-    return ["Counting favorable outcomes correctly but using the wrong total sample space."];
+    return [
+      "Name the sample space before counting.",
+      "The denominator should match the outcomes still possible.",
+      "Conditional information can shrink the sample space."
+    ];
   }
-  if (workspace.topic === "Differential Equations") {
-    return ["Treating a derivative rule like ordinary algebra and losing the differential or chain-rule factor."];
-  }
-  if (workspace.topic === "Calculus") {
-    return ["Applying a memorized derivative or integral rule without checking the inside function."];
-  }
+
   if (isPhysicsWorkspaceId(workspace.id)) {
-    return ["Calculating with the numbers while ignoring the units or direction."];
+    return [
+      "Keep units upright and attached to the quantity.",
+      "Use the diagram to identify what the symbols mean before calculating.",
+      "Direction matters for vectors, forces, momentum, and fields."
+    ];
   }
+
   if (workspace.topic === "Proofs") {
-    return ["Giving an example when the claim requires a proof for every case."];
+    return [
+      "Separate the claim from the reason.",
+      "Universal claims need all cases; existence claims need one working case.",
+      "A counterexample must satisfy the setup and break the conclusion."
+    ];
   }
-  return ["Copying the worked example's answer instead of applying the same rule to the active question."];
+
+  if (workspace.topic === "Set Theory") {
+    return [
+      "Membership is about one object.",
+      "Subset is about every element of one set being inside another set.",
+      "Union means either set; intersection means both sets."
+    ];
+  }
+
+  if (workspace.topic === "Number Theory") {
+    return [
+      "Divisibility means no remainder.",
+      "Modular arithmetic keeps the remainder and ignores completed groups.",
+      "Congruent numbers have the same remainder in the chosen modulus."
+    ];
+  }
+
+  if (workspace.topic === "Real Analysis") {
+    return [
+      "Definitions are the main object of study.",
+      "Look for what happens arbitrarily close to a value.",
+      "Examples test a definition; counterexamples find its boundary."
+    ];
+  }
+
+  if (workspace.topic === "Abstract Algebra") {
+    return [
+      "Identify the set and operation before checking a structure.",
+      "A definition usually has several required rules.",
+      "One failed rule is enough to reject the structure."
+    ];
+  }
+
+  return conceptWhyItems(workspace);
 }
 
 function conceptWorkedExampleRows(workspace) {
@@ -5585,9 +5878,23 @@ function conceptWorkedExampleRows(workspace) {
       { math: "100 + 200 = 300", note: "Check the size." },
       { math: "98 + 203 = 301", note: "Now calculate exactly." }
     ],
+    "prealgebra.integers": [
+      { math: "-3 × -5", note: "Start with the sign." },
+      { math: "-3 × -5 = +(3 × 5)", note: "Same signs make a positive product." },
+      { math: "+(3 × 5) = 15", note: "Multiply the sizes." }
+    ],
+    "prealgebra.expressions": [
+      { math: "5a + 3 + 2a = 5a + 2a + 3", note: "Move like terms together." },
+      { math: "5a + 2a + 3 = (5 + 2)a + 3", note: "Add coefficients of a." },
+      { math: "(5 + 2)a + 3 = 7a + 3", note: "Keep the constant term." }
+    ],
     "prealgebra.exponents": [
       { math: "2^5 = 2 × 2 × 2 × 2 × 2", note: "An exponent counts equal factors." },
       { math: "2^5 = 32", note: "Multiply the factors." }
+    ],
+    "algebra.polynomials": [
+      { math: "2x^2 + 5x^2 - x = (2 + 5)x^2 - x", note: "Group terms with the same variable and exponent." },
+      { math: "(2 + 5)x^2 - x = 7x^2 - x", note: "Combine the squared terms." }
     ],
     "algebra.rational-expressions": [
       { math: "\\frac{12x}{18} = \\frac{12 ÷ 6}{18 ÷ 6}x", note: "Reduce the numerical factor." },
@@ -6080,28 +6387,6 @@ function conceptWorkedExampleItems(workspace) {
   ];
 }
 
-function introAnswerFormatItems(workspace) {
-  if (workspace.type === "concept" && workspace.problems?.length) {
-    return [
-      "Equivalent typing is accepted when possible: spaces, capitalization, the pi symbol or typed p-i, ×/*, and degree symbols are normalized.",
-      "Use compact math notation when the question asks for a formula, expression, coordinate, or set.",
-      "For yes-or-no questions, type yes or no."
-    ];
-  }
-
-  if (workspace.type === "division") {
-    return workspace.allowsRemainder
-      ? ["Use digits in the quotient boxes and write the final remainder when the workspace asks for it."]
-      : ["Use digits in the quotient, product, and remainder boxes. This lesson uses problems with no final remainder."];
-  }
-
-  if (["addition", "subtraction", "multiplication"].includes(workspace.type)) {
-    return ["Use one digit per square unless the active square is a carry or borrow mark that asks for a small value."];
-  }
-
-  return ["Use compact math notation. Spaces and capitalization are ignored for checking."];
-}
-
 function createIntroFigure(workspace) {
   if (!["addition", "subtraction", "multiplication", "division", "concept", "equation", "inequality", "quadratic"].includes(workspace.type)) return null;
 
@@ -6211,8 +6496,12 @@ function createStaticMathIntroFigure(workspace) {
   const rows = staticMathFigureRows(workspace);
   if (!rows) return null;
 
+  return createIntroMathFigure(rows, introFigureCaption(workspace), workspace.type);
+}
+
+function createIntroMathFigure(rows, captionText, type = "concept") {
   const figure = document.createElement("figure");
-  figure.className = `intro-figure intro-math-figure ${workspace.type}-figure`;
+  figure.className = `intro-figure intro-math-figure ${type}-figure`;
 
   const stack = document.createElement("div");
   stack.className = "intro-math-stack";
@@ -6227,9 +6516,23 @@ function createStaticMathIntroFigure(workspace) {
   }
 
   const caption = document.createElement("figcaption");
-  caption.textContent = introFigureCaption(workspace);
+  caption.textContent = captionText;
   figure.append(stack, caption);
   return figure;
+}
+
+function supplementalIntroFigures(workspace) {
+  if (workspace.id === "arithmetic.place-value") {
+    return [
+      createIntroMathFigure(
+        ["642 = 600 + 40 + 2", "642 = 6 × 100 + 4 × 10 + 2 × 1"],
+        "Expanded form shows the value contributed by each digit.",
+        workspace.type
+      )
+    ];
+  }
+
+  return [];
 }
 
 function staticMathFigureRows(workspace) {
@@ -6375,16 +6678,20 @@ function createDiagramIntroSvg(figure) {
     }
   } else if (figure === "place-value") {
     const columns = [
-      { label: "hundreds", digit: "6", value: "600", x: 66 },
-      { label: "tens", digit: "4", value: "40", x: 154 },
+      { label: "hundreds", digit: "6", value: "600", x: 46 },
+      { label: "tens", digit: "4", value: "40", x: 144 },
       { label: "ones", digit: "2", value: "2", x: 242 }
     ];
+    svgText(svg, "number: 642", 180, 32, "geometry-label geometry-math", "middle");
     for (const column of columns) {
-      svg.append(svgElement("rect", { class: "geometry-shape active", x: column.x, y: 48, width: 58, height: 48, rx: 6 }));
-      svgText(svg, column.label, column.x + 29, 35, "geometry-note", "middle");
-      svgText(svg, column.digit, column.x + 29, 80, "geometry-label geometry-math active", "middle");
-      svgText(svg, column.value, column.x + 29, 132, "geometry-label geometry-math result", "middle");
-      svg.append(svgElement("path", { class: "geometry-line result", d: `M ${column.x + 29} 100 V 112` }));
+      svg.append(
+        svgElement("rect", { class: "geometry-shape active", x: column.x, y: 50, width: 72, height: 48, rx: 6 }),
+        svgElement("rect", { class: "geometry-shape result", x: column.x, y: 116, width: 72, height: 34, rx: 6 }),
+        svgElement("path", { class: "geometry-line result", d: `M ${column.x + 36} 100 V 112` })
+      );
+      svgText(svg, column.label, column.x + 36, 46, "geometry-note", "middle");
+      svgText(svg, column.digit, column.x + 36, 82, "geometry-label geometry-math active", "middle");
+      svgText(svg, column.value, column.x + 36, 140, "geometry-label geometry-math result", "middle");
     }
   } else if (figure === "fraction-bar") {
     [0, 1, 2, 3].forEach((index) => {
@@ -7822,7 +8129,7 @@ function renderConceptGrid(model) {
       button.setAttribute("role", "radio");
       button.setAttribute("aria-checked", "false");
       button.setAttribute("aria-label", `${index + 1}. ${stripMathTags(choice.label)}`);
-      setMathText(button, choice.label);
+      setChoiceText(button, choice.label, model);
       button.addEventListener("click", () => selectConceptChoice(input, choice.value));
       choiceGrid.append(button);
     });
@@ -7945,6 +8252,8 @@ function generatedAnswerChoices(problem, answers) {
     choices.push(...fractionDistractors(normalized));
   } else if (/^-?\d+,?-?\d+$/.test(normalized) || /^\(-?\d+,-?\d+\)$/.test(normalized)) {
     choices.push(...coordinateDistractors(answer));
+  } else if (isAlgebraicChoiceValue(answer, problem)) {
+    choices.push(...algebraicDistractors(answer, problem));
   } else {
     choices.push(...textDistractors(answer, prompt, label));
   }
@@ -7997,6 +8306,97 @@ function coordinateDistractors(value) {
   return [`(${y},${x})`, `(${-x},${y})`, `(${x},${-y})`];
 }
 
+function isAlgebraicChoiceValue(answer, problem) {
+  const text = String(answer || "").trim();
+  if (!/[A-Za-zθπ]/.test(text)) return false;
+  if (/^(yes|no|true|false)$/i.test(text)) return false;
+  const context = `${problem.prompt || ""} ${problem.label || ""}`;
+  return /[+\-*/^=()]/.test(text) || /\b(expression|equation|polynomial|factor|quadratic|term|variable|function|slope|ratio)\b/i.test(context);
+}
+
+function algebraicDistractors(answer, problem) {
+  const raw = String(answer || "").replace(/\s+/g, "");
+  const candidates = [];
+  addMonomialDistractors(candidates, raw);
+  addExpressionDistractors(candidates, raw);
+  addFactoredDistractors(candidates, raw);
+
+  if (raw.includes("/")) {
+    const [top, bottom] = raw.split("/");
+    if (top && bottom) {
+      candidates.push(top, bottom, `${bottom}/${top}`);
+    }
+  }
+
+  if (raw.includes("^2")) {
+    candidates.push(raw.replace(/\^2/g, ""), raw.replace(/\^2/g, "^3"));
+  }
+
+  const context = answerValue(`${problem.prompt || ""} ${problem.label || ""}`);
+  if (context.includes("combine") || context.includes("like") || context.includes("polynomial")) {
+    candidates.push(raw.replace(/([A-Za-z])\^2/g, "$1"), raw.replace(/\+2x\b/, "+2x^2"));
+  }
+
+  return candidates.filter((item) => answerValue(item) !== answerValue(answer));
+}
+
+function addMonomialDistractors(candidates, raw) {
+  const match = raw.match(/^(-?\d*)([A-Za-zθπ])(\^\d+)?$/);
+  if (!match) return;
+  const sign = match[1] === "-" ? -1 : 1;
+  const coefficient = match[1] === "" || match[1] === "-" ? sign : Number(match[1]);
+  const variable = match[2];
+  const exponent = match[3] || "";
+  if (!Number.isFinite(coefficient)) return;
+  candidates.push(
+    formatMonomial(coefficient + 1, variable, exponent),
+    formatMonomial(coefficient - 1 || coefficient + 2, variable, exponent),
+    `${variable}${exponent}`,
+    String(coefficient)
+  );
+}
+
+function addExpressionDistractors(candidates, raw) {
+  const binomial = raw.match(/^([A-Za-zθπ])([+-])(\d+)$/);
+  if (binomial) {
+    const variable = binomial[1];
+    const sign = binomial[2];
+    const constant = Number(binomial[3]);
+    candidates.push(
+      `${variable}${sign}${constant + 1}`,
+      `${variable}${sign}${Math.max(0, constant - 1)}`,
+      `${variable}${sign === "+" ? "-" : "+"}${constant}`
+    );
+  }
+
+  const firstCoefficient = raw.match(/^(-?\d+)([A-Za-z])(\^\d+)?/);
+  if (firstCoefficient) {
+    const coefficient = Number(firstCoefficient[1]);
+    const variable = firstCoefficient[2];
+    const exponent = firstCoefficient[3] || "";
+    candidates.push(raw.replace(firstCoefficient[0], formatMonomial(coefficient + 1, variable, exponent)));
+    candidates.push(raw.replace(firstCoefficient[0], formatMonomial(coefficient - 1 || coefficient + 2, variable, exponent)));
+  }
+
+  if (/[+-]/.test(raw.slice(1))) {
+    candidates.push(raw.replace(/[+-][^+-]+$/, ""));
+    candidates.push(raw.replace(/\+/g, "-"));
+  }
+}
+
+function addFactoredDistractors(candidates, raw) {
+  if (!/\)\(/.test(raw)) return;
+  candidates.push(raw.replace(/\+(\d+)\)/, "-$1)"));
+  candidates.push(raw.replace(/-(\d+)\)/, "+$1)"));
+  candidates.push(raw.replace(/\)\(([^)]+)\)/, "+$1"));
+}
+
+function formatMonomial(coefficient, variable, exponent = "") {
+  if (coefficient === 1) return `${variable}${exponent}`;
+  if (coefficient === -1) return `-${variable}${exponent}`;
+  return `${coefficient}${variable}${exponent}`;
+}
+
 function textDistractors(answer, prompt, label) {
   const pools = [
     { test: "direction|shift", values: ["up", "down", "left", "right"] },
@@ -8019,6 +8419,23 @@ function displayChoiceLabel(value) {
     .replace(/\bforall\b/g, "for all")
     .replace(/\bthereexists\b/g, "there exists")
     .replace(/\batleastone\b/g, "at least one");
+}
+
+function setChoiceText(button, label, model) {
+  const text = String(label ?? "");
+  if (shouldRenderChoiceAsMath(text, model)) {
+    setMathText(button, `<math>${text}</math>`);
+    return;
+  }
+  setMathText(button, text);
+}
+
+function shouldRenderChoiceAsMath(label, model) {
+  const text = String(label || "").trim();
+  if (!text || /^(yes|no|true|false)$/i.test(text)) return false;
+  if (hasMathSyntax(displayMathText(text))) return true;
+  const promptHasMath = hasMathSyntax(displayMathText(stripMathTags(model.prompt || "")));
+  return promptHasMath && /^-?(?:\d+(?:\.\d+)?|(?:\d*)[A-Za-zθπ])$/.test(text);
 }
 
 function optionsFromPrompt(prompt) {
@@ -9242,26 +9659,7 @@ function appendAutoMathText(element, text) {
 
   element.setAttribute("aria-label", text);
   element.classList.add("has-math");
-  const powerPattern = /\^(\{[^}]+\}|-?[A-Za-z0-9]+)/g;
-  let cursor = 0;
-  let match = powerPattern.exec(text);
-  while (match) {
-    if (match.index > cursor) {
-      appendSegmentBeforeExponent(element, text.slice(cursor, match.index));
-    }
-
-    const exponentText = match[1].startsWith("{") ? match[1].slice(1, -1) : match[1];
-    const exponent = document.createElement("sup");
-    exponent.className = "math-sup";
-    exponent.textContent = exponentText;
-    element.append(exponent);
-    cursor = powerPattern.lastIndex;
-    match = powerPattern.exec(text);
-  }
-
-  if (cursor < text.length) {
-    appendMathSegment(element, text.slice(cursor));
-  }
+  appendMathSegment(element, text);
 }
 
 function appendExplicitMathText(element, text) {
@@ -9288,26 +9686,7 @@ function appendAutoMathFragment(element, text) {
     return;
   }
 
-  const powerPattern = /\^(\{[^}]+\}|-?[A-Za-z0-9]+)/g;
-  let cursor = 0;
-  let match = powerPattern.exec(text);
-  while (match) {
-    if (match.index > cursor) {
-      appendSegmentBeforeExponent(element, text.slice(cursor, match.index));
-    }
-
-    const exponentText = match[1].startsWith("{") ? match[1].slice(1, -1) : match[1];
-    const exponent = document.createElement("sup");
-    exponent.className = "math-sup";
-    exponent.textContent = exponentText;
-    element.append(exponent);
-    cursor = powerPattern.lastIndex;
-    match = powerPattern.exec(text);
-  }
-
-  if (cursor < text.length) {
-    appendMathSegment(element, text.slice(cursor));
-  }
+  appendMathSegment(element, text);
 }
 
 function stripMathTags(text) {
@@ -9330,12 +9709,34 @@ function displayMathText(value) {
 }
 
 function hasMathSyntax(text) {
-  return /[\^πθ∫≤≥≡∈∉⊆∪∩=+\-*/×·/]|[A-Za-z]\d|\d[A-Za-z]|\([^)]+,[^)]+\)|\b[A-Za-z]\([A-Za-z0-9]+\)|\b(?:sin|cos|tan|sec|csc|cot|arcsin|arccos|arctan|log|ln|lim)\b/i.test(text);
+  return /[\^πθ∫≤≥≠≈≡∈∉⊂⊆∪∩∀∃∴∵⊕⊢⊨⊥⊤ℕℤℚℝℂ=+\-*/×·/]|[A-Za-z]\d|\d[A-Za-z]|\([^)]+,[^)]+\)|\{[^}]+\}|\b[A-Za-z]\([A-Za-z0-9]+\)|\b(?:sin|cos|tan|sec|csc|cot|arcsin|arccos|arctan|log|ln|lim)\b/i.test(text);
 }
 
 function appendMathSegment(element, text) {
   if (!text) return;
-  const tokenPattern = /((?<![A-Za-z])(?:[A-Za-z]\([A-Za-z0-9]+\)|[A-Za-zπθ])\s*=\s*[^,.;?]+|\b[A-Za-z]\([A-Za-z0-9]+\)|\b(?:sin|cos|tan|sec|csc|cot|arcsin|arccos|arctan|log|ln|lim)\s*[A-Za-zθπ]?\b|\b(?:\d+|[A-Za-zθπ])\s*[+\-*/×·]\s*(?:\d+|[A-Za-zθπ])\b|\b\d+\s*[π]\b|\b\d+[A-Za-z]\b|\b[A-Za-z]\d+\b|\([^)]+,[^)]+\)|[πθ∫∈∉⊆∪∩≡])/gi;
+  const operand = String.raw`(?:\d+(?:\.\d+)?[A-Za-zπθ](?:\^\{?[-A-Za-z0-9πθ]+\}?)?|[A-Za-zπθ](?:\^\{?[-A-Za-z0-9πθ]+\}?)?|\d+(?:\.\d+)?)`;
+  const expression = String.raw`${operand}(?:\s*[+\-*/×·]\s*${operand})+`;
+  const parenthesizedExpression = String.raw`\(\s*${expression}\s*\)`;
+  const relation = String.raw`(?<![A-Za-z])(?:[A-Za-z]\([A-Za-z0-9]+\)|[A-Za-zπθℕℤℚℝℂ])\s*(?:=|≤|≥|≠|≈|≡|<|>|∈|∉|⊂|⊆)\s*(?:\{[^}]+\}|[^,.;?]+)`;
+  const functionCall = String.raw`\b(?:sin|cos|tan|sec|csc|cot|arcsin|arccos|arctan|log|ln|lim)\s*[A-Za-zθπ]?\b`;
+  const tokenPattern = new RegExp(
+    [
+      relation,
+      String.raw`${parenthesizedExpression}\s*\/\s*${parenthesizedExpression}`,
+      parenthesizedExpression,
+      expression,
+      String.raw`\b[A-Za-z]\([A-Za-z0-9]+\)`,
+      functionCall,
+      String.raw`\b(?:\d+(?:\.\d+)?|[A-Za-zθπ])\s*\/\s*(?:\d+(?:\.\d+)?|[A-Za-zθπ])\b`,
+      String.raw`\b(?:\d+(?:\.\d+)?|[A-Za-zθπ])(?:\^\{?[-A-Za-z0-9πθ]+\}?)\b`,
+      String.raw`\b\d+[A-Za-zπθ](?:\^\{?[-A-Za-z0-9πθ]+\}?)?\b`,
+      String.raw`\b[A-Za-z]\d+\b`,
+      String.raw`\([^)]+,[^)]+\)`,
+      String.raw`\{[^}]+\}`,
+      String.raw`[πθ∫∈∉⊂⊆∪∩∀∃∴∵⊕⊢⊨⊥⊤≡≈≤≥≠ℕℤℚℝℂ]`
+    ].join("|"),
+    "gi"
+  );
   let cursor = 0;
   let match = tokenPattern.exec(text);
   if (match) {
@@ -9365,11 +9766,21 @@ function appendRun(element, text, className) {
   const segment = document.createElement("span");
   segment.className = className;
   if (className === "math-run") {
-    appendMathRunContent(segment, text);
+    segment.append(createInlineMathMlExpression(text));
   } else {
     segment.textContent = text;
   }
   element.append(segment);
+}
+
+function createInlineMathMlExpression(text) {
+  const math = createMathMlExpression(normalizeInlineMathRun(text));
+  math.classList.add("inline-mathml-run");
+  return math;
+}
+
+function normalizeInlineMathRun(text) {
+  return normalizePlainMathLine(String(text || "").trim()) || String(text || "").trim();
 }
 
 function appendMathRunContent(element, text) {
@@ -10893,6 +11304,7 @@ function normalizePlainMathLine(line) {
     .replace(/(?<!\\)\bint\b/gi, "\\int")
     .replace(/\b(d[A-Za-z])\/(d[A-Za-z])\b/g, "\\dfrac{$1}{$2}")
     .replace(/\\?\b(sin|cos|tan|sec|csc|cot|ln|log)\s+([A-Za-zθπ])\s*\/\s*\\?\b(sin|cos|tan|sec|csc|cot|ln|log)\s+([A-Za-zθπ])\b/gi, "\\frac{\\$1 $2}{\\$3 $4}")
+    .replace(/\(([^()]+)\)\s*\/\s*\(([^()]+)\)/g, "\\frac{$1}{$2}")
     .replace(/(?<![\\\w])([A-Za-z0-9]+)\/([A-Za-z0-9]+)(?![\w])/g, "\\frac{$1}{$2}")
     .replace(/(?<![\\\w])([A-Za-z0-9]+)\s+\/\s+([A-Za-z0-9]+)(?![\w])/g, "\\frac{$1}{$2}")
     .replace(/<=>/g, "\\iff")

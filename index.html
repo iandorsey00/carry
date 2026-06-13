@@ -12,7 +12,7 @@
     <link rel="icon" type="image/png" sizes="512x512" href="/assets/carry-icon.png">
     <link rel="apple-touch-icon" href="/assets/carry-icon.png">
     <link rel="manifest" href="/manifest.webmanifest">
-    <link rel="stylesheet" href="/styles.css?v=0.1.0-alpha.71">
+    <link rel="stylesheet" href="/styles.css?v=0.1.0-alpha.79">
   </head>
   <body>
     <div class="app-shell">
@@ -127,10 +127,14 @@
           </div>
 
           <section class="lesson-intro" id="lessonIntro" aria-labelledby="introTitle">
-            <p class="eyebrow">Learn</p>
-            <h3 id="introTitle">Long addition</h3>
+            <div class="intro-header">
+              <div>
+                <p class="eyebrow">Learn</p>
+                <h3 id="introTitle">Long addition</h3>
+              </div>
+              <button class="tool-button primary-action" id="startLesson" type="button">Start</button>
+            </div>
             <div class="intro-copy" id="introCopy"></div>
-            <button class="tool-button" id="startLesson" type="button">Start</button>
           </section>
 
           <section class="lesson-setup" aria-labelledby="setupTitle">
@@ -624,6 +628,7 @@
               <div class="sudoku-status" data-number-status="prime-factors" aria-live="polite"></div>
               <div class="number-game-layout">
                 <div>
+                  <div class="number-game-visual prime-visual" data-number-visual="prime-factors" aria-hidden="true"></div>
                   <p class="mod-clock-prompt" data-number-prompt="prime-factors"></p>
                   <div class="number-choice-grid" data-number-choices="prime-factors"></div>
                 </div>
@@ -654,6 +659,7 @@
               <div class="sudoku-status" data-number-status="gcd-race" aria-live="polite"></div>
               <div class="number-game-layout">
                 <div>
+                  <div class="number-game-visual gcd-visual" data-number-visual="gcd-race" aria-hidden="true"></div>
                   <p class="mod-clock-prompt" data-number-prompt="gcd-race"></p>
                   <div class="number-choice-grid" data-number-choices="gcd-race"></div>
                 </div>
@@ -714,6 +720,7 @@
               <div class="sudoku-status" data-number-status="residue-match" aria-live="polite"></div>
               <div class="number-game-layout">
                 <div>
+                  <div class="number-game-visual residue-visual" data-number-visual="residue-match" aria-hidden="true"></div>
                   <p class="mod-clock-prompt" data-number-prompt="residue-match"></p>
                   <div class="number-choice-grid" data-number-choices="residue-match"></div>
                 </div>
@@ -760,7 +767,7 @@
       </main>
 
       <footer class="site-footer">
-        Carry <span id="appVersion">v0.1.0-alpha.71</span> © 2026 Ian Dorsey · Open source under the MIT License
+        Carry <span id="appVersion">v0.1.0-alpha.79</span> © 2026 Ian Dorsey · Open source under the MIT License
       </footer>
     </div>
 
@@ -834,6 +841,6 @@
         }
       };
     </script>
-    <script src="/app.js?v=0.1.0-alpha.71" defer></script>
+    <script src="/app.js?v=0.1.0-alpha.79" defer></script>
   </body>
 </html>
