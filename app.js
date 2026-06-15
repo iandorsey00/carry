@@ -1,6 +1,6 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-alpha.79";
+const APP_VERSION = "0.1.0-alpha.80";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 const GAMES_STORAGE_KEY = "carry.games.v1";
@@ -3141,6 +3141,8 @@ function cacheElements() {
   els.copyScratchPlain = document.querySelector("#copyScratchPlain");
   els.copyScratchLatex = document.querySelector("#copyScratchLatex");
   els.copyScratchMarkdown = document.querySelector("#copyScratchMarkdown");
+  els.exportScratchImage = document.querySelector("#exportScratchImage");
+  els.shareScratchImage = document.querySelector("#shareScratchImage");
   els.exportScratchLatex = document.querySelector("#exportScratchLatex");
   els.importScratchLatex = document.querySelector("#importScratchLatex");
   els.scratchpadToolbar = document.querySelector(".scratchpad-toolbar");
@@ -10721,6 +10723,8 @@ function bindEvents() {
   els.copyScratchPlain.addEventListener("click", () => copyScratchpad("plain"));
   els.copyScratchLatex.addEventListener("click", () => copyScratchpad("latex"));
   els.copyScratchMarkdown.addEventListener("click", () => copyScratchpad("markdown"));
+  els.exportScratchImage.addEventListener("click", exportScratchpadImage);
+  els.shareScratchImage.addEventListener("click", shareScratchpadImage);
   els.exportScratchLatex.addEventListener("click", exportScratchpadLatex);
   els.importScratchLatex.addEventListener("change", importScratchpadLatex);
   els.sudokuBoard.addEventListener("click", (event) => {
@@ -12171,13 +12175,179 @@ function exportScratchpadLatex() {
   const pad = activeScratchpad();
   const title = safeFilename(pad?.title || "carry-scratchpad");
   const blob = new Blob([scratchpadLatexText()], { type: "application/x-tex" });
+  downloadBlob(blob, `${title}.tex`);
+  setScratchpadStatus("LaTeX exported.");
+}
+
+async function exportScratchpadImage() {
+  const snapshot = await scratchpadPreviewSnapshot();
+  if (!snapshot) {
+    setScratchpadStatus("Nothing to export yet.");
+    return;
+  }
+
+  downloadBlob(snapshot.svgBlob, snapshot.svgName);
+  setScratchpadStatus("Rendered preview exported as SVG.");
+}
+
+async function shareScratchpadImage() {
+  const snapshot = await scratchpadPreviewSnapshot();
+  if (!snapshot) {
+    setScratchpadStatus("Nothing to share yet.");
+    return;
+  }
+
+  try {
+    const file = new File([snapshot.svgBlob], snapshot.svgName, { type: "image/svg+xml" });
+    if (navigator.share && (!navigator.canShare || navigator.canShare({ files: [file] }))) {
+      await navigator.share({
+        files: [file],
+        title: activeScratchpad()?.title || "Carry scratchpad"
+      });
+      setScratchpadStatus("Rendered preview shared.");
+      return;
+    }
+
+    if (navigator.clipboard?.write && window.ClipboardItem) {
+      await navigator.clipboard.write([new window.ClipboardItem({ "image/svg+xml": snapshot.svgBlob })]);
+      setScratchpadStatus("Rendered preview copied as an SVG image.");
+      return;
+    }
+
+    downloadBlob(snapshot.svgBlob, snapshot.svgName);
+    setScratchpadStatus("Sharing is not available here; SVG image downloaded instead.");
+  } catch (error) {
+    if (error?.name === "AbortError") {
+      setScratchpadStatus("Share cancelled.");
+      return;
+    }
+    console.error(error);
+    downloadBlob(snapshot.svgBlob, snapshot.svgName);
+    setScratchpadStatus("Image sharing failed; SVG image downloaded instead.");
+  }
+}
+
+async function scratchpadPreviewSnapshot() {
+  const pad = activeScratchpad();
+  const preview = els.scratchpadPreview;
+  if (!preview || !preview.textContent.trim()) return null;
+  if (document.fonts?.ready) await document.fonts.ready;
+  const title = safeFilename(pad?.title || "carry-scratchpad");
+  const width = Math.ceil(Math.max(preview.scrollWidth, preview.clientWidth, 360));
+  const height = Math.ceil(Math.max(preview.scrollHeight, preview.clientHeight, 120));
+  return {
+    width,
+    height,
+    svgName: `${title}.svg`,
+    svgBlob: scratchpadPreviewSvgBlob(preview, width, height)
+  };
+}
+
+function scratchpadPreviewSvgBlob(preview, width, height) {
+  const clone = preview.cloneNode(true);
+  clone.removeAttribute("id");
+  clone.setAttribute("aria-live", "off");
+  clone.style.width = `${width}px`;
+  clone.style.minHeight = `${height}px`;
+  clone.style.height = "auto";
+
+  const wrapper = document.createElement("div");
+  wrapper.setAttribute("xmlns", "http://www.w3.org/1999/xhtml");
+  wrapper.className = "scratchpad-image-root";
+  wrapper.style.width = `${width}px`;
+  wrapper.style.minHeight = `${height}px`;
+
+  const style = document.createElement("style");
+  style.textContent = scratchpadImageCss();
+  wrapper.append(style, clone);
+
+  const content = new XMLSerializer().serializeToString(wrapper);
+  const svg = [
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`,
+    `<foreignObject width="100%" height="100%">${content}</foreignObject>`,
+    "</svg>"
+  ].join("");
+  return new Blob([svg], { type: "image/svg+xml;charset=utf-8" });
+}
+
+function scratchpadImageCss() {
+  const root = getComputedStyle(document.documentElement);
+  const text = root.getPropertyValue("--text").trim() || "#171717";
+  const muted = root.getPropertyValue("--muted").trim() || "#60616a";
+  const surface = root.getPropertyValue("--surface").trim() || "#ffffff";
+  const line = root.getPropertyValue("--line").trim() || "#d9d9de";
+  const font = root.getPropertyValue("--font").trim() || "Inter, Arial, sans-serif";
+  const mathFont = root.getPropertyValue("--math-font").trim() || "STIX Two Math, Cambria Math, Times New Roman, serif";
+
+  return `
+    * { box-sizing: border-box; }
+    .scratchpad-image-root {
+      width: 100%;
+      min-height: 100%;
+      background: ${surface};
+      color: ${text};
+      font-family: ${font};
+    }
+    .scratchpad-preview {
+      width: 100%;
+      min-height: 0;
+      padding: 16px;
+      border: 1px solid ${line};
+      border-radius: 8px;
+      background: ${surface};
+      overflow: visible;
+    }
+    .scratch-line {
+      display: grid;
+      grid-template-columns: 32px minmax(0, 1fr);
+      gap: 12px;
+      min-height: 28px;
+      align-items: baseline;
+    }
+    .scratch-line-number {
+      color: ${muted};
+      font-size: 12px;
+      font-weight: 700;
+      text-align: right;
+      user-select: none;
+    }
+    .scratch-line-math {
+      min-width: 0;
+      font-family: ${mathFont};
+      font-size: 20px;
+      line-height: 1.45;
+      overflow-wrap: anywhere;
+    }
+    .scratch-line-math-aligned {
+      display: grid;
+      grid-template-columns: minmax(4ch, 1fr) auto minmax(0, 1.4fr);
+      gap: 0.28em;
+      align-items: baseline;
+    }
+    .scratch-align-left { justify-self: end; min-width: 0; }
+    .scratch-align-equals { justify-self: center; }
+    .scratch-align-right { justify-self: start; min-width: 0; }
+    .scratch-mathml-line {
+      display: inline math;
+      font-family: ${mathFont};
+      font-size: 1em;
+      math-style: normal;
+      vertical-align: -0.08em;
+    }
+    math {
+      font-family: ${mathFont};
+      math-style: normal;
+    }
+  `;
+}
+
+function downloadBlob(blob, filename) {
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement("a");
   anchor.href = url;
-  anchor.download = `${title}.tex`;
+  anchor.download = filename;
   anchor.click();
   URL.revokeObjectURL(url);
-  setScratchpadStatus("LaTeX exported.");
 }
 
 function importScratchpadLatex(event) {
