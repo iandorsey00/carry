@@ -9,10 +9,14 @@
       content="Carry is a local-first math, physics, scratchpad, and puzzle learning studio for focused browser-based practice."
     >
     <title>Carry</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="icon" type="image/png" sizes="512x512" href="/assets/carry-icon.png">
     <link rel="apple-touch-icon" href="/assets/carry-icon.png">
     <link rel="manifest" href="/manifest.webmanifest">
-    <link rel="stylesheet" href="/styles.css?v=0.1.0-alpha.80">
+    <link rel="stylesheet" href="/styles.css?v=0.1.0-alpha.82">
   </head>
   <body>
     <div class="app-shell">
@@ -358,35 +362,48 @@
             </div>
 
             <div class="tool-pane" id="randomNumberTool" data-tool-panel="random-number">
-              <div class="tool-controls" aria-label="Random number settings">
-                <label>
-                  <span>Minimum</span>
-                  <input id="randomNumberMin" type="number" value="0" inputmode="decimal">
-                </label>
-                <label>
-                  <span>Maximum</span>
-                  <input id="randomNumberMax" type="number" value="99" inputmode="decimal">
-                </label>
-                <label class="option-row compact-option">
-                  <input id="randomNumberDecimals" type="checkbox">
-                  <span>Allow decimals</span>
-                </label>
-                <label>
-                  <span>Places</span>
-                  <select id="randomNumberPlaces">
-                    <option value="1">1</option>
-                    <option value="2" selected>2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                  </select>
-                </label>
-                <label class="option-row compact-option">
-                  <input id="randomNumberAutoCopy" type="checkbox">
-                  <span>Copy automatically</span>
-                </label>
-              </div>
+              <section class="random-settings" aria-label="Random number settings">
+                <div class="random-setting-group">
+                  <h3>Range</h3>
+                  <div class="random-range-fields">
+                    <label>
+                      <span>Minimum</span>
+                      <input id="randomNumberMin" type="number" value="0" inputmode="decimal">
+                    </label>
+                    <label>
+                      <span>Maximum</span>
+                      <input id="randomNumberMax" type="number" value="99" inputmode="decimal">
+                    </label>
+                  </div>
+                </div>
+
+                <div class="random-setting-group">
+                  <h3>Format</h3>
+                  <label class="switch-row">
+                    <input id="randomNumberDecimals" type="checkbox">
+                    <span>Allow decimals</span>
+                  </label>
+                  <label class="random-places-field">
+                    <span>Places</span>
+                    <select id="randomNumberPlaces">
+                      <option value="1">1</option>
+                      <option value="2" selected>2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                      <option value="6">6</option>
+                    </select>
+                  </label>
+                </div>
+
+                <div class="random-setting-group">
+                  <h3>Output</h3>
+                  <label class="switch-row">
+                    <input id="randomNumberAutoCopy" type="checkbox">
+                    <span>Auto-copy</span>
+                  </label>
+                </div>
+              </section>
 
               <div class="tool-status" id="randomNumberStatus" aria-live="polite">
                 Range 0 to 99, whole numbers only.
@@ -773,7 +790,7 @@
       </main>
 
       <footer class="site-footer">
-        Carry <span id="appVersion">v0.1.0-alpha.80</span> © 2026 Ian Dorsey · Open source under the MIT License
+        Carry <span id="appVersion">v0.1.0-alpha.82</span> © 2026 Ian Dorsey · Open source under the MIT License
       </footer>
     </div>
 
@@ -847,6 +864,6 @@
         }
       };
     </script>
-    <script src="/app.js?v=0.1.0-alpha.80" defer></script>
+    <script src="/app.js?v=0.1.0-alpha.82" defer></script>
   </body>
 </html>
