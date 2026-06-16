@@ -1,6 +1,6 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-alpha.82";
+const APP_VERSION = "0.1.0-alpha.83";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 const GAMES_STORAGE_KEY = "carry.games.v1";
@@ -9711,13 +9711,17 @@ function displayMathText(value) {
 }
 
 function hasMathSyntax(text) {
-  return /[\^πθ∫≤≥≠≈≡∈∉⊂⊆∪∩∀∃∴∵⊕⊢⊨⊥⊤ℕℤℚℝℂ=+\-*/×·/]|[A-Za-z]\d|\d[A-Za-z]|\([^)]+,[^)]+\)|\{[^}]+\}|\b[A-Za-z]\([A-Za-z0-9]+\)|\b(?:sin|cos|tan|sec|csc|cot|arcsin|arccos|arctan|log|ln|lim)\b/i.test(text);
+  const value = String(text || "");
+  const operand = String.raw`(?:\d+(?:\.\d+)?[A-Za-zπθ]?|[A-Za-zπθ]|ℕ|ℤ|ℚ|ℝ|ℂ|\([^)]+\)|\{[^}]+\})`;
+  const expression = new RegExp(String.raw`(?<![A-Za-z])${operand}\s*(?:[+\-*/×·]|\\bmod\\b)\s*${operand}(?![A-Za-z])`, "i");
+  const relation = new RegExp(String.raw`(?<![A-Za-z])${operand}\s*(?:=|≤|≥|≠|≈|≡|<|>|∈|∉|⊂|⊆)\s*${operand}(?![A-Za-z])`, "i");
+  return /[\^πθ∫≤≥≠≈≡∈∉⊂⊆∪∩∀∃∴∵⊕⊢⊨⊥⊤ℕℤℚℝℂ×·]|[A-Za-z]\d|\d[A-Za-z]|\([^)]+,[^)]+\)|\{[^}]+\}|\b[A-Za-z]\([A-Za-z0-9]+\)|\b(?:sin|cos|tan|sec|csc|cot|arcsin|arccos|arctan|log|ln|lim)\b/i.test(value) || expression.test(value) || relation.test(value);
 }
 
 function appendMathSegment(element, text) {
   if (!text) return;
   const operand = String.raw`(?:\d+(?:\.\d+)?[A-Za-zπθ](?:\^\{?[-A-Za-z0-9πθ]+\}?)?|[A-Za-zπθ](?:\^\{?[-A-Za-z0-9πθ]+\}?)?|\d+(?:\.\d+)?)`;
-  const expression = String.raw`${operand}(?:\s*[+\-*/×·]\s*${operand})+`;
+  const expression = String.raw`(?<![A-Za-z])${operand}(?:\s*[+\-*/×·]\s*${operand})+(?![A-Za-z])`;
   const parenthesizedExpression = String.raw`\(\s*${expression}\s*\)`;
   const relation = String.raw`(?<![A-Za-z])(?:[A-Za-z]\([A-Za-z0-9]+\)|[A-Za-zπθℕℤℚℝℂ])\s*(?:=|≤|≥|≠|≈|≡|<|>|∈|∉|⊂|⊆)\s*(?:\{[^}]+\}|[^,.;?]+)`;
   const functionCall = String.raw`\b(?:sin|cos|tan|sec|csc|cot|arcsin|arccos|arctan|log|ln|lim)\s*[A-Za-zθπ]?\b`;
