@@ -1,6 +1,6 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-alpha.83";
+const APP_VERSION = "0.1.0-alpha.84";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 const GAMES_STORAGE_KEY = "carry.games.v1";
@@ -3005,10 +3005,54 @@ function supplementBroadPractice() {
   ]);
 }
 
+function createLessonQaReport() {
+  const conceptReports = Object.values(conceptWorkspaces).map((workspace) => {
+    const problems = workspace.problems || [];
+    const missingHint = problems.filter((problem) => !problem.hint).length;
+    const missingFeedback = problems.filter((problem) => !problem.feedback).length;
+    const explicitChoiceCount = problems.filter((problem) => Array.isArray(problem.choices) && problem.choices.length >= 2).length;
+    return {
+      id: workspace.id,
+      title: workspace.title,
+      topic: workspace.topic,
+      type: workspace.type,
+      problemCount: problems.length,
+      explicitChoiceCount,
+      generatedChoiceCount: problems.length - explicitChoiceCount,
+      missingHint,
+      missingFeedback,
+      needsBetaPass: problems.length < 8 || missingHint > 0 || missingFeedback > 0
+    };
+  }).sort((left, right) => left.id.localeCompare(right.id));
+
+  const lowPractice = conceptReports.filter((item) => item.problemCount < 8).map((item) => item.id);
+  const missingFeedback = conceptReports.filter((item) => item.missingFeedback > 0).map((item) => `${item.id} (${item.missingFeedback})`);
+  const missingHints = conceptReports.filter((item) => item.missingHint > 0).map((item) => `${item.id} (${item.missingHint})`);
+
+  return {
+    version: APP_VERSION,
+    conceptLessonCount: conceptReports.length,
+    longOperationProblemCounts: {
+      addition: additionProblemSet.length,
+      subtraction: subtractionProblemSet.length,
+      multiplication: multiplicationProblemSet.length,
+      division: divisionProblemSet.length,
+      divisionRemainders: divisionRemainderProblemSet.length
+    },
+    betaTargets: {
+      lowPractice,
+      missingHints,
+      missingFeedback
+    },
+    lessons: conceptReports
+  };
+}
+
 const els = {};
 
 document.addEventListener("DOMContentLoaded", () => {
   cacheElements();
+  window.carryLessonQA = createLessonQaReport;
   if (els.appVersion) els.appVersion.textContent = `v${APP_VERSION}`;
   const routeState = resolveRouteFromPath();
   state.activeSurface = routeState?.surface || state.scratchpads.activeSurface || "learn";
@@ -8112,11 +8156,17 @@ function renderConceptGrid(model) {
 
   const answerTitle = document.createElement("div");
   answerTitle.className = "concept-answer-title";
-  answerTitle.textContent = model.cells[0].choices?.length ? "Choose an answer" : "Enter an answer";
+  answerTitle.textContent = answerTitleForModel(model);
 
   const input = createConceptAnswerInput(model);
 
   answerPanel.append(answerTitle);
+  if (model.cells[0].choices?.length) {
+    const answerNote = document.createElement("p");
+    answerNote.className = "concept-answer-note";
+    answerNote.textContent = answerNoteForMode();
+    answerPanel.append(answerNote);
+  }
   if (model.cells[0].choices?.length) {
     const choiceGrid = document.createElement("div");
     choiceGrid.className = "concept-choice-grid";
@@ -8162,6 +8212,16 @@ function renderConceptGrid(model) {
   els.grid.append(prompt);
 }
 
+function answerTitleForModel(model) {
+  return model.cells[0].choices?.length ? "Choose one answer" : "Enter the answer";
+}
+
+function answerNoteForMode() {
+  if (state.mode === "guided") return "Guided checks each choice as you go.";
+  if (state.mode === "practice") return "Choose an answer, then press Check or Return.";
+  return "Try a choice freely. Press Check when you want feedback.";
+}
+
 function createConceptAnswerInput(model) {
   const input = document.createElement("input");
   input.className = "digit-input concept-answer-input";
@@ -8182,7 +8242,6 @@ function createConceptAnswerInput(model) {
   input.addEventListener("input", (event) => {
     event.target.value = normalizeAnswerInput(event.target.value);
     if (state.mode === "guided") validateGuidedConceptInput(event.target);
-    if (state.mode === "practice") validateInput(event.target, false);
     if (state.mode === "explore") markExploreInput(event.target);
   });
   input.setAttribute("oninput", "document.dispatchEvent(new CustomEvent('carry-concept-input-command', { detail: this }))");
@@ -8483,7 +8542,7 @@ function selectConceptChoice(input, value) {
   input.classList.remove("incorrect", "correct", "hint");
   syncConceptChoiceButtons(input);
   if (state.mode === "guided") validateGuidedConceptInput(input);
-  if (state.mode === "practice") validateInput(input, false);
+  if (state.mode === "practice") setStatus("Choice selected. Press Check or Return.", "");
   if (state.mode === "explore") markExploreInput(input);
 }
 
@@ -10280,7 +10339,6 @@ document.addEventListener("carry-concept-input-command", (event) => {
   if (!input?.classList?.contains("digit-input")) return;
   input.value = normalizeAnswerInput(input.value);
   if (state.mode === "guided") validateGuidedConceptInput(input);
-  if (state.mode === "practice") validateInput(input, false);
   if (state.mode === "explore") markExploreInput(input);
 });
 

@@ -2469,8 +2469,10 @@ button {
 .concept-answer-panel {
   display: grid;
   gap: 12px;
-  padding-top: 16px;
-  border-top: 1px solid var(--line);
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-muted);
 }
 
 .concept-answer-title {
@@ -2478,6 +2480,13 @@ button {
   font-size: 13px;
   font-weight: 800;
   text-transform: uppercase;
+}
+
+.concept-answer-note {
+  margin: -6px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.35;
 }
 
 .concept-answer-input {
@@ -2531,6 +2540,7 @@ button {
   color: var(--text);
   cursor: pointer;
   font-weight: 800;
+  line-height: 1.2;
   text-align: center;
 }
 

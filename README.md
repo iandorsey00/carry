@@ -1,6 +1,6 @@
 # Carry
 
-Version: `0.1.0-alpha.83`
+Version: `0.1.0-alpha.84`
 
 Carry is a local-first math, physics, scratchpad, and puzzle learning studio designed to run fully in the browser.
 
@@ -34,6 +34,10 @@ Carry uses pre-1.0 semantic versions while the curriculum and interaction model 
 - Algebra, Geometry, Trigonometry, Precalculus, Calculus, Differential Equations, Linear Algebra, Proofs, Set Theory, Number Theory, Probability, Real Analysis, and Abstract Algebra helpers focus on simple transformations, systems, factoring, introductory quadratics, shape facts, measurement, coordinate reasoning, proof basics, exact trig relationships, function behavior, graph transformations, early advanced algebra, limits, rates of change, accumulation, series, slope fields, separable equations, introductory differential-equation models, vectors, matrices, determinants, eigenvectors, core proof patterns, set language, relations, countability, divisibility, congruence, probability language, counting, conditional probability, random variables, real-number rigor, convergence, continuity, differentiability, integration, groups, rings, fields, homomorphisms, and algebraic examples before broader advanced features are added.
 
 Future topics can register their own workspace, notation renderer, validation logic, hint system, and progress hooks without adding account infrastructure.
+
+## Beta QA
+
+Run `carryLessonQA()` in the browser console to inspect concept lesson coverage, missing hints or feedback, generated choice usage, and long-operation problem counts. Use this as the first pass for section-by-section beta hardening.
 
 ## Deploy
 
