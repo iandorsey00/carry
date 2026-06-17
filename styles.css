@@ -2489,6 +2489,21 @@ button {
   line-height: 1.35;
 }
 
+.concept-check-button {
+  justify-self: end;
+  min-width: 112px;
+  min-height: 44px;
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 800;
+}
+
+.concept-check-button:hover {
+  border-color: var(--accent-strong);
+  background: var(--accent-strong);
+}
+
 .concept-answer-input {
   width: 100%;
   min-width: 0;

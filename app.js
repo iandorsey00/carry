@@ -1,6 +1,6 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-alpha.84";
+const APP_VERSION = "0.1.0-alpha.89";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 const GAMES_STORAGE_KEY = "carry.games.v1";
@@ -239,6 +239,25 @@ const topicGroups = [
           { id: "probability.counting", title: "Counting" },
           { id: "probability.conditional-probability", title: "Conditional probability" },
           { id: "probability.random-variables", title: "Random variables" }
+        ]
+      }
+    ]
+  },
+  {
+    name: "Statistics",
+    sections: [
+      {
+        title: "Data and Inference",
+        lessons: [
+          { id: "statistics.data-summaries", title: "Data summaries" },
+          { id: "statistics.center-spread", title: "Center and spread" },
+          { id: "statistics.displays", title: "Data displays" },
+          { id: "statistics.variance-standard-deviation", title: "Variance and standard deviation" },
+          { id: "statistics.normal-distribution", title: "Normal distribution" },
+          { id: "statistics.binomial-distribution", title: "Binomial distribution" },
+          { id: "statistics.correlation-regression", title: "Correlation and regression" },
+          { id: "statistics.confidence-intervals", title: "Confidence intervals" },
+          { id: "statistics.sampling-inference", title: "Sampling and inference" }
         ]
       }
     ]
@@ -2090,6 +2109,171 @@ const probabilityConceptWorkspaces = {
   }
 };
 
+const statisticsConceptWorkspaces = {
+  "statistics.data-summaries": {
+    id: "statistics.data-summaries",
+    topic: "Statistics",
+    title: "Data summaries",
+    type: "concept",
+    figure: "statistics-data-summaries",
+    intro: [
+      "Statistics starts by turning data into summaries that can be compared.",
+      "A variable is a measured feature, such as height, time, score, or category.",
+      "A data set should keep the context: what was measured, from whom, and in what units."
+    ],
+    problems: [
+      { prompt: "In the data set 4, 7, 9, how many observations are there?", answer: "3", hint: "Count the listed values.", label: "observation count", feedback: "Each listed value is one observation." },
+      { prompt: "A column labeled height in centimeters is categorical or quantitative?", answer: "quantitative", choices: [{ value: "quantitative", label: "quantitative" }, { value: "categorical", label: "categorical" }, { value: "sample", label: "sample" }, { value: "outlier", label: "outlier" }], hint: "Measurements with units are quantitative.", label: "variable type", feedback: "Quantitative variables measure amounts." },
+      { prompt: "A column labeled favorite color is categorical or quantitative?", answer: "categorical", choices: [{ value: "categorical", label: "categorical" }, { value: "quantitative", label: "quantitative" }, { value: "mean", label: "mean" }, { value: "range", label: "range" }], hint: "Color names are categories, not numerical measurements.", label: "categorical variable", feedback: "Categorical variables sort observations into groups." },
+      { prompt: "For 2, 5, 8, what is the total?", answer: "15", hint: "Add the values before finding many summaries.", label: "data total", feedback: "Totals are often the first step toward a mean." }
+    ]
+  },
+  "statistics.center-spread": {
+    id: "statistics.center-spread",
+    topic: "Statistics",
+    title: "Center and spread",
+    type: "concept",
+    figure: "statistics-center-spread",
+    intro: [
+      "Center describes a typical value.",
+      "Spread describes how far values vary from each other.",
+      "Mean, median, range, and interquartile range answer different questions about the same data."
+    ],
+    problems: [
+      { prompt: "Find the mean of 2, 4, 6.", answer: "4", hint: "Add to get 12, then divide by 3.", label: "mean", feedback: "Mean is total divided by number of values." },
+      { prompt: "Find the median of 3, 9, 10.", answer: "9", hint: "The median is the middle value after sorting.", label: "median", feedback: "Median is the middle ordered value." },
+      { prompt: "Find the range of 5, 8, 12.", answer: "7", hint: "Subtract smallest from largest: 12 - 5.", label: "range", feedback: "Range is largest minus smallest." },
+      { prompt: "Which summary is more resistant to one very large outlier: mean or median?", answer: "median", choices: [{ value: "median", label: "median" }, { value: "mean", label: "mean" }, { value: "range", label: "range" }, { value: "total", label: "total" }], hint: "The median depends on order, not the size of one extreme value.", label: "resistant center", feedback: "Median is resistant to outliers." }
+    ]
+  },
+  "statistics.displays": {
+    id: "statistics.displays",
+    topic: "Statistics",
+    title: "Data displays",
+    type: "concept",
+    figure: "statistics-displays",
+    intro: [
+      "A data display should match the type of data and the question being asked.",
+      "Bar charts compare categories.",
+      "Histograms show the shape of quantitative data by grouping values into intervals."
+    ],
+    problems: [
+      { prompt: "Which display is best for comparing favorite colors: bar chart or histogram?", answer: "bar chart", choices: [{ value: "bar chart", label: "bar chart" }, { value: "histogram", label: "histogram" }, { value: "box plot", label: "box plot" }, { value: "scatterplot", label: "scatterplot" }], hint: "Favorite color is categorical.", label: "categorical display", feedback: "Bar charts compare categories." },
+      { prompt: "Which display groups numerical values into intervals?", answer: "histogram", choices: [{ value: "histogram", label: "histogram" }, { value: "bar chart", label: "bar chart" }, { value: "pie chart", label: "pie chart" }, { value: "table", label: "table" }], hint: "Histograms group quantitative values into bins.", label: "histogram meaning", feedback: "Histograms show distribution shape." },
+      { prompt: "A scatterplot is best for one variable or two quantitative variables?", answer: "two quantitative variables", choices: [{ value: "two quantitative variables", label: "two quantitative variables" }, { value: "one category", label: "one category" }, { value: "one total", label: "one total" }, { value: "one label", label: "one label" }], hint: "Scatterplots show pairs of numbers.", label: "scatterplot variables", feedback: "Scatterplots show relationships between two quantitative variables." },
+      { prompt: "In a histogram, taller bars mean more values or larger values?", answer: "more values", choices: [{ value: "more values", label: "more values" }, { value: "larger values", label: "larger values" }, { value: "more categories", label: "more categories" }, { value: "no data", label: "no data" }], hint: "Bar height counts how many observations are in the interval.", label: "histogram bar height", feedback: "Histogram height represents frequency." }
+    ]
+  },
+  "statistics.variance-standard-deviation": {
+    id: "statistics.variance-standard-deviation",
+    topic: "Statistics",
+    title: "Variance and standard deviation",
+    type: "concept",
+    figure: "statistics-variance",
+    intro: [
+      "Variance and standard deviation measure how far data values are from the mean.",
+      "A deviation is one value minus the mean.",
+      "Standard deviation returns spread to the original units, which makes it easier to interpret."
+    ],
+    problems: [
+      { prompt: "For the data 2, 4, 6, the mean is 4. What is the deviation of 6?", answer: "2", choices: [{ value: "2", label: "2" }, { value: "-2", label: "-2" }, { value: "4", label: "4" }, { value: "6", label: "6" }], hint: "Deviation means value minus mean.", label: "deviation", feedback: "6 - 4 = 2." },
+      { prompt: "Which has more spread: 9, 10, 11 or 2, 10, 18?", answer: "2,10,18", choices: [{ value: "2,10,18", label: "2, 10, 18" }, { value: "9,10,11", label: "9, 10, 11" }, { value: "same", label: "same" }, { value: "cannot tell", label: "cannot tell" }], hint: "Compare distance from the center value 10.", label: "spread comparison", feedback: "2 and 18 are much farther from 10." },
+      { prompt: "Standard deviation is measured in original units or squared units?", answer: "original units", choices: [{ value: "original units", label: "original units" }, { value: "squared units", label: "squared units" }, { value: "percent only", label: "percent only" }, { value: "no units", label: "no units" }], hint: "Variance uses squared units; standard deviation takes the square root.", label: "standard deviation units", feedback: "Standard deviation is easier to interpret because it uses original units." },
+      { prompt: "If every value is the same, the standard deviation is what number?", answer: "0", choices: [{ value: "0", label: "0" }, { value: "1", label: "1" }, { value: "the mean", label: "the mean" }, { value: "negative", label: "negative" }], hint: "No value is away from the mean.", label: "zero spread", feedback: "No spread gives standard deviation 0." }
+    ]
+  },
+  "statistics.normal-distribution": {
+    id: "statistics.normal-distribution",
+    topic: "Statistics",
+    title: "Normal distribution",
+    type: "concept",
+    figure: "statistics-normal",
+    intro: [
+      "A normal distribution is bell-shaped and symmetric.",
+      "The mean marks the center of the curve.",
+      "Standard deviation describes typical distance from the mean."
+    ],
+    problems: [
+      { prompt: "In a normal distribution, the mean is at the center or an edge?", answer: "center", choices: [{ value: "center", label: "center" }, { value: "edge", label: "edge" }, { value: "left tail", label: "left tail" }, { value: "right tail", label: "right tail" }], hint: "A normal curve is symmetric around its mean.", label: "normal center", feedback: "The mean is the center of a normal distribution." },
+      { prompt: "A larger standard deviation makes the normal curve wider or narrower?", answer: "wider", choices: [{ value: "wider", label: "wider" }, { value: "narrower", label: "narrower" }, { value: "shifted left", label: "shifted left" }, { value: "shifted right", label: "shifted right" }], hint: "More spread makes the curve wider.", label: "standard deviation spread", feedback: "Standard deviation controls spread." },
+      { prompt: "About what percent of normal data lies within one standard deviation of the mean?", answer: "68%", answers: ["68%", "68"], choices: [{ value: "68%", label: "68%" }, { value: "50%", label: "50%" }, { value: "95%", label: "95%" }, { value: "100%", label: "100%" }], hint: "Use the 68-95-99.7 rule.", label: "empirical rule one sd", feedback: "The empirical rule starts with about 68% within one standard deviation." },
+      { prompt: "A z-score tells distance from the mean in what units?", answer: "standard deviations", choices: [{ value: "standard deviations", label: "standard deviations" }, { value: "raw units", label: "raw units" }, { value: "percentiles", label: "percentiles" }, { value: "observations", label: "observations" }], hint: "z-scores measure standard deviations from the mean.", label: "z score units", feedback: "A z-score is measured in standard deviations." }
+    ]
+  },
+  "statistics.binomial-distribution": {
+    id: "statistics.binomial-distribution",
+    topic: "Statistics",
+    title: "Binomial distribution",
+    type: "concept",
+    figure: "statistics-binomial",
+    intro: [
+      "A binomial model counts successes in a fixed number of independent trials.",
+      "Each trial has the same success probability.",
+      "Binomial questions appear in quality control, surveys, games, and repeated yes/no events."
+    ],
+    problems: [
+      { prompt: "A binomial trial has two outcomes or many measured values?", answer: "two outcomes", choices: [{ value: "two outcomes", label: "two outcomes" }, { value: "many measured values", label: "many measured values" }, { value: "no probability", label: "no probability" }, { value: "only geometry", label: "only geometry" }], hint: "Think success/failure.", label: "binomial outcome type", feedback: "Each binomial trial is usually described as success or failure." },
+      { prompt: "If a coin is flipped 5 times, what is n in the binomial model?", answer: "5", choices: [{ value: "5", label: "5" }, { value: "2", label: "2" }, { value: "1/2", label: "1/2" }, { value: "10", label: "10" }], hint: "n is the number of trials.", label: "binomial n", feedback: "Five flips means n = 5 trials." },
+      { prompt: "For a fair coin, what is p for heads?", answer: "1/2", answers: ["1/2", "0.5"], choices: [{ value: "1/2", label: "1/2" }, { value: "1/5", label: "1/5" }, { value: "2", label: "2" }, { value: "5", label: "5" }], hint: "p is the probability of success on one trial.", label: "binomial p", feedback: "Heads has probability 1/2 on each fair flip." },
+      { prompt: "In a binomial model, p should stay the same or change every trial?", answer: "same", choices: [{ value: "same", label: "stay the same" }, { value: "change", label: "change every trial" }, { value: "be negative", label: "be negative" }, { value: "be unknown always", label: "be unknown always" }], hint: "The usual binomial model uses the same success probability each time.", label: "constant probability", feedback: "A fixed p is one binomial condition." }
+    ]
+  },
+  "statistics.correlation-regression": {
+    id: "statistics.correlation-regression",
+    topic: "Statistics",
+    title: "Correlation and regression",
+    type: "concept",
+    figure: "statistics-correlation",
+    intro: [
+      "Correlation describes the direction and strength of a linear relationship.",
+      "Regression uses data to model or predict one quantitative variable from another.",
+      "A strong relationship does not automatically prove causation."
+    ],
+    problems: [
+      { prompt: "If taller people tend to weigh more, the association is positive or negative?", answer: "positive", choices: [{ value: "positive", label: "positive" }, { value: "negative", label: "negative" }, { value: "zero", label: "zero" }, { value: "categorical", label: "categorical" }], hint: "Both variables tend to increase together.", label: "positive association", feedback: "Increasing together gives a positive association." },
+      { prompt: "A correlation near 0 means strong linear pattern or weak linear pattern?", answer: "weak linear pattern", choices: [{ value: "weak linear pattern", label: "weak linear pattern" }, { value: "strong linear pattern", label: "strong linear pattern" }, { value: "perfect prediction", label: "perfect prediction" }, { value: "impossible data", label: "impossible data" }], hint: "Correlation measures linear direction and strength.", label: "near zero correlation", feedback: "Correlation near 0 means little linear pattern." },
+      { prompt: "Does correlation by itself prove causation?", answer: "no", answers: ["no", "false"], choices: [{ value: "no", label: "No" }, { value: "yes", label: "Yes" }], hint: "There may be lurking variables or reverse direction.", label: "correlation causation", feedback: "Correlation alone does not prove causation." },
+      { prompt: "A regression line is mainly used to summarize and predict or to list categories?", answer: "summarize and predict", choices: [{ value: "summarize and predict", label: "summarize and predict" }, { value: "list categories", label: "list categories" }, { value: "find exact proof", label: "find exact proof" }, { value: "erase outliers", label: "erase outliers" }], hint: "Regression models a quantitative relationship.", label: "regression purpose", feedback: "Regression gives a compact model for prediction." }
+    ]
+  },
+  "statistics.confidence-intervals": {
+    id: "statistics.confidence-intervals",
+    topic: "Statistics",
+    title: "Confidence intervals",
+    type: "concept",
+    figure: "statistics-confidence",
+    intro: [
+      "A confidence interval gives a plausible range for a population value.",
+      "Intervals combine an estimate with a margin of error.",
+      "Higher confidence usually makes the interval wider."
+    ],
+    problems: [
+      { prompt: "A confidence interval is a single value or a range?", answer: "range", choices: [{ value: "range", label: "range" }, { value: "single value", label: "single value" }, { value: "category", label: "category" }, { value: "proof", label: "proof" }], hint: "Intervals have lower and upper endpoints.", label: "interval meaning", feedback: "A confidence interval is a range of plausible values." },
+      { prompt: "If an estimate is 50 with margin of error 3, the interval is 47 to what?", answer: "53", choices: [{ value: "53", label: "53" }, { value: "50", label: "50" }, { value: "47", label: "47" }, { value: "3", label: "3" }], hint: "Add the margin of error to the estimate.", label: "upper endpoint", feedback: "50 + 3 = 53." },
+      { prompt: "A larger margin of error makes an interval wider or narrower?", answer: "wider", choices: [{ value: "wider", label: "wider" }, { value: "narrower", label: "narrower" }, { value: "unchanged", label: "unchanged" }, { value: "negative", label: "negative" }], hint: "The margin extends both sides of the estimate.", label: "margin width", feedback: "A larger margin of error creates a wider interval." },
+      { prompt: "Higher confidence usually makes the interval wider or narrower?", answer: "wider", choices: [{ value: "wider", label: "wider" }, { value: "narrower", label: "narrower" }, { value: "same width", label: "same width" }, { value: "not a range", label: "not a range" }], hint: "More confidence requires a wider net.", label: "confidence width", feedback: "Higher confidence usually means a wider interval." }
+    ]
+  },
+  "statistics.sampling-inference": {
+    id: "statistics.sampling-inference",
+    topic: "Statistics",
+    title: "Sampling and inference",
+    type: "concept",
+    figure: "statistics-sampling",
+    intro: [
+      "Inference uses sample data to reason about a larger population.",
+      "Random sampling helps reduce bias.",
+      "A statistic describes a sample; a parameter describes a population."
+    ],
+    problems: [
+      { prompt: "A number computed from a sample is called a statistic or a parameter?", answer: "statistic", choices: [{ value: "statistic", label: "statistic" }, { value: "parameter", label: "parameter" }, { value: "outlier", label: "outlier" }, { value: "axis", label: "axis" }], hint: "Statistics come from samples.", label: "sample statistic", feedback: "A statistic describes a sample." },
+      { prompt: "A number describing an entire population is called a statistic or a parameter?", answer: "parameter", choices: [{ value: "parameter", label: "parameter" }, { value: "statistic", label: "statistic" }, { value: "median", label: "median" }, { value: "bar", label: "bar" }], hint: "Parameters describe populations.", label: "population parameter", feedback: "A parameter describes the full population." },
+      { prompt: "Random sampling mainly helps reduce bias or increase decoration?", answer: "reduce bias", choices: [{ value: "reduce bias", label: "reduce bias" }, { value: "increase decoration", label: "increase decoration" }, { value: "change units", label: "change units" }, { value: "remove all uncertainty", label: "remove all uncertainty" }], hint: "Random sampling makes selection less systematic.", label: "random sampling purpose", feedback: "Random sampling helps reduce bias." },
+      { prompt: "Does a larger random sample usually give a more stable estimate?", answer: "yes", answers: ["yes", "true"], choices: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], hint: "Larger samples usually vary less from sample to sample.", label: "sample size stability", feedback: "Larger random samples usually give more stable estimates." }
+    ]
+  }
+};
+
 const realAnalysisConceptWorkspaces = {
   "real-analysis.sets": {
     id: "real-analysis.sets",
@@ -2590,6 +2774,7 @@ const conceptWorkspaces = {
   ...numberTheoryConceptWorkspaces,
   ...graphTheoryConceptWorkspaces,
   ...probabilityConceptWorkspaces,
+  ...statisticsConceptWorkspaces,
   ...realAnalysisConceptWorkspaces,
   ...abstractAlgebraConceptWorkspaces,
   ...physicsConceptWorkspaces
@@ -2613,6 +2798,7 @@ const workspaceRegistry = {
   "Number Theory": { id: "number-theory.placeholders", title: "Divisibility and congruence", status: "planned" },
   "Graph Theory": { id: "graph-theory.placeholders", title: "Graphs and networks", status: "planned" },
   "Probability": { id: "probability.placeholders", title: "Chance and counting", status: "planned" },
+  "Statistics": { id: "statistics.placeholders", title: "Data and inference", status: "planned" },
   "Real Analysis": { id: "real-analysis.placeholders", title: "Definitions and proofs", status: "planned" },
   "Abstract Algebra": { id: "abstract-algebra.placeholders", title: "Groups and examples", status: "planned" },
   "Proofs": { id: "proofs.placeholders", title: "Proof construction", status: "planned" }
@@ -2990,6 +3176,22 @@ function supplementBroadPractice() {
     { prompt: "What is 17 mod 6?", answer: "5", hint: "17 = 6 × 2 + 5.", label: "mod remainder", feedback: "Find the remainder after division." },
     { prompt: "On a 12-hour clock, 8 + 7 lands on what hour?", answer: "3", hint: "15 wraps around to 3.", label: "clock arithmetic", feedback: "Subtract 12 after passing 12." },
     { prompt: "In mod 5 arithmetic, is 12 equivalent to 2?", answer: "yes", answers: ["yes", "true"], hint: "12 and 2 differ by 10.", label: "mod equivalence", feedback: "Numbers are equivalent mod n when their difference is divisible by n." }
+  ]);
+
+  addPractice("statistics.data-summaries", [
+    { prompt: "In 6, 6, 9, 12, how many observations are there?", answer: "4", hint: "Count every listed value, including repeats.", label: "observation count", feedback: "Repeated values are still separate observations." },
+    { prompt: "A variable labeled school grade level is categorical or quantitative?", answer: "categorical", choices: [{ value: "categorical", label: "categorical" }, { value: "quantitative", label: "quantitative" }, { value: "mean", label: "mean" }, { value: "sample size", label: "sample size" }], hint: "Grade level names ordered groups.", label: "grade variable type", feedback: "Grade level is usually treated as categorical or ordinal." }
+  ]);
+
+  addPractice("statistics.center-spread", [
+    { prompt: "Find the mean of 5, 5, 11.", answer: "7", hint: "Add to get 21, then divide by 3.", label: "mean", feedback: "Mean is the arithmetic balance point." },
+    { prompt: "Find the median of 2, 8, 20, 30.", answer: "14", hint: "Average the two middle values: 8 and 20.", label: "median even count", feedback: "With an even count, median is the average of the two middle values." },
+    { prompt: "Find the range of 10, 13, 19, 21.", answer: "11", hint: "Subtract 10 from 21.", label: "range", feedback: "Range measures the full spread from smallest to largest." }
+  ]);
+
+  addPractice("statistics.normal-distribution", [
+    { prompt: "A z-score of -2 is below or above the mean?", answer: "below", choices: [{ value: "below", label: "below" }, { value: "above", label: "above" }, { value: "equal", label: "equal" }, { value: "cannot tell", label: "cannot tell" }], hint: "Negative z-scores are below the mean.", label: "negative z score", feedback: "The sign of a z-score gives direction from the mean." },
+    { prompt: "About what percent of normal data lies within two standard deviations?", answer: "95%", answers: ["95", "95%"], choices: [{ value: "95%", label: "95%" }, { value: "68%", label: "68%" }, { value: "50%", label: "50%" }, { value: "10%", label: "10%" }], hint: "Use the 68-95-99.7 rule.", label: "empirical rule two sd", feedback: "About 95% lies within two standard deviations." }
   ]);
 
   addPractice("real-analysis.sequences", [
@@ -3732,7 +3934,7 @@ function renderWorkspace() {
 }
 
 function workspaceStartStatus(workspace) {
-  if (workspace.type === "concept") return "Choose an answer, then check it.";
+  if (workspace.type === "concept") return state.mode === "guided" ? "Choose one answer." : "Choose an answer, then check it.";
   if (["equation", "inequality", "system", "factoring", "quadratic"].includes(workspace.type)) {
     return "Enter the active step, then check it.";
   }
@@ -5312,7 +5514,7 @@ function renderIntroWorkspace(workspace) {
   state.currentModel = null;
   els.introTitle.textContent = "Overview";
   renderIntroCopy(workspace);
-  els.stepText.textContent = `Read the ${workspace.title.toLowerCase()} guide, then start a problem.`;
+  els.stepText.textContent = `${lessonStudioMove(workspace)} Then start a problem.`;
 }
 
 function renderIntroCopy(workspace) {
@@ -5349,6 +5551,9 @@ function renderIntroCopy(workspace) {
   const sections = document.createElement("div");
   sections.className = "intro-sections";
   sections.append(createIntroSection("Core idea", items), createWorkedExampleSection(workspace));
+
+  const studioMove = lessonStudioItems(workspace);
+  if (studioMove.length) sections.append(createIntroSection("Studio move", studioMove));
 
   const explanation = introExplanationSection(workspace);
   if (explanation?.items?.length) sections.append(createIntroSection(explanation.title, explanation.items));
@@ -5460,6 +5665,58 @@ function createIntroSection(title, items) {
 
   section.append(heading, list);
   return section;
+}
+
+function lessonStudioMove(workspace) {
+  if (workspace.type === "addition") return "Build the sum one column at a time.";
+  if (workspace.type === "subtraction") return "Rewrite the top number only when a borrow is needed.";
+  if (workspace.type === "multiplication") return "Build partial products, then add them.";
+  if (workspace.type === "division") return "Repeat divide, multiply, subtract from left to right.";
+  if (workspace.type === "equation") return "Keep both sides balanced on every row.";
+  if (workspace.type === "inequality") return "Track the comparison sign while you solve.";
+  if (workspace.type === "system") return "Show the method before writing the solution.";
+  if (workspace.type === "quadratic" || workspace.type === "factoring") return "Choose the structure before calculating.";
+  if (workspace.topic === "Statistics") return "Name the data structure before calculating.";
+  return `Review ${workspace.title.toLowerCase()}, then try the prompt.`;
+}
+
+function lessonStudioItems(workspace) {
+  if (workspace.type === "addition") {
+    return [
+      "Treat each column as a small checkpoint.",
+      "Only write a carry when a column total reaches 10 or more."
+    ];
+  }
+
+  if (workspace.type === "subtraction") {
+    return [
+      "Make the top digit large enough before subtracting.",
+      "Use borrow marks to preserve what changed."
+    ];
+  }
+
+  if (workspace.type === "multiplication") {
+    return [
+      "Finish one partial row before starting the next.",
+      "Use place-value zeros to show the row shift."
+    ];
+  }
+
+  if (workspace.type === "division") {
+    return [
+      "Each cycle asks what fits, checks by multiplying, then subtracts.",
+      "Remainders become part of the next partial dividend."
+    ];
+  }
+
+  if (workspace.topic === "Statistics") {
+    return [
+      "First ask what the data values represent.",
+      "Then choose the summary, display, or inference idea that matches the question."
+    ];
+  }
+
+  return [];
 }
 
 function createWorkedExampleSection(workspace) {
@@ -5731,6 +5988,14 @@ function conceptWhyItems(workspace) {
     ];
   }
 
+  if (workspace.topic === "Statistics") {
+    return [
+      "Statistics turns data into summaries, displays, and decisions.",
+      "Good statistical reasoning keeps the context and units attached to the numbers.",
+      "Samples are useful because they help estimate what may be true about a larger population."
+    ];
+  }
+
   if (workspace.topic === "Differential Equations") {
     return [
       "A differential equation describes how a quantity changes, not only what it is.",
@@ -5803,6 +6068,85 @@ function conceptWhyItems(workspace) {
 }
 
 function conceptNoticeItems(workspace) {
+  const specificNotices = {
+    "arithmetic.number-sense": [
+      "Compare numbers from left to right, starting with the largest place.",
+      "Use distance from friendly numbers when a question asks for closest.",
+      "A pattern question depends on the repeated change between terms."
+    ],
+    "arithmetic.integers": [
+      "On the number line, greater means farther right.",
+      "Adding a positive moves right; subtracting a positive moves left.",
+      "For multiplication and division, decide the sign before doing the arithmetic."
+    ],
+    "arithmetic.fractions": [
+      "The denominator names the size of the parts.",
+      "Equivalent fractions multiply or divide top and bottom by the same value.",
+      "When numerators match, the smaller denominator gives larger pieces."
+    ],
+    "arithmetic.decimals": [
+      "Compare decimals by lining up place values.",
+      "Adding a trailing zero can make comparison easier without changing the value.",
+      "Tenths and hundredths are place-value names, not separate number systems."
+    ],
+    "arithmetic.percents": [
+      "Percent means out of 100.",
+      "Use familiar anchors: 50% is half, 25% is a quarter, 10% is one tenth.",
+      "Move between percent, decimal, and fraction forms when one form is easier."
+    ],
+    "arithmetic.ratios": [
+      "A ratio compares two quantities in order.",
+      "Equivalent ratios scale both parts by the same factor.",
+      "Simplifying a ratio is like simplifying a fraction with two named parts."
+    ],
+    "arithmetic.factors-multiples-primes": [
+      "Factors divide evenly into a number.",
+      "Multiples are numbers you land on by repeated multiplication.",
+      "Prime means exactly two positive factors: 1 and itself."
+    ],
+    "arithmetic.order-of-operations": [
+      "Parentheses are handled before the rest of the expression.",
+      "Multiplication and division come before addition and subtraction.",
+      "Operations with the same priority are handled from left to right."
+    ],
+    "arithmetic.word-problems": [
+      "Name what the question asks for before calculating.",
+      "Look for action words and structure: more, left, equal groups, each.",
+      "Check that the final number has the right unit."
+    ],
+    "arithmetic.mixed-review": [
+      "First decide which operation or method fits the question.",
+      "Estimate before exact calculation when numbers are large.",
+      "Use the estimate to reject answers that are far too small or too large."
+    ],
+    "prealgebra.integers": [
+      "Separate sign from size: first decide positive or negative, then calculate.",
+      "Same signs in multiplication or division give a positive result.",
+      "Different signs in multiplication or division give a negative result."
+    ],
+    "prealgebra.exponents": [
+      "The base is the repeated factor.",
+      "The exponent counts how many factors there are.",
+      "Evaluate powers before ordinary multiplication, addition, or subtraction."
+    ],
+    "prealgebra.coordinate-plane": [
+      "Coordinates are written in x, y order.",
+      "The x-coordinate moves horizontally before the y-coordinate moves vertically.",
+      "Quadrants are determined by the signs of x and y."
+    ],
+    "algebra.rational-expressions": [
+      "A rational expression is an algebraic fraction.",
+      "Factor before canceling so you only cancel common factors.",
+      "Excluded values come from the original denominator, even after simplifying."
+    ],
+    "geometry.coordinate": [
+      "Horizontal distance compares x-values.",
+      "Vertical distance compares y-values.",
+      "Midpoints average the x-values and average the y-values separately."
+    ]
+  };
+  if (specificNotices[workspace.id]) return specificNotices[workspace.id];
+
   if (workspace.topic === "Arithmetic" && workspace.id === "arithmetic.place-value") {
     return [
       "Read the digit and its column together.",
@@ -5840,6 +6184,61 @@ function conceptNoticeItems(workspace) {
       "Name the sample space before counting.",
       "The denominator should match the outcomes still possible.",
       "Conditional information can shrink the sample space."
+    ];
+  }
+
+  if (workspace.topic === "Statistics") {
+    const statisticsNotices = {
+      "statistics.data-summaries": [
+        "First identify the variable and whether it is categorical or quantitative.",
+        "Count observations before computing summaries.",
+        "Keep units and context with every data summary."
+      ],
+      "statistics.center-spread": [
+        "Mean uses every value, so outliers can pull it.",
+        "Median uses ordered position, so it is more resistant.",
+        "Spread is separate from center; two data sets can have the same center and different spread."
+      ],
+      "statistics.displays": [
+        "Bar charts compare categories.",
+        "Histograms show the shape of quantitative data.",
+        "Scatterplots show relationships between two quantitative variables."
+      ],
+      "statistics.variance-standard-deviation": [
+        "Deviations compare each value to the mean.",
+        "Variance averages squared deviations.",
+        "Standard deviation is in the original units, so it is usually easier to explain."
+      ],
+      "statistics.normal-distribution": [
+        "Normal curves are symmetric around the mean.",
+        "Standard deviation controls how wide the curve is.",
+        "z-scores measure distance from the mean in standard deviations."
+      ],
+      "statistics.binomial-distribution": [
+        "A binomial model counts successes.",
+        "The number of trials is fixed before observing the data.",
+        "The success probability stays the same for each trial."
+      ],
+      "statistics.correlation-regression": [
+        "Correlation describes linear direction and strength.",
+        "Regression gives a line for summarizing or predicting.",
+        "Association alone does not prove cause."
+      ],
+      "statistics.confidence-intervals": [
+        "An interval has a lower endpoint and an upper endpoint.",
+        "The margin of error extends both directions from the estimate.",
+        "Higher confidence usually means a wider interval."
+      ],
+      "statistics.sampling-inference": [
+        "Samples describe observed data; populations are what you want to learn about.",
+        "Random sampling reduces selection bias.",
+        "Larger random samples usually make estimates more stable, but uncertainty never disappears completely."
+      ]
+    };
+    return statisticsNotices[workspace.id] || [
+      "Identify the data, the summary, and the context.",
+      "Choose a display or statistic that matches the question.",
+      "Remember that sample results still carry uncertainty."
     ];
   }
 
@@ -5896,9 +6295,17 @@ function conceptNoticeItems(workspace) {
 
 function conceptWorkedExampleRows(workspace) {
   const examples = {
+    "arithmetic.number-sense": [
+      { math: "409 < 490", note: "Hundreds match, so compare tens." },
+      { math: "9 > 0", note: "The tens digit decides the larger number." }
+    ],
     "arithmetic.estimation": [
       { math: "296 + 401", note: "Round before calculating." },
       { math: "300 + 400 = 700", note: "Use a nearby estimate." }
+    ],
+    "arithmetic.integers": [
+      { math: "-3 + 8", note: "Start at -3 and move right 8." },
+      { math: "-3 + 8 = 5", note: "The landing point is the sum." }
     ],
     "arithmetic.fractions": [
       { math: "\\frac{8}{12} = \\frac{8 ÷ 4}{12 ÷ 4}", note: "Divide top and bottom by 4." },
@@ -5938,6 +6345,10 @@ function conceptWorkedExampleRows(workspace) {
       { math: "2^5 = 2 × 2 × 2 × 2 × 2", note: "An exponent counts equal factors." },
       { math: "2^5 = 32", note: "Multiply the factors." }
     ],
+    "prealgebra.coordinate-plane": [
+      { math: "(3, -2)", note: "Move 3 right from the origin." },
+      { math: "y = -2", note: "Then move 2 down." }
+    ],
     "algebra.polynomials": [
       { math: "2x^2 + 5x^2 - x = (2 + 5)x^2 - x", note: "Group terms with the same variable and exponent." },
       { math: "(2 + 5)x^2 - x = 7x^2 - x", note: "Combine the squared terms." }
@@ -5945,6 +6356,10 @@ function conceptWorkedExampleRows(workspace) {
     "algebra.rational-expressions": [
       { math: "\\frac{12x}{18} = \\frac{12 ÷ 6}{18 ÷ 6}x", note: "Reduce the numerical factor." },
       { math: "\\frac{12x}{18} = \\frac{2x}{3}", note: "Keep the variable factor." }
+    ],
+    "geometry.coordinate": [
+      { math: "(2, 3) \\to (7, 3)", note: "The y-values match, so the movement is horizontal." },
+      { math: "7 - 2 = 5", note: "Subtract the x-values for horizontal distance." }
     ],
     "trigonometry.right-triangles": [
       { math: "\\sin\\,\\theta = \\frac{\\text{opposite}}{\\text{hypotenuse}}", note: "Choose the side across from the angle." },
@@ -6002,6 +6417,42 @@ function conceptWorkedExampleRows(workspace) {
       { math: "X(H) = 1", note: "Assign a number to heads." },
       { math: "X(T) = 0", note: "Assign a number to tails." },
       { math: "E[X] = \\frac{1}{2}", note: "Average the equally likely values." }
+    ],
+    "statistics.data-summaries": [
+      { math: "4, 7, 9", note: "Each value is one observation." },
+      { math: "n = 3", note: "Count observations before summarizing." }
+    ],
+    "statistics.center-spread": [
+      { math: "\\bar{x} = \\frac{2 + 4 + 6}{3}", note: "Mean is total divided by count." },
+      { math: "\\bar{x} = 4", note: "This mean is the balance point." }
+    ],
+    "statistics.displays": [
+      { math: "\\text{category} \\to \\text{bar chart}", note: "Use bars for categories." },
+      { math: "\\text{quantity} \\to \\text{histogram}", note: "Use intervals for quantitative distributions." }
+    ],
+    "statistics.variance-standard-deviation": [
+      { math: "x - \\bar{x}", note: "A deviation compares a value to the mean." },
+      { math: "\\sigma = \\sqrt{\\text{variance}}", note: "Standard deviation returns spread to original units." }
+    ],
+    "statistics.normal-distribution": [
+      { math: "z = \\frac{x - \\mu}{\\sigma}", note: "A z-score measures distance from the mean." },
+      { math: "z = 1", note: "One standard deviation above the mean." }
+    ],
+    "statistics.binomial-distribution": [
+      { math: "X \\sim \\text{Binomial}(n,p)", note: "X counts successes in n trials." },
+      { math: "n = 5,\\, p = \\frac{1}{2}", note: "Five fair coin flips make a binomial model." }
+    ],
+    "statistics.correlation-regression": [
+      { math: "r > 0", note: "Positive correlation means values tend to increase together." },
+      { math: "\\hat{y} = mx + b", note: "A regression line predicts y from x." }
+    ],
+    "statistics.confidence-intervals": [
+      { math: "\\text{estimate} \\pm \\text{margin}", note: "Intervals extend around an estimate." },
+      { math: "50 \\pm 3 = [47, 53]", note: "Subtract and add the margin of error." }
+    ],
+    "statistics.sampling-inference": [
+      { math: "\\text{sample statistic} \\to \\text{population parameter}", note: "Use a sample to estimate a population value." },
+      { math: "n \\uparrow \\Rightarrow \\text{more stable estimates}", note: "Larger random samples usually vary less." }
     ],
     "real-analysis.sequences": [
       { math: "\\frac{3}{n} \\to 0", note: "The denominator grows without bound." }
@@ -8023,6 +8474,15 @@ function conceptFigureCaption(figure) {
     "probability-counting": "Counting rules organize multi-step choices.",
     "probability-conditional": "Conditional probability narrows what outcomes remain possible.",
     "probability-random-variable": "Random variables assign numbers to outcomes.",
+    "statistics-data-summaries": "Statistics begins by naming variables, observations, and context.",
+    "statistics-center-spread": "Center and spread describe typical value and variability.",
+    "statistics-displays": "Data displays should match the variable type and the question.",
+    "statistics-variance": "Variance and standard deviation measure distance from the mean.",
+    "statistics-normal": "Normal distributions are symmetric and centered at the mean.",
+    "statistics-binomial": "Binomial models count successes across repeated yes-or-no trials.",
+    "statistics-correlation": "Correlation and regression model relationships between quantitative variables.",
+    "statistics-confidence": "Confidence intervals turn an estimate into a plausible range.",
+    "statistics-sampling": "Sampling connects observed data to a larger population.",
     "real-sets": "Intervals and bounds make sets of real numbers precise.",
     "real-sequences": "Sequences converge when their tails stay close to one value.",
     "real-limits": "Epsilon bands make approaching a limit precise.",
@@ -8197,6 +8657,7 @@ function renderConceptGrid(model) {
     answerLabel.append(input);
     answerPanel.append(answerLabel);
   }
+  answerPanel.append(createConceptLocalCheck());
 
   prompt.append(text, answerPanel);
   if (model.workspaceId) {
@@ -8212,13 +8673,22 @@ function renderConceptGrid(model) {
   els.grid.append(prompt);
 }
 
+function createConceptLocalCheck() {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "tool-button compact concept-check-button";
+  button.textContent = "Check";
+  button.addEventListener("click", requestStepCheck);
+  return button;
+}
+
 function answerTitleForModel(model) {
   return model.cells[0].choices?.length ? "Choose one answer" : "Enter the answer";
 }
 
 function answerNoteForMode() {
   if (state.mode === "guided") return "Guided checks each choice as you go.";
-  if (state.mode === "practice") return "Choose an answer, then press Check or Return.";
+  if (state.mode === "practice") return "Choose an answer, then press Check.";
   return "Try a choice freely. Press Check when you want feedback.";
 }
 
@@ -8542,7 +9012,7 @@ function selectConceptChoice(input, value) {
   input.classList.remove("incorrect", "correct", "hint");
   syncConceptChoiceButtons(input);
   if (state.mode === "guided") validateGuidedConceptInput(input);
-  if (state.mode === "practice") setStatus("Choice selected. Press Check or Return.", "");
+  if (state.mode === "practice") setStatus("Choice selected. Press Check.", "");
   if (state.mode === "explore") markExploreInput(input);
 }
 
@@ -9114,35 +9584,39 @@ function currentProblem(workspaceId, problemSet) {
 }
 
 function buildAdditionModel(top, bottom) {
-  const topDigits = digits(top, 3);
-  const bottomDigits = digits(bottom, 3);
+  const width = operationDigitWidth(top, bottom);
+  const topDigits = digits(top, width);
+  const bottomDigits = digits(bottom, width);
+  const firstSumIndex = Math.max(0, width - String(top + bottom).length);
   const total = top + bottom;
-  const sumDigits = String(total).padStart(4, "0").split("");
+  const sumDigits = String(total).padStart(width + 1, "0").split("");
   const cells = [];
   let sequence = 0;
   let carry = 0;
 
-  for (let index = 2; index >= 0; index -= 1) {
-    const col = index + 5;
+  for (let index = width - 1; index >= 0; index -= 1) {
+    const col = digitColumn(index, width);
     const columnTotal = topDigits[index] + bottomDigits[index] + carry;
     const digit = columnTotal % 10;
     const nextCarry = Math.floor(columnTotal / 10);
     const incomingAddCarryId = carry > 0 ? `add-carry-${col}` : null;
 
-    cells.push({
-      id: `add-sum-${index}`,
-      row: 5,
-      col,
-      kind: "sum",
-      expected: String(digit),
-      sequence,
-      topCol: col,
-      bottomCol: col,
-      incomingAddCarryId,
-      label: `sum digit ${digit}`,
-      hint: `Add this column and write the ones digit here.`
-    });
-    sequence += 1;
+    if (index >= firstSumIndex) {
+      cells.push({
+        id: `add-sum-${index}`,
+        row: 5,
+        col,
+        kind: "sum",
+        expected: String(digit),
+        sequence,
+        topCol: col,
+        bottomCol: col,
+        incomingAddCarryId,
+        label: `sum digit ${digit}`,
+        hint: `Add this column and write the ones digit here.`
+      });
+      sequence += 1;
+    }
 
     if (nextCarry > 0) {
       cells.push({
@@ -9164,24 +9638,24 @@ function buildAdditionModel(top, bottom) {
     cells.push({
       id: "add-sum-lead",
       row: 5,
-      col: 4,
+      col: digitColumn(0, width) - 1,
       kind: "sum",
       expected: sumDigits[0],
       sequence,
-      incomingAddCarryId: "add-carry-4",
+      incomingAddCarryId: `add-carry-${digitColumn(0, width) - 1}`,
       label: `leading sum digit ${sumDigits[0]}`,
       hint: "Bring down the final carry."
     });
   }
 
-  return { top, bottom, topDigits, bottomDigits, final: total, cells };
+  return { top, bottom, topDigits, bottomDigits, width, final: total, cells };
 }
 
 function renderAdditionGrid(model) {
   const staticCells = [
-    ...model.topDigits.map((value, index) => ({ row: 2, col: index + 5, value })),
-    ...model.bottomDigits.map((value, index) => ({ row: 3, col: index + 5, value })),
-    { row: 3, col: 4, value: "+", operator: true }
+    ...digitDisplayCells(model.top, model.width, 2),
+    ...digitDisplayCells(model.bottom, model.width, 3),
+    { row: 3, col: digitColumn(0, model.width) - 1, value: "+", operator: true }
   ];
 
   for (let row = 1; row <= 5; row += 1) {
@@ -9225,7 +9699,7 @@ function additionLabelForRow(row) {
 }
 
 function buildDivisionModel(dividend, divisor) {
-  const dividendDigits = digits(dividend, 3);
+  const dividendDigits = numberDigits(dividend);
   const cells = [];
   let sequence = 0;
   let remainder = 0;
@@ -9233,7 +9707,7 @@ function buildDivisionModel(dividend, divisor) {
   let stepIndex = 0;
 
   dividendDigits.forEach((digit, index) => {
-    const col = index + 5;
+    const col = digitColumn(index, dividendDigits.length);
     const partial = remainder * 10 + digit;
     if (!divisionStarted && partial < divisor && index < dividendDigits.length - 1) {
       remainder = partial;
@@ -9307,6 +9781,7 @@ function buildDivisionModel(dividend, divisor) {
 }
 
 function renderDivisionGrid(model) {
+  const dividendStart = digitColumn(0, model.dividendDigits.length);
   for (let row = 1; row <= 11; row += 1) {
     addCell({ row, col: 1, value: divisionLabelForRow(row), className: "row-label" });
   }
@@ -9314,7 +9789,7 @@ function renderDivisionGrid(model) {
   for (let row = 1; row <= 11; row += 1) {
     for (let col = 2; col <= 7; col += 1) {
       const inputCell = model.cells.find((item) => item.row === row && item.col === col);
-      const dividendIndex = col - 5;
+      const dividendIndex = col - dividendStart;
 
       if (row === 1 && col >= 5) {
         if (inputCell) {
@@ -9358,14 +9833,17 @@ function divisionLabelForRow(row) {
 }
 
 function buildSubtractionModel(top, bottom) {
-  const topDigits = digits(top, 3);
-  const bottomDigits = digits(bottom, 3);
-  const answerDigits = String(top - bottom).padStart(3, "0").split("");
+  const width = operationDigitWidth(top, bottom);
+  const topDigits = digits(top, width);
+  const bottomDigits = digits(bottom, width);
+  const answer = top - bottom;
+  const firstAnswerIndex = Math.max(0, width - String(Math.max(0, answer)).length);
+  const answerDigits = String(answer).padStart(width, "0").split("");
   const workingTop = [...topDigits];
   const cells = [];
   let sequence = 0;
 
-  for (let index = 2; index >= 0; index -= 1) {
+  for (let index = width - 1; index >= 0; index -= 1) {
     const current = workingTop[index];
     const needsBorrow = current < bottomDigits[index];
     if (needsBorrow) {
@@ -9374,7 +9852,7 @@ function buildSubtractionModel(top, bottom) {
       cells.push({
         id: `sub-borrow-raise-${index}`,
         row: 2,
-        col: index + 5,
+        col: digitColumn(index, width),
         kind: "borrow",
         borrowRole: "recipient",
         expected: "1",
@@ -9389,7 +9867,7 @@ function buildSubtractionModel(top, bottom) {
         cells.push({
           id: `sub-borrow-lender-${lenderIndex}-${index}`,
           row: 2,
-          col: lenderIndex + 5,
+          col: digitColumn(lenderIndex, width),
           kind: "borrow",
           borrowRole: "lender",
           expected: String(workingTop[lenderIndex]),
@@ -9404,7 +9882,7 @@ function buildSubtractionModel(top, bottom) {
           cells.push({
             id: `sub-borrow-pass-${passIndex}-${index}`,
             row: 2,
-            col: passIndex + 5,
+            col: digitColumn(passIndex, width),
             kind: "borrow",
             borrowRole: "lender",
             expected: "9",
@@ -9417,25 +9895,27 @@ function buildSubtractionModel(top, bottom) {
       }
     }
 
-    const col = index + 5;
+    const col = digitColumn(index, width);
     const borrowCell = [...cells].reverse().find((cell) => cell.kind === "borrow" && cell.col === col);
-    cells.push({
-      id: `sub-diff-${index}`,
-      row: 5,
-      col,
-      kind: "difference",
-      expected: answerDigits[index],
-      sequence,
-      topCol: col,
-      bottomCol: col,
-      borrowId: borrowCell?.id || null,
-      label: `difference digit ${answerDigits[index]}`,
-      hint: `Subtract the lower digit from the adjusted top digit.`
-    });
-    sequence += 1;
+    if (index >= firstAnswerIndex) {
+      cells.push({
+        id: `sub-diff-${index}`,
+        row: 5,
+        col,
+        kind: "difference",
+        expected: answerDigits[index],
+        sequence,
+        topCol: col,
+        bottomCol: col,
+        borrowId: borrowCell?.id || null,
+        label: `difference digit ${answerDigits[index]}`,
+        hint: `Subtract the lower digit from the adjusted top digit.`
+      });
+      sequence += 1;
+    }
   }
 
-  return { top, bottom, topDigits, bottomDigits, final: top - bottom, cells };
+  return { top, bottom, topDigits, bottomDigits, width, final: top - bottom, cells };
 }
 
 function findLenderIndex(workingTop, targetIndex) {
@@ -9447,9 +9927,9 @@ function findLenderIndex(workingTop, targetIndex) {
 
 function renderSubtractionGrid(model) {
   const staticCells = [
-    ...model.topDigits.map((value, index) => ({ row: 2, col: index + 5, value })),
-    ...model.bottomDigits.map((value, index) => ({ row: 3, col: index + 5, value })),
-    { row: 3, col: 4, value: "–", operator: true }
+    ...digitDisplayCells(model.top, model.width, 2),
+    ...digitDisplayCells(model.bottom, model.width, 3),
+    { row: 3, col: digitColumn(0, model.width) - 1, value: "–", operator: true }
   ];
 
   for (let row = 2; row <= 5; row += 1) {
@@ -9490,8 +9970,8 @@ function subtractionLabelForRow(row) {
 }
 
 function buildMultiplicationModel(top, bottom) {
-  const topDigits = digits(top, 3);
-  const bottomDigits = digits(bottom, 3);
+  const topDigits = numberDigits(top);
+  const bottomDigits = numberDigits(bottom);
   const bottomFromRight = [...bottomDigits].reverse();
   const partials = bottomFromRight.map((digit, index) => top * digit * 10 ** index);
   const final = top * bottom;
@@ -9615,14 +10095,14 @@ function buildMultiplicationModel(top, bottom) {
     additionCarry = nextAdditionCarry;
   }
 
-  return { top, bottom, topDigits, bottomDigits, partials, final, cells };
+  return { top, bottom, topDigits, bottomDigits, partialRows: bottomDigits.length, partials, final, cells };
 }
 
 function renderMultiplicationGrid(model) {
   const staticCells = [
-    ...model.topDigits.map((value, index) => ({ row: 2, col: index + 5, value })),
-    ...model.bottomDigits.map((value, index) => ({ row: 3, col: index + 5, value })),
-    { row: 3, col: 4, value: "x", operator: true }
+    ...digitDisplayCells(model.top, Math.max(1, model.topDigits.length), 2),
+    ...digitDisplayCells(model.bottom, Math.max(1, model.bottomDigits.length), 3),
+    { row: 3, col: digitColumn(0, Math.max(1, model.bottomDigits.length)) - 1, value: "x", operator: true }
   ];
 
   for (let row = 1; row <= 10; row += 1) {
@@ -9670,6 +10150,7 @@ function labelForRow(row) {
     8: "hundreds",
     10: "sum"
   };
+  if (row === 8 && state.currentModel?.partialRows < 3) return "";
   return labels[row] || "";
 }
 
@@ -10237,7 +10718,7 @@ function checkCurrentStep() {
   }
 
   if (isCurrentProblemComplete()) {
-    setStatus("Lesson complete. Press Return for the next problem, or choose New.", "complete");
+    setStatus("Lesson complete. Choose New for another problem.", "complete");
     return;
   }
 
@@ -10313,11 +10794,8 @@ function handleCommandEvent(event) {
   event.preventDefault();
   event.stopPropagation();
   event.stopImmediatePropagation();
-  if (isCurrentProblemComplete()) {
-    startNextProblem();
-  } else {
-    checkCurrentStep();
-  }
+  if (isCurrentProblemComplete()) return;
+  checkCurrentStep();
 }
 
 function handleAnswerKeydown(event) {
@@ -10325,11 +10803,8 @@ function handleAnswerKeydown(event) {
   event.preventDefault();
   event.stopPropagation();
   event.stopImmediatePropagation();
-  if (isCurrentProblemComplete()) {
-    startNextProblem();
-  } else {
-    checkCurrentStep();
-  }
+  if (isCurrentProblemComplete()) return;
+  checkCurrentStep();
 }
 
 document.addEventListener("carry-check-command", () => requestStepCheck());
@@ -10345,9 +10820,7 @@ document.addEventListener("carry-concept-input-command", (event) => {
 function runReturnCommand() {
   if (state.showIntro) {
     startCurrentLesson();
-  } else if (isCurrentProblemComplete()) {
-    startNextProblem();
-  } else {
+  } else if (!isCurrentProblemComplete()) {
     checkCurrentStep();
   }
 }
@@ -10377,11 +10850,8 @@ function handleDigitKeydown(event) {
   if (event.key === "Enter") {
     event.preventDefault();
     event.stopPropagation();
-    if (isCurrentProblemComplete()) {
-      startNextProblem();
-    } else {
-      checkCurrentStep();
-    }
+    if (isCurrentProblemComplete()) return;
+    checkCurrentStep();
   }
 }
 
@@ -10444,7 +10914,7 @@ function completeConceptAnswer(input) {
   completeLesson();
   input.disabled = true;
   syncConceptChoiceButtons(input);
-  setStatus(`${successForInput(input)} Press Return for the next problem.`, "complete");
+  setStatus(`${successForInput(input)} Choose New for another problem.`, "complete");
 }
 
 function feedbackForInput(input) {
@@ -10939,18 +11409,11 @@ function handlePageKeydown(event) {
   if (handleToolsKeydown(event)) return;
   if (handleSudokuKeydown(event)) return;
   if (handleConceptChoiceKeydown(event)) return;
-  if (event.key === "Enter" && !state.showIntro && isCurrentProblemComplete() && event.target?.closest?.(".concept-card")) {
-    event.preventDefault();
-    startNextProblem();
-    return;
-  }
   if (event.key === "Enter") {
     if (isFormControl(event.target) && !event.target.classList?.contains("digit-input")) return;
     event.preventDefault();
     if (state.showIntro) {
       startCurrentLesson();
-    } else if (isCurrentProblemComplete()) {
-      startNextProblem();
     } else if (!state.showIntro && orderedSteps().length > 0) {
       checkCurrentStep();
     }
@@ -11111,7 +11574,7 @@ function isValidDivisionProblem(dividend, divisor, allowsRemainder) {
 function isValidDivisionShape(dividend, divisor) {
   return Number.isInteger(dividend)
     && Number.isInteger(divisor)
-    && dividend >= 100
+    && dividend >= 10
     && dividend <= 999
     && divisor >= 2
     && divisor <= 99;
@@ -11135,8 +11598,8 @@ function randomDivisionProblem(allowsRemainder) {
 
 function divisionGuardrailMessage(workspace) {
   return workspace.allowsRemainder
-    ? "Use a 3-digit dividend and a 1- or 2-digit divisor from 2 to 99 with a nonzero remainder."
-    : "Use a 3-digit dividend and a 1- or 2-digit divisor from 2 to 99 with no remainder.";
+    ? "Use a 2- or 3-digit dividend and a 1- or 2-digit divisor from 2 to 99 with a nonzero remainder."
+    : "Use a 2- or 3-digit dividend and a 1- or 2-digit divisor from 2 to 99 with no remainder.";
 }
 
 function modeStatus(mode) {
@@ -11529,6 +11992,10 @@ function appendScratchCommand(target, text, index) {
     "\\arctan": "arctan",
     "\\pi": "π",
     "\\theta": "θ",
+    "\\mu": "μ",
+    "\\sigma": "σ",
+    "\\rho": "ρ",
+    "\\chi": "χ",
     "\\lfloor": "⌊",
     "\\rfloor": "⌋",
     "\\lceil": "⌈",
@@ -11646,6 +12113,16 @@ function appendMathMlContent(target, value) {
         appendMathMlContent(row, group.value);
         sqrt.append(row);
         target.append(sqrt);
+        cursor = group.end;
+        continue;
+      }
+    }
+
+    if (text.startsWith("\\overline", cursor) || text.startsWith("\\bar", cursor)) {
+      const commandLength = text.startsWith("\\overline", cursor) ? 9 : 4;
+      const group = readBraceGroup(text, cursor + commandLength);
+      if (group) {
+        target.append(createMathMlOver(group.value));
         cursor = group.end;
         continue;
       }
@@ -11883,6 +12360,13 @@ function createMathMlRow(value) {
   return row;
 }
 
+function createMathMlOver(value) {
+  const node = createMathMlElement("mover");
+  node.setAttribute("accent", "true");
+  node.append(createMathMlRow(value), createMathMlToken("mo", "¯"));
+  return node;
+}
+
 function appendMathMlIntegral(target, text, index) {
   const integral = createMathMlToken("mo", "∫");
   let cursor = index + 4;
@@ -11923,7 +12407,7 @@ function appendMathMlIntegral(target, text, index) {
 }
 
 function mathMlCommandAt(text, index) {
-  const commands = ["\\Rightarrow", "\\rightarrow", "\\therefore", "\\subseteq", "\\emptyset", "\\because", "\\arcsin", "\\arccos", "\\arctan", "\\lfloor", "\\rfloor", "\\lceil", "\\rceil", "\\forall", "\\exists", "\\lambda", "\\approx", "\\equiv", "\\models", "\\bmod", "\\Delta", "\\Omega", "\\notin", "\\subset", "\\theta", "\\vdash", "\\times", "\\quad", "\\land", "\\oplus", "\\cdot", "\\bot", "\\top", "\\div", "\\lim", "\\lor", "\\neg", "\\iff", "\\sin", "\\cos", "\\tan", "\\sec", "\\csc", "\\cot", "\\log", "\\cup", "\\cap", "\\ln", "\\pi", "\\le", "\\ge", "\\ne", "\\pm", "\\to", "\\in", "\\;", "\\,"];
+  const commands = ["\\Rightarrow", "\\rightarrow", "\\therefore", "\\subseteq", "\\emptyset", "\\because", "\\arcsin", "\\arccos", "\\arctan", "\\lfloor", "\\rfloor", "\\lceil", "\\rceil", "\\forall", "\\exists", "\\lambda", "\\approx", "\\equiv", "\\models", "\\bmod", "\\Delta", "\\Omega", "\\sigma", "\\notin", "\\subset", "\\theta", "\\vdash", "\\times", "\\quad", "\\land", "\\oplus", "\\cdot", "\\rho", "\\chi", "\\bot", "\\top", "\\div", "\\lim", "\\lor", "\\neg", "\\iff", "\\sin", "\\cos", "\\tan", "\\sec", "\\csc", "\\cot", "\\log", "\\cup", "\\cap", "\\mu", "\\ln", "\\pi", "\\le", "\\ge", "\\ne", "\\pm", "\\to", "\\in", "\\;", "\\,"];
   return commands.find((command) => text.startsWith(command, index));
 }
 
@@ -11936,6 +12420,10 @@ function appendMathMlCommand(target, command) {
   const commandMap = {
     "\\theta": ["mi", "θ"],
     "\\pi": ["mi", "π", "normal"],
+    "\\mu": ["mi", "μ"],
+    "\\sigma": ["mi", "σ"],
+    "\\rho": ["mi", "ρ"],
+    "\\chi": ["mi", "χ"],
     "\\le": ["mo", "≤"],
     "\\ge": ["mo", "≥"],
     "\\ne": ["mo", "≠"],
@@ -12531,6 +13019,29 @@ function updateProgressPanel() {
 
 function digits(number, length) {
   return String(number).padStart(length, "0").split("").map(Number);
+}
+
+function numberDigits(number) {
+  return String(Math.abs(Number(number) || 0)).split("").map(Number);
+}
+
+function operationDigitWidth(...values) {
+  return Math.min(3, Math.max(1, ...values.map((value) => numberDigits(value).length)));
+}
+
+function digitColumn(index, width) {
+  return 8 - width + index;
+}
+
+function digitDisplayCells(number, width, row) {
+  const source = numberDigits(number);
+  const digitsToShow = source.slice(-width);
+  const startIndex = width - digitsToShow.length;
+  return digitsToShow.map((value, index) => ({
+    row,
+    col: digitColumn(startIndex + index, width),
+    value
+  }));
 }
 
 function numberToCells(number, columns) {
