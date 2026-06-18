@@ -1,12 +1,13 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-alpha.89";
+const APP_VERSION = "0.1.0-alpha.92";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 const GAMES_STORAGE_KEY = "carry.games.v1";
 const TOOLS_STORAGE_KEY = "carry.tools.v1";
 const GAME_IDS = ["sudoku", "mod-clock", "prime-factors", "gcd-race", "divisibility", "residue-match", "graph-paths"];
 const TOOL_IDS = ["random-number", "normal-simulator", "unit-circle", "complex-plane", "number-theory"];
+const MAX_CONCEPT_CHOICES = 2;
 
 const topicGroups = [
   {
@@ -1844,7 +1845,7 @@ const graphTheoryConceptWorkspaces = {
       {
         prompt: "In graph theory, what is another common name for a vertex?",
         answer: "node",
-        choices: [{ value: "node", label: "node" }, { value: "face", label: "face" }, { value: "angle", label: "angle" }, { value: "axis", label: "axis" }],
+        choices: [{ value: "node", label: "node" }, { value: "edge", label: "edge" }],
         hint: "Vertices are the points of a graph; many network diagrams call them nodes.",
         feedback: "A vertex is a node: one object in the graph.",
         label: "vertex vocabulary"
@@ -1898,7 +1899,7 @@ const graphTheoryConceptWorkspaces = {
       {
         prompt: "For shortest path questions, what should you count?",
         answer: "edges",
-        choices: [{ value: "edges", label: "edges" }, { value: "letters", label: "letters" }, { value: "regions", label: "regions" }, { value: "angles", label: "angles" }],
+        choices: [{ value: "edges", label: "edges" }, { value: "vertices", label: "vertices" }],
         hint: "The Graph Paths game asks for the fewest edge steps.",
         feedback: "Shortest path length counts edge steps.",
         label: "shortest path count"
@@ -1928,7 +1929,7 @@ const graphTheoryConceptWorkspaces = {
       {
         prompt: "Degree describes which object?",
         answer: "a vertex",
-        choices: [{ value: "a vertex", label: "a vertex" }, { value: "the whole plane", label: "the whole plane" }, { value: "a fraction", label: "a fraction" }, { value: "an angle only", label: "an angle only" }],
+        choices: [{ value: "a vertex", label: "a vertex" }, { value: "an edge", label: "an edge" }],
         hint: "Ask: degree of which point?",
         feedback: "Degree is attached to a vertex.",
         label: "degree object"
@@ -1974,7 +1975,7 @@ const graphTheoryConceptWorkspaces = {
       {
         prompt: "Which word means every vertex is reachable from every other vertex?",
         answer: "connected",
-        choices: [{ value: "connected", label: "connected" }, { value: "prime", label: "prime" }, { value: "parallel", label: "parallel" }, { value: "acute", label: "acute" }],
+        choices: [{ value: "connected", label: "connected" }, { value: "separated", label: "separated" }],
         hint: "Reachability is the core idea.",
         feedback: "Connected means all vertices are mutually reachable.",
         label: "connected meaning"
@@ -2012,7 +2013,7 @@ const graphTheoryConceptWorkspaces = {
       {
         prompt: "Connectedness asks whether what exists between vertices?",
         answer: "a path",
-        choices: [{ value: "a path", label: "a path" }, { value: "a decimal", label: "a decimal" }, { value: "a numerator", label: "a numerator" }, { value: "a tangent", label: "a tangent" }],
+        choices: [{ value: "a path", label: "a path" }, { value: "only a label", label: "only a label" }],
         hint: "Connected vertices can be reached by following edges.",
         feedback: "Connectedness is about whether a path exists.",
         label: "connected path"
@@ -2161,7 +2162,7 @@ const statisticsConceptWorkspaces = {
       { prompt: "Which display is best for comparing favorite colors: bar chart or histogram?", answer: "bar chart", choices: [{ value: "bar chart", label: "bar chart" }, { value: "histogram", label: "histogram" }, { value: "box plot", label: "box plot" }, { value: "scatterplot", label: "scatterplot" }], hint: "Favorite color is categorical.", label: "categorical display", feedback: "Bar charts compare categories." },
       { prompt: "Which display groups numerical values into intervals?", answer: "histogram", choices: [{ value: "histogram", label: "histogram" }, { value: "bar chart", label: "bar chart" }, { value: "pie chart", label: "pie chart" }, { value: "table", label: "table" }], hint: "Histograms group quantitative values into bins.", label: "histogram meaning", feedback: "Histograms show distribution shape." },
       { prompt: "A scatterplot is best for one variable or two quantitative variables?", answer: "two quantitative variables", choices: [{ value: "two quantitative variables", label: "two quantitative variables" }, { value: "one category", label: "one category" }, { value: "one total", label: "one total" }, { value: "one label", label: "one label" }], hint: "Scatterplots show pairs of numbers.", label: "scatterplot variables", feedback: "Scatterplots show relationships between two quantitative variables." },
-      { prompt: "In a histogram, taller bars mean more values or larger values?", answer: "more values", choices: [{ value: "more values", label: "more values" }, { value: "larger values", label: "larger values" }, { value: "more categories", label: "more categories" }, { value: "no data", label: "no data" }], hint: "Bar height counts how many observations are in the interval.", label: "histogram bar height", feedback: "Histogram height represents frequency." }
+      { prompt: "In a histogram, taller bars mean more values or larger values?", answer: "more values", choices: [{ value: "more values", label: "more values" }, { value: "larger values", label: "larger values" }], hint: "Bar height counts how many observations are in the interval.", label: "histogram bar height", feedback: "Histogram height represents frequency." }
     ]
   },
   "statistics.variance-standard-deviation": {
@@ -2179,7 +2180,7 @@ const statisticsConceptWorkspaces = {
       { prompt: "For the data 2, 4, 6, the mean is 4. What is the deviation of 6?", answer: "2", choices: [{ value: "2", label: "2" }, { value: "-2", label: "-2" }, { value: "4", label: "4" }, { value: "6", label: "6" }], hint: "Deviation means value minus mean.", label: "deviation", feedback: "6 - 4 = 2." },
       { prompt: "Which has more spread: 9, 10, 11 or 2, 10, 18?", answer: "2,10,18", choices: [{ value: "2,10,18", label: "2, 10, 18" }, { value: "9,10,11", label: "9, 10, 11" }, { value: "same", label: "same" }, { value: "cannot tell", label: "cannot tell" }], hint: "Compare distance from the center value 10.", label: "spread comparison", feedback: "2 and 18 are much farther from 10." },
       { prompt: "Standard deviation is measured in original units or squared units?", answer: "original units", choices: [{ value: "original units", label: "original units" }, { value: "squared units", label: "squared units" }, { value: "percent only", label: "percent only" }, { value: "no units", label: "no units" }], hint: "Variance uses squared units; standard deviation takes the square root.", label: "standard deviation units", feedback: "Standard deviation is easier to interpret because it uses original units." },
-      { prompt: "If every value is the same, the standard deviation is what number?", answer: "0", choices: [{ value: "0", label: "0" }, { value: "1", label: "1" }, { value: "the mean", label: "the mean" }, { value: "negative", label: "negative" }], hint: "No value is away from the mean.", label: "zero spread", feedback: "No spread gives standard deviation 0." }
+      { prompt: "If every value is the same, the standard deviation is what number?", answer: "0", choices: [{ value: "0", label: "0" }, { value: "1", label: "1" }], hint: "No value is away from the mean.", label: "zero spread", feedback: "No spread gives standard deviation 0." }
     ]
   },
   "statistics.normal-distribution": {
@@ -2212,10 +2213,10 @@ const statisticsConceptWorkspaces = {
       "Binomial questions appear in quality control, surveys, games, and repeated yes/no events."
     ],
     problems: [
-      { prompt: "A binomial trial has two outcomes or many measured values?", answer: "two outcomes", choices: [{ value: "two outcomes", label: "two outcomes" }, { value: "many measured values", label: "many measured values" }, { value: "no probability", label: "no probability" }, { value: "only geometry", label: "only geometry" }], hint: "Think success/failure.", label: "binomial outcome type", feedback: "Each binomial trial is usually described as success or failure." },
+      { prompt: "A binomial trial has two outcomes or many measured values?", answer: "two outcomes", choices: [{ value: "two outcomes", label: "two outcomes" }, { value: "many measured values", label: "many measured values" }], hint: "Think success/failure.", label: "binomial outcome type", feedback: "Each binomial trial is usually described as success or failure." },
       { prompt: "If a coin is flipped 5 times, what is n in the binomial model?", answer: "5", choices: [{ value: "5", label: "5" }, { value: "2", label: "2" }, { value: "1/2", label: "1/2" }, { value: "10", label: "10" }], hint: "n is the number of trials.", label: "binomial n", feedback: "Five flips means n = 5 trials." },
       { prompt: "For a fair coin, what is p for heads?", answer: "1/2", answers: ["1/2", "0.5"], choices: [{ value: "1/2", label: "1/2" }, { value: "1/5", label: "1/5" }, { value: "2", label: "2" }, { value: "5", label: "5" }], hint: "p is the probability of success on one trial.", label: "binomial p", feedback: "Heads has probability 1/2 on each fair flip." },
-      { prompt: "In a binomial model, p should stay the same or change every trial?", answer: "same", choices: [{ value: "same", label: "stay the same" }, { value: "change", label: "change every trial" }, { value: "be negative", label: "be negative" }, { value: "be unknown always", label: "be unknown always" }], hint: "The usual binomial model uses the same success probability each time.", label: "constant probability", feedback: "A fixed p is one binomial condition." }
+      { prompt: "In a binomial model, p should stay the same or change every trial?", answer: "same", choices: [{ value: "same", label: "stay the same" }, { value: "change", label: "change every trial" }], hint: "The usual binomial model uses the same success probability each time.", label: "constant probability", feedback: "A fixed p is one binomial condition." }
     ]
   },
   "statistics.correlation-regression": {
@@ -2231,9 +2232,9 @@ const statisticsConceptWorkspaces = {
     ],
     problems: [
       { prompt: "If taller people tend to weigh more, the association is positive or negative?", answer: "positive", choices: [{ value: "positive", label: "positive" }, { value: "negative", label: "negative" }, { value: "zero", label: "zero" }, { value: "categorical", label: "categorical" }], hint: "Both variables tend to increase together.", label: "positive association", feedback: "Increasing together gives a positive association." },
-      { prompt: "A correlation near 0 means strong linear pattern or weak linear pattern?", answer: "weak linear pattern", choices: [{ value: "weak linear pattern", label: "weak linear pattern" }, { value: "strong linear pattern", label: "strong linear pattern" }, { value: "perfect prediction", label: "perfect prediction" }, { value: "impossible data", label: "impossible data" }], hint: "Correlation measures linear direction and strength.", label: "near zero correlation", feedback: "Correlation near 0 means little linear pattern." },
+      { prompt: "A correlation near 0 means strong linear pattern or weak linear pattern?", answer: "weak linear pattern", choices: [{ value: "weak linear pattern", label: "weak linear pattern" }, { value: "strong linear pattern", label: "strong linear pattern" }], hint: "Correlation measures linear direction and strength.", label: "near zero correlation", feedback: "Correlation near 0 means little linear pattern." },
       { prompt: "Does correlation by itself prove causation?", answer: "no", answers: ["no", "false"], choices: [{ value: "no", label: "No" }, { value: "yes", label: "Yes" }], hint: "There may be lurking variables or reverse direction.", label: "correlation causation", feedback: "Correlation alone does not prove causation." },
-      { prompt: "A regression line is mainly used to summarize and predict or to list categories?", answer: "summarize and predict", choices: [{ value: "summarize and predict", label: "summarize and predict" }, { value: "list categories", label: "list categories" }, { value: "find exact proof", label: "find exact proof" }, { value: "erase outliers", label: "erase outliers" }], hint: "Regression models a quantitative relationship.", label: "regression purpose", feedback: "Regression gives a compact model for prediction." }
+      { prompt: "A regression line is mainly used to summarize and predict or to list categories?", answer: "summarize and predict", choices: [{ value: "summarize and predict", label: "summarize and predict" }, { value: "list categories", label: "list categories" }], hint: "Regression models a quantitative relationship.", label: "regression purpose", feedback: "Regression gives a compact model for prediction." }
     ]
   },
   "statistics.confidence-intervals": {
@@ -2250,7 +2251,7 @@ const statisticsConceptWorkspaces = {
     problems: [
       { prompt: "A confidence interval is a single value or a range?", answer: "range", choices: [{ value: "range", label: "range" }, { value: "single value", label: "single value" }, { value: "category", label: "category" }, { value: "proof", label: "proof" }], hint: "Intervals have lower and upper endpoints.", label: "interval meaning", feedback: "A confidence interval is a range of plausible values." },
       { prompt: "If an estimate is 50 with margin of error 3, the interval is 47 to what?", answer: "53", choices: [{ value: "53", label: "53" }, { value: "50", label: "50" }, { value: "47", label: "47" }, { value: "3", label: "3" }], hint: "Add the margin of error to the estimate.", label: "upper endpoint", feedback: "50 + 3 = 53." },
-      { prompt: "A larger margin of error makes an interval wider or narrower?", answer: "wider", choices: [{ value: "wider", label: "wider" }, { value: "narrower", label: "narrower" }, { value: "unchanged", label: "unchanged" }, { value: "negative", label: "negative" }], hint: "The margin extends both sides of the estimate.", label: "margin width", feedback: "A larger margin of error creates a wider interval." },
+      { prompt: "A larger margin of error makes an interval wider or narrower?", answer: "wider", choices: [{ value: "wider", label: "wider" }, { value: "narrower", label: "narrower" }], hint: "The margin extends both sides of the estimate.", label: "margin width", feedback: "A larger margin of error creates a wider interval." },
       { prompt: "Higher confidence usually makes the interval wider or narrower?", answer: "wider", choices: [{ value: "wider", label: "wider" }, { value: "narrower", label: "narrower" }, { value: "same width", label: "same width" }, { value: "not a range", label: "not a range" }], hint: "More confidence requires a wider net.", label: "confidence width", feedback: "Higher confidence usually means a wider interval." }
     ]
   },
@@ -2268,7 +2269,7 @@ const statisticsConceptWorkspaces = {
     problems: [
       { prompt: "A number computed from a sample is called a statistic or a parameter?", answer: "statistic", choices: [{ value: "statistic", label: "statistic" }, { value: "parameter", label: "parameter" }, { value: "outlier", label: "outlier" }, { value: "axis", label: "axis" }], hint: "Statistics come from samples.", label: "sample statistic", feedback: "A statistic describes a sample." },
       { prompt: "A number describing an entire population is called a statistic or a parameter?", answer: "parameter", choices: [{ value: "parameter", label: "parameter" }, { value: "statistic", label: "statistic" }, { value: "median", label: "median" }, { value: "bar", label: "bar" }], hint: "Parameters describe populations.", label: "population parameter", feedback: "A parameter describes the full population." },
-      { prompt: "Random sampling mainly helps reduce bias or increase decoration?", answer: "reduce bias", choices: [{ value: "reduce bias", label: "reduce bias" }, { value: "increase decoration", label: "increase decoration" }, { value: "change units", label: "change units" }, { value: "remove all uncertainty", label: "remove all uncertainty" }], hint: "Random sampling makes selection less systematic.", label: "random sampling purpose", feedback: "Random sampling helps reduce bias." },
+      { prompt: "Random sampling mainly helps reduce bias or remove all uncertainty?", answer: "reduce bias", choices: [{ value: "reduce bias", label: "reduce bias" }, { value: "remove all uncertainty", label: "remove all uncertainty" }], hint: "Random sampling makes selection less systematic, but it does not remove uncertainty.", label: "random sampling purpose", feedback: "Random sampling helps reduce bias." },
       { prompt: "Does a larger random sample usually give a more stable estimate?", answer: "yes", answers: ["yes", "true"], choices: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], hint: "Larger samples usually vary less from sample to sample.", label: "sample size stability", feedback: "Larger random samples usually give more stable estimates." }
     ]
   }
@@ -3208,28 +3209,62 @@ function supplementBroadPractice() {
 }
 
 function createLessonQaReport() {
+  const weirdChoicePattern = /\b(decoration|only geometry|impossible data|exact proof|erase outliers|whole plane|angle only|no data|be negative|unknown always|no probability)\b/i;
   const conceptReports = Object.values(conceptWorkspaces).map((workspace) => {
     const problems = workspace.problems || [];
-    const missingHint = problems.filter((problem) => !problem.hint).length;
-    const missingFeedback = problems.filter((problem) => !problem.feedback).length;
-    const explicitChoiceCount = problems.filter((problem) => Array.isArray(problem.choices) && problem.choices.length >= 2).length;
+    const usesTopLevelAnswers = workspace.type === "concept";
+    const missingHint = usesTopLevelAnswers ? problems.filter((problem) => !problem.hint).length : 0;
+    const missingFeedback = usesTopLevelAnswers ? problems.filter((problem) => !problem.feedback).length : 0;
+    const choiceReports = usesTopLevelAnswers ? problems.map((problem) => {
+      const answers = problem.answers || [problem.answer];
+      const rawChoices = problem.choices || conceptChoicesForProblem(problem, answers);
+      const refinedChoices = refineConceptChoices(rawChoices, answers, problem);
+      const weirdChoices = refinedChoices
+        .filter((choice) => weirdChoicePattern.test(`${choice.value} ${choice.label}`))
+        .map((choice) => String(choice.label || choice.value));
+      return {
+        prompt: stripMathTags(problem.prompt || ""),
+        rawCount: rawChoices.length,
+        refinedCount: refinedChoices.length,
+        hasChoices: refinedChoices.length >= 2,
+        weirdChoices
+      };
+    }) : [];
+    const explicitChoiceCount = usesTopLevelAnswers ? problems.filter((problem) => Array.isArray(problem.choices) && problem.choices.length >= 2).length : 0;
+    const effectiveChoiceCount = choiceReports.filter((report) => report.hasChoices).length;
+    const overChoiceLimit = choiceReports.filter((report) => report.refinedCount > MAX_CONCEPT_CHOICES).length;
+    const weirdChoices = choiceReports
+      .filter((report) => report.weirdChoices.length)
+      .map((report) => ({ prompt: report.prompt, choices: report.weirdChoices }));
+    const typedAnswerCount = problems.length - effectiveChoiceCount;
+    const needsBetaPass = problems.length < 8 || missingHint > 0 || missingFeedback > 0 || overChoiceLimit > 0 || weirdChoices.length > 0;
     return {
       id: workspace.id,
       title: workspace.title,
       topic: workspace.topic,
       type: workspace.type,
       problemCount: problems.length,
+      structuredProblemCount: usesTopLevelAnswers ? 0 : problems.length,
       explicitChoiceCount,
+      effectiveChoiceCount,
+      typedAnswerCount,
       generatedChoiceCount: problems.length - explicitChoiceCount,
       missingHint,
       missingFeedback,
-      needsBetaPass: problems.length < 8 || missingHint > 0 || missingFeedback > 0
+      overChoiceLimit,
+      weirdChoices,
+      needsBetaPass
     };
   }).sort((left, right) => left.id.localeCompare(right.id));
 
   const lowPractice = conceptReports.filter((item) => item.problemCount < 8).map((item) => item.id);
   const missingFeedback = conceptReports.filter((item) => item.missingFeedback > 0).map((item) => `${item.id} (${item.missingFeedback})`);
   const missingHints = conceptReports.filter((item) => item.missingHint > 0).map((item) => `${item.id} (${item.missingHint})`);
+  const overChoiceLimit = conceptReports.filter((item) => item.overChoiceLimit > 0).map((item) => `${item.id} (${item.overChoiceLimit})`);
+  const weirdChoices = conceptReports.filter((item) => item.weirdChoices.length).map((item) => `${item.id} (${item.weirdChoices.length})`);
+  const typedAnswerHeavy = conceptReports
+    .filter((item) => item.typedAnswerCount > Math.max(4, item.problemCount / 2))
+    .map((item) => `${item.id} (${item.typedAnswerCount})`);
 
   return {
     version: APP_VERSION,
@@ -3244,8 +3279,15 @@ function createLessonQaReport() {
     betaTargets: {
       lowPractice,
       missingHints,
-      missingFeedback
+      missingFeedback,
+      overChoiceLimit,
+      weirdChoices,
+      typedAnswerHeavy
     },
+    betaBlockerCount: missingHints.length + overChoiceLimit.length + weirdChoices.length,
+    feedbackPolishTargetCount: missingFeedback.length,
+    curriculumDepthTargetCount: lowPractice.length,
+    betaIssueCount: lowPractice.length + missingHints.length + missingFeedback.length + overChoiceLimit.length + weirdChoices.length,
     lessons: conceptReports
   };
 }
@@ -3289,6 +3331,7 @@ function cacheElements() {
   els.progressCompleted = document.querySelector("#progressCompleted");
   els.progressRecent = document.querySelector("#progressRecent");
   els.progressSummary = document.querySelector("#progressSummary");
+  els.betaQaStatus = document.querySelector("#betaQaStatus");
   els.savedWorkspaces = document.querySelector("#savedWorkspaces");
   els.autoAdvance = document.querySelector("#autoAdvance");
   els.exportProgress = document.querySelector("#exportProgress");
@@ -3929,12 +3972,13 @@ function renderWorkspace() {
   }
   setStatus(workspaceStartStatus(workspace), "");
   setActiveStep();
+  updatePrimaryAction();
   drawOverlays();
   updateStepText();
 }
 
 function workspaceStartStatus(workspace) {
-  if (workspace.type === "concept") return state.mode === "guided" ? "Choose one answer." : "Choose an answer, then check it.";
+  if (workspace.type === "concept") return state.mode === "guided" ? "Choose an answer. It checks immediately." : "Choose an answer, then Check.";
   if (["equation", "inequality", "system", "factoring", "quadratic"].includes(workspace.type)) {
     return "Enter the active step, then check it.";
   }
@@ -3949,6 +3993,50 @@ function setWorkspaceView(view) {
   els.status.hidden = !isProblem;
   els.gridShell.hidden = !isProblem;
   els.workspaceTools.hidden = !isProblem;
+}
+
+function updatePrimaryAction() {
+  if (!els.checkStep) return;
+  const workspace = getActiveWorkspace();
+  const isComplete = isCurrentProblemComplete();
+  const guidedChoice = workspace.type === "concept" && state.mode === "guided";
+  if (guidedChoice && !isComplete) {
+    els.checkStep.hidden = false;
+    els.checkStep.disabled = true;
+    els.checkStep.style.visibility = "hidden";
+    setPrimaryActionButton("check");
+    updateLocalConceptActions(isComplete);
+    return;
+  }
+  els.checkStep.hidden = false;
+  els.checkStep.disabled = false;
+  els.checkStep.style.visibility = "";
+  setPrimaryActionButton(isComplete ? "next" : "check");
+  updateLocalConceptActions(isComplete);
+}
+
+function setPrimaryActionButton(mode) {
+  if (els.checkStep.dataset.actionMode === mode) return;
+  els.checkStep.dataset.actionMode = mode;
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg.setAttribute("viewBox", "0 0 24 24");
+  svg.setAttribute("aria-hidden", "true");
+  const paths = mode === "next"
+    ? ["M5 12h14", "m13 5 6-5-6-5"]
+    : ["m20 6-11 11-5-5"];
+  paths.forEach((value) => {
+    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    path.setAttribute("d", value);
+    svg.append(path);
+  });
+  els.checkStep.replaceChildren(svg, document.createTextNode(mode === "next" ? "Next" : "Check"));
+}
+
+function updateLocalConceptActions(isComplete) {
+  els.grid?.querySelectorAll(".concept-check-button").forEach((button) => {
+    button.textContent = isComplete ? "Next" : "Check";
+    button.classList.toggle("primary-action", isComplete);
+  });
 }
 
 function currentSudokuSettings() {
@@ -5558,6 +5646,9 @@ function renderIntroCopy(workspace) {
   const explanation = introExplanationSection(workspace);
   if (explanation?.items?.length) sections.append(createIntroSection(explanation.title, explanation.items));
 
+  const applications = introApplicationItems(workspace);
+  if (applications.length) sections.append(createIntroSection("Where it shows up", applications));
+
   const workspaceItems = introWorkspaceItems(workspace);
   if (workspaceItems.length) sections.append(createIntroSection("In the workspace", workspaceItems));
 
@@ -5646,6 +5737,100 @@ function introWorkspaceItems(workspace) {
     ];
   }
 
+  return [];
+}
+
+function introApplicationItems(workspace) {
+  const byId = {
+    "arithmetic.place-value": [
+      "Reading prices, scores, measurements, and large numbers quickly.",
+      "Catching errors when a digit is in the wrong place."
+    ],
+    "arithmetic.number-sense": [
+      "Estimating whether a result is reasonable before trusting a calculator.",
+      "Comparing quantities in money, distance, time, and data."
+    ],
+    "arithmetic.fractions": [
+      "Sharing, scaling recipes, interpreting ratios, and reading probability.",
+      "Moving between exact values and decimal approximations."
+    ],
+    "algebra.linear-equations": [
+      "Solving for an unknown cost, distance, rate, or missing measurement.",
+      "Rearranging formulas in science and engineering."
+    ],
+    "algebra.systems": [
+      "Finding where two constraints are true at the same time.",
+      "Comparing plans, mixtures, break-even points, and intersections."
+    ],
+    "geometry.coordinate": [
+      "Mapping, screen graphics, robotics, design grids, and analytic geometry.",
+      "Turning shapes into numbers that can be measured."
+    ],
+    "trigonometry.unit-circle": [
+      "Modeling rotation, waves, sound, light, and seasonal cycles.",
+      "Connecting angles to coordinates."
+    ],
+    "calculus.derivatives": [
+      "Measuring instantaneous speed, slope, sensitivity, and marginal change.",
+      "Understanding how a changing system responds right now."
+    ],
+    "calculus.integrals": [
+      "Accumulating distance, area, total change, mass, charge, and probability.",
+      "Turning many tiny contributions into a whole."
+    ],
+    "statistics.normal-distribution": [
+      "Modeling measurement error, natural variation, test scores, and averages.",
+      "Judging whether an observation is ordinary or unusual."
+    ],
+    "statistics.correlation-regression": [
+      "Finding relationships in real data while remembering that association is not proof of cause.",
+      "Making simple predictions with uncertainty."
+    ],
+    "number-theory.modular-arithmetic": [
+      "Clock arithmetic, calendars, cycles, checksums, music patterns, and cryptography.",
+      "Reasoning with remainders instead of full numbers."
+    ],
+    "graph-theory.vertices-edges": [
+      "Networks: friends, roads, websites, circuits, dependencies, and maps.",
+      "Separating objects from the connections between them."
+    ],
+    "physics.kinematics": [
+      "Motion in vehicles, sports, animation, experiments, and sensors.",
+      "Connecting position, velocity, acceleration, and time."
+    ]
+  };
+  if (byId[workspace.id]) return byId[workspace.id];
+
+  if (workspace.topic === "Statistics") {
+    return [
+      "Reading data claims in science, business, medicine, and public life.",
+      "Separating signal, variation, uncertainty, and context."
+    ];
+  }
+  if (workspace.topic === "Probability") {
+    return [
+      "Reasoning about risk, games, sampling, forecasts, and uncertainty.",
+      "Making the possible outcomes explicit before judging likelihood."
+    ];
+  }
+  if (workspace.topic === "Graph Theory") {
+    return [
+      "Networks, routes, dependencies, search, scheduling, and communication.",
+      "Using simple diagrams to reveal structure."
+    ];
+  }
+  if (workspace.topic === "Physics Foundations" || isPhysicsWorkspaceId(workspace.id)) {
+    return [
+      "Connecting formulas to measurable quantities in the world.",
+      "Using units and diagrams to keep calculations grounded."
+    ];
+  }
+  if (workspace.topic === "Proofs" || workspace.topic === "Real Analysis" || workspace.topic === "Abstract Algebra") {
+    return [
+      "Building definitions carefully enough that examples and counterexamples become visible.",
+      "Learning how mathematical certainty is assembled one reason at a time."
+    ];
+  }
   return [];
 }
 
@@ -8578,7 +8763,7 @@ function getActiveWorkspace() {
 
 function buildConceptModel(workspace) {
   const answers = workspace.problem.answers || [workspace.problem.answer];
-  const choices = workspace.problem.choices || conceptChoicesForProblem(workspace.problem, answers);
+  const choices = refineConceptChoices(workspace.problem.choices || conceptChoicesForProblem(workspace.problem, answers), answers, workspace.problem);
   return {
     ...workspace.problem,
     sourceWorkspaceId: workspace.id,
@@ -8624,7 +8809,7 @@ function renderConceptGrid(model) {
   if (model.cells[0].choices?.length) {
     const answerNote = document.createElement("p");
     answerNote.className = "concept-answer-note";
-    answerNote.textContent = answerNoteForMode();
+    answerNote.textContent = answerNoteForMode(model.cells[0].choices.length);
     answerPanel.append(answerNote);
   }
   if (model.cells[0].choices?.length) {
@@ -8641,6 +8826,7 @@ function renderConceptGrid(model) {
       button.setAttribute("role", "radio");
       button.setAttribute("aria-checked", "false");
       button.setAttribute("aria-label", `${index + 1}. ${stripMathTags(choice.label)}`);
+      button.setAttribute("aria-keyshortcuts", String(index + 1));
       setChoiceText(button, choice.label, model);
       button.addEventListener("click", () => selectConceptChoice(input, choice.value));
       choiceGrid.append(button);
@@ -8657,7 +8843,9 @@ function renderConceptGrid(model) {
     answerLabel.append(input);
     answerPanel.append(answerLabel);
   }
-  answerPanel.append(createConceptLocalCheck());
+  if (!model.cells[0].choices?.length || state.mode !== "guided") {
+    answerPanel.append(createConceptLocalCheck());
+  }
 
   prompt.append(text, answerPanel);
   if (model.workspaceId) {
@@ -8686,10 +8874,11 @@ function answerTitleForModel(model) {
   return model.cells[0].choices?.length ? "Choose one answer" : "Enter the answer";
 }
 
-function answerNoteForMode() {
-  if (state.mode === "guided") return "Guided checks each choice as you go.";
-  if (state.mode === "practice") return "Choose an answer, then press Check.";
-  return "Try a choice freely. Press Check when you want feedback.";
+function answerNoteForMode(choiceCount = MAX_CONCEPT_CHOICES) {
+  const keyHint = choiceCount > 1 ? ` Keys 1-${choiceCount} work too.` : "";
+  if (state.mode === "guided") return `Choose an answer. It checks immediately.${keyHint}`;
+  if (state.mode === "practice") return `Choose an answer, then Check.${keyHint}`;
+  return `Try a choice freely. Check when ready.${keyHint}`;
 }
 
 function createConceptAnswerInput(model) {
@@ -8789,8 +8978,102 @@ function generatedAnswerChoices(problem, answers) {
     choices.push(...textDistractors(answer, prompt, label));
   }
 
-  return stableChoiceOrder(uniqueChoiceValues(choices).slice(0, 4), `${problem.prompt || ""}:${answer}`)
+  return stableChoiceOrder(uniqueChoiceValues(choices).slice(0, MAX_CONCEPT_CHOICES), `${problem.prompt || ""}:${answer}`)
     .map((value) => ({ value: String(value), label: displayChoiceLabel(value) }));
+}
+
+function refineConceptChoices(choices, answers, problem) {
+  const normalized = uniqueChoiceObjects(choices);
+  if (normalized.length <= MAX_CONCEPT_CHOICES) return normalized;
+
+  const correct = normalized.find((choice) => isChoiceAccepted(choice.value, answers, problem))
+    || { value: String(problem.answer || answers?.[0] || ""), label: displayChoiceLabel(problem.answer || answers?.[0] || "") };
+  const distractor = normalized
+    .filter((choice) => !isChoiceAccepted(choice.value, answers, problem))
+    .map((choice) => ({ choice, score: choiceQualityScore(choice, correct, problem) }))
+    .sort((a, b) => b.score - a.score)[0]?.choice;
+  const refined = distractor ? [correct, distractor] : [correct];
+  return stableChoiceObjectOrder(refined, `${problem.prompt || ""}:${problem.answer || answers?.[0] || ""}`);
+}
+
+function uniqueChoiceObjects(choices) {
+  const result = [];
+  (choices || []).forEach((choice) => {
+    const value = typeof choice === "object" ? choice.value : choice;
+    const label = typeof choice === "object" ? choice.label ?? choice.value : choice;
+    if (value === null || value === undefined || !String(value).trim()) return;
+    if (!result.some((item) => answerValue(item.value) === answerValue(value))) {
+      result.push({ value: String(value), label: String(label ?? value) });
+    }
+  });
+  return result;
+}
+
+function stableChoiceObjectOrder(choices, seedText) {
+  return stableChoiceOrder(choices.map((_, index) => String(index)), seedText)
+    .map((index) => choices[Number(index)])
+    .filter(Boolean);
+}
+
+function choiceQualityScore(choice, correct, problem) {
+  const value = answerValue(choice.value);
+  const label = answerValue(choice.label);
+  const correctValue = answerValue(correct.value);
+  const prompt = answerValue(problem.prompt);
+  const lessonLabel = answerValue(problem.label);
+  let score = 0;
+
+  if (prompt.includes(value) || prompt.includes(label)) score += 12;
+  if (sameChoiceShape(value, correctValue)) score += 6;
+  if (sameWordCount(choice.label, correct.label)) score += 2;
+  if (sameAnswerFamily(value, correctValue, lessonLabel)) score += 3;
+  if (isWeakDistractor(value, prompt, lessonLabel)) score -= 10;
+  return score;
+}
+
+function sameChoiceShape(value, correctValue) {
+  if (/^-?\d+(?:\.\d+)?%?$/.test(value) && /^-?\d+(?:\.\d+)?%?$/.test(correctValue)) return true;
+  if (/^-?\d+\/-?\d+$/.test(value) && /^-?\d+\/-?\d+$/.test(correctValue)) return true;
+  if (/^(yes|no|true|false)$/.test(value) && /^(yes|no|true|false)$/.test(correctValue)) return true;
+  if (value.includes(",") && correctValue.includes(",")) return true;
+  return /^[a-z]+$/.test(value) && /^[a-z]+$/.test(correctValue);
+}
+
+function sameWordCount(value, correctValue) {
+  const count = (item) => String(item || "").trim().split(/\s+/).filter(Boolean).length;
+  return count(value) === count(correctValue);
+}
+
+function sameAnswerFamily(value, correctValue, label) {
+  const families = [
+    ["mean", "median", "mode", "range"],
+    ["wider", "narrower", "larger", "smaller", "same"],
+    ["positive", "negative", "zero"],
+    ["quantitative", "categorical"],
+    ["statistic", "parameter"],
+    ["vertex", "edge", "cycle", "path", "degree", "component"],
+    ["subset", "element", "union", "intersection", "relation", "function"]
+  ];
+  return families.some((family) => family.includes(value) && family.includes(correctValue))
+    || (label && value.includes(label) && correctValue.includes(label));
+}
+
+function isWeakDistractor(value, prompt, label) {
+  if (prompt.includes(value) || label.includes(value)) return false;
+  return [
+    "decoration",
+    "onlygeometry",
+    "impossibledata",
+    "exactproof",
+    "eraseoutliers",
+    "wholeplane",
+    "angleonly",
+    "numerator",
+    "tangent",
+    "nodata",
+    "nounits",
+    "unknownalways"
+  ].some((weak) => value.includes(weak));
 }
 
 function stableChoiceOrder(values, seedText) {
@@ -8956,9 +9239,11 @@ function setChoiceText(button, label, model) {
   const text = String(label ?? "");
   if (shouldRenderChoiceAsMath(text, model)) {
     setMathText(button, `<math>${text}</math>`);
+    button.setAttribute("aria-label", stripMathTags(text));
     return;
   }
   setMathText(button, text);
+  button.setAttribute("aria-label", stripMathTags(text));
 }
 
 function shouldRenderChoiceAsMath(label, model) {
@@ -10718,7 +11003,7 @@ function checkCurrentStep() {
   }
 
   if (isCurrentProblemComplete()) {
-    setStatus("Lesson complete. Choose New for another problem.", "complete");
+    startNextProblem();
     return;
   }
 
@@ -10820,6 +11105,8 @@ document.addEventListener("carry-concept-input-command", (event) => {
 function runReturnCommand() {
   if (state.showIntro) {
     startCurrentLesson();
+  } else if (isCurrentProblemComplete()) {
+    startNextProblem();
   } else if (!isCurrentProblemComplete()) {
     checkCurrentStep();
   }
@@ -10884,6 +11171,7 @@ function validateInput(input, announce) {
   if (announce) {
     setStatus(correct ? successForInput(input) : feedbackForInput(input), correct ? "correct" : "incorrect");
   }
+  updatePrimaryAction();
   return correct;
 }
 
@@ -10903,6 +11191,7 @@ function validateGuidedConceptInput(input) {
   const correct = validateInput(input, false);
   if (!correct) {
     setStatus(feedbackForInput(input), "incorrect");
+    updatePrimaryAction();
     return;
   }
 
@@ -10914,7 +11203,8 @@ function completeConceptAnswer(input) {
   completeLesson();
   input.disabled = true;
   syncConceptChoiceButtons(input);
-  setStatus(`${successForInput(input)} Choose New for another problem.`, "complete");
+  setStatus(`${successForInput(input)} Continue to the next problem.`, "complete");
+  updatePrimaryAction();
 }
 
 function feedbackForInput(input) {
@@ -11130,8 +11420,9 @@ function completeLesson() {
     input.disabled = false;
   });
   els.grid.querySelectorAll(".active-column").forEach((cell) => cell.classList.remove("active-column"));
-  setStatus("Lesson complete. Your progress is saved on this device.", "complete");
+  setStatus("Lesson complete. Continue to the next problem.", "complete");
   saveProgress(`Completed ${getActiveWorkspace().title.toLowerCase()}`);
+  updatePrimaryAction();
   updateStepText();
 }
 
@@ -13014,7 +13305,24 @@ function updateProgressPanel() {
   els.progressCompleted.textContent = `${state.progress.completedLessons.length} ${state.progress.completedLessons.length === 1 ? "lesson" : "lessons"}`;
   els.progressSummary.textContent = els.progressCompleted.textContent;
   els.progressRecent.textContent = state.progress.recentActivity[0]?.label || "Just started";
+  if (els.betaQaStatus) {
+    const qa = createLessonQaReport();
+    els.betaQaStatus.textContent = qa.betaBlockerCount === 0 ? "Choice and feedback gate clear" : `${qa.betaBlockerCount} lesson QA ${qa.betaBlockerCount === 1 ? "blocker" : "blockers"}`;
+    els.betaQaStatus.title = betaQaStatusTitle(qa);
+  }
   els.savedWorkspaces.textContent = state.progress.savedWorkspaces.join(", ");
+}
+
+function betaQaStatusTitle(qa) {
+  const targets = qa.betaTargets || {};
+  const parts = [
+    targets.missingHints?.length ? `${targets.missingHints.length} missing hints` : "",
+    targets.overChoiceLimit?.length ? `${targets.overChoiceLimit.length} over choice limit` : "",
+    targets.weirdChoices?.length ? `${targets.weirdChoices.length} odd choice sets` : "",
+    qa.feedbackPolishTargetCount ? `${qa.feedbackPolishTargetCount} lessons use generated feedback` : "",
+    qa.curriculumDepthTargetCount ? `${qa.curriculumDepthTargetCount} lessons need deeper practice later` : ""
+  ].filter(Boolean);
+  return parts.length ? parts.join("; ") : "Automated lesson QA found no current choice or feedback blockers.";
 }
 
 function digits(number, length) {
