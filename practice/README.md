@@ -3,13 +3,15 @@
 This directory is the migration home for Carry's learner-facing practice content.
 
 Current production state:
-- Most concept question data still lives inline in `../app.js`.
-- Long-operation lessons and other highly interactive modes still keep their state machines in `../app.js`.
+- Reusable lesson question data lives in curriculum-shaped files under `practice/`.
+- Long-operation workspace definitions live beside the arithmetic lesson files.
+- Some special-mode rendering and validation engines still live in `../app.js` while they are migrated safely.
 
 Recommended target:
 - Keep practice content under `practice/`.
-- Put reusable question and answer data in small subject/lesson modules.
-- Put special practice engines, such as long addition, long multiplication, equation transforms, graph interactions, or future proof builders, under `practice/modes/`.
+- Put reusable question and answer data in small lesson modules.
+- Put special practice definitions beside the lesson they power when the lesson is curriculum-specific.
+- Move shared special practice engines, such as equation transforms, graph interactions, or future proof builders, into shared engine modules once more than one lesson needs them.
 - Keep the app shell responsible for navigation, rendering containers, local persistence, import/export, and orchestration.
 
 This is intentionally a modular directory, not one large data file. "One place" means one practice boundary with a predictable structure.
@@ -20,16 +22,18 @@ Suggested shape:
 practice/
   README.md
   practice-format.js
-  math/
-    arithmetic/
-      long-addition.questions.js
-      long-multiplication.engine.js
+  arithmetic/
+    whole-numbers/
+      place-value.js
+      long-addition.js
+      long-multiplication.js
+    number-systems/
+      fractions.js
+      decimals.js
   physics/
-    kinematics.questions.js
-  modes/
-    long-operation-engine.js
-    equation-transform-engine.js
+    motion/
+      kinematics.js
 ```
 
 Migration rule:
-Move content here one lesson or engine at a time, then wire `app.js` to import that module. Avoid large unreviewable moves that mix data migration with behavior changes.
+Move behavior here one engine at a time. Data files can move freely, but renderer and validator migrations should stay small and testable.

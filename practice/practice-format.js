@@ -8,14 +8,17 @@
  *   state machines in the main app file forever.
  *
  * Current state:
- * - Most lesson questions still live inline in ../app.js as JavaScript objects.
- * - Long operations, equation helpers, graph games, and other rich interactions
- *   still keep their engines inline in ../app.js.
+ * - Lesson question data lives in curriculum-shaped files such as
+ *   practice/arithmetic/whole-numbers/place-value.js.
+ * - Long-operation workspace definitions live beside their arithmetic lessons.
+ * - Equation helpers, graph games, and other rich interactions still keep some
+ *   renderer and validator code inline in ../app.js while they are migrated.
  *
  * Recommended migration target:
- * - Use practice/*.questions.js modules for reusable question/answer data.
- * - Use practice/modes/*.engine.js modules for special practice modes.
- * - Keep generated problems and validators beside the engine that owns them.
+ * - Use practice/{topic}/{section}/{lesson}.js for reusable question/answer data.
+ * - Keep curriculum-specific special mode definitions beside their lesson file.
+ * - Move shared validators/renderers into shared engine modules only when more
+ *   than one lesson needs them.
  * - Keep app-wide routing, localStorage, import/export, and page layout outside
  *   practice modules.
  *

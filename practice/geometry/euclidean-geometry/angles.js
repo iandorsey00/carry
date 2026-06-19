@@ -1,0 +1,51 @@
+// Carry practice lesson data. Loaded before app.js by index.html.
+(function registerCarryPracticeLesson() {
+  window.CarryPractice = window.CarryPractice || { sections: {}, modes: {} };
+  window.CarryPractice.sections["geometry"] = window.CarryPractice.sections["geometry"] || {};
+  window.CarryPractice.sections["geometry"]["geometry.angles"] = {
+  "id": "geometry.angles",
+  "topic": "Geometry",
+  "title": "Angles",
+  "type": "concept",
+  "figure": "geometry-angles",
+  "intro": [
+    "Angles measure turning.",
+    "A straight angle measures 180 degrees.",
+    "Adjacent angles share a side. If they form a straight line, their measures add to 180 degrees."
+  ],
+  "problems": [
+    {
+      "prompt": "Two adjacent angles make a straight line. One is 120 degrees. What is the other?",
+      "answer": "60",
+      "answers": [
+        "60",
+        "60degrees"
+      ],
+      "hint": "Straight line angles add to 180. Compute 180 - 120.",
+      "label": "missing angle"
+    },
+    {
+      "prompt": "What is the measure of a right angle?",
+      "answer": "90",
+      "answers": [
+        "90",
+        "90degrees"
+      ],
+      "hint": "A right angle is one quarter turn.",
+      "label": "right angle measure"
+    },
+    {
+      "prompt": "Angles of 35 degrees and 55 degrees add to what kind of angle?",
+      "answer": "right",
+      "answers": [
+        "right",
+        "rightangle",
+        "90",
+        "90degrees"
+      ],
+      "hint": "35 + 55 = 90.",
+      "label": "angle type"
+    }
+  ]
+};
+})();

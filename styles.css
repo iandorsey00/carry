@@ -198,10 +198,10 @@ body[data-surface="scratchpad"] .site-footer {
 .brand-mark {
   margin: 0;
   color: var(--text);
-  font-size: clamp(3.5rem, 10vw, 7rem);
+  font-size: clamp(2.8rem, 7vw, 5.2rem);
   font-weight: 700;
-  letter-spacing: -0.075em;
-  line-height: 0.9;
+  letter-spacing: -0.06em;
+  line-height: 0.92;
 }
 
 .brand-stage {
@@ -528,10 +528,12 @@ body[data-surface="scratchpad"] .site-footer {
 }
 
 .scratchpad-header {
+  position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr);
   gap: 16px;
   align-items: start;
+  justify-items: center;
 }
 
 .scratchpad-section-heading {
@@ -554,6 +556,10 @@ body[data-surface="scratchpad"] .site-footer {
   line-height: 0.9;
 }
 
+.scratchpad-title-lockup {
+  text-align: center;
+}
+
 .scratchpad-actions,
 .copy-actions {
   display: flex;
@@ -571,8 +577,9 @@ body[data-surface="scratchpad"] .site-footer {
 }
 
 .scratchpad-drawer {
-  position: relative;
-  justify-self: end;
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 .scratchpad-drawer-summary {
@@ -2669,8 +2676,8 @@ body[data-surface="scratchpad"] .scratch-line-math-aligned {
 }
 
 .concept-check-button {
-  justify-self: end;
-  min-width: 112px;
+  justify-self: stretch;
+  width: 100%;
   min-height: 44px;
   border-color: var(--accent);
   background: var(--accent);
@@ -2726,7 +2733,8 @@ body[data-surface="scratchpad"] .scratch-line-math-aligned {
   display: inline-flex;
   min-height: 56px;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  gap: 10px;
   padding: 11px 12px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -2735,12 +2743,39 @@ body[data-surface="scratchpad"] .scratch-line-math-aligned {
   cursor: pointer;
   font-weight: 800;
   line-height: 1.2;
-  text-align: center;
+  text-align: left;
+}
+
+.concept-choice-key {
+  display: inline-flex;
+  width: 26px;
+  height: 26px;
+  flex: 0 0 26px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface-muted);
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.concept-choice-label {
+  min-width: 0;
+  flex: 1;
 }
 
 .concept-choice-button.selected {
   border-color: var(--accent);
   background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.concept-choice-button.selected .concept-choice-key {
+  border-color: var(--accent);
+  background: var(--surface);
   color: var(--accent);
 }
 
@@ -2750,9 +2785,19 @@ body[data-surface="scratchpad"] .scratch-line-math-aligned {
   color: var(--correct);
 }
 
+.concept-choice-button.correct .concept-choice-key {
+  border-color: var(--correct);
+  color: var(--correct);
+}
+
 .concept-choice-button.incorrect {
   border-color: var(--incorrect);
   background: var(--incorrect-soft);
+  color: var(--incorrect);
+}
+
+.concept-choice-button.incorrect .concept-choice-key {
+  border-color: var(--incorrect);
   color: var(--incorrect);
 }
 
@@ -3060,10 +3105,6 @@ body[data-surface="scratchpad"] .scratch-line-math-aligned {
     padding: 12px 56px 4px;
   }
 
-  .brand-mark {
-    font-size: clamp(3rem, 15vw, 4.4rem);
-  }
-
   .workspace-layout {
     grid-template-columns: 1fr;
   }
@@ -3086,6 +3127,7 @@ body[data-surface="scratchpad"] .scratch-line-math-aligned {
   }
 
   .scratchpad-drawer {
+    position: static;
     justify-self: start;
   }
 
