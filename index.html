@@ -9,20 +9,18 @@
       content="Carry is a local-first math, physics, scratchpad, and puzzle learning studio for focused browser-based practice."
     >
     <title>Carry</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="icon" type="image/png" sizes="512x512" href="/assets/carry-icon.png">
     <link rel="apple-touch-icon" href="/assets/carry-icon.png">
     <link rel="manifest" href="/manifest.webmanifest">
-    <link rel="stylesheet" href="/styles.css?v=0.1.0-alpha.92">
+    <link rel="stylesheet" href="/styles.css?v=0.1.0-alpha.94">
   </head>
   <body>
     <div class="app-shell">
       <header class="topbar" aria-label="Carry header">
         <div class="brand-lockup">
-          <h1 class="brand-mark">Carry <sup>Alpha</sup></h1>
+          <h1 class="brand-mark">Carry</h1>
+          <span class="brand-stage">Alpha</span>
         </div>
         <nav class="surface-switch" aria-label="Carry workspaces">
           <button class="surface-tab" id="learnSurface" type="button" aria-pressed="true">Math</button>
@@ -196,157 +194,159 @@
 
           <section class="scratchpad-panel" id="scratchpadPanel" aria-labelledby="scratchpadTitle" hidden>
             <div class="scratchpad-header">
-              <div>
+              <div class="scratchpad-title-lockup">
                 <p class="eyebrow">Notation helper</p>
-                <h2 id="scratchpadTitle">Scratchpad</h2>
+                <h2 id="scratchpadTitle">Carry Scratchpad</h2>
               </div>
-              <div class="scratchpad-actions" aria-label="Scratchpad actions">
-                <div class="scratchpad-action-group" aria-label="Scratchpad controls">
-                  <span>Scratchpad</span>
-                  <button class="tool-button compact" id="newScratchpad" type="button">New</button>
-                  <button class="tool-button compact" id="renameScratchpad" type="button">Rename</button>
+              <details class="scratchpad-drawer">
+                <summary class="tool-button compact scratchpad-drawer-summary">Options</summary>
+                <div class="scratchpad-drawer-body">
+                  <nav class="scratchpad-surface-links" aria-label="Carry sections">
+                    <button type="button" data-scratchpad-surface="learn">Math</button>
+                    <button type="button" data-scratchpad-surface="physics">Physics</button>
+                    <button type="button" data-scratchpad-surface="tools">Tools</button>
+                    <button type="button" data-scratchpad-surface="games">Games</button>
+                  </nav>
+                  <div class="scratchpad-actions" aria-label="Scratchpad actions">
+                    <div class="scratchpad-action-group" aria-label="View controls">
+                      <span>View</span>
+                      <label class="tool-button compact checkbox-action">
+                        <input id="scratchpadLineNumbers" type="checkbox">
+                        Line numbers
+                      </label>
+                    </div>
+                    <div class="scratchpad-action-group" aria-label="Scratchpad controls">
+                      <span>Scratchpad</span>
+                      <button class="tool-button compact" id="newScratchpad" type="button">New</button>
+                      <button class="tool-button compact" id="renameScratchpad" type="button">Rename</button>
+                    </div>
+                    <div class="scratchpad-action-group" aria-label="Copy controls">
+                      <span>Copy</span>
+                      <button class="tool-button compact" id="copyScratchPlain" type="button">Plain</button>
+                      <button class="tool-button compact" id="copyScratchLatex" type="button">TeX</button>
+                      <button class="tool-button compact" id="copyScratchMarkdown" type="button">Markdown</button>
+                    </div>
+                    <div class="scratchpad-action-group" aria-label="LaTeX file controls">
+                      <span>LaTeX</span>
+                      <button class="tool-button compact" id="exportScratchLatex" type="button">Export</button>
+                      <label class="tool-button compact file-action">
+                        Import
+                        <input id="importScratchLatex" type="file" accept=".tex,.txt,text/plain,application/x-tex">
+                      </label>
+                    </div>
+                    <div class="scratchpad-action-group" aria-label="Rendered image controls">
+                      <span>Image</span>
+                      <button class="tool-button compact" id="exportScratchImage" type="button">SVG</button>
+                      <button class="tool-button compact" id="shareScratchImage" type="button">Share</button>
+                    </div>
+                  </div>
+                  <p class="scratchpad-note">
+                    Type plain math or LaTeX-ish notation. Carry formats it as you write.
+                  </p>
+                  <div class="scratchpad-toolbar" aria-label="Math symbol helpers">
+                    <section class="scratchpad-symbol-group" aria-label="Calculus">
+                      <h3>Calculus</h3>
+                      <div class="scratchpad-symbol-buttons">
+                        <button type="button" data-insert="int ">∫</button>
+                        <button type="button" data-insert="int_0^1 ">∫₀¹</button>
+                        <button type="button" data-insert="dy/dt">dy/dt</button>
+                        <button type="button" data-insert="ln||">ln| |</button>
+                        <button type="button" data-insert="\,">thin space</button>
+                        <button type="button" data-insert="\quad">quad</button>
+                      </div>
+                    </section>
+                    <section class="scratchpad-symbol-group" aria-label="Notation">
+                      <h3>Notation</h3>
+                      <div class="scratchpad-symbol-buttons">
+                        <button type="button" data-insert="e^()">e^( )</button>
+                        <button type="button" data-insert="x_1">x₁</button>
+                        <button type="button" data-insert="\frac{}{}">a/b</button>
+                        <button type="button" data-insert="\lfloor x \rfloor">⌊x⌋</button>
+                        <button type="button" data-insert="\lceil x \rceil">⌈x⌉</button>
+                        <button type="button" data-insert="[[1, 2], [3, 4]]">[ ]</button>
+                        <button type="button" data-insert="sqrt()">sqrt( )</button>
+                        <button type="button" data-insert="theta">θ</button>
+                        <button type="button" data-insert="pi">π</button>
+                      </div>
+                    </section>
+                    <section class="scratchpad-symbol-group" aria-label="Relations">
+                      <h3>Relations</h3>
+                      <div class="scratchpad-symbol-buttons">
+                        <button type="button" data-insert="<=">≤</button>
+                        <button type="button" data-insert=">=">≥</button>
+                        <button type="button" data-insert="!=">≠</button>
+                        <button type="button" data-insert=" \equiv ">≡</button>
+                        <button type="button" data-insert=" \pmod{}">mod</button>
+                        <button type="button" data-insert="+/-">±</button>
+                        <button type="button" data-insert=" -> ">→</button>
+                        <button type="button" data-insert=" => ">⇒</button>
+                      </div>
+                    </section>
+                    <section class="scratchpad-symbol-group" aria-label="Logic">
+                      <h3>Logic</h3>
+                      <div class="scratchpad-symbol-buttons">
+                        <button type="button" data-insert=" \land ">∧</button>
+                        <button type="button" data-insert=" \lor ">∨</button>
+                        <button type="button" data-insert="\neg ">¬</button>
+                        <button type="button" data-insert=" \iff ">⇔</button>
+                        <button type="button" data-insert="\forall ">∀</button>
+                        <button type="button" data-insert="\exists ">∃</button>
+                        <button type="button" data-insert="\bot">⊥</button>
+                        <button type="button" data-insert="\top">⊤</button>
+                        <button type="button" data-insert=" \therefore ">∴</button>
+                        <button type="button" data-insert=" \because ">∵</button>
+                        <button type="button" data-insert=" \oplus ">⊕</button>
+                        <button type="button" data-insert=" \vdash ">⊢</button>
+                        <button type="button" data-insert=" \models ">⊨</button>
+                      </div>
+                    </section>
+                    <section class="scratchpad-symbol-group" aria-label="Sets">
+                      <h3>Sets</h3>
+                      <div class="scratchpad-symbol-buttons">
+                        <button type="button" data-insert="\in">∈</button>
+                        <button type="button" data-insert="\notin">∉</button>
+                        <button type="button" data-insert="\subset">⊂</button>
+                        <button type="button" data-insert="\subseteq">⊆</button>
+                        <button type="button" data-insert="\cup">∪</button>
+                        <button type="button" data-insert="\cap">∩</button>
+                        <button type="button" data-insert="\emptyset">∅</button>
+                        <button type="button" data-insert="{ }">{ }</button>
+                      </div>
+                    </section>
+                    <section class="scratchpad-symbol-group" aria-label="Number systems">
+                      <h3>Number systems</h3>
+                      <div class="scratchpad-symbol-buttons">
+                        <button type="button" data-insert="\mathbb{N}">ℕ</button>
+                        <button type="button" data-insert="\mathbb{Z}">ℤ</button>
+                        <button type="button" data-insert="\mathbb{Q}">ℚ</button>
+                        <button type="button" data-insert="\mathbb{R}">ℝ</button>
+                        <button type="button" data-insert="\mathbb{C}">ℂ</button>
+                      </div>
+                    </section>
+                  </div>
+                  <section class="scratchpad-saved" aria-labelledby="savedScratchpadsTitle">
+                    <h3 id="savedScratchpadsTitle">Recent scratchpads</h3>
+                    <div class="scratchpad-list" id="scratchpadList"></div>
+                  </section>
+                  <p class="device-note compact" id="scratchpadStatus">
+                    Scratchpads are saved privately in this browser.
+                  </p>
                 </div>
-                <div class="scratchpad-action-group" aria-label="LaTeX file controls">
-                  <span>LaTeX</span>
-                  <button class="tool-button compact" id="exportScratchLatex" type="button">Export</button>
-                  <label class="tool-button compact file-action">
-                    Import
-                    <input id="importScratchLatex" type="file" accept=".tex,.txt,text/plain,application/x-tex">
-                  </label>
-                </div>
-              </div>
+              </details>
             </div>
 
-            <p class="scratchpad-note">
-              Type plain math or LaTeX-ish notation on the left. Carry formats it on the right.
-            </p>
-
-            <div class="scratchpad-toolbar" aria-label="Math symbol helpers">
-              <section class="scratchpad-symbol-group" aria-label="Calculus">
-                <h3>Calculus</h3>
-                <div class="scratchpad-symbol-buttons">
-                  <button type="button" data-insert="int ">∫</button>
-                  <button type="button" data-insert="int_0^1 ">∫₀¹</button>
-                  <button type="button" data-insert="dy/dt">dy/dt</button>
-                  <button type="button" data-insert="ln||">ln| |</button>
-                  <button type="button" data-insert="\,">thin space</button>
-                  <button type="button" data-insert="\quad">quad</button>
-                </div>
-              </section>
-              <section class="scratchpad-symbol-group" aria-label="Notation">
-                <h3>Notation</h3>
-                <div class="scratchpad-symbol-buttons">
-                  <button type="button" data-insert="e^()">e^( )</button>
-                  <button type="button" data-insert="x_1">x₁</button>
-                  <button type="button" data-insert="\frac{}{}">a/b</button>
-                  <button type="button" data-insert="\lfloor x \rfloor">⌊x⌋</button>
-                  <button type="button" data-insert="\lceil x \rceil">⌈x⌉</button>
-                  <button type="button" data-insert="[[1, 2], [3, 4]]">[ ]</button>
-                  <button type="button" data-insert="sqrt()">sqrt( )</button>
-                  <button type="button" data-insert="theta">θ</button>
-                  <button type="button" data-insert="pi">π</button>
-                </div>
-              </section>
-              <section class="scratchpad-symbol-group" aria-label="Relations">
-                <h3>Relations</h3>
-                <div class="scratchpad-symbol-buttons">
-                  <button type="button" data-insert="<=">≤</button>
-                  <button type="button" data-insert=">=">≥</button>
-                  <button type="button" data-insert="!=">≠</button>
-                  <button type="button" data-insert=" \equiv ">≡</button>
-                  <button type="button" data-insert=" \pmod{}">mod</button>
-                  <button type="button" data-insert="+/-">±</button>
-                  <button type="button" data-insert=" -> ">→</button>
-                  <button type="button" data-insert=" => ">⇒</button>
-                </div>
-              </section>
-              <section class="scratchpad-symbol-group" aria-label="Logic">
-                <h3>Logic</h3>
-                <div class="scratchpad-symbol-buttons">
-                  <button type="button" data-insert=" \land ">∧</button>
-                  <button type="button" data-insert=" \lor ">∨</button>
-                  <button type="button" data-insert="\neg ">¬</button>
-                  <button type="button" data-insert=" \iff ">⇔</button>
-                  <button type="button" data-insert="\forall ">∀</button>
-                  <button type="button" data-insert="\exists ">∃</button>
-                  <button type="button" data-insert="\bot">⊥</button>
-                  <button type="button" data-insert="\top">⊤</button>
-                  <button type="button" data-insert=" \therefore ">∴</button>
-                  <button type="button" data-insert=" \because ">∵</button>
-                  <button type="button" data-insert=" \oplus ">⊕</button>
-                  <button type="button" data-insert=" \vdash ">⊢</button>
-                  <button type="button" data-insert=" \models ">⊨</button>
-                </div>
-              </section>
-              <section class="scratchpad-symbol-group" aria-label="Sets">
-                <h3>Sets</h3>
-                <div class="scratchpad-symbol-buttons">
-                  <button type="button" data-insert="\in">∈</button>
-                  <button type="button" data-insert="\notin">∉</button>
-                  <button type="button" data-insert="\subset">⊂</button>
-                  <button type="button" data-insert="\subseteq">⊆</button>
-                  <button type="button" data-insert="\cup">∪</button>
-                  <button type="button" data-insert="\cap">∩</button>
-                  <button type="button" data-insert="\emptyset">∅</button>
-                  <button type="button" data-insert="{ }">{ }</button>
-                </div>
-              </section>
-              <section class="scratchpad-symbol-group" aria-label="Number systems">
-                <h3>Number systems</h3>
-                <div class="scratchpad-symbol-buttons">
-                  <button type="button" data-insert="\mathbb{N}">ℕ</button>
-                  <button type="button" data-insert="\mathbb{Z}">ℤ</button>
-                  <button type="button" data-insert="\mathbb{Q}">ℚ</button>
-                  <button type="button" data-insert="\mathbb{R}">ℝ</button>
-                  <button type="button" data-insert="\mathbb{C}">ℂ</button>
-                </div>
-              </section>
-            </div>
-
-            <div class="scratchpad-layout">
-              <section class="scratchpad-editor-panel" aria-labelledby="scratchpadEditorLabel">
+            <div class="scratchpad-layout" data-scratchpad-view="plain">
+              <section class="scratchpad-work-panel" aria-labelledby="scratchpadEditorLabel">
                 <div class="scratchpad-section-heading">
-                  <h3 id="scratchpadEditorLabel">Plain text / LaTeX-ish</h3>
-                  <button class="icon-button" id="copyScratchPlain" type="button" aria-label="Copy plain text" title="Copy plain text">
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                      <rect x="9" y="9" width="11" height="11" rx="2"></rect>
-                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                    </svg>
-                  </button>
-                </div>
-                <textarea id="scratchpadInput" spellcheck="false"></textarea>
-              </section>
-
-              <section class="scratchpad-preview-panel" aria-labelledby="scratchpadPreviewLabel">
-                <div class="scratchpad-section-heading">
-                  <h3 id="scratchpadPreviewLabel">Rendered preview</h3>
-                  <div class="copy-actions">
-                    <button class="format-button" id="copyScratchLatex" type="button" aria-label="Copy LaTeX" title="Copy LaTeX">
-                      TeX
-                    </button>
-                    <button class="format-button" id="copyScratchMarkdown" type="button" aria-label="Copy Markdown" title="Copy Markdown">
-                      MD
-                    </button>
-                    <button class="format-button" id="exportScratchImage" type="button" aria-label="Export rendered preview as SVG image" title="Export rendered preview as SVG image">
-                      SVG
-                    </button>
-                    <button class="format-button" id="shareScratchImage" type="button" aria-label="Share rendered preview image" title="Share rendered preview image">
-                      Share
-                    </button>
+                  <h3 class="sr-only" id="scratchpadEditorLabel">Scratchpad editor</h3>
+                  <div class="scratchpad-view-toggle" role="group" aria-label="Scratchpad view">
+                    <button type="button" id="scratchpadPlainView" aria-pressed="true" title="Plain mode. Shortcut: Command or Control + Shift + M">Plain</button>
+                    <button type="button" id="scratchpadRenderedView" aria-pressed="false" title="Rendered mode. Shortcut: Command or Control + Shift + M">Rendered</button>
                   </div>
                 </div>
+                <textarea id="scratchpadInput" spellcheck="false"></textarea>
                 <div class="scratchpad-preview" id="scratchpadPreview" aria-live="polite"></div>
               </section>
-            </div>
-
-            <div class="scratchpad-footer">
-              <section class="scratchpad-saved" aria-labelledby="savedScratchpadsTitle">
-                <h3 id="savedScratchpadsTitle">Recent scratchpads</h3>
-                <div class="scratchpad-list" id="scratchpadList"></div>
-              </section>
-              <p class="device-note compact" id="scratchpadStatus">
-                Scratchpads are saved privately in this browser.
-              </p>
             </div>
           </section>
 
@@ -794,7 +794,7 @@
       </main>
 
       <footer class="site-footer">
-        Carry <span id="appVersion">v0.1.0-alpha.92</span> © 2026 Ian Dorsey · Open source under the MIT License
+        Carry <span id="appVersion">v0.1.0-alpha.94</span> © 2026 Ian Dorsey · Open source under the MIT License
       </footer>
     </div>
 
@@ -868,6 +868,6 @@
         }
       };
     </script>
-    <script src="/app.js?v=0.1.0-alpha.92" defer></script>
+    <script src="/app.js?v=0.1.0-alpha.94" defer></script>
   </body>
 </html>

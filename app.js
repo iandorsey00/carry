@@ -1,6 +1,6 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-alpha.92";
+const APP_VERSION = "0.1.0-alpha.94";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 const GAMES_STORAGE_KEY = "carry.games.v1";
@@ -3425,6 +3425,10 @@ function cacheElements() {
   els.scratchpadPreview = document.querySelector("#scratchpadPreview");
   els.scratchpadList = document.querySelector("#scratchpadList");
   els.scratchpadStatus = document.querySelector("#scratchpadStatus");
+  els.scratchpadLayout = document.querySelector(".scratchpad-layout");
+  els.scratchpadPlainView = document.querySelector("#scratchpadPlainView");
+  els.scratchpadRenderedView = document.querySelector("#scratchpadRenderedView");
+  els.scratchpadLineNumbers = document.querySelector("#scratchpadLineNumbers");
   els.newScratchpad = document.querySelector("#newScratchpad");
   els.renameScratchpad = document.querySelector("#renameScratchpad");
   els.copyScratchPlain = document.querySelector("#copyScratchPlain");
@@ -3480,6 +3484,7 @@ function loadScratchpads() {
     version: 1,
     activeSurface: "learn",
     activeScratchpadId: fallbackPad.id,
+    showLineNumbers: false,
     scratchpads: [fallbackPad]
   };
 
@@ -3988,11 +3993,12 @@ function workspaceStartStatus(workspace) {
 function setWorkspaceView(view) {
   const isIntro = view === "intro";
   const isProblem = view === "problem";
+  const workspace = getActiveWorkspace();
   els.lessonIntro.hidden = !isIntro;
   els.setupPanel.hidden = !isProblem;
   els.status.hidden = !isProblem;
   els.gridShell.hidden = !isProblem;
-  els.workspaceTools.hidden = !isProblem;
+  els.workspaceTools.hidden = !isProblem || workspace.type === "concept";
 }
 
 function updatePrimaryAction() {
@@ -5557,6 +5563,7 @@ function renderSurface() {
   const isPhysics = state.activeSurface === "physics";
   const isTools = state.activeSurface === "tools";
   const isGames = state.activeSurface === "games";
+  document.body.dataset.surface = state.activeSurface;
   els.lessonPanel.hidden = isScratchpad || isTools || isGames;
   els.scratchpadPanel.hidden = !isScratchpad;
   els.toolsPanel.hidden = !isTools;
@@ -8846,6 +8853,10 @@ function renderConceptGrid(model) {
   if (!model.cells[0].choices?.length || state.mode !== "guided") {
     answerPanel.append(createConceptLocalCheck());
   }
+  const inlineHint = document.createElement("p");
+  inlineHint.className = "concept-inline-hint";
+  inlineHint.hidden = true;
+  answerPanel.append(inlineHint);
 
   prompt.append(text, answerPanel);
   if (model.workspaceId) {
@@ -9295,6 +9306,7 @@ function selectConceptChoice(input, value) {
   if (input.disabled) return;
   input.value = value;
   input.classList.remove("incorrect", "correct", "hint");
+  setConceptInlineHint(input, "");
   syncConceptChoiceButtons(input);
   if (state.mode === "guided") validateGuidedConceptInput(input);
   if (state.mode === "practice") setStatus("Choice selected. Press Check.", "");
@@ -11163,6 +11175,9 @@ function validateInput(input, announce) {
   input.classList.toggle("correct", correct);
   input.classList.toggle("incorrect", input.value.length > 0 && !correct);
   syncConceptChoiceButtons(input);
+  if (input.classList.contains("concept-answer-input")) {
+    setConceptInlineHint(input, correct || !input.value.trim() ? "" : feedbackForInput(input));
+  }
   if (correct) {
     state.checkedCells.set(input.dataset.cellId, input.value);
   } else {
@@ -11183,6 +11198,7 @@ const answerVariantCache = new Map();
 function validateGuidedConceptInput(input) {
   if (!input.value.trim()) {
     input.classList.remove("correct", "incorrect", "hint");
+    setConceptInlineHint(input, "");
     syncConceptChoiceButtons(input);
     setStatus(input.classList.contains("concept-answer-choice-control") ? "Choose an answer, then check it." : "Enter the answer, then check it.", "");
     return;
@@ -11190,7 +11206,9 @@ function validateGuidedConceptInput(input) {
 
   const correct = validateInput(input, false);
   if (!correct) {
-    setStatus(feedbackForInput(input), "incorrect");
+    const feedback = feedbackForInput(input);
+    setConceptInlineHint(input, feedback);
+    setStatus(feedback, "incorrect");
     updatePrimaryAction();
     return;
   }
@@ -11202,9 +11220,22 @@ function completeConceptAnswer(input) {
   state.activeStep = orderedSteps().length;
   completeLesson();
   input.disabled = true;
+  setConceptInlineHint(input, "");
   syncConceptChoiceButtons(input);
   setStatus(`${successForInput(input)} Continue to the next problem.`, "complete");
   updatePrimaryAction();
+}
+
+function setConceptInlineHint(input, text) {
+  const hint = input.closest(".concept-card")?.querySelector(".concept-inline-hint");
+  if (!hint) return;
+  const cleanText = String(text || "").trim();
+  hint.hidden = !cleanText;
+  if (cleanText) {
+    setMathText(hint, cleanText);
+  } else {
+    hint.textContent = "";
+  }
 }
 
 function feedbackForInput(input) {
@@ -11476,6 +11507,12 @@ function bindEvents() {
   els.toolsSurface.addEventListener("click", () => setSurface("tools"));
   els.gamesSurface.addEventListener("click", () => setSurface("games"));
   els.scratchpadSurface.addEventListener("click", () => setSurface("scratchpad"));
+  document.querySelectorAll("[data-scratchpad-surface]").forEach((button) => {
+    button.addEventListener("click", () => {
+      button.closest(".scratchpad-drawer")?.removeAttribute("open");
+      setSurface(button.dataset.scratchpadSurface);
+    });
+  });
   els.toolTabs.forEach((tab) => {
     tab.addEventListener("click", () => setActiveTool(tab.dataset.tool));
   });
@@ -11503,6 +11540,7 @@ function bindEvents() {
   document.addEventListener("mouseup", handleCommandEvent, true);
   document.addEventListener("touchstart", handleCommandEvent, true);
   document.addEventListener("keydown", handleCommandEvent, true);
+  document.addEventListener("keydown", handleScratchpadShortcut, true);
   els.checkStep.addEventListener("pointerdown", requestStepCheck);
   els.checkStep.addEventListener("mousedown", requestStepCheck);
   els.checkStep.addEventListener("mouseup", requestStepCheck);
@@ -11541,6 +11579,9 @@ function bindEvents() {
   els.importProgress.addEventListener("change", importProgress);
   els.scratchpadInput.addEventListener("input", handleScratchpadInput);
   els.scratchpadInput.addEventListener("keydown", handleScratchpadKeydown);
+  els.scratchpadPlainView.addEventListener("click", () => setScratchpadView("plain"));
+  els.scratchpadRenderedView.addEventListener("click", () => setScratchpadView("rendered"));
+  els.scratchpadLineNumbers.addEventListener("change", () => setScratchpadLineNumbers(els.scratchpadLineNumbers.checked));
   els.newScratchpad.addEventListener("click", createScratchpad);
   els.renameScratchpad.addEventListener("click", renameScratchpad);
   els.copyScratchPlain.addEventListener("click", () => copyScratchpad("plain"));
@@ -11963,12 +12004,37 @@ function saveScratchpads() {
 function renderScratchpad() {
   const pad = activeScratchpad();
   if (!pad) return;
-  if (els.scratchpadTitle) els.scratchpadTitle.textContent = pad.title;
+  if (els.scratchpadTitle) els.scratchpadTitle.textContent = "Carry Scratchpad";
   if (els.scratchpadInput && els.scratchpadInput.value !== pad.text) {
     els.scratchpadInput.value = pad.text;
   }
   renderScratchpadPreview();
   renderScratchpadList();
+  setScratchpadView(els.scratchpadLayout?.dataset.scratchpadView || "plain");
+  updateScratchpadLineNumbers();
+}
+
+function setScratchpadView(view) {
+  const nextView = view === "rendered" ? "rendered" : "plain";
+  if (els.scratchpadLayout) els.scratchpadLayout.dataset.scratchpadView = nextView;
+  els.scratchpadPlainView?.setAttribute("aria-pressed", nextView === "plain" ? "true" : "false");
+  els.scratchpadRenderedView?.setAttribute("aria-pressed", nextView === "rendered" ? "true" : "false");
+  if (nextView === "plain") {
+    els.scratchpadInput?.focus({ preventScroll: true });
+  }
+}
+
+function updateScratchpadLineNumbers() {
+  const showLineNumbers = Boolean(state.scratchpads.showLineNumbers);
+  if (els.scratchpadLayout) els.scratchpadLayout.dataset.lineNumbers = showLineNumbers ? "true" : "false";
+  if (els.scratchpadLineNumbers) els.scratchpadLineNumbers.checked = showLineNumbers;
+}
+
+function setScratchpadLineNumbers(enabled) {
+  state.scratchpads.showLineNumbers = Boolean(enabled);
+  saveScratchpads();
+  updateScratchpadLineNumbers();
+  setScratchpadStatus(state.scratchpads.showLineNumbers ? "Line numbers shown." : "Line numbers hidden.");
 }
 
 function renderScratchpadList() {
@@ -12976,6 +13042,14 @@ function handleScratchpadKeydown(event) {
   duplicateScratchpadLine();
 }
 
+function handleScratchpadShortcut(event) {
+  if (state.activeSurface !== "scratchpad") return;
+  if (event.key.toLowerCase() !== "m" || (!event.metaKey && !event.ctrlKey) || !event.shiftKey || event.altKey) return;
+  event.preventDefault();
+  const currentView = els.scratchpadLayout?.dataset.scratchpadView || "plain";
+  setScratchpadView(currentView === "plain" ? "rendered" : "plain");
+}
+
 function duplicateScratchpadLine() {
   const input = els.scratchpadInput;
   const cursor = input.selectionStart ?? input.value.length;
@@ -13117,7 +13191,7 @@ function scratchpadImageCss() {
   const muted = root.getPropertyValue("--muted").trim() || "#60616a";
   const surface = root.getPropertyValue("--surface").trim() || "#ffffff";
   const line = root.getPropertyValue("--line").trim() || "#d9d9de";
-  const font = root.getPropertyValue("--font").trim() || "Inter, Arial, sans-serif";
+  const font = root.getPropertyValue("--font").trim() || '"Helvetica Neue", Helvetica, Arial, sans-serif';
   const mathFont = root.getPropertyValue("--math-font").trim() || "STIX Two Math, Cambria Math, Times New Roman, serif";
 
   return `

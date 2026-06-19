@@ -1,6 +1,6 @@
 # Carry
 
-Version: `0.1.0-alpha.92`
+Version: `0.1.0-alpha.94`
 
 Carry is a local-first math, physics, scratchpad, and puzzle learning studio designed to run fully in the browser.
 
@@ -17,6 +17,7 @@ Open `index.html` in a browser, or serve the directory with any static file serv
 - `index.html` provides the static app shell.
 - `styles.css` defines the shared interface system, light and dark themes, grid layout, focus states, and responsive behavior.
 - `app.js` contains the client-side workspace registry, progress and game persistence, lesson renderers, validation, hints, problem guardrails, and import/export flow.
+- `practice/` documents the recommended modular home for reusable question data and special practice engines as they migrate out of `app.js`.
 - `assets/carry-icon.png`, `assets/carry-icon-256.png`, and `favicon.ico` provide the app icon and browser favicons.
 
 ## Versioning
