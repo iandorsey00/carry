@@ -24,7 +24,25 @@
       "prompt": "In a ring, multiplication distributes over which operation?",
       "answer": "addition",
       "hint": "Think a(b + c) = ab + ac.",
-      "label": "distributive operation"
+      "label": "distributive operation",
+      "choices": [
+        {
+          "value": "addition",
+          "label": "addition"
+        },
+        {
+          "value": "closure",
+          "label": "closure"
+        },
+        {
+          "value": "identity",
+          "label": "identity"
+        },
+        {
+          "value": "inverse",
+          "label": "inverse"
+        }
+      ]
     },
     {
       "prompt": "Are the integers a ring under usual addition and multiplication?",
@@ -34,7 +52,17 @@
         "true"
       ],
       "hint": "Integers support both operations and satisfy the ring rules.",
-      "label": "integer ring"
+      "label": "integer ring",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     }
   ]
 };

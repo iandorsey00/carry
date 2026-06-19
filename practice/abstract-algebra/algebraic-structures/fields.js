@@ -22,7 +22,17 @@
         "true"
       ],
       "hint": "Division by nonzero elements is allowed in a field.",
-      "label": "field inverse"
+      "label": "field inverse",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     },
     {
       "prompt": "Is 0 required to have a multiplicative inverse in a field?",
@@ -32,7 +42,17 @@
         "false"
       ],
       "hint": "Division by zero is still not allowed.",
-      "label": "zero inverse"
+      "label": "zero inverse",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     },
     {
       "prompt": "Are the integers a field under usual operations?",
@@ -42,7 +62,17 @@
         "false"
       ],
       "hint": "2 has no integer multiplicative inverse.",
-      "label": "integers not field"
+      "label": "integers not field",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     }
   ]
 };

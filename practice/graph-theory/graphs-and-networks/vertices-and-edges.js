@@ -61,12 +61,12 @@
       "answer": "5",
       "choices": [
         {
-          "value": "4",
-          "label": "4"
-        },
-        {
           "value": "5",
           "label": "5"
+        },
+        {
+          "value": "4",
+          "label": "4"
         },
         {
           "value": "9",

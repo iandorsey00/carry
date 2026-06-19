@@ -26,20 +26,12 @@
       "answer": "quantitative",
       "choices": [
         {
-          "value": "quantitative",
-          "label": "quantitative"
-        },
-        {
           "value": "categorical",
           "label": "categorical"
         },
         {
-          "value": "sample",
-          "label": "sample"
-        },
-        {
-          "value": "outlier",
-          "label": "outlier"
+          "value": "quantitative",
+          "label": "quantitative"
         }
       ],
       "hint": "Measurements with units are quantitative.",
@@ -57,14 +49,6 @@
         {
           "value": "quantitative",
           "label": "quantitative"
-        },
-        {
-          "value": "mean",
-          "label": "mean"
-        },
-        {
-          "value": "range",
-          "label": "range"
         }
       ],
       "hint": "Color names are categories, not numerical measurements.",
@@ -77,6 +61,30 @@
       "hint": "Add the values before finding many summaries.",
       "label": "data total",
       "feedback": "Totals are often the first step toward a mean."
+    },
+    {
+      "prompt": "In 6, 6, 9, 12, how many observations are there?",
+      "answer": "4",
+      "hint": "Count every listed value, including repeats.",
+      "label": "observation count",
+      "feedback": "Repeated values are still separate observations."
+    },
+    {
+      "prompt": "A variable labeled school grade level is categorical or quantitative?",
+      "answer": "categorical",
+      "choices": [
+        {
+          "value": "categorical",
+          "label": "categorical"
+        },
+        {
+          "value": "quantitative",
+          "label": "quantitative"
+        }
+      ],
+      "hint": "Grade level names ordered groups.",
+      "label": "grade variable type",
+      "feedback": "Grade level is usually treated as categorical or ordinal."
     }
   ]
 };

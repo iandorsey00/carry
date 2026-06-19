@@ -33,7 +33,10 @@
  * - Keep prompts short and concrete.
  * - Use <math>...</math> only around math expressions that should render as math.
  * - Provide 2-4 choices when the question is multiple-choice.
- * - Use two choices when plausible distractors would become silly or misleading.
+ * - Use two choices for yes/no, true/false, and X-or-Y prompts.
+ * - Use three choices only when the prompt itself names three alternatives.
+ * - Use four choices only when every distractor is plausible and from the same family.
+ * - Use two choices when four plausible distractors would become silly or misleading.
  * - Use typed answers only when there is one clear answer or a small accepted set.
  * - Put the learning nudge in hint, not in the wrong answer choices.
  * - feedback should explain the rule after the learner answers correctly.

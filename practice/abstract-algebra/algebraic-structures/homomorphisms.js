@@ -23,7 +23,25 @@
         "operations"
       ],
       "hint": "It respects the operation, so structure is preserved.",
-      "label": "homomorphism meaning"
+      "label": "homomorphism meaning",
+      "choices": [
+        {
+          "value": "structure",
+          "label": "structure"
+        },
+        {
+          "value": "mean",
+          "label": "mean"
+        },
+        {
+          "value": "median",
+          "label": "median"
+        },
+        {
+          "value": "mode",
+          "label": "mode"
+        }
+      ]
     },
     {
       "prompt": "For an additive homomorphism f, f(a + b) equals f(a) plus what?",
@@ -43,7 +61,17 @@
         "false"
       ],
       "hint": "Some homomorphisms collapse different inputs together.",
-      "label": "homomorphism injective"
+      "label": "homomorphism injective",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     }
   ]
 };

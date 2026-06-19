@@ -23,7 +23,25 @@
         "intervals"
       ],
       "hint": "A partition chops the interval into subintervals.",
-      "label": "partition meaning"
+      "label": "partition meaning",
+      "choices": [
+        {
+          "value": "pieces",
+          "label": "pieces"
+        },
+        {
+          "value": "mean",
+          "label": "mean"
+        },
+        {
+          "value": "median",
+          "label": "median"
+        },
+        {
+          "value": "mode",
+          "label": "mode"
+        }
+      ]
     },
     {
       "prompt": "For a constant function f(x) = 3 on [0, 2], what is the area under the graph?",
@@ -39,7 +57,17 @@
         "true"
       ],
       "hint": "Each subinterval contributes a rectangle-like area.",
-      "label": "riemann rectangles"
+      "label": "riemann rectangles",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     }
   ]
 };

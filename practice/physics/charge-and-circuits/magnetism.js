@@ -22,7 +22,17 @@
         "magnetic"
       ],
       "hint": "Moving charge is connected to magnetism.",
-      "label": "moving charge field"
+      "label": "moving charge field",
+      "choices": [
+        {
+          "value": "electricfield",
+          "label": "electric field"
+        },
+        {
+          "value": "magneticfield",
+          "label": "magnetic field"
+        }
+      ]
     },
     {
       "prompt": "Like magnetic poles attract or repel?",
@@ -32,7 +42,17 @@
         "repels"
       ],
       "hint": "North-north or south-south push apart.",
-      "label": "like poles"
+      "label": "like poles",
+      "choices": [
+        {
+          "value": "attract",
+          "label": "attract"
+        },
+        {
+          "value": "repel",
+          "label": "repel"
+        }
+      ]
     },
     {
       "prompt": "Opposite magnetic poles attract or repel?",
@@ -42,7 +62,17 @@
         "attracts"
       ],
       "hint": "North and south pull together.",
-      "label": "opposite poles"
+      "label": "opposite poles",
+      "choices": [
+        {
+          "value": "attract",
+          "label": "attract"
+        },
+        {
+          "value": "repel",
+          "label": "repel"
+        }
+      ]
     }
   ]
 };

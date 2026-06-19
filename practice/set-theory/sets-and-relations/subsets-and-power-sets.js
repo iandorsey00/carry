@@ -22,7 +22,17 @@
         "true"
       ],
       "hint": "Both <math>1</math> and <math>2</math> appear in the larger set.",
-      "label": "subset check"
+      "label": "subset check",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     },
     {
       "prompt": "How many subsets does a set with 3 elements have?",
@@ -38,7 +48,17 @@
         "true"
       ],
       "hint": "There is no element in the empty set that can fail to belong.",
-      "label": "empty subset"
+      "label": "empty subset",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     }
   ]
 };

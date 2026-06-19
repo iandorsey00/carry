@@ -22,7 +22,17 @@
         "true"
       ],
       "hint": "A square bracket means the endpoint is included.",
-      "label": "closed endpoint"
+      "label": "closed endpoint",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     },
     {
       "prompt": "Does the interval (2, 5) include 2?",
@@ -32,7 +42,17 @@
         "false"
       ],
       "hint": "A parenthesis means the endpoint is not included.",
-      "label": "open endpoint"
+      "label": "open endpoint",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     },
     {
       "prompt": "What is the smallest number in the set [2, 5]?",

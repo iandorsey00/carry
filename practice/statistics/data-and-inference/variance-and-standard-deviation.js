@@ -23,16 +23,16 @@
           "label": "2"
         },
         {
-          "value": "-2",
-          "label": "-2"
-        },
-        {
           "value": "4",
           "label": "4"
         },
         {
           "value": "6",
           "label": "6"
+        },
+        {
+          "value": "-2",
+          "label": "-2"
         }
       ],
       "hint": "Deviation means value minus mean.",
@@ -56,8 +56,8 @@
           "label": "same"
         },
         {
-          "value": "cannot tell",
-          "label": "cannot tell"
+          "value": "mean",
+          "label": "mean"
         }
       ],
       "hint": "Compare distance from the center value 10.",
@@ -75,14 +75,6 @@
         {
           "value": "squared units",
           "label": "squared units"
-        },
-        {
-          "value": "percent only",
-          "label": "percent only"
-        },
-        {
-          "value": "no units",
-          "label": "no units"
         }
       ],
       "hint": "Variance uses squared units; standard deviation takes the square root.",

@@ -19,26 +19,66 @@
       "answer": "repel",
       "answers": [
         "repel",
-        "repels"
+        "repels",
+        "false"
       ],
       "hint": "Two positives or two negatives push apart.",
-      "label": "like charges"
+      "label": "like charges",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     },
     {
       "prompt": "Do opposite charges attract or repel?",
       "answer": "attract",
       "answers": [
         "attract",
-        "attracts"
+        "attracts",
+        "false"
       ],
       "hint": "Positive and negative pull together.",
-      "label": "opposite charges"
+      "label": "opposite charges",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     },
     {
       "prompt": "Electric field is force per unit what?",
       "answer": "charge",
       "hint": "E = F / q.",
-      "label": "field denominator"
+      "label": "field denominator",
+      "choices": [
+        {
+          "value": "charge",
+          "label": "charge"
+        },
+        {
+          "value": "closure",
+          "label": "closure"
+        },
+        {
+          "value": "identity",
+          "label": "identity"
+        },
+        {
+          "value": "inverse",
+          "label": "inverse"
+        }
+      ]
     }
   ]
 };

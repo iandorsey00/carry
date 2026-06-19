@@ -28,7 +28,17 @@
         "true"
       ],
       "hint": "Limits depend on nearby values, not only the value at the point.",
-      "label": "punctured limit"
+      "label": "punctured limit",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     },
     {
       "prompt": "In epsilon-delta language, epsilon controls closeness of outputs or inputs?",
@@ -38,7 +48,17 @@
         "output"
       ],
       "hint": "Epsilon measures vertical closeness to the limiting value.",
-      "label": "epsilon role"
+      "label": "epsilon role",
+      "choices": [
+        {
+          "value": "outputs",
+          "label": "outputs"
+        },
+        {
+          "value": "inputs",
+          "label": "inputs"
+        }
+      ]
     }
   ]
 };

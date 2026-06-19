@@ -35,6 +35,31 @@
       "answer": "15",
       "hint": "3^2 + 2(3) = 9 + 6.",
       "label": "polynomial value"
+    },
+    {
+      "prompt": "Combine like terms: 6x^2 - 2x^2 + x.",
+      "answer": "4x^2+x",
+      "answers": [
+        "4x^2+x",
+        "x+4x^2"
+      ],
+      "hint": "Combine only the x^2 terms.",
+      "label": "combined polynomial",
+      "feedback": "Match both variable and exponent before combining."
+    },
+    {
+      "prompt": "What is the degree of 7x^4 + 2x^2 - 1?",
+      "answer": "4",
+      "hint": "Find the largest exponent.",
+      "label": "polynomial degree",
+      "feedback": "Degree is about the highest power after simplifying."
+    },
+    {
+      "prompt": "Evaluate x^2 - x when x = 5.",
+      "answer": "20",
+      "hint": "25 - 5 = 20.",
+      "label": "polynomial value",
+      "feedback": "Substitute the value for every x first."
     }
   ]
 };

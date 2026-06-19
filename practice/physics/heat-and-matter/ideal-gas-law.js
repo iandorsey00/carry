@@ -18,13 +18,49 @@
       "prompt": "In PV = nRT, what letter represents pressure?",
       "answer": "p",
       "hint": "P is pressure.",
-      "label": "pressure letter"
+      "label": "pressure letter",
+      "choices": [
+        {
+          "value": "p",
+          "label": "P"
+        },
+        {
+          "value": "v",
+          "label": "V"
+        },
+        {
+          "value": "n",
+          "label": "n"
+        },
+        {
+          "value": "t",
+          "label": "T"
+        }
+      ]
     },
     {
       "prompt": "In PV = nRT, what letter represents volume?",
       "answer": "v",
       "hint": "V is volume.",
-      "label": "volume letter"
+      "label": "volume letter",
+      "choices": [
+        {
+          "value": "p",
+          "label": "P"
+        },
+        {
+          "value": "v",
+          "label": "V"
+        },
+        {
+          "value": "n",
+          "label": "n"
+        },
+        {
+          "value": "t",
+          "label": "T"
+        }
+      ]
     },
     {
       "prompt": "For gas laws, temperature should be in kelvin or celsius?",
@@ -34,7 +70,17 @@
         "k"
       ],
       "hint": "Kelvin is the absolute temperature scale.",
-      "label": "absolute temperature"
+      "label": "absolute temperature",
+      "choices": [
+        {
+          "value": "kelvin",
+          "label": "kelvin"
+        },
+        {
+          "value": "celsius",
+          "label": "celsius"
+        }
+      ]
     }
   ]
 };

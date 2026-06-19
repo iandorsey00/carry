@@ -19,10 +19,21 @@
       "answer": "yes",
       "answers": [
         "yes",
-        "y"
+        "y",
+        "true"
       ],
       "hint": "29 is not divisible by 2, 3, or 5.",
-      "label": "prime check"
+      "label": "prime check",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     },
     {
       "prompt": "Give the missing factor: 6 x __ = 42.",

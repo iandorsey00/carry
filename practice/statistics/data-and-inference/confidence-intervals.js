@@ -19,20 +19,12 @@
       "answer": "range",
       "choices": [
         {
-          "value": "range",
-          "label": "range"
-        },
-        {
           "value": "single value",
           "label": "single value"
         },
         {
-          "value": "category",
-          "label": "category"
-        },
-        {
-          "value": "proof",
-          "label": "proof"
+          "value": "range",
+          "label": "range"
         }
       ],
       "hint": "Intervals have lower and upper endpoints.",
@@ -92,14 +84,6 @@
         {
           "value": "narrower",
           "label": "narrower"
-        },
-        {
-          "value": "same width",
-          "label": "same width"
-        },
-        {
-          "value": "not a range",
-          "label": "not a range"
         }
       ],
       "hint": "More confidence requires a wider net.",

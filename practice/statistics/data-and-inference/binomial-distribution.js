@@ -44,12 +44,12 @@
           "label": "2"
         },
         {
-          "value": "1/2",
-          "label": "1/2"
-        },
-        {
           "value": "10",
           "label": "10"
+        },
+        {
+          "value": "1/2",
+          "label": "1/2"
         }
       ],
       "hint": "n is the number of trials.",
@@ -91,10 +91,10 @@
       "choices": [
         {
           "value": "same",
-          "label": "stay the same"
+          "label": "same"
         },
         {
-          "value": "change",
+          "value": "change every trial",
           "label": "change every trial"
         }
       ],

@@ -39,6 +39,35 @@
       "answer": "5",
       "hint": "Use the distance formula: square, add, then take the square root.",
       "label": "vector length"
+    },
+    {
+      "prompt": "Add the vectors (1, 5) + (3, -2).",
+      "answer": "(4,3)",
+      "answers": [
+        "(4,3)",
+        "4,3"
+      ],
+      "hint": "Add x-components and y-components separately.",
+      "label": "vector addition",
+      "feedback": "Vectors add component by component."
+    },
+    {
+      "prompt": "Compute -2(3, 4).",
+      "answer": "(-6,-8)",
+      "answers": [
+        "(-6,-8)",
+        "-6,-8"
+      ],
+      "hint": "Multiply each component by -2.",
+      "label": "scalar multiplication",
+      "feedback": "A negative scalar also reverses direction."
+    },
+    {
+      "prompt": "What is the length of the vector (5, 12)?",
+      "answer": "13",
+      "hint": "Use the 5-12-13 right triangle.",
+      "label": "vector length",
+      "feedback": "Square, add, then take the square root."
     }
   ]
 };

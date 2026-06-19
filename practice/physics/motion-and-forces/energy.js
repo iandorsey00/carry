@@ -18,7 +18,17 @@
       "prompt": "Kinetic energy belongs to motion or height?",
       "answer": "motion",
       "hint": "Kinetic means moving.",
-      "label": "kinetic energy meaning"
+      "label": "kinetic energy meaning",
+      "choices": [
+        {
+          "value": "motion",
+          "label": "motion"
+        },
+        {
+          "value": "height",
+          "label": "height"
+        }
+      ]
     },
     {
       "prompt": "What happens to gravitational potential energy when height increases?",
@@ -28,13 +38,41 @@
         "goes up"
       ],
       "hint": "Greater height means greater mgh.",
-      "label": "height energy"
+      "label": "height energy",
+      "choices": [
+        {
+          "value": "increases",
+          "label": "increases"
+        },
+        {
+          "value": "force",
+          "label": "force"
+        },
+        {
+          "value": "energy",
+          "label": "energy"
+        },
+        {
+          "value": "momentum",
+          "label": "momentum"
+        }
+      ]
     },
     {
       "prompt": "Work transfers what quantity: energy or charge?",
       "answer": "energy",
       "hint": "Work is a way of transferring energy.",
-      "label": "work transfer"
+      "label": "work transfer",
+      "choices": [
+        {
+          "value": "energy",
+          "label": "energy"
+        },
+        {
+          "value": "charge",
+          "label": "charge"
+        }
+      ]
     }
   ]
 };

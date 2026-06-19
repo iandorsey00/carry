@@ -34,7 +34,17 @@
         "false"
       ],
       "hint": "A zero derivative means no instantaneous change.",
-      "label": "equilibrium change"
+      "label": "equilibrium change",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     },
     {
       "prompt": "In <math>dT/dt = -k(T - A)</math>, what value is the surrounding temperature?",

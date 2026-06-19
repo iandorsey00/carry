@@ -34,7 +34,17 @@
         "false"
       ],
       "hint": "Zero determinant means information is flattened.",
-      "label": "invertibility check"
+      "label": "invertibility check",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     }
   ]
 };

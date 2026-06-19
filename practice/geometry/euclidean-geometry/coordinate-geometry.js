@@ -35,6 +35,31 @@
       "answer": "12",
       "hint": "The side lengths are 4 and 3.",
       "label": "coordinate rectangle area"
+    },
+    {
+      "prompt": "What is the vertical distance from (2, 1) to (2, 6)?",
+      "answer": "5",
+      "hint": "The x-values match, so compare y-values.",
+      "label": "vertical distance",
+      "feedback": "Subtract the smaller coordinate from the larger one."
+    },
+    {
+      "prompt": "What is the midpoint of (2, 4) and (8, 4)?",
+      "answer": "(5,4)",
+      "answers": [
+        "(5,4)",
+        "5,4"
+      ],
+      "hint": "Average the x-values and average the y-values.",
+      "label": "midpoint",
+      "feedback": "Midpoint means average each coordinate."
+    },
+    {
+      "prompt": "A rectangle has side lengths 5 and 2 on the coordinate grid. What is its area?",
+      "answer": "10",
+      "hint": "Area is length times width.",
+      "label": "coordinate rectangle area",
+      "feedback": "Use the side lengths after reading the grid."
     }
   ]
 };

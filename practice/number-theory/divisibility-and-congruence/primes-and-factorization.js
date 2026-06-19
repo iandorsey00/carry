@@ -22,7 +22,17 @@
         "true"
       ],
       "hint": "17 is not divisible by 2, 3, or 5.",
-      "label": "prime check"
+      "label": "prime check",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     },
     {
       "prompt": "Is 21 prime?",
@@ -32,7 +42,17 @@
         "false"
       ],
       "hint": "21 = 3 × 7.",
-      "label": "composite check"
+      "label": "composite check",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     },
     {
       "prompt": "Write 12 as a product of primes.",

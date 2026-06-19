@@ -30,7 +30,17 @@
       "prompt": "Which is greater: -2 or -7?",
       "answer": "-2",
       "hint": "The greater number is farther right on the number line.",
-      "label": "greater integer"
+      "label": "greater integer",
+      "choices": [
+        {
+          "value": "-2",
+          "label": "-2"
+        },
+        {
+          "value": "-7",
+          "label": "-7"
+        }
+      ]
     }
   ]
 };

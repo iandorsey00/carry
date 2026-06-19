@@ -28,7 +28,25 @@
       "prompt": "A triangle with three equal sides is called what?",
       "answer": "equilateral",
       "hint": "Equal sides means equilateral.",
-      "label": "triangle type"
+      "label": "triangle type",
+      "choices": [
+        {
+          "value": "equilateral",
+          "label": "equilateral"
+        },
+        {
+          "value": "acute",
+          "label": "acute"
+        },
+        {
+          "value": "right",
+          "label": "right"
+        },
+        {
+          "value": "obtuse",
+          "label": "obtuse"
+        }
+      ]
     },
     {
       "prompt": "A right triangle has one angle of 90 degrees and another of 35 degrees. What is the third angle?",
@@ -39,6 +57,63 @@
       ],
       "hint": "180 - 90 - 35 = 55.",
       "label": "right triangle angle"
+    },
+    {
+      "prompt": "A triangle has angles 40 degrees and 65 degrees. What is the third angle?",
+      "answer": "75",
+      "answers": [
+        "75",
+        "75degrees"
+      ],
+      "hint": "Subtract 40 and 65 from 180.",
+      "label": "third angle",
+      "feedback": "Triangle angles always total 180 degrees."
+    },
+    {
+      "prompt": "A triangle with two equal sides is called what?",
+      "answer": "isosceles",
+      "hint": "Two equal sides means isosceles.",
+      "label": "triangle type",
+      "feedback": "Match the side pattern to the name.",
+      "choices": [
+        {
+          "value": "isosceles",
+          "label": "isosceles"
+        },
+        {
+          "value": "acute",
+          "label": "acute"
+        },
+        {
+          "value": "right",
+          "label": "right"
+        },
+        {
+          "value": "obtuse",
+          "label": "obtuse"
+        }
+      ]
+    },
+    {
+      "prompt": "Can a triangle have angles 90, 60, and 40 degrees?",
+      "answer": "no",
+      "answers": [
+        "no",
+        "false"
+      ],
+      "hint": "Those angles add to 190.",
+      "label": "triangle possibility",
+      "feedback": "Check whether the angles add to 180.",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     }
   ]
 };

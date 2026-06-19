@@ -42,6 +42,38 @@
       ],
       "hint": "A derivative of 4x is 4.",
       "label": "constant antiderivative"
+    },
+    {
+      "prompt": "What is an antiderivative of 3x^2?",
+      "answer": "x^3+c",
+      "answers": [
+        "x^3+c",
+        "x^3+C",
+        "x^3 + C"
+      ],
+      "hint": "Differentiate x^3 to get 3x^2.",
+      "label": "basic antiderivative",
+      "feedback": "Reverse the power rule."
+    },
+    {
+      "prompt": "What is the area under y = 4 from x = 0 to x = 5?",
+      "answer": "20",
+      "hint": "This is a rectangle: height 4 and width 5.",
+      "label": "constant integral",
+      "feedback": "For a constant function, multiply height by width."
+    },
+    {
+      "prompt": "What is an antiderivative of 9?",
+      "answer": "9x+c",
+      "answers": [
+        "9x+c",
+        "9x+C",
+        "9*x+c",
+        "9*x+C"
+      ],
+      "hint": "A derivative of 9x is 9.",
+      "label": "constant antiderivative",
+      "feedback": "Constants integrate to constant times x plus C."
     }
   ]
 };

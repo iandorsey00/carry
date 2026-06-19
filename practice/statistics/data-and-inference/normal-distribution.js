@@ -20,19 +20,11 @@
       "choices": [
         {
           "value": "center",
-          "label": "center"
+          "label": "at the center"
         },
         {
           "value": "edge",
           "label": "edge"
-        },
-        {
-          "value": "left tail",
-          "label": "left tail"
-        },
-        {
-          "value": "right tail",
-          "label": "right tail"
         }
       ],
       "hint": "A normal curve is symmetric around its mean.",
@@ -50,14 +42,6 @@
         {
           "value": "narrower",
           "label": "narrower"
-        },
-        {
-          "value": "shifted left",
-          "label": "shifted left"
-        },
-        {
-          "value": "shifted right",
-          "label": "shifted right"
         }
       ],
       "hint": "More spread makes the curve wider.",
@@ -117,6 +101,52 @@
       "hint": "z-scores measure standard deviations from the mean.",
       "label": "z score units",
       "feedback": "A z-score is measured in standard deviations."
+    },
+    {
+      "prompt": "A z-score of -2 is below or above the mean?",
+      "answer": "below",
+      "choices": [
+        {
+          "value": "below",
+          "label": "below"
+        },
+        {
+          "value": "above the mean",
+          "label": "above the mean"
+        }
+      ],
+      "hint": "Negative z-scores are below the mean.",
+      "label": "negative z score",
+      "feedback": "The sign of a z-score gives direction from the mean."
+    },
+    {
+      "prompt": "About what percent of normal data lies within two standard deviations?",
+      "answer": "95%",
+      "answers": [
+        "95",
+        "95%"
+      ],
+      "choices": [
+        {
+          "value": "95%",
+          "label": "95%"
+        },
+        {
+          "value": "68%",
+          "label": "68%"
+        },
+        {
+          "value": "50%",
+          "label": "50%"
+        },
+        {
+          "value": "10%",
+          "label": "10%"
+        }
+      ],
+      "hint": "Use the 68-95-99.7 rule.",
+      "label": "empirical rule two sd",
+      "feedback": "About 95% lies within two standard deviations."
     }
   ]
 };

@@ -44,7 +44,74 @@
         "90degrees"
       ],
       "hint": "35 + 55 = 90.",
-      "label": "angle type"
+      "label": "angle type",
+      "choices": [
+        {
+          "value": "right",
+          "label": "right"
+        },
+        {
+          "value": "acute",
+          "label": "acute"
+        },
+        {
+          "value": "obtuse",
+          "label": "obtuse"
+        }
+      ]
+    },
+    {
+      "prompt": "Two adjacent angles make a straight line. One is 45 degrees. What is the other?",
+      "answer": "135",
+      "answers": [
+        "135",
+        "135degrees"
+      ],
+      "hint": "Straight line angles add to 180.",
+      "label": "missing angle",
+      "feedback": "Subtract the known angle from 180."
+    },
+    {
+      "prompt": "What kind of angle is 30 degrees: acute, right, or obtuse?",
+      "answer": "acute",
+      "hint": "Acute angles are less than 90 degrees.",
+      "label": "angle type",
+      "feedback": "Compare the measure to 90 degrees.",
+      "choices": [
+        {
+          "value": "acute",
+          "label": "acute"
+        },
+        {
+          "value": "right",
+          "label": "right"
+        },
+        {
+          "value": "obtuse",
+          "label": "obtuse"
+        }
+      ]
+    },
+    {
+      "prompt": "What kind of angle is 140 degrees?",
+      "answer": "obtuse",
+      "hint": "Obtuse angles are greater than 90 and less than 180 degrees.",
+      "label": "angle type",
+      "feedback": "Classify by size.",
+      "choices": [
+        {
+          "value": "obtuse",
+          "label": "obtuse"
+        },
+        {
+          "value": "acute",
+          "label": "acute"
+        },
+        {
+          "value": "right",
+          "label": "right"
+        }
+      ]
     }
   ]
 };

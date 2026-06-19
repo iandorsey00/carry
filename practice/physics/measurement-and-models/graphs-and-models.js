@@ -18,13 +18,49 @@
       "prompt": "On a position-time graph, slope represents what?",
       "answer": "velocity",
       "hint": "Change in position divided by change in time is velocity.",
-      "label": "position graph slope"
+      "label": "position graph slope",
+      "choices": [
+        {
+          "value": "velocity",
+          "label": "velocity"
+        },
+        {
+          "value": "position",
+          "label": "position"
+        },
+        {
+          "value": "acceleration",
+          "label": "acceleration"
+        },
+        {
+          "value": "time",
+          "label": "time"
+        }
+      ]
     },
     {
       "prompt": "On a velocity-time graph, area represents what?",
       "answer": "displacement",
       "hint": "Velocity times time gives displacement.",
-      "label": "velocity graph area"
+      "label": "velocity graph area",
+      "choices": [
+        {
+          "value": "displacement",
+          "label": "displacement"
+        },
+        {
+          "value": "velocity",
+          "label": "velocity"
+        },
+        {
+          "value": "acceleration",
+          "label": "acceleration"
+        },
+        {
+          "value": "time",
+          "label": "time"
+        }
+      ]
     },
     {
       "prompt": "A horizontal position-time graph means the object is moving or at rest?",
@@ -35,7 +71,17 @@
         "not moving"
       ],
       "hint": "Position is not changing.",
-      "label": "horizontal position graph"
+      "label": "horizontal position graph",
+      "choices": [
+        {
+          "value": "moving",
+          "label": "moving"
+        },
+        {
+          "value": "atrest",
+          "label": "at rest"
+        }
+      ]
     }
   ]
 };

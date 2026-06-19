@@ -36,6 +36,37 @@
       "answer": "3/4",
       "hint": "Use sin^2 x + cos^2 x = 1.",
       "label": "cosine squared"
+    },
+    {
+      "prompt": "If cos^2 x = 1/9, what is sin^2 x?",
+      "answer": "8/9",
+      "hint": "Use sin^2 x + cos^2 x = 1.",
+      "label": "sine squared",
+      "feedback": "Subtract the known squared value from 1."
+    },
+    {
+      "prompt": "Complete: 1 + tan^2 x = __.",
+      "answer": "sec^2x",
+      "answers": [
+        "sec^2x",
+        "sec^2 x",
+        "sec²x"
+      ],
+      "hint": "This is a Pythagorean identity.",
+      "label": "secant identity",
+      "feedback": "This identity pairs tangent with secant."
+    },
+    {
+      "prompt": "Rewrite cot x using cos x and sin x.",
+      "answer": "cosx/sinx",
+      "answers": [
+        "cosx/sinx",
+        "cos(x)/sin(x)",
+        "cos x/sin x"
+      ],
+      "hint": "Cotangent is cosine divided by sine.",
+      "label": "cotangent identity",
+      "feedback": "Cotangent is the reciprocal of tangent."
     }
   ]
 };

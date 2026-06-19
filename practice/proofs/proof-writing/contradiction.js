@@ -23,7 +23,17 @@
         "not the claim"
       ],
       "hint": "You temporarily suppose the claim is false.",
-      "label": "contradiction assumption"
+      "label": "contradiction assumption",
+      "choices": [
+        {
+          "value": "claim",
+          "label": "claim"
+        },
+        {
+          "value": "opposite",
+          "label": "its opposite"
+        }
+      ]
     },
     {
       "prompt": "What kind of result finishes a contradiction proof?",
@@ -34,7 +44,25 @@
         "false"
       ],
       "hint": "You show the assumption led to something impossible.",
-      "label": "contradiction finish"
+      "label": "contradiction finish",
+      "choices": [
+        {
+          "value": "contradiction",
+          "label": "contradiction"
+        },
+        {
+          "value": "hypothesis",
+          "label": "hypothesis"
+        },
+        {
+          "value": "conclusion",
+          "label": "conclusion"
+        },
+        {
+          "value": "counterexample",
+          "label": "counterexample"
+        }
+      ]
     },
     {
       "prompt": "If assuming not P leads to a contradiction, what can you conclude?",
@@ -46,7 +74,25 @@
         "true"
       ],
       "hint": "The negation failed, so P remains.",
-      "label": "contradiction conclusion"
+      "label": "contradiction conclusion",
+      "choices": [
+        {
+          "value": "p",
+          "label": "p"
+        },
+        {
+          "value": "hypothesis",
+          "label": "hypothesis"
+        },
+        {
+          "value": "conclusion",
+          "label": "conclusion"
+        },
+        {
+          "value": "contradiction",
+          "label": "contradiction"
+        }
+      ]
     }
   ]
 };

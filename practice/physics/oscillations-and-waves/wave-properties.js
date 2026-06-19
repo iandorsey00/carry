@@ -18,7 +18,25 @@
       "prompt": "In v = f lambda, what does f represent?",
       "answer": "frequency",
       "hint": "f is the number of cycles per second.",
-      "label": "wave frequency"
+      "label": "wave frequency",
+      "choices": [
+        {
+          "value": "frequency",
+          "label": "frequency"
+        },
+        {
+          "value": "force",
+          "label": "force"
+        },
+        {
+          "value": "energy",
+          "label": "energy"
+        },
+        {
+          "value": "momentum",
+          "label": "momentum"
+        }
+      ]
     },
     {
       "prompt": "If frequency is 2 Hz and wavelength is 3 m, what is wave speed?",
@@ -30,7 +48,20 @@
       "prompt": "Does a wave transfer energy or mass overall?",
       "answer": "energy",
       "hint": "Waves carry energy without transporting matter overall.",
-      "label": "wave transfer"
+      "label": "wave transfer",
+      "answers": [
+        "false"
+      ],
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     }
   ]
 };

@@ -35,6 +35,31 @@
       ],
       "hint": "Divide numerator and denominator by 3.",
       "label": "reduced rational expression"
+    },
+    {
+      "prompt": "Simplify: 10x / 15.",
+      "answer": "2x/3",
+      "answers": [
+        "2x/3",
+        "(2x)/3"
+      ],
+      "hint": "Divide numerator and denominator by 5.",
+      "label": "reduced rational expression",
+      "feedback": "Reduce common numerical factors."
+    },
+    {
+      "prompt": "For 1 / (x + 4), what value of x is not allowed?",
+      "answer": "-4",
+      "hint": "The denominator cannot equal zero.",
+      "label": "excluded value",
+      "feedback": "Set the denominator equal to zero to find the excluded value."
+    },
+    {
+      "prompt": "Simplify: (x^2 - 4) / (x - 2).",
+      "answer": "x+2",
+      "hint": "Factor x^2 - 4 as (x - 2)(x + 2).",
+      "label": "simplified rational expression",
+      "feedback": "Factor first, then cancel common factors."
     }
   ]
 };

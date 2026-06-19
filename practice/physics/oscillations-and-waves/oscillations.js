@@ -18,13 +18,41 @@
       "prompt": "Time for one full cycle is period or frequency?",
       "answer": "period",
       "hint": "Period is measured in seconds per cycle.",
-      "label": "cycle time"
+      "label": "cycle time",
+      "choices": [
+        {
+          "value": "period",
+          "label": "period"
+        },
+        {
+          "value": "frequency",
+          "label": "frequency"
+        }
+      ]
     },
     {
       "prompt": "Cycles per second is called what?",
       "answer": "frequency",
       "hint": "Frequency counts cycles each second.",
-      "label": "cycles per second"
+      "label": "cycles per second",
+      "choices": [
+        {
+          "value": "frequency",
+          "label": "frequency"
+        },
+        {
+          "value": "period",
+          "label": "period"
+        },
+        {
+          "value": "amplitude",
+          "label": "amplitude"
+        },
+        {
+          "value": "wavelength",
+          "label": "wavelength"
+        }
+      ]
     },
     {
       "prompt": "If period doubles, frequency increases or decreases?",
@@ -34,7 +62,17 @@
         "goes down"
       ],
       "hint": "Frequency is inverse to period.",
-      "label": "period frequency relation"
+      "label": "period frequency relation",
+      "choices": [
+        {
+          "value": "increases",
+          "label": "increases"
+        },
+        {
+          "value": "decreases",
+          "label": "decreases"
+        }
+      ]
     }
   ]
 };

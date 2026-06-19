@@ -37,6 +37,33 @@
       ],
       "hint": "Leave the answer exact: π times the diameter is 6π.",
       "label": "circumference"
+    },
+    {
+      "prompt": "A circle has radius 7. What is its diameter?",
+      "answer": "14",
+      "hint": "The diameter is twice the radius.",
+      "label": "diameter",
+      "feedback": "Double the radius."
+    },
+    {
+      "prompt": "A circle has diameter 18. What is its radius?",
+      "answer": "9",
+      "hint": "The radius is half the diameter.",
+      "label": "radius",
+      "feedback": "Halve the diameter."
+    },
+    {
+      "prompt": "Using C = πd, what is the circumference of a circle with diameter 8?",
+      "answer": "8π",
+      "answers": [
+        "8π",
+        "8pi",
+        "8*pi",
+        "8×π"
+      ],
+      "hint": "Leave the answer exact as 8π.",
+      "label": "circumference",
+      "feedback": "Multiply π by the diameter."
     }
   ]
 };

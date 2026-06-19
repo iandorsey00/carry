@@ -19,16 +19,16 @@
       "answer": "4",
       "choices": [
         {
+          "value": "4",
+          "label": "4"
+        },
+        {
           "value": "1",
           "label": "1"
         },
         {
           "value": "3",
           "label": "3"
-        },
-        {
-          "value": "4",
-          "label": "4"
         },
         {
           "value": "8",
@@ -61,12 +61,12 @@
       "answer": "1",
       "choices": [
         {
-          "value": "0",
-          "label": "0"
-        },
-        {
           "value": "1",
           "label": "1"
+        },
+        {
+          "value": "0",
+          "label": "0"
         },
         {
           "value": "2",

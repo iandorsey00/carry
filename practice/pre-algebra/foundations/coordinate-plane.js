@@ -40,7 +40,25 @@
         "quadrant4"
       ],
       "hint": "Positive x and negative y is Quadrant IV.",
-      "label": "quadrant"
+      "label": "quadrant",
+      "choices": [
+        {
+          "value": "IV",
+          "label": "IV"
+        },
+        {
+          "value": "I",
+          "label": "I"
+        },
+        {
+          "value": "II",
+          "label": "II"
+        },
+        {
+          "value": "III",
+          "label": "III"
+        }
+      ]
     }
   ]
 };

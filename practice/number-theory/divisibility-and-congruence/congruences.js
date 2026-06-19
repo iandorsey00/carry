@@ -22,7 +22,17 @@
         "true"
       ],
       "hint": "17 and 2 differ by 15, which is divisible by 5.",
-      "label": "congruence check"
+      "label": "congruence check",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     },
     {
       "prompt": "If a ≡ b mod n, what divides a - b?",

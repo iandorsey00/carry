@@ -35,6 +35,38 @@
       "answer": "13",
       "hint": "Square 3 first, then add 4.",
       "label": "exponent expression value"
+    },
+    {
+      "prompt": "Evaluate 4^2.",
+      "answer": "16",
+      "hint": "4 squared means 4 x 4.",
+      "label": "power value",
+      "feedback": "The exponent counts repeated factors, not addition."
+    },
+    {
+      "prompt": "Evaluate 10^4.",
+      "answer": "10000",
+      "hint": "Use four factors of 10.",
+      "label": "power of ten",
+      "feedback": "A power of 10 has as many zeros as the exponent."
+    },
+    {
+      "prompt": "Write 5 x 5 x 5 as a power.",
+      "answer": "5^3",
+      "answers": [
+        "5^3",
+        "5³"
+      ],
+      "hint": "There are three factors of 5.",
+      "label": "power notation",
+      "feedback": "The repeated factor is the base; the count is the exponent."
+    },
+    {
+      "prompt": "Evaluate 2^3 + 1.",
+      "answer": "9",
+      "hint": "2^3 is 8, then add 1.",
+      "label": "exponent expression value",
+      "feedback": "Evaluate the exponent before adding."
     }
   ]
 };

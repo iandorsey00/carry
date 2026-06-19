@@ -25,14 +25,6 @@
         {
           "value": "negative",
           "label": "negative"
-        },
-        {
-          "value": "zero",
-          "label": "zero"
-        },
-        {
-          "value": "categorical",
-          "label": "categorical"
         }
       ],
       "hint": "Both variables tend to increase together.",
@@ -44,12 +36,12 @@
       "answer": "weak linear pattern",
       "choices": [
         {
-          "value": "weak linear pattern",
-          "label": "weak linear pattern"
-        },
-        {
           "value": "strong linear pattern",
           "label": "strong linear pattern"
+        },
+        {
+          "value": "weak linear pattern",
+          "label": "weak linear pattern"
         }
       ],
       "hint": "Correlation measures linear direction and strength.",
@@ -65,12 +57,12 @@
       ],
       "choices": [
         {
-          "value": "no",
-          "label": "No"
-        },
-        {
           "value": "yes",
           "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
         }
       ],
       "hint": "There may be lurking variables or reverse direction.",

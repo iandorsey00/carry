@@ -18,13 +18,41 @@
       "prompt": "A photon is a quantum of what?",
       "answer": "light",
       "hint": "Photons are light particles/quanta.",
-      "label": "photon meaning"
+      "label": "photon meaning",
+      "choices": [
+        {
+          "value": "light",
+          "label": "light"
+        },
+        {
+          "value": "sound",
+          "label": "sound"
+        },
+        {
+          "value": "heat",
+          "label": "heat"
+        },
+        {
+          "value": "mass",
+          "label": "mass"
+        }
+      ]
     },
     {
       "prompt": "Quantum energy levels are continuous or discrete?",
       "answer": "discrete",
       "hint": "Quantum levels come in allowed steps.",
-      "label": "energy levels"
+      "label": "energy levels",
+      "choices": [
+        {
+          "value": "continuous",
+          "label": "continuous"
+        },
+        {
+          "value": "discrete",
+          "label": "discrete"
+        }
+      ]
     },
     {
       "prompt": "At small scales, quantum physics or classical physics is usually needed?",
@@ -34,7 +62,17 @@
         "quantum"
       ],
       "hint": "Quantum effects dominate atoms and particles.",
-      "label": "small scale physics"
+      "label": "small scale physics",
+      "choices": [
+        {
+          "value": "quantumphysics",
+          "label": "quantum physics"
+        },
+        {
+          "value": "classicalphysics",
+          "label": "classical physics"
+        }
+      ]
     }
   ]
 };

@@ -37,6 +37,34 @@
       "answer": "8",
       "hint": "The tens place is the middle digit.",
       "label": "tens digit"
+    },
+    {
+      "prompt": "In 735, what is the value of the 7?",
+      "answer": "700",
+      "hint": "The 7 is in the hundreds place.",
+      "label": "value of 7",
+      "feedback": "Name the place first, then write the digit's value."
+    },
+    {
+      "prompt": "Complete: 864 = 800 + __ + 4.",
+      "answer": "60",
+      "hint": "The 6 is in the tens place.",
+      "label": "expanded tens term",
+      "feedback": "The tens digit contributes groups of ten."
+    },
+    {
+      "prompt": "In 902, what digit is in the ones place?",
+      "answer": "2",
+      "hint": "The ones place is the rightmost digit.",
+      "label": "ones digit",
+      "feedback": "Read the places from right to left: ones, tens, hundreds."
+    },
+    {
+      "prompt": "Write 300 + 40 + 9 as a number.",
+      "answer": "349",
+      "hint": "Put the hundreds, tens, and ones together.",
+      "label": "standard form",
+      "feedback": "Expanded form names each place value separately."
     }
   ]
 };

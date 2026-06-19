@@ -22,7 +22,17 @@
         "true"
       ],
       "hint": "Any point (a, b) can be made from a(1, 0) + b(0, 1).",
-      "label": "span plane"
+      "label": "span plane",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     },
     {
       "prompt": "How many vectors are in a standard basis for R^2?",
@@ -38,7 +48,17 @@
         "false"
       ],
       "hint": "One vector can be made from the other, so it is redundant.",
-      "label": "independence check"
+      "label": "independence check",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     }
   ]
 };

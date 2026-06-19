@@ -18,7 +18,25 @@
       "prompt": "Compared with y = x^2, y = x^2 + 4 shifts which direction?",
       "answer": "up",
       "hint": "Adding 4 outside the square raises every output.",
-      "label": "vertical shift"
+      "label": "vertical shift",
+      "choices": [
+        {
+          "value": "up",
+          "label": "up"
+        },
+        {
+          "value": "down",
+          "label": "down"
+        },
+        {
+          "value": "left",
+          "label": "left"
+        },
+        {
+          "value": "right",
+          "label": "right"
+        }
+      ]
     },
     {
       "prompt": "What is the vertex of y = (x - 2)^2 + 3?",
@@ -34,7 +52,86 @@
       "prompt": "Compared with y = x^2, y = (x - 5)^2 shifts right by how many units?",
       "answer": "5",
       "hint": "Inside subtraction shifts right.",
-      "label": "horizontal shift"
+      "label": "horizontal shift",
+      "choices": [
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "up",
+          "label": "up"
+        },
+        {
+          "value": "down",
+          "label": "down"
+        },
+        {
+          "value": "left",
+          "label": "left"
+        }
+      ]
+    },
+    {
+      "prompt": "Compared with y = x^2, y = x^2 - 6 shifts which direction?",
+      "answer": "down",
+      "hint": "Subtracting outside lowers every output.",
+      "label": "vertical shift",
+      "feedback": "Outside changes affect y-values.",
+      "choices": [
+        {
+          "value": "down",
+          "label": "down"
+        },
+        {
+          "value": "up",
+          "label": "up"
+        },
+        {
+          "value": "left",
+          "label": "left"
+        },
+        {
+          "value": "right",
+          "label": "right"
+        }
+      ]
+    },
+    {
+      "prompt": "What is the vertex of y = (x + 1)^2 - 4?",
+      "answer": "(-1,-4)",
+      "answers": [
+        "(-1,-4)",
+        "-1,-4"
+      ],
+      "hint": "Use y = (x - h)^2 + k.",
+      "label": "parabola vertex",
+      "feedback": "Inside plus means the h-value is negative."
+    },
+    {
+      "prompt": "Compared with y = x^2, y = (x + 3)^2 shifts left by how many units?",
+      "answer": "3",
+      "hint": "Inside addition shifts left.",
+      "label": "horizontal shift",
+      "feedback": "Horizontal shifts feel opposite inside parentheses.",
+      "choices": [
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "up",
+          "label": "up"
+        },
+        {
+          "value": "down",
+          "label": "down"
+        },
+        {
+          "value": "left",
+          "label": "left"
+        }
+      ]
     }
   ]
 };

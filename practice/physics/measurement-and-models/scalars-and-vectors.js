@@ -18,19 +18,55 @@
       "prompt": "Is speed a scalar or vector?",
       "answer": "scalar",
       "hint": "Speed has size but no direction.",
-      "label": "speed type"
+      "label": "speed type",
+      "answers": [
+        "false"
+      ],
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     },
     {
       "prompt": "Is velocity a scalar or vector?",
       "answer": "vector",
       "hint": "Velocity includes direction.",
-      "label": "velocity type"
+      "label": "velocity type",
+      "answers": [
+        "false"
+      ],
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     },
     {
       "prompt": "A 10 N force east is a scalar or vector?",
       "answer": "vector",
       "hint": "The direction east matters.",
-      "label": "force type"
+      "label": "force type",
+      "choices": [
+        {
+          "value": "scalar",
+          "label": "scalar"
+        },
+        {
+          "value": "vector",
+          "label": "vector"
+        }
+      ]
     }
   ]
 };

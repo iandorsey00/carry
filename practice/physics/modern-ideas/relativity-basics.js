@@ -18,7 +18,25 @@
       "prompt": "In E = mc^2, c represents the speed of what?",
       "answer": "light",
       "hint": "c is the speed of light in vacuum.",
-      "label": "c meaning"
+      "label": "c meaning",
+      "choices": [
+        {
+          "value": "light",
+          "label": "light"
+        },
+        {
+          "value": "mean",
+          "label": "mean"
+        },
+        {
+          "value": "median",
+          "label": "median"
+        },
+        {
+          "value": "mode",
+          "label": "mode"
+        }
+      ]
     },
     {
       "prompt": "Relativity matters most at slow speeds or near light speed?",
@@ -29,7 +47,17 @@
         "light speed"
       ],
       "hint": "Everyday speeds are usually well approximated by classical mechanics.",
-      "label": "relativity speed"
+      "label": "relativity speed",
+      "choices": [
+        {
+          "value": "speeds",
+          "label": "speeds"
+        },
+        {
+          "value": "nearlightspeed",
+          "label": "near light speed"
+        }
+      ]
     },
     {
       "prompt": "Mass and energy are related: yes or no?",
@@ -39,7 +67,17 @@
         "true"
       ],
       "hint": "That is the meaning of E = mc^2.",
-      "label": "mass energy relation"
+      "label": "mass energy relation",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     }
   ]
 };

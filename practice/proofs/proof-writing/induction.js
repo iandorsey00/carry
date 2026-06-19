@@ -23,7 +23,25 @@
         "base case"
       ],
       "hint": "It anchors the proof at the starting value.",
-      "label": "base case"
+      "label": "base case",
+      "choices": [
+        {
+          "value": "base",
+          "label": "base"
+        },
+        {
+          "value": "hypothesis",
+          "label": "hypothesis"
+        },
+        {
+          "value": "conclusion",
+          "label": "conclusion"
+        },
+        {
+          "value": "contradiction",
+          "label": "contradiction"
+        }
+      ]
     },
     {
       "prompt": "After the base case, which step proves that case k implies case k + 1?",
@@ -46,7 +64,25 @@
         "all positive integers"
       ],
       "hint": "The truth moves from 1 to 2 to 3 and so on.",
-      "label": "induction conclusion"
+      "label": "induction conclusion",
+      "choices": [
+        {
+          "value": "all",
+          "label": "all"
+        },
+        {
+          "value": "hypothesis",
+          "label": "hypothesis"
+        },
+        {
+          "value": "conclusion",
+          "label": "conclusion"
+        },
+        {
+          "value": "contradiction",
+          "label": "contradiction"
+        }
+      ]
     }
   ]
 };

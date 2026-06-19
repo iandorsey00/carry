@@ -24,7 +24,17 @@
       "prompt": "For one die, is rolling an even number an outcome or an event?",
       "answer": "event",
       "hint": "It contains several outcomes: 2, 4, and 6.",
-      "label": "event meaning"
+      "label": "event meaning",
+      "choices": [
+        {
+          "value": "outcome",
+          "label": "outcome"
+        },
+        {
+          "value": "event",
+          "label": "event"
+        }
+      ]
     },
     {
       "prompt": "For one die, how many outcomes are possible?",

@@ -28,13 +28,58 @@
         "false"
       ],
       "hint": "Each input can have only one output.",
-      "label": "function definition"
+      "label": "function definition",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     },
     {
       "prompt": "For the point (4, 9), what is the output?",
       "answer": "9",
       "hint": "In an ordered pair, the output is the y-value.",
       "label": "function output"
+    },
+    {
+      "prompt": "If f(x) = x^2 - 1, what is f(4)?",
+      "answer": "15",
+      "hint": "Replace x with 4.",
+      "label": "evaluate a function",
+      "feedback": "Substitute the input wherever x appears."
+    },
+    {
+      "prompt": "For the point (-2, 5), what is the input?",
+      "answer": "-2",
+      "hint": "The input is the x-value.",
+      "label": "function input",
+      "feedback": "Ordered pairs are written as input, output."
+    },
+    {
+      "prompt": "Can a vertical line hit the graph of a function twice?",
+      "answer": "no",
+      "answers": [
+        "no",
+        "false"
+      ],
+      "hint": "That would give one input two outputs.",
+      "label": "vertical line test",
+      "feedback": "Functions need one output per input.",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     }
   ]
 };

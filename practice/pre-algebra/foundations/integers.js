@@ -31,6 +31,34 @@
       "answer": "6",
       "hint": "Same signs make a positive quotient.",
       "label": "integer quotient"
+    },
+    {
+      "prompt": "What is -8 + 3?",
+      "answer": "-5",
+      "hint": "Move 3 steps right from -8.",
+      "label": "integer addition",
+      "feedback": "Use the number line direction: adding moves right."
+    },
+    {
+      "prompt": "What is -5 - 6?",
+      "answer": "-11",
+      "hint": "Move 6 steps left from -5.",
+      "label": "integer subtraction",
+      "feedback": "Subtracting a positive moves left."
+    },
+    {
+      "prompt": "What is -6 x -4?",
+      "answer": "24",
+      "hint": "Same signs make a positive product.",
+      "label": "integer product",
+      "feedback": "Check the sign rule first, then multiply."
+    },
+    {
+      "prompt": "What is 42 / -7?",
+      "answer": "-6",
+      "hint": "Different signs make a negative quotient.",
+      "label": "integer quotient",
+      "feedback": "Different signs give a negative result."
     }
   ]
 };

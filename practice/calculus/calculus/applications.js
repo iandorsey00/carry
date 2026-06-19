@@ -24,7 +24,25 @@
       "prompt": "A rate is 5 units per second for 4 seconds. What total accumulates?",
       "answer": "20",
       "hint": "Constant rate times time gives total accumulation.",
-      "label": "accumulated total"
+      "label": "accumulated total",
+      "choices": [
+        {
+          "value": "20",
+          "label": "20"
+        },
+        {
+          "value": "force",
+          "label": "force"
+        },
+        {
+          "value": "energy",
+          "label": "energy"
+        },
+        {
+          "value": "momentum",
+          "label": "momentum"
+        }
+      ]
     },
     {
       "prompt": "If a derivative changes from positive to negative, the function has a local what?",
@@ -34,7 +52,25 @@
         "max"
       ],
       "hint": "Increasing then decreasing creates a peak.",
-      "label": "local maximum"
+      "label": "local maximum",
+      "choices": [
+        {
+          "value": "maximum",
+          "label": "maximum"
+        },
+        {
+          "value": "positive",
+          "label": "positive"
+        },
+        {
+          "value": "negative",
+          "label": "negative"
+        },
+        {
+          "value": "zero",
+          "label": "zero"
+        }
+      ]
     }
   ]
 };

@@ -22,7 +22,17 @@
         "hotter to colder"
       ],
       "hint": "Thermal energy flows from higher temperature to lower temperature.",
-      "label": "heat direction"
+      "label": "heat direction",
+      "choices": [
+        {
+          "value": "hottocold",
+          "label": "hot to cold"
+        },
+        {
+          "value": "cold to hot",
+          "label": "cold to hot"
+        }
+      ]
     },
     {
       "prompt": "Temperature is related to average kinetic energy: yes or no?",
@@ -32,13 +42,41 @@
         "true"
       ],
       "hint": "Microscopic motion is tied to temperature.",
-      "label": "temperature meaning"
+      "label": "temperature meaning",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     },
     {
       "prompt": "Heat is energy transfer caused by what difference?",
       "answer": "temperature",
       "hint": "A temperature difference drives heat transfer.",
-      "label": "heat cause"
+      "label": "heat cause",
+      "choices": [
+        {
+          "value": "temperature",
+          "label": "temperature"
+        },
+        {
+          "value": "pressure",
+          "label": "pressure"
+        },
+        {
+          "value": "volume",
+          "label": "volume"
+        },
+        {
+          "value": "mass",
+          "label": "mass"
+        }
+      ]
     }
   ]
 };

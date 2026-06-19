@@ -54,7 +54,10 @@
       ],
       "hint": "A closed loop is a cycle.",
       "feedback": "A tree cannot have a closed loop.",
-      "label": "tree loop"
+      "label": "tree loop",
+      "answers": [
+        "false"
+      ]
     },
     {
       "prompt": "Which word means every vertex is reachable from every other vertex?",
@@ -67,6 +70,14 @@
         {
           "value": "separated",
           "label": "separated"
+        },
+        {
+          "value": "mean",
+          "label": "mean"
+        },
+        {
+          "value": "median",
+          "label": "median"
         }
       ],
       "hint": "Reachability is the core idea.",

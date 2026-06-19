@@ -36,6 +36,64 @@
       "value": 95342,
       "shift": 0
     }
+  ],
+  "problems": [
+    {
+      "top": 247,
+      "bottom": 386
+    },
+    {
+      "top": 318,
+      "bottom": 274
+    },
+    {
+      "top": 529,
+      "bottom": 643
+    },
+    {
+      "top": 764,
+      "bottom": 159
+    },
+    {
+      "top": 406,
+      "bottom": 582
+    },
+    {
+      "top": 913,
+      "bottom": 248
+    },
+    {
+      "top": 670,
+      "bottom": 395
+    },
+    {
+      "top": 125,
+      "bottom": 904
+    },
+    {
+      "top": 142,
+      "bottom": 236
+    },
+    {
+      "top": 305,
+      "bottom": 418
+    },
+    {
+      "top": 760,
+      "bottom": 204
+    },
+    {
+      "top": 629,
+      "bottom": 317
+    },
+    {
+      "top": 480,
+      "bottom": 625
+    },
+    {
+      "top": 831,
+      "bottom": 406
+    }
   ]
 };
 })();

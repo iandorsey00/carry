@@ -22,7 +22,17 @@
         "true"
       ],
       "hint": "Differentiability is stronger than continuity.",
-      "label": "differentiability implies continuity"
+      "label": "differentiability implies continuity",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     },
     {
       "prompt": "Does |x| have a derivative at x = 0?",
@@ -32,7 +42,17 @@
         "false"
       ],
       "hint": "The left and right slopes at the corner disagree.",
-      "label": "absolute value corner"
+      "label": "absolute value corner",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     },
     {
       "prompt": "What is the derivative of x^2?",

@@ -24,7 +24,25 @@
       "prompt": "Current measures flow of what?",
       "answer": "charge",
       "hint": "Electric current is moving charge.",
-      "label": "current meaning"
+      "label": "current meaning",
+      "choices": [
+        {
+          "value": "charge",
+          "label": "charge"
+        },
+        {
+          "value": "mean",
+          "label": "mean"
+        },
+        {
+          "value": "median",
+          "label": "median"
+        },
+        {
+          "value": "mode",
+          "label": "mode"
+        }
+      ]
     },
     {
       "prompt": "In a series circuit, current is the same through each component: yes or no?",
@@ -34,7 +52,17 @@
         "true"
       ],
       "hint": "There is only one path in series.",
-      "label": "series current"
+      "label": "series current",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     }
   ]
 };

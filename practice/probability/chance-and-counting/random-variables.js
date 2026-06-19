@@ -22,7 +22,17 @@
         "numbers"
       ],
       "hint": "It assigns numerical values to outcomes.",
-      "label": "random variable meaning"
+      "label": "random variable meaning",
+      "choices": [
+        {
+          "value": "numbers",
+          "label": "numbers"
+        },
+        {
+          "value": "angles",
+          "label": "angles"
+        }
+      ]
     },
     {
       "prompt": "For a fair coin where heads is 1 and tails is 0, what is the expected value?",
@@ -42,7 +52,25 @@
         "probabilities"
       ],
       "hint": "Each value needs a chance attached to it.",
-      "label": "distribution parts"
+      "label": "distribution parts",
+      "choices": [
+        {
+          "value": "probabilities",
+          "label": "probabilities"
+        },
+        {
+          "value": "standard deviations",
+          "label": "standard deviations"
+        },
+        {
+          "value": "raw units",
+          "label": "raw units"
+        },
+        {
+          "value": "percentiles",
+          "label": "percentiles"
+        }
+      ]
     }
   ]
 };

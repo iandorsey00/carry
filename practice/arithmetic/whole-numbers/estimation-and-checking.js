@@ -30,7 +30,61 @@
       "prompt": "Is 812 - 398 closer to 400 or 600?",
       "answer": "400",
       "hint": "812 - 400 is about 412.",
-      "label": "closer estimate"
+      "label": "closer estimate",
+      "answers": [
+        "false"
+      ],
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "Estimate 604 + 197 by rounding to hundreds.",
+      "answer": "800",
+      "hint": "604 is about 600, and 197 is about 200.",
+      "label": "rounded sum",
+      "feedback": "Round to numbers that are easy to add."
+    },
+    {
+      "prompt": "Estimate 52 x 7 using 50 x 7.",
+      "answer": "350",
+      "hint": "50 x 7 is a close check.",
+      "label": "estimated product",
+      "feedback": "Use a nearby friendly number."
+    },
+    {
+      "prompt": "Is 919 - 102 closer to 800 or 900?",
+      "answer": "800",
+      "hint": "919 - 100 is about 819.",
+      "label": "closer estimate",
+      "feedback": "Estimate before doing exact subtraction.",
+      "answers": [
+        "false"
+      ],
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "Estimate 31 x 19 using 30 x 20.",
+      "answer": "600",
+      "hint": "30 x 20 is a nearby easy product.",
+      "label": "two-factor estimate",
+      "feedback": "Round both factors when exact precision is not needed."
     }
   ]
 };

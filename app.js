@@ -1,6 +1,6 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-alpha.95";
+const APP_VERSION = "0.1.0-alpha.96";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 const GAMES_STORAGE_KEY = "carry.games.v1";
@@ -510,401 +510,74 @@ const state = {
   autoAdvancedToStep: null
 };
 
-const multiplicationProblemSet = [
-  { top: 247, bottom: 386 },
-  { top: 318, bottom: 274 },
-  { top: 529, bottom: 643 },
-  { top: 764, bottom: 159 },
-  { top: 406, bottom: 582 },
-  { top: 913, bottom: 248 },
-  { top: 670, bottom: 395 },
-  { top: 125, bottom: 904 }
-];
-
-const additionProblemSet = [
-  { top: 486, bottom: 257 },
-  { top: 738, bottom: 164 },
-  { top: 509, bottom: 286 },
-  { top: 672, bottom: 459 },
-  { top: 94, bottom: 728 },
-  { top: 805, bottom: 96 },
-  { top: 357, bottom: 648 },
-  { top: 999, bottom: 1 }
-];
-
-const subtractionProblemSet = [
-  { top: 645, bottom: 278 },
-  { top: 732, bottom: 458 },
-  { top: 804, bottom: 257 },
-  { top: 900, bottom: 468 },
-  { top: 701, bottom: 389 },
-  { top: 610, bottom: 124 },
-  { top: 530, bottom: 275 },
-  { top: 986, bottom: 497 },
-  { top: 100, bottom: 57 },
-  { top: 405, bottom: 198 }
-];
-
-const divisionProblemSet = [
-  { top: 864, bottom: 4 },
-  { top: 144, bottom: 12 },
-  { top: 168, bottom: 14 },
-  { top: 276, bottom: 23 },
-  { top: 693, bottom: 3 },
-  { top: 848, bottom: 8 },
-  { top: 735, bottom: 5 },
-  { top: 954, bottom: 9 },
-  { top: 672, bottom: 6 },
-  { top: 707, bottom: 7 },
-  { top: 816, bottom: 4 }
-];
-
-const divisionRemainderProblemSet = [
-  { top: 865, bottom: 4 },
-  { top: 145, bottom: 12 },
-  { top: 170, bottom: 14 },
-  { top: 278, bottom: 23 },
-  { top: 694, bottom: 3 },
-  { top: 850, bottom: 8 },
-  { top: 737, bottom: 5 },
-  { top: 958, bottom: 9 },
-  { top: 674, bottom: 6 },
-  { top: 710, bottom: 7 },
-  { top: 819, bottom: 4 }
-];
-
-supplementFoundationalPractice();
-supplementBroadPractice();
-
-function supplementFoundationalPractice() {
-  additionProblemSet.push(
-    { top: 148, bottom: 236 },
-    { top: 275, bottom: 319 },
-    { top: 406, bottom: 357 },
-    { top: 680, bottom: 145 },
-    { top: 59, bottom: 864 },
-    { top: 708, bottom: 292 },
-    { top: 471, bottom: 528 },
-    { top: 826, bottom: 75 }
-  );
-
-  subtractionProblemSet.push(
-    { top: 842, bottom: 367 },
-    { top: 756, bottom: 289 },
-    { top: 603, bottom: 178 },
-    { top: 950, bottom: 456 },
-    { top: 520, bottom: 89 },
-    { top: 904, bottom: 627 }
-  );
-
-  multiplicationProblemSet.push(
-    { top: 142, bottom: 236 },
-    { top: 305, bottom: 418 },
-    { top: 760, bottom: 204 },
-    { top: 629, bottom: 317 },
-    { top: 480, bottom: 625 },
-    { top: 831, bottom: 406 }
-  );
-
-  divisionProblemSet.push(
-    { top: 936, bottom: 6 },
-    { top: 816, bottom: 12 },
-    { top: 988, bottom: 13 },
-    { top: 672, bottom: 21 },
-    { top: 792, bottom: 18 },
-    { top: 945, bottom: 15 }
-  );
-
-  divisionRemainderProblemSet.push(
-    { top: 937, bottom: 6 },
-    { top: 817, bottom: 12 },
-    { top: 989, bottom: 13 },
-    { top: 673, bottom: 21 },
-    { top: 793, bottom: 18 },
-    { top: 946, bottom: 15 }
-  );
-
-  addPractice("arithmetic.fractions", [
-    { prompt: "Simplify 9/12.", answer: "3/4", hint: "Divide the top and bottom by 3.", label: "simplified fraction", feedback: "Look for a common factor in the numerator and denominator." },
-    { prompt: "What is 3/5 of 20?", answer: "12", hint: "One fifth of 20 is 4, so three fifths is 12.", label: "fraction of a number", feedback: "Find one equal part first, then multiply by the numerator." },
-    { prompt: "Which is larger: 2/3 or 2/5?", answer: "2/3", hint: "With the same numerator, smaller parts make a smaller fraction.", label: "larger fraction", feedback: "Compare the size of each part when the numerators match." },
-    { prompt: "Complete: 1/2 = __/8.", answer: "4", hint: "Multiply the denominator by 4, so multiply the numerator by 4.", label: "equivalent fraction", feedback: "Use the same scale factor on the top and bottom." },
-    { prompt: "What is 1/3 + 1/3?", answer: "2/3", hint: "The denominators match, so add the numerators.", label: "like denominator sum", feedback: "When denominators match, keep the denominator and add the numerators." }
-  ]);
-
-  addPractice("arithmetic.decimals", [
-    { prompt: "What is 0.25 + 0.50?", answer: "0.75", answers: ["0.75", ".75"], hint: "Add hundredths: 25 hundredths plus 50 hundredths.", label: "decimal sum", feedback: "Line up place values before adding." },
-    { prompt: "Write 7 hundredths as a decimal.", answer: "0.07", answers: ["0.07", ".07"], hint: "Hundredths use two places after the decimal point.", label: "hundredths decimal", feedback: "Hundredths need two decimal places." },
-    { prompt: "Which is larger: 0.62 or 0.7?", answer: "0.7", answers: ["0.7", "0.70"], hint: "0.7 is the same as 0.70.", label: "larger decimal", feedback: "Compare using the same number of decimal places." },
-    { prompt: "What is 3.4 - 1.2?", answer: "2.2", hint: "Subtract tenths from tenths and ones from ones.", label: "decimal difference", feedback: "Line up the decimal points." }
-  ]);
-
-  addPractice("arithmetic.percents", [
-    { prompt: "What is 50% of 90?", answer: "45", hint: "50% is half.", label: "fifty percent", feedback: "Translate the percent into a familiar fraction." },
-    { prompt: "What is 20% of 60?", answer: "12", hint: "10% is 6, so 20% is 12.", label: "twenty percent", feedback: "Find 10% first if that is easier." },
-    { prompt: "Write 0.35 as a percent.", answer: "35%", answers: ["35%", "35"], hint: "0.35 is 35 hundredths.", label: "decimal to percent", feedback: "Move from decimal hundredths to percent." },
-    { prompt: "Write 75% as a decimal.", answer: "0.75", answers: ["0.75", ".75"], hint: "75% means 75 out of 100.", label: "percent to decimal", feedback: "Percent means per hundred." }
-  ]);
-
-  addPractice("arithmetic.ratios", [
-    { prompt: "Simplify the ratio 8:12.", answer: "2:3", hint: "Divide both parts by 4.", label: "simplified ratio", feedback: "Divide both sides of the ratio by the same number." },
-    { prompt: "Complete the equivalent ratio: 5:6 = 10:__.", answer: "12", hint: "5 became 10 by multiplying by 2.", label: "equivalent ratio", feedback: "Use the same scale factor on both parts." },
-    { prompt: "If 3:7 scales by 5, what is the new second number?", answer: "35", hint: "Multiply the second part by 5.", label: "scaled ratio part", feedback: "Scale both parts by the same factor." },
-    { prompt: "Simplify 15:25.", answer: "3:5", hint: "Divide both parts by 5.", label: "simplified ratio", feedback: "Look for the greatest common factor." }
-  ]);
-
-  addPractice("prealgebra.integers", [
-    { prompt: "What is -8 + 3?", answer: "-5", hint: "Move 3 steps right from -8.", label: "integer addition", feedback: "Use the number line direction: adding moves right." },
-    { prompt: "What is -5 - 6?", answer: "-11", hint: "Move 6 steps left from -5.", label: "integer subtraction", feedback: "Subtracting a positive moves left." },
-    { prompt: "What is -6 x -4?", answer: "24", hint: "Same signs make a positive product.", label: "integer product", feedback: "Check the sign rule first, then multiply." },
-    { prompt: "What is 42 / -7?", answer: "-6", hint: "Different signs make a negative quotient.", label: "integer quotient", feedback: "Different signs give a negative result." }
-  ]);
-
-  addPractice("prealgebra.expressions", [
-    { prompt: "Simplify: 4y + 2y.", answer: "6y", hint: "Both terms are y terms.", label: "combined expression", feedback: "Only combine terms with the same variable part." },
-    { prompt: "Simplify: 8m - 3m + 2.", answer: "5m+2", answers: ["5m+2", "2+5m"], hint: "Combine the m terms and keep the constant.", label: "combined expression", feedback: "Constants and variable terms are different kinds of terms." },
-    { prompt: "Evaluate 2p + 5 when p = 6.", answer: "17", hint: "2 times 6 plus 5.", label: "expression value", feedback: "Substitute first, then follow order of operations." },
-    { prompt: "Simplify: 3a + 4 + a + 6.", answer: "4a+10", answers: ["4a+10", "10+4a"], hint: "Combine a terms, then constants.", label: "combined expression", feedback: "Group like terms before adding." }
-  ]);
-
-  addPractice("prealgebra.exponents", [
-    { prompt: "Evaluate 4^2.", answer: "16", hint: "4 squared means 4 x 4.", label: "power value", feedback: "The exponent counts repeated factors, not addition." },
-    { prompt: "Evaluate 10^4.", answer: "10000", hint: "Use four factors of 10.", label: "power of ten", feedback: "A power of 10 has as many zeros as the exponent." },
-    { prompt: "Write 5 x 5 x 5 as a power.", answer: "5^3", answers: ["5^3", "5³"], hint: "There are three factors of 5.", label: "power notation", feedback: "The repeated factor is the base; the count is the exponent." },
-    { prompt: "Evaluate 2^3 + 1.", answer: "9", hint: "2^3 is 8, then add 1.", label: "exponent expression value", feedback: "Evaluate the exponent before adding." }
-  ]);
-
-  addPractice("algebra.polynomials", [
-    { prompt: "Combine like terms: 6x^2 - 2x^2 + x.", answer: "4x^2+x", answers: ["4x^2+x", "x+4x^2"], hint: "Combine only the x^2 terms.", label: "combined polynomial", feedback: "Match both variable and exponent before combining." },
-    { prompt: "What is the degree of 7x^4 + 2x^2 - 1?", answer: "4", hint: "Find the largest exponent.", label: "polynomial degree", feedback: "Degree is about the highest power after simplifying." },
-    { prompt: "Evaluate x^2 - x when x = 5.", answer: "20", hint: "25 - 5 = 20.", label: "polynomial value", feedback: "Substitute the value for every x first." }
-  ]);
-
-  addPractice("algebra.rational-expressions", [
-    { prompt: "Simplify: 10x / 15.", answer: "2x/3", answers: ["2x/3", "(2x)/3"], hint: "Divide numerator and denominator by 5.", label: "reduced rational expression", feedback: "Reduce common numerical factors." },
-    { prompt: "For 1 / (x + 4), what value of x is not allowed?", answer: "-4", hint: "The denominator cannot equal zero.", label: "excluded value", feedback: "Set the denominator equal to zero to find the excluded value." },
-    { prompt: "Simplify: (x^2 - 4) / (x - 2).", answer: "x+2", hint: "Factor x^2 - 4 as (x - 2)(x + 2).", label: "simplified rational expression", feedback: "Factor first, then cancel common factors." }
-  ]);
-
-  addEquationPractice("prealgebra.equations", [
-    { a: 1, b: -4, c: 9 },
-    { a: 4, b: 0, c: 28 },
-    { a: 3, b: -6, c: 15 },
-    { a: -2, b: 0, c: 18 }
-  ]);
-
-  addEquationPractice("prealgebra.inequalities", [
-    { a: 1, b: -3, relation: ">=", c: 4 },
-    { a: 3, b: 0, relation: ">", c: 12 },
-    { a: -2, b: 0, relation: ">=", c: 8 },
-    { a: 2, b: 5, relation: "<", c: 17 }
-  ]);
-
-  addEquationPractice("algebra.linear-equations", [
-    { a: 3, b: 6, c: 21 },
-    { a: -4, b: 8, c: -12 },
-    { a: 7, b: -2, c: 26 },
-    { a: 2, b: -9, c: 5 }
-  ]);
+function operationProblemsFromWorkspace(workspace) {
+  if (Array.isArray(workspace?.problems) && workspace.problems.length) return workspace.problems;
+  return workspace?.problem ? [workspace.problem] : [];
 }
 
-function addPractice(workspaceId, problems) {
-  conceptWorkspaces[workspaceId]?.problems.push(...problems);
-}
-
-function addEquationPractice(workspaceId, problems) {
-  conceptWorkspaces[workspaceId]?.problems.push(...problems);
-}
-
-function supplementBroadPractice() {
-  addPractice("arithmetic.place-value", [
-    { prompt: "In 735, what is the value of the 7?", answer: "700", hint: "The 7 is in the hundreds place.", label: "value of 7", feedback: "Name the place first, then write the digit's value." },
-    { prompt: "Complete: 864 = 800 + __ + 4.", answer: "60", hint: "The 6 is in the tens place.", label: "expanded tens term", feedback: "The tens digit contributes groups of ten." },
-    { prompt: "In 902, what digit is in the ones place?", answer: "2", hint: "The ones place is the rightmost digit.", label: "ones digit", feedback: "Read the places from right to left: ones, tens, hundreds." },
-    { prompt: "Write 300 + 40 + 9 as a number.", answer: "349", hint: "Put the hundreds, tens, and ones together.", label: "standard form", feedback: "Expanded form names each place value separately." }
-  ]);
-
-  addPractice("arithmetic.number-sense", [
-    { prompt: "Which is larger: 681 or 618?", answer: "681", hint: "The hundreds match, so compare the tens digits.", label: "larger number", feedback: "Compare from left to right." },
-    { prompt: "What is 241 closest to: 200, 300, or 400?", answer: "200", hint: "241 is 41 away from 200 and 59 away from 300.", label: "closest hundred", feedback: "Use distance from nearby friendly numbers." },
-    { prompt: "Fill the missing number: 210, 220, 230, __.", answer: "240", hint: "Each step adds 10.", label: "next number", feedback: "Find the repeated change between terms." },
-    { prompt: "Which number is between 500 and 600: 489, 531, or 604?", answer: "531", hint: "531 is greater than 500 and less than 600.", label: "number between", feedback: "Check both boundaries." }
-  ]);
-
-  addPractice("arithmetic.estimation", [
-    { prompt: "Estimate 604 + 197 by rounding to hundreds.", answer: "800", hint: "604 is about 600, and 197 is about 200.", label: "rounded sum", feedback: "Round to numbers that are easy to add." },
-    { prompt: "Estimate 52 x 7 using 50 x 7.", answer: "350", hint: "50 x 7 is a close check.", label: "estimated product", feedback: "Use a nearby friendly number." },
-    { prompt: "Is 919 - 102 closer to 800 or 900?", answer: "800", hint: "919 - 100 is about 819.", label: "closer estimate", feedback: "Estimate before doing exact subtraction." },
-    { prompt: "Estimate 31 x 19 using 30 x 20.", answer: "600", hint: "30 x 20 is a nearby easy product.", label: "two-factor estimate", feedback: "Round both factors when exact precision is not needed." }
-  ]);
-
-  addPractice("geometry.angles", [
-    { prompt: "Two adjacent angles make a straight line. One is 45 degrees. What is the other?", answer: "135", answers: ["135", "135degrees"], hint: "Straight line angles add to 180.", label: "missing angle", feedback: "Subtract the known angle from 180." },
-    { prompt: "What kind of angle is 30 degrees: acute, right, or obtuse?", answer: "acute", hint: "Acute angles are less than 90 degrees.", label: "angle type", feedback: "Compare the measure to 90 degrees." },
-    { prompt: "What kind of angle is 140 degrees?", answer: "obtuse", hint: "Obtuse angles are greater than 90 and less than 180 degrees.", label: "angle type", feedback: "Classify by size." }
-  ]);
-
-  addPractice("geometry.triangles", [
-    { prompt: "A triangle has angles 40 degrees and 65 degrees. What is the third angle?", answer: "75", answers: ["75", "75degrees"], hint: "Subtract 40 and 65 from 180.", label: "third angle", feedback: "Triangle angles always total 180 degrees." },
-    { prompt: "A triangle with two equal sides is called what?", answer: "isosceles", hint: "Two equal sides means isosceles.", label: "triangle type", feedback: "Match the side pattern to the name." },
-    { prompt: "Can a triangle have angles 90, 60, and 40 degrees?", answer: "no", answers: ["no", "false"], hint: "Those angles add to 190.", label: "triangle possibility", feedback: "Check whether the angles add to 180." }
-  ]);
-
-  addPractice("geometry.circles", [
-    { prompt: "A circle has radius 7. What is its diameter?", answer: "14", hint: "The diameter is twice the radius.", label: "diameter", feedback: "Double the radius." },
-    { prompt: "A circle has diameter 18. What is its radius?", answer: "9", hint: "The radius is half the diameter.", label: "radius", feedback: "Halve the diameter." },
-    { prompt: "Using C = πd, what is the circumference of a circle with diameter 8?", answer: "8π", answers: ["8π", "8pi", "8*pi", "8×π"], hint: "Leave the answer exact as 8π.", label: "circumference", feedback: "Multiply π by the diameter." }
-  ]);
-
-  addPractice("geometry.area-volume", [
-    { prompt: "What is the area of a rectangle with length 9 and width 4?", answer: "36", hint: "Rectangle area is length times width.", label: "rectangle area", feedback: "Multiply the two side lengths." },
-    { prompt: "A triangle has base 12 and height 5. What is its area?", answer: "30", hint: "Use half of base times height.", label: "triangle area", feedback: "Take half after multiplying base and height." },
-    { prompt: "What is the volume of a rectangular prism with dimensions 3, 4, and 6?", answer: "72", hint: "Multiply all three dimensions.", label: "prism volume", feedback: "Volume uses three dimensions." }
-  ]);
-
-  addPractice("geometry.coordinate", [
-    { prompt: "What is the vertical distance from (2, 1) to (2, 6)?", answer: "5", hint: "The x-values match, so compare y-values.", label: "vertical distance", feedback: "Subtract the smaller coordinate from the larger one." },
-    { prompt: "What is the midpoint of (2, 4) and (8, 4)?", answer: "(5,4)", answers: ["(5,4)", "5,4"], hint: "Average the x-values and average the y-values.", label: "midpoint", feedback: "Midpoint means average each coordinate." },
-    { prompt: "A rectangle has side lengths 5 and 2 on the coordinate grid. What is its area?", answer: "10", hint: "Area is length times width.", label: "coordinate rectangle area", feedback: "Use the side lengths after reading the grid." }
-  ]);
-
-  addPractice("trigonometry.unit-circle", [
-    { prompt: "On the unit circle, what is sin π/2?", answer: "1", hint: "At π/2, the point is at the top of the circle.", label: "sine at pi over two", feedback: "Sine is the y-coordinate on the unit circle." },
-    { prompt: "At π, what is the point on the unit circle?", answer: "(-1,0)", answers: ["(-1,0)", "-1,0"], hint: "π is the leftmost point on the unit circle.", label: "unit circle point", feedback: "Move halfway around the circle from (1, 0)." },
-    { prompt: "On the unit circle, what is cos π?", answer: "-1", hint: "At π, the x-coordinate is -1.", label: "cosine at pi", feedback: "Cosine is the x-coordinate." }
-  ]);
-
-  addPractice("trigonometry.right-triangles", [
-    { prompt: "In a right triangle, opposite = 5 and hypotenuse = 13. What is sin θ?", answer: "5/13", hint: "Sine is opposite over hypotenuse.", label: "sine ratio", feedback: "Use the side relative to the chosen angle." },
-    { prompt: "If adjacent = 12 and hypotenuse = 13, what is cos θ?", answer: "12/13", hint: "Cosine is adjacent over hypotenuse.", label: "cosine ratio", feedback: "Cosine uses the side next to the angle." },
-    { prompt: "If opposite = 5 and adjacent = 12, what is tan θ?", answer: "5/12", hint: "Tangent is opposite over adjacent.", label: "tangent ratio", feedback: "Tangent does not use the hypotenuse." }
-  ]);
-
-  addPractice("trigonometry.graphs", [
-    { prompt: "What is the amplitude of y = 4 cos x?", answer: "4", hint: "Amplitude is the coefficient size in front of cos x.", label: "cosine amplitude", feedback: "Use the absolute value of the multiplier." },
-    { prompt: "What is the period of y = cos x?", answer: "2π", answers: ["2π", "2pi", "2*pi"], hint: "Basic cosine repeats every 2π.", label: "cosine period", feedback: "Basic sine and cosine share the same period." },
-    { prompt: "What is sin 0?", answer: "0", hint: "The sine graph starts at 0.", label: "sine graph value", feedback: "Use the unit circle or the graph." }
-  ]);
-
-  addPractice("trigonometry.identities", [
-    { prompt: "If cos^2 x = 1/9, what is sin^2 x?", answer: "8/9", hint: "Use sin^2 x + cos^2 x = 1.", label: "sine squared", feedback: "Subtract the known squared value from 1." },
-    { prompt: "Complete: 1 + tan^2 x = __.", answer: "sec^2x", answers: ["sec^2x", "sec^2 x", "sec²x"], hint: "This is a Pythagorean identity.", label: "secant identity", feedback: "This identity pairs tangent with secant." },
-    { prompt: "Rewrite cot x using cos x and sin x.", answer: "cosx/sinx", answers: ["cosx/sinx", "cos(x)/sin(x)", "cos x/sin x"], hint: "Cotangent is cosine divided by sine.", label: "cotangent identity", feedback: "Cotangent is the reciprocal of tangent." }
-  ]);
-
-  addPractice("precalculus.functions", [
-    { prompt: "If f(x) = x^2 - 1, what is f(4)?", answer: "15", hint: "Replace x with 4.", label: "evaluate a function", feedback: "Substitute the input wherever x appears." },
-    { prompt: "For the point (-2, 5), what is the input?", answer: "-2", hint: "The input is the x-value.", label: "function input", feedback: "Ordered pairs are written as input, output." },
-    { prompt: "Can a vertical line hit the graph of a function twice?", answer: "no", answers: ["no", "false"], hint: "That would give one input two outputs.", label: "vertical line test", feedback: "Functions need one output per input." }
-  ]);
-
-  addPractice("precalculus.transformations", [
-    { prompt: "Compared with y = x^2, y = x^2 - 6 shifts which direction?", answer: "down", hint: "Subtracting outside lowers every output.", label: "vertical shift", feedback: "Outside changes affect y-values." },
-    { prompt: "What is the vertex of y = (x + 1)^2 - 4?", answer: "(-1,-4)", answers: ["(-1,-4)", "-1,-4"], hint: "Use y = (x - h)^2 + k.", label: "parabola vertex", feedback: "Inside plus means the h-value is negative." },
-    { prompt: "Compared with y = x^2, y = (x + 3)^2 shifts left by how many units?", answer: "3", hint: "Inside addition shifts left.", label: "horizontal shift", feedback: "Horizontal shifts feel opposite inside parentheses." }
-  ]);
-
-  addPractice("calculus.limits", [
-    { prompt: "As x approaches 5, what does x - 2 approach?", answer: "3", hint: "Substitute the nearby value: 5 - 2.", label: "basic limit", feedback: "For continuous simple expressions, direct substitution works." },
-    { prompt: "As x approaches -1, what does x^2 approach?", answer: "1", hint: "Square -1.", label: "square limit", feedback: "Use the value being approached." },
-    { prompt: "If the left-hand limit is 2 and the right-hand limit is 3, does the two-sided limit exist?", answer: "no", answers: ["no", "false"], hint: "The two sides must agree.", label: "two-sided limit", feedback: "Compare the two one-sided limits." }
-  ]);
-
-  addPractice("calculus.derivatives", [
-    { prompt: "Find the derivative of x^3.", answer: "3x^2", answers: ["3x^2", "3*x^2"], hint: "Bring down 3 and reduce the exponent by 1.", label: "power rule", feedback: "Use the power rule." },
-    { prompt: "What is the derivative of 7x?", answer: "7", hint: "The slope of y = 7x is 7.", label: "linear derivative", feedback: "The coefficient of x is the slope." },
-    { prompt: "For y = -2x + 9, what is the slope?", answer: "-2", hint: "The coefficient of x is -2.", label: "line slope", feedback: "Read the coefficient of x." }
-  ]);
-
-  addPractice("calculus.integrals", [
-    { prompt: "What is an antiderivative of 3x^2?", answer: "x^3+c", answers: ["x^3+c", "x^3+C", "x^3 + C"], hint: "Differentiate x^3 to get 3x^2.", label: "basic antiderivative", feedback: "Reverse the power rule." },
-    { prompt: "What is the area under y = 4 from x = 0 to x = 5?", answer: "20", hint: "This is a rectangle: height 4 and width 5.", label: "constant integral", feedback: "For a constant function, multiply height by width." },
-    { prompt: "What is an antiderivative of 9?", answer: "9x+c", answers: ["9x+c", "9x+C", "9*x+c", "9*x+C"], hint: "A derivative of 9x is 9.", label: "constant antiderivative", feedback: "Constants integrate to constant times x plus C." }
-  ]);
-
-  addPractice("linear-algebra.vectors", [
-    { prompt: "Add the vectors (1, 5) + (3, -2).", answer: "(4,3)", answers: ["(4,3)", "4,3"], hint: "Add x-components and y-components separately.", label: "vector addition", feedback: "Vectors add component by component." },
-    { prompt: "Compute -2(3, 4).", answer: "(-6,-8)", answers: ["(-6,-8)", "-6,-8"], hint: "Multiply each component by -2.", label: "scalar multiplication", feedback: "A negative scalar also reverses direction." },
-    { prompt: "What is the length of the vector (5, 12)?", answer: "13", hint: "Use the 5-12-13 right triangle.", label: "vector length", feedback: "Square, add, then take the square root." }
-  ]);
-
-  addPractice("proofs.logic", [
-    { prompt: "In the statement if A then B, which part is the conclusion?", answer: "b", answers: ["b", "B"], hint: "The conclusion follows then.", label: "identify conclusion", feedback: "Separate the if part from the then part." },
-    { prompt: "If A implies B and B is false, what can you conclude about A?", answer: "a is false", answers: ["false", "a is false", "not a", "¬a"], choices: [{ value: "a is false", label: "A is false" }, { value: "b is true", label: "B is true" }, { value: "a is true", label: "A is true" }], hint: "If A were true, B would have to be true.", label: "contrapositive reasoning", feedback: "This is reasoning by contrapositive." },
-    { prompt: "What word joins two statements so both must be true?", answer: "and", answers: ["and", "conjunction"], hint: "A and B requires both pieces.", label: "logical and", feedback: "Conjunction means both." }
-  ]);
-
-  addPractice("set-theory.sets-notation", [
-    { prompt: "If <math>C = {4, 5, 6}</math>, is <math>7</math> in <math>C</math>?", answer: "no", answers: ["no", "false"], hint: "<math>7</math> is not listed inside the braces.", label: "nonmembership check", feedback: "Check the listed elements." },
-    { prompt: "If <math>D = {a, b}</math>, is <math>a</math> in <math>D</math>?", answer: "yes", answers: ["yes", "true"], hint: "<math>a</math> is listed inside the braces.", label: "membership check", feedback: "Membership means appears as an element." },
-    { prompt: "What symbol means is not an element of?", answer: "∉", answers: ["∉", "notin", "not in", "is not in"], hint: "It is the membership symbol with a slash.", label: "nonmembership symbol", feedback: "Use the slashed membership symbol." }
-  ]);
-
-  addPractice("number-theory.modular-arithmetic", [
-    { prompt: "What is 17 mod 6?", answer: "5", hint: "17 = 6 × 2 + 5.", label: "mod remainder", feedback: "Find the remainder after division." },
-    { prompt: "On a 12-hour clock, 8 + 7 lands on what hour?", answer: "3", hint: "15 wraps around to 3.", label: "clock arithmetic", feedback: "Subtract 12 after passing 12." },
-    { prompt: "In mod 5 arithmetic, is 12 equivalent to 2?", answer: "yes", answers: ["yes", "true"], hint: "12 and 2 differ by 10.", label: "mod equivalence", feedback: "Numbers are equivalent mod n when their difference is divisible by n." }
-  ]);
-
-  addPractice("statistics.data-summaries", [
-    { prompt: "In 6, 6, 9, 12, how many observations are there?", answer: "4", hint: "Count every listed value, including repeats.", label: "observation count", feedback: "Repeated values are still separate observations." },
-    { prompt: "A variable labeled school grade level is categorical or quantitative?", answer: "categorical", choices: [{ value: "categorical", label: "categorical" }, { value: "quantitative", label: "quantitative" }, { value: "mean", label: "mean" }, { value: "sample size", label: "sample size" }], hint: "Grade level names ordered groups.", label: "grade variable type", feedback: "Grade level is usually treated as categorical or ordinal." }
-  ]);
-
-  addPractice("statistics.center-spread", [
-    { prompt: "Find the mean of 5, 5, 11.", answer: "7", hint: "Add to get 21, then divide by 3.", label: "mean", feedback: "Mean is the arithmetic balance point." },
-    { prompt: "Find the median of 2, 8, 20, 30.", answer: "14", hint: "Average the two middle values: 8 and 20.", label: "median even count", feedback: "With an even count, median is the average of the two middle values." },
-    { prompt: "Find the range of 10, 13, 19, 21.", answer: "11", hint: "Subtract 10 from 21.", label: "range", feedback: "Range measures the full spread from smallest to largest." }
-  ]);
-
-  addPractice("statistics.normal-distribution", [
-    { prompt: "A z-score of -2 is below or above the mean?", answer: "below", choices: [{ value: "below", label: "below" }, { value: "above", label: "above" }, { value: "equal", label: "equal" }, { value: "cannot tell", label: "cannot tell" }], hint: "Negative z-scores are below the mean.", label: "negative z score", feedback: "The sign of a z-score gives direction from the mean." },
-    { prompt: "About what percent of normal data lies within two standard deviations?", answer: "95%", answers: ["95", "95%"], choices: [{ value: "95%", label: "95%" }, { value: "68%", label: "68%" }, { value: "50%", label: "50%" }, { value: "10%", label: "10%" }], hint: "Use the 68-95-99.7 rule.", label: "empirical rule two sd", feedback: "About 95% lies within two standard deviations." }
-  ]);
-
-  addPractice("real-analysis.sequences", [
-    { prompt: "What number does the sequence 2/n approach?", answer: "0", hint: "As n gets large, 2 divided by n gets close to 0.", label: "sequence limit", feedback: "A fixed numerator over growing n tends to 0." },
-    { prompt: "Does the sequence 1, 1, 1, 1 converge?", answer: "yes", answers: ["yes", "true"], hint: "It stays at one value.", label: "constant sequence", feedback: "A constant sequence converges to that constant." },
-    { prompt: "If a sequence approaches 7, what is its limit?", answer: "7", hint: "The limit is the value approached by the terms.", label: "limit value", feedback: "Name the destination value." }
-  ]);
-
-  addPractice("abstract-algebra.groups", [
-    { prompt: "Under multiplication, what is the identity element for nonzero real numbers?", answer: "1", hint: "Multiplying by 1 changes nothing.", label: "multiplicative identity", feedback: "The identity leaves elements unchanged." },
-    { prompt: "Under addition, what is the inverse of -8?", answer: "8", hint: "-8 plus 8 is 0.", label: "additive inverse", feedback: "Find the element that combines to make the identity." },
-    { prompt: "If combining two elements always stays in the set, which rule is being checked?", answer: "closure", hint: "Closure keeps results inside the set.", label: "closure rule", feedback: "Closure is about staying inside." }
-  ]);
-}
+const multiplicationProblemSet = operationProblemsFromWorkspace(multiplicationWorkspace);
+const additionProblemSet = operationProblemsFromWorkspace(additionWorkspace);
+const subtractionProblemSet = operationProblemsFromWorkspace(subtractionWorkspace);
+const divisionProblemSet = operationProblemsFromWorkspace(divisionWorkspace);
+const divisionRemainderProblemSet = operationProblemsFromWorkspace(divisionRemainderWorkspace);
 
 function createLessonQaReport() {
-  const weirdChoicePattern = /\b(decoration|only geometry|impossible data|exact proof|erase outliers|whole plane|angle only|no data|be negative|unknown always|no probability)\b/i;
+  const weirdChoicePattern = /\b(cannot tell|cannot be determined|not enough information|decoration|only geometry|impossible data|exact proof|erase outliers|whole plane|angle only|no data|be negative|unknown always|no probability)\b/i;
+  const genericWeakPattern = /^(proof|category|sample)$/i;
   const conceptReports = Object.values(conceptWorkspaces).map((workspace) => {
     const problems = workspace.problems || [];
     const usesTopLevelAnswers = workspace.type === "concept";
     const missingHint = usesTopLevelAnswers ? problems.filter((problem) => !problem.hint).length : 0;
     const missingFeedback = usesTopLevelAnswers ? problems.filter((problem) => !problem.feedback).length : 0;
     const choiceReports = usesTopLevelAnswers ? problems.map((problem) => {
-      const answers = problem.answers || [problem.answer];
-      const rawChoices = problem.choices || conceptChoicesForProblem(problem, answers);
-      const refinedChoices = refineConceptChoices(rawChoices, answers, problem);
+      const answers = acceptedProblemAnswers(problem);
+      const explicitChoices = uniqueChoiceObjects(problem.choices || []);
+      const refinedChoices = choicesForConceptProblem(problem, answers);
+      const promptOptions = optionsFromPrompt(stripMathTags(problem.prompt || ""));
+      const binaryPrompt = isBinaryChoicePrompt(problem, answers);
       const weirdChoices = refinedChoices
-        .filter((choice) => weirdChoicePattern.test(`${choice.value} ${choice.label}`))
+        .filter((choice) => weakChoiceMatches(choice, problem, weirdChoicePattern, genericWeakPattern))
         .map((choice) => String(choice.label || choice.value));
+      const longChoiceLabels = refinedChoices
+        .filter((choice) => String(choice.label || choice.value).length > 44)
+        .map((choice) => String(choice.label || choice.value));
+      const generatedChoiceNeeded = !explicitChoices.length && shouldUseGeneratedChoices(problem, answers);
+      const missingAcceptedChoice = refinedChoices.length >= 2
+        && !refinedChoices.some((choice) => isChoiceAccepted(choice.value, answers, problem));
       return {
         prompt: stripMathTags(problem.prompt || ""),
-        rawCount: rawChoices.length,
+        rawCount: explicitChoices.length,
         refinedCount: refinedChoices.length,
         hasChoices: refinedChoices.length >= 2,
+        choiceCountInvalid: refinedChoices.length > 0 && (refinedChoices.length < 2 || refinedChoices.length > MAX_CONCEPT_CHOICES),
+        binaryTooMany: binaryPrompt && refinedChoices.length > 2,
+        missingAcceptedChoice,
+        promptOptions,
+        generatedChoiceNeeded,
+        longChoiceLabels,
         weirdChoices
       };
     }) : [];
     const explicitChoiceCount = usesTopLevelAnswers ? problems.filter((problem) => Array.isArray(problem.choices) && problem.choices.length >= 2).length : 0;
     const effectiveChoiceCount = choiceReports.filter((report) => report.hasChoices).length;
-    const overChoiceLimit = choiceReports.filter((report) => report.refinedCount > MAX_CONCEPT_CHOICES).length;
+    const invalidChoiceCount = choiceReports.filter((report) => report.choiceCountInvalid).length;
+    const binaryTooManyCount = choiceReports.filter((report) => report.binaryTooMany).length;
+    const missingAcceptedChoiceCount = choiceReports.filter((report) => report.missingAcceptedChoice).length;
+    const generatedChoiceNeededCount = choiceReports.filter((report) => report.generatedChoiceNeeded).length;
+    const longChoiceLabelCount = choiceReports.filter((report) => report.longChoiceLabels.length).length;
     const weirdChoices = choiceReports
       .filter((report) => report.weirdChoices.length)
       .map((report) => ({ prompt: report.prompt, choices: report.weirdChoices }));
     const typedAnswerCount = problems.length - effectiveChoiceCount;
-    const needsBetaPass = problems.length < 8 || missingHint > 0 || missingFeedback > 0 || overChoiceLimit > 0 || weirdChoices.length > 0;
+    const needsBetaPass = problems.length < 8
+      || missingHint > 0
+      || missingFeedback > 0
+      || invalidChoiceCount > 0
+      || binaryTooManyCount > 0
+      || missingAcceptedChoiceCount > 0
+      || generatedChoiceNeededCount > 0
+      || longChoiceLabelCount > 0
+      || weirdChoices.length > 0;
     return {
       id: workspace.id,
       title: workspace.title,
@@ -918,7 +591,11 @@ function createLessonQaReport() {
       generatedChoiceCount: problems.length - explicitChoiceCount,
       missingHint,
       missingFeedback,
-      overChoiceLimit,
+      invalidChoiceCount,
+      binaryTooManyCount,
+      missingAcceptedChoiceCount,
+      generatedChoiceNeededCount,
+      longChoiceLabelCount,
       weirdChoices,
       needsBetaPass
     };
@@ -927,7 +604,11 @@ function createLessonQaReport() {
   const lowPractice = conceptReports.filter((item) => item.problemCount < 8).map((item) => item.id);
   const missingFeedback = conceptReports.filter((item) => item.missingFeedback > 0).map((item) => `${item.id} (${item.missingFeedback})`);
   const missingHints = conceptReports.filter((item) => item.missingHint > 0).map((item) => `${item.id} (${item.missingHint})`);
-  const overChoiceLimit = conceptReports.filter((item) => item.overChoiceLimit > 0).map((item) => `${item.id} (${item.overChoiceLimit})`);
+  const invalidChoices = conceptReports.filter((item) => item.invalidChoiceCount > 0).map((item) => `${item.id} (${item.invalidChoiceCount})`);
+  const binaryTooMany = conceptReports.filter((item) => item.binaryTooManyCount > 0).map((item) => `${item.id} (${item.binaryTooManyCount})`);
+  const missingAcceptedChoices = conceptReports.filter((item) => item.missingAcceptedChoiceCount > 0).map((item) => `${item.id} (${item.missingAcceptedChoiceCount})`);
+  const generatedChoicesNeeded = conceptReports.filter((item) => item.generatedChoiceNeededCount > 0).map((item) => `${item.id} (${item.generatedChoiceNeededCount})`);
+  const longChoiceLabels = conceptReports.filter((item) => item.longChoiceLabelCount > 0).map((item) => `${item.id} (${item.longChoiceLabelCount})`);
   const weirdChoices = conceptReports.filter((item) => item.weirdChoices.length).map((item) => `${item.id} (${item.weirdChoices.length})`);
   const typedAnswerHeavy = conceptReports
     .filter((item) => item.typedAnswerCount > Math.max(4, item.problemCount / 2))
@@ -947,14 +628,26 @@ function createLessonQaReport() {
       lowPractice,
       missingHints,
       missingFeedback,
-      overChoiceLimit,
+      invalidChoices,
+      binaryTooMany,
+      missingAcceptedChoices,
+      generatedChoicesNeeded,
+      longChoiceLabels,
       weirdChoices,
       typedAnswerHeavy
     },
-    betaBlockerCount: missingHints.length + overChoiceLimit.length + weirdChoices.length,
+    betaBlockerCount: missingHints.length + invalidChoices.length + binaryTooMany.length + missingAcceptedChoices.length + generatedChoicesNeeded.length + weirdChoices.length,
     feedbackPolishTargetCount: missingFeedback.length,
     curriculumDepthTargetCount: lowPractice.length,
-    betaIssueCount: lowPractice.length + missingHints.length + missingFeedback.length + overChoiceLimit.length + weirdChoices.length,
+    betaIssueCount: lowPractice.length
+      + missingHints.length
+      + missingFeedback.length
+      + invalidChoices.length
+      + binaryTooMany.length
+      + missingAcceptedChoices.length
+      + generatedChoicesNeeded.length
+      + longChoiceLabels.length
+      + weirdChoices.length,
     lessons: conceptReports
   };
 }
@@ -6436,8 +6129,8 @@ function getActiveWorkspace() {
 }
 
 function buildConceptModel(workspace) {
-  const answers = workspace.problem.answers || [workspace.problem.answer];
-  const choices = refineConceptChoices(workspace.problem.choices || conceptChoicesForProblem(workspace.problem, answers), answers, workspace.problem);
+  const answers = acceptedProblemAnswers(workspace.problem);
+  const choices = choicesForConceptProblem(workspace.problem, answers);
   return {
     ...workspace.problem,
     sourceWorkspaceId: workspace.id,
@@ -6458,6 +6151,10 @@ function buildConceptModel(workspace) {
       }
     ]
   };
+}
+
+function acceptedProblemAnswers(problem) {
+  return uniqueChoiceValues([problem?.answer, ...(problem?.answers || [])]);
 }
 
 function renderConceptGrid(model) {
@@ -6666,9 +6363,81 @@ function generatedAnswerChoices(problem, answers) {
     .map((value) => ({ value: String(value), label: displayChoiceLabel(value) }));
 }
 
+function choicesForConceptProblem(problem, answers) {
+  const explicitChoices = Array.isArray(problem.choices) && problem.choices.length ? problem.choices : [];
+  if (explicitChoices.length) return refineConceptChoices(explicitChoices, answers, problem);
+  if (!shouldUseGeneratedChoices(problem, answers)) return [];
+  return refineConceptChoices(conceptChoicesForProblem(problem, answers), answers, problem);
+}
+
+function shouldUseGeneratedChoices(problem, answers) {
+  const primaryAnswer = answerValue(problem.answer || answers?.[0] || "");
+  if (["yes", "no", "true", "false"].includes(primaryAnswer)) return true;
+  if (symbolChoicesForAnswer(problem.answer || answers?.[0] || "").length) return true;
+
+  const promptOptions = prioritizeAnswerChoice(optionsFromPrompt(stripMathTags(problem.prompt || "")), answers);
+  if (promptOptions.length >= 2 && promptOptions.length <= MAX_CONCEPT_CHOICES) return true;
+  if (isExactConstructionProblem(problem, answers)) return false;
+
+  const prompt = stripMathTags(problem.prompt || "").toLowerCase();
+  const label = answerValue(problem.label || "");
+  if (/\b(kind|type|rule|property|word|name|called|describes|identifies|represents|means|symbol|direction|units|display|association|variable|conclusion|hypothesis|counterexample|identity|inverse)\b/.test(prompt)) return true;
+  if (/\b(logic|proof|set|subset|relation|function|graph|tree|physics|unit|statistic|parameter|distribution)\b/.test(label)) return true;
+  return false;
+}
+
+function isExactConstructionProblem(problem, answers) {
+  const promptText = stripMathTags(problem.prompt || "");
+  const prompt = answerValue(promptText);
+  const readablePrompt = promptText.toLowerCase();
+  const answer = String(problem.answer || answers?.[0] || "");
+  const normalizedAnswer = answerValue(answer);
+  if (!normalizedAnswer || ["yes", "no", "true", "false"].includes(normalizedAnswer)) return false;
+  if (prioritizeAnswerChoice(optionsFromPrompt(promptText), answers).length >= 2) return false;
+  if (symbolChoicesForAnswer(answer).length) return false;
+
+  const exactVerb = /^(simplify|compute|evaluate|find|write|complete|add|subtract|multiply|divide|solve|factor|expand|enter|give)/.test(prompt);
+  if (exactVerb) return true;
+
+  const conceptualPrompt = /\b(kind|type|rule|property|word|name|called|describes|identifies|represents|means|symbol|direction|closer|larger|greater|smaller|units|display|association|variable|conclusion|hypothesis|counterexample|identity|inverse)\b/.test(readablePrompt);
+  if (conceptualPrompt) return false;
+
+  return exactVerb || looksLikeExactAnswer(answer);
+}
+
+function looksLikeExactAnswer(answer) {
+  const raw = String(answer || "").trim();
+  const compact = answerValue(raw);
+  if (/^-?\d+(?:\.\d+)?%?$/.test(compact)) return true;
+  if (/^-?\d+\/-?\d+$/.test(compact)) return true;
+  if (/^\(?-?\d+(?:\.\d+)?,?-?\d+(?:\.\d+)?\)?$/.test(compact)) return true;
+  if (/[=+\-*/^()[\]{}]/.test(raw) && /[A-Za-z0-9πθ]/.test(raw)) return true;
+  return /^-?\d*[A-Za-zπθ]\^?\d*$/.test(raw) && raw.length > 1;
+}
+
+function isBinaryChoicePrompt(problem, answers) {
+  const answer = answerValue(problem.answer || answers?.[0] || "");
+  if (["yes", "no", "true", "false"].includes(answer)) return true;
+  return prioritizeAnswerChoice(optionsFromPrompt(stripMathTags(problem.prompt || "")), answers).length === 2;
+}
+
+function weakChoiceMatches(choice, problem, weirdChoicePattern, genericWeakPattern) {
+  const label = String(choice.label || choice.value || "");
+  const value = String(choice.value || "");
+  const combined = `${value} ${label}`;
+  if (weirdChoicePattern.test(combined)) return true;
+  const prompt = answerValue(stripMathTags(problem.prompt || ""));
+  const problemLabel = answerValue(problem.label || "");
+  const compactChoice = answerValue(label);
+  return genericWeakPattern.test(label.trim())
+    && !prompt.includes(compactChoice)
+    && !problemLabel.includes(compactChoice);
+}
+
 function refineConceptChoices(choices, answers, problem) {
   const normalized = uniqueChoiceObjects(choices);
-  if (normalized.length <= MAX_CONCEPT_CHOICES) return normalized;
+  if (normalized.length <= 1) return normalized;
+  if (normalized.length <= MAX_CONCEPT_CHOICES) return stableChoiceObjectOrder(normalized, `${problem.prompt || ""}:${problem.answer || answers?.[0] || ""}`);
 
   const correct = normalized.find((choice) => isChoiceAccepted(choice.value, answers, problem))
     || { value: String(problem.answer || answers?.[0] || ""), label: displayChoiceLabel(problem.answer || answers?.[0] || "") };
@@ -6911,7 +6680,7 @@ function textDistractors(answer, prompt, label) {
     { test: "number|prime|factor|multiple|divisor", values: ["prime", "composite", "factor", "multiple", "divisor", "remainder"] }
   ];
   const haystack = `${prompt} ${label} ${answerValue(answer)}`;
-  const pool = pools.find((item) => new RegExp(item.test).test(haystack))?.values || ["not enough information"];
+  const pool = pools.find((item) => new RegExp(item.test).test(haystack))?.values || ["definition", "example", "method"];
   return pool.filter((item) => answerValue(item) !== answerValue(answer));
 }
 
@@ -6946,10 +6715,11 @@ function optionsFromPrompt(prompt) {
     .replace(/\?/g, "")
     .replace(/\.$/, "")
     .replace(/\s+/g, " ");
-  const colonMatch = text.match(/:\s*([^?]+)$/);
+  const colonMatch = text.match(/\b(?:choose|select|answer|which|what symbol|which symbol|closer|larger|greater|smaller|closest)\b[^:]*:\s*([^?]+)$/i);
   const closerMatch = text.match(/\bcloser to\s+(.+)$/i);
   const chooseMatch = text.match(/\b(?:which|what)\s+(?:is|are)\s+[^:]*\b(?:larger|greater|smaller|closest)\b:?\s+(.+)$/i);
   const source = colonMatch ? colonMatch[1] : closerMatch ? closerMatch[1] : chooseMatch ? chooseMatch[1] : text;
+  if (!colonMatch && !closerMatch && !chooseMatch && !/\bor\b/i.test(source)) return [];
   if (!/\bor\b/i.test(source) && !/,/.test(source)) return [];
   const pieces = source
     .replace(/\bwhich is (?:larger|greater|smaller)\b:?/i, "")
@@ -7105,7 +6875,7 @@ function equationStep({ id, row, col, expected, answers, sequence, label, hint }
     col,
     kind: "equationStep",
     expected,
-    answers: answers || [expected],
+    answers: uniqueChoiceValues([expected, ...(answers || [])]),
     sequence,
     label,
     hint,
@@ -11067,7 +10837,11 @@ function betaQaStatusTitle(qa) {
   const targets = qa.betaTargets || {};
   const parts = [
     targets.missingHints?.length ? `${targets.missingHints.length} missing hints` : "",
-    targets.overChoiceLimit?.length ? `${targets.overChoiceLimit.length} over choice limit` : "",
+    targets.invalidChoices?.length ? `${targets.invalidChoices.length} invalid choice counts` : "",
+    targets.binaryTooMany?.length ? `${targets.binaryTooMany.length} binary prompts with too many choices` : "",
+    targets.missingAcceptedChoices?.length ? `${targets.missingAcceptedChoices.length} choice sets without an accepted answer` : "",
+    targets.generatedChoicesNeeded?.length ? `${targets.generatedChoicesNeeded.length} generated choice fallbacks` : "",
+    targets.longChoiceLabels?.length ? `${targets.longChoiceLabels.length} lessons with long choice labels` : "",
     targets.weirdChoices?.length ? `${targets.weirdChoices.length} odd choice sets` : "",
     qa.feedbackPolishTargetCount ? `${qa.feedbackPolishTargetCount} lessons use generated feedback` : "",
     qa.curriculumDepthTargetCount ? `${qa.curriculumDepthTargetCount} lessons need deeper practice later` : ""

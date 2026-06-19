@@ -18,7 +18,25 @@
       "prompt": "Speed has units of distance divided by what?",
       "answer": "time",
       "hint": "Meters per second means meters divided by seconds.",
-      "label": "speed unit denominator"
+      "label": "speed unit denominator",
+      "choices": [
+        {
+          "value": "time",
+          "label": "time"
+        },
+        {
+          "value": "force",
+          "label": "force"
+        },
+        {
+          "value": "energy",
+          "label": "energy"
+        },
+        {
+          "value": "momentum",
+          "label": "momentum"
+        }
+      ]
     },
     {
       "prompt": "Which is a unit of force: newton or joule?",
@@ -28,13 +46,33 @@
         "n"
       ],
       "hint": "A joule is a unit of energy.",
-      "label": "force unit"
+      "label": "force unit",
+      "choices": [
+        {
+          "value": "newton",
+          "label": "newton"
+        },
+        {
+          "value": "joule",
+          "label": "joule"
+        }
+      ]
     },
     {
       "prompt": "What does the unit m/s measure: speed or mass?",
       "answer": "speed",
       "hint": "Meters per second compares distance to time.",
-      "label": "meters per second meaning"
+      "label": "meters per second meaning",
+      "choices": [
+        {
+          "value": "speed",
+          "label": "speed"
+        },
+        {
+          "value": "mass",
+          "label": "mass"
+        }
+      ]
     }
   ]
 };

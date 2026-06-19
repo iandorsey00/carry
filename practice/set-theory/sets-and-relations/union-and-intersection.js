@@ -43,7 +43,17 @@
         "cup"
       ],
       "hint": "Union uses or.",
-      "label": "union meaning"
+      "label": "union meaning",
+      "choices": [
+        {
+          "value": "union",
+          "label": "union"
+        },
+        {
+          "value": "intersection",
+          "label": "intersection"
+        }
+      ]
     }
   ]
 };

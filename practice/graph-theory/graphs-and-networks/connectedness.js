@@ -29,19 +29,22 @@
       ],
       "hint": "Same component means there is a path between them.",
       "feedback": "Without a path, the vertices are in different components.",
-      "label": "component membership"
+      "label": "component membership",
+      "answers": [
+        "false"
+      ]
     },
     {
       "prompt": "A graph with two separated pieces has how many connected components?",
       "answer": "2",
       "choices": [
         {
-          "value": "1",
-          "label": "1"
-        },
-        {
           "value": "2",
           "label": "2"
+        },
+        {
+          "value": "1",
+          "label": "1"
         },
         {
           "value": "3",

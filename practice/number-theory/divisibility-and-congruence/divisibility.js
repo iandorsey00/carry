@@ -22,7 +22,17 @@
         "true"
       ],
       "hint": "20 = 4 × 5.",
-      "label": "divides twenty"
+      "label": "divides twenty",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     },
     {
       "prompt": "Does 6 divide 20?",
@@ -32,7 +42,17 @@
         "false"
       ],
       "hint": "20 divided by 6 leaves a remainder.",
-      "label": "does not divide twenty"
+      "label": "does not divide twenty",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     },
     {
       "prompt": "If 3 | 18, what does the vertical bar mean?",
@@ -42,7 +62,25 @@
         "divides evenly"
       ],
       "hint": "Read 3 | 18 as 3 divides 18.",
-      "label": "divisibility symbol"
+      "label": "divisibility symbol",
+      "choices": [
+        {
+          "value": "divides",
+          "label": "divides"
+        },
+        {
+          "value": "≡",
+          "label": "≡"
+        },
+        {
+          "value": "≤",
+          "label": "≤"
+        },
+        {
+          "value": "≥",
+          "label": "≥"
+        }
+      ]
     }
   ]
 };

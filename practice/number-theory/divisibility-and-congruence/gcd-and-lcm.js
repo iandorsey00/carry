@@ -34,7 +34,17 @@
         "greatest common divisor"
       ],
       "hint": "GCD looks downward at divisors.",
-      "label": "shared factors"
+      "label": "shared factors",
+      "choices": [
+        {
+          "value": "gcd",
+          "label": "GCD"
+        },
+        {
+          "value": "LCM",
+          "label": "LCM"
+        }
+      ]
     }
   ]
 };

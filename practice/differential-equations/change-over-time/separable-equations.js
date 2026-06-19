@@ -23,7 +23,17 @@
         "one over y"
       ],
       "hint": "Move y to the left so the y terms stay with dy.",
-      "label": "separable y side"
+      "label": "separable y side",
+      "choices": [
+        {
+          "value": "1/y",
+          "label": "1/y"
+        },
+        {
+          "value": "3x",
+          "label": "3x"
+        }
+      ]
     },
     {
       "prompt": "After writing <math>(1/y)dy = 3x dx</math>, what operation comes next?",

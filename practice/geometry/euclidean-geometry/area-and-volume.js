@@ -31,6 +31,27 @@
       "answer": "20",
       "hint": "Triangle area is half of base times height.",
       "label": "triangle area"
+    },
+    {
+      "prompt": "What is the area of a rectangle with length 9 and width 4?",
+      "answer": "36",
+      "hint": "Rectangle area is length times width.",
+      "label": "rectangle area",
+      "feedback": "Multiply the two side lengths."
+    },
+    {
+      "prompt": "A triangle has base 12 and height 5. What is its area?",
+      "answer": "30",
+      "hint": "Use half of base times height.",
+      "label": "triangle area",
+      "feedback": "Take half after multiplying base and height."
+    },
+    {
+      "prompt": "What is the volume of a rectangular prism with dimensions 3, 4, and 6?",
+      "answer": "72",
+      "hint": "Multiply all three dimensions.",
+      "label": "prism volume",
+      "feedback": "Volume uses three dimensions."
     }
   ]
 };

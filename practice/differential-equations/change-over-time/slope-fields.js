@@ -35,7 +35,17 @@
         "follow them"
       ],
       "hint": "The marks show the derivative at nearby points.",
-      "label": "solution curve behavior"
+      "label": "solution curve behavior",
+      "choices": [
+        {
+          "value": "follow",
+          "label": "follow the slope marks"
+        },
+        {
+          "value": "ignore them",
+          "label": "ignore them"
+        }
+      ]
     }
   ]
 };

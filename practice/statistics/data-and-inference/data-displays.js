@@ -25,14 +25,6 @@
         {
           "value": "histogram",
           "label": "histogram"
-        },
-        {
-          "value": "box plot",
-          "label": "box plot"
-        },
-        {
-          "value": "scatterplot",
-          "label": "scatterplot"
         }
       ],
       "hint": "Favorite color is categorical.",
@@ -69,20 +61,12 @@
       "answer": "two quantitative variables",
       "choices": [
         {
+          "value": "one variable",
+          "label": "one variable"
+        },
+        {
           "value": "two quantitative variables",
           "label": "two quantitative variables"
-        },
-        {
-          "value": "one category",
-          "label": "one category"
-        },
-        {
-          "value": "one total",
-          "label": "one total"
-        },
-        {
-          "value": "one label",
-          "label": "one label"
         }
       ],
       "hint": "Scatterplots show pairs of numbers.",

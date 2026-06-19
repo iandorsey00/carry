@@ -22,7 +22,17 @@
         "true"
       ],
       "hint": "12 is even and greater than 10.",
-      "label": "valid construction"
+      "label": "valid construction",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     },
     {
       "prompt": "After constructing an example, what should you do next?",
@@ -33,7 +43,25 @@
         "prove it works"
       ],
       "hint": "Show that the constructed object has the required properties.",
-      "label": "verify construction"
+      "label": "verify construction",
+      "choices": [
+        {
+          "value": "verify",
+          "label": "verify"
+        },
+        {
+          "value": "hypothesis",
+          "label": "hypothesis"
+        },
+        {
+          "value": "conclusion",
+          "label": "conclusion"
+        },
+        {
+          "value": "contradiction",
+          "label": "contradiction"
+        }
+      ]
     },
     {
       "prompt": "A construction proof is mainly used for which quantifier: for all or exists?",
@@ -44,7 +72,17 @@
         "there exists"
       ],
       "hint": "Building one object proves existence.",
-      "label": "construction quantifier"
+      "label": "construction quantifier",
+      "choices": [
+        {
+          "value": "for all",
+          "label": "for all"
+        },
+        {
+          "value": "exists",
+          "label": "exists"
+        }
+      ]
     }
   ]
 };

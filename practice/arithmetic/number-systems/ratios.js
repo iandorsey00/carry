@@ -31,6 +31,34 @@
       "answer": "16",
       "hint": "3 became 12 by multiplying by 4.",
       "label": "equivalent ratio"
+    },
+    {
+      "prompt": "Simplify the ratio 8:12.",
+      "answer": "2:3",
+      "hint": "Divide both parts by 4.",
+      "label": "simplified ratio",
+      "feedback": "Divide both sides of the ratio by the same number."
+    },
+    {
+      "prompt": "Complete the equivalent ratio: 5:6 = 10:__.",
+      "answer": "12",
+      "hint": "5 became 10 by multiplying by 2.",
+      "label": "equivalent ratio",
+      "feedback": "Use the same scale factor on both parts."
+    },
+    {
+      "prompt": "If 3:7 scales by 5, what is the new second number?",
+      "answer": "35",
+      "hint": "Multiply the second part by 5.",
+      "label": "scaled ratio part",
+      "feedback": "Scale both parts by the same factor."
+    },
+    {
+      "prompt": "Simplify 15:25.",
+      "answer": "3:5",
+      "hint": "Divide both parts by 5.",
+      "label": "simplified ratio",
+      "feedback": "Look for the greatest common factor."
     }
   ]
 };

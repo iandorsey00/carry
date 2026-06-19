@@ -25,14 +25,6 @@
         {
           "value": "parameter",
           "label": "parameter"
-        },
-        {
-          "value": "outlier",
-          "label": "outlier"
-        },
-        {
-          "value": "axis",
-          "label": "axis"
         }
       ],
       "hint": "Statistics come from samples.",
@@ -44,20 +36,12 @@
       "answer": "parameter",
       "choices": [
         {
-          "value": "parameter",
-          "label": "parameter"
-        },
-        {
           "value": "statistic",
           "label": "statistic"
         },
         {
-          "value": "median",
-          "label": "median"
-        },
-        {
-          "value": "bar",
-          "label": "bar"
+          "value": "parameter",
+          "label": "parameter"
         }
       ],
       "hint": "Parameters describe populations.",

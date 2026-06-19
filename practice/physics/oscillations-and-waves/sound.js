@@ -22,19 +22,49 @@
         "true"
       ],
       "hint": "Sound cannot travel through empty space.",
-      "label": "sound medium"
+      "label": "sound medium",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     },
     {
       "prompt": "Higher frequency means higher or lower pitch?",
       "answer": "higher",
       "hint": "Pitch rises as frequency rises.",
-      "label": "pitch frequency"
+      "label": "pitch frequency",
+      "choices": [
+        {
+          "value": "higher",
+          "label": "higher"
+        },
+        {
+          "value": "lower pitch",
+          "label": "lower pitch"
+        }
+      ]
     },
     {
       "prompt": "Sound in air is longitudinal or transverse?",
       "answer": "longitudinal",
       "hint": "Air compressions move along the direction of travel.",
-      "label": "sound wave type"
+      "label": "sound wave type",
+      "choices": [
+        {
+          "value": "longitudinal",
+          "label": "longitudinal"
+        },
+        {
+          "value": "transverse",
+          "label": "transverse"
+        }
+      ]
     }
   ]
 };

@@ -31,6 +31,27 @@
       "answer": "3/4",
       "hint": "Tangent is opposite over adjacent.",
       "label": "tangent ratio"
+    },
+    {
+      "prompt": "In a right triangle, opposite = 5 and hypotenuse = 13. What is sin θ?",
+      "answer": "5/13",
+      "hint": "Sine is opposite over hypotenuse.",
+      "label": "sine ratio",
+      "feedback": "Use the side relative to the chosen angle."
+    },
+    {
+      "prompt": "If adjacent = 12 and hypotenuse = 13, what is cos θ?",
+      "answer": "12/13",
+      "hint": "Cosine is adjacent over hypotenuse.",
+      "label": "cosine ratio",
+      "feedback": "Cosine uses the side next to the angle."
+    },
+    {
+      "prompt": "If opposite = 5 and adjacent = 12, what is tan θ?",
+      "answer": "5/12",
+      "hint": "Tangent is opposite over adjacent.",
+      "label": "tangent ratio",
+      "feedback": "Tangent does not use the hypotenuse."
     }
   ]
 };

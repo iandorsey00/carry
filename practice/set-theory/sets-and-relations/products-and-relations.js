@@ -34,7 +34,17 @@
         "true"
       ],
       "hint": "A relation is usually represented by ordered pairs.",
-      "label": "relation definition"
+      "label": "relation definition",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     }
   ]
 };

@@ -28,7 +28,17 @@
         "0"
       ],
       "hint": "Balanced means they cancel.",
-      "label": "balanced force"
+      "label": "balanced force",
+      "choices": [
+        {
+          "value": "zero",
+          "label": "zero"
+        },
+        {
+          "value": "nonzero net force",
+          "label": "nonzero net force"
+        }
+      ]
     },
     {
       "prompt": "Does friction usually oppose motion or cause no effect?",
@@ -39,7 +49,17 @@
         "oppose motion"
       ],
       "hint": "Friction acts against slipping or sliding.",
-      "label": "friction direction"
+      "label": "friction direction",
+      "choices": [
+        {
+          "value": "oppose",
+          "label": "oppose motion"
+        },
+        {
+          "value": "noeffect",
+          "label": "cause no effect"
+        }
+      ]
     }
   ]
 };

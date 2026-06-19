@@ -28,7 +28,17 @@
         "true"
       ],
       "hint": "They are already listed as 1, 2, 3, and so on.",
-      "label": "integer countability"
+      "label": "integer countability",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     },
     {
       "prompt": "Are the real numbers countable?",
@@ -38,7 +48,17 @@
         "false"
       ],
       "hint": "The real numbers cannot be fully listed in a sequence.",
-      "label": "real countability"
+      "label": "real countability",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     }
   ]
 };

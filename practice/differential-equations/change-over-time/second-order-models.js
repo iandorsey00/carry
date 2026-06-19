@@ -18,7 +18,25 @@
       "prompt": "If <math>x(t)</math> is position, what does <math>x''(t)</math> represent?",
       "answer": "acceleration",
       "hint": "The first derivative is velocity; the second is acceleration.",
-      "label": "second derivative meaning"
+      "label": "second derivative meaning",
+      "choices": [
+        {
+          "value": "acceleration",
+          "label": "acceleration"
+        },
+        {
+          "value": "mean",
+          "label": "mean"
+        },
+        {
+          "value": "median",
+          "label": "median"
+        },
+        {
+          "value": "mode",
+          "label": "mode"
+        }
+      ]
     },
     {
       "prompt": "A spring that repeats back and forth is called an oscillation or a limit?",
@@ -28,7 +46,17 @@
         "oscillator"
       ],
       "hint": "Repeated back-and-forth motion is oscillation.",
-      "label": "spring motion"
+      "label": "spring motion",
+      "choices": [
+        {
+          "value": "oscillation",
+          "label": "oscillation"
+        },
+        {
+          "value": "limit",
+          "label": "limit"
+        }
+      ]
     },
     {
       "prompt": "Which derivative appears in a second-order equation: first or second?",
@@ -38,7 +66,17 @@
         "2nd"
       ],
       "hint": "Second-order means the highest derivative is second.",
-      "label": "order meaning"
+      "label": "order meaning",
+      "choices": [
+        {
+          "value": "first",
+          "label": "first"
+        },
+        {
+          "value": "second",
+          "label": "second"
+        }
+      ]
     }
   ]
 };

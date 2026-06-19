@@ -22,13 +22,41 @@
         "false"
       ],
       "hint": "A function gives each input exactly one output.",
-      "label": "function rule"
+      "label": "function rule",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     },
     {
       "prompt": "What is the set of allowed inputs called?",
       "answer": "domain",
       "hint": "The domain is where inputs come from.",
-      "label": "domain"
+      "label": "domain",
+      "choices": [
+        {
+          "value": "domain",
+          "label": "domain"
+        },
+        {
+          "value": "set",
+          "label": "set"
+        },
+        {
+          "value": "subset",
+          "label": "subset"
+        },
+        {
+          "value": "element",
+          "label": "element"
+        }
+      ]
     },
     {
       "prompt": "If <math>f(2) = 7</math>, what is the output for input <math>2</math>?",

@@ -28,7 +28,17 @@
         "permutations"
       ],
       "hint": "Permutations care about order.",
-      "label": "order matters"
+      "label": "order matters",
+      "choices": [
+        {
+          "value": "permutations",
+          "label": "permutations"
+        },
+        {
+          "value": "combinations",
+          "label": "combinations"
+        }
+      ]
     },
     {
       "prompt": "If order does not matter, are you counting permutations or combinations?",
@@ -38,7 +48,17 @@
         "combinations"
       ],
       "hint": "Combinations choose groups without order.",
-      "label": "order not matter"
+      "label": "order not matter",
+      "choices": [
+        {
+          "value": "permutations",
+          "label": "permutations"
+        },
+        {
+          "value": "combinations",
+          "label": "combinations"
+        }
+      ]
     }
   ]
 };

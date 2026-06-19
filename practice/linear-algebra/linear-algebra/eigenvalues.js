@@ -24,7 +24,25 @@
       "prompt": "For [[2, 0], [0, 5]], what eigenvalue belongs to the x-axis direction?",
       "answer": "2",
       "hint": "The x-coordinate is scaled by 2.",
-      "label": "x-axis eigenvalue"
+      "label": "x-axis eigenvalue",
+      "choices": [
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "up",
+          "label": "up"
+        },
+        {
+          "value": "down",
+          "label": "down"
+        },
+        {
+          "value": "left",
+          "label": "left"
+        }
+      ]
     },
     {
       "prompt": "If a vector changes direction after applying A, is it an eigenvector of A?",
@@ -34,7 +52,17 @@
         "false"
       ],
       "hint": "Eigenvectors keep direction, though they may scale or reverse.",
-      "label": "eigenvector definition"
+      "label": "eigenvector definition",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     }
   ]
 };

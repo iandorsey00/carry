@@ -22,7 +22,25 @@
         "P"
       ],
       "hint": "The hypothesis is the condition after if.",
-      "label": "identify hypothesis"
+      "label": "identify hypothesis",
+      "choices": [
+        {
+          "value": "p",
+          "label": "p"
+        },
+        {
+          "value": "hypothesis",
+          "label": "hypothesis"
+        },
+        {
+          "value": "conclusion",
+          "label": "conclusion"
+        },
+        {
+          "value": "contradiction",
+          "label": "contradiction"
+        }
+      ]
     },
     {
       "prompt": "In the statement if P then Q, which part is the conclusion?",
@@ -32,7 +50,25 @@
         "Q"
       ],
       "hint": "The conclusion is what follows then.",
-      "label": "identify conclusion"
+      "label": "identify conclusion",
+      "choices": [
+        {
+          "value": "q",
+          "label": "q"
+        },
+        {
+          "value": "hypothesis",
+          "label": "hypothesis"
+        },
+        {
+          "value": "conclusion",
+          "label": "conclusion"
+        },
+        {
+          "value": "contradiction",
+          "label": "contradiction"
+        }
+      ]
     },
     {
       "prompt": "If P implies Q and P is true, what can you conclude?",
@@ -43,6 +79,95 @@
       ],
       "hint": "This is direct reasoning: the implication fires when P is true.",
       "label": "direct implication"
+    },
+    {
+      "prompt": "In the statement if A then B, which part is the conclusion?",
+      "answer": "b",
+      "answers": [
+        "b",
+        "B"
+      ],
+      "hint": "The conclusion follows then.",
+      "label": "identify conclusion",
+      "feedback": "Separate the if part from the then part.",
+      "choices": [
+        {
+          "value": "b",
+          "label": "b"
+        },
+        {
+          "value": "hypothesis",
+          "label": "hypothesis"
+        },
+        {
+          "value": "conclusion",
+          "label": "conclusion"
+        },
+        {
+          "value": "contradiction",
+          "label": "contradiction"
+        }
+      ]
+    },
+    {
+      "prompt": "If A implies B and B is false, what can you conclude about A?",
+      "answer": "a is false",
+      "answers": [
+        "false",
+        "a is false",
+        "not a",
+        "¬a"
+      ],
+      "choices": [
+        {
+          "value": "a is false",
+          "label": "A is false"
+        },
+        {
+          "value": "b is true",
+          "label": "B is true"
+        },
+        {
+          "value": "a is true",
+          "label": "A is true"
+        },
+        {
+          "value": "positive",
+          "label": "positive"
+        }
+      ],
+      "hint": "If A were true, B would have to be true.",
+      "label": "contrapositive reasoning",
+      "feedback": "This is reasoning by contrapositive."
+    },
+    {
+      "prompt": "What word joins two statements so both must be true?",
+      "answer": "and",
+      "answers": [
+        "and",
+        "conjunction"
+      ],
+      "hint": "A and B requires both pieces.",
+      "label": "logical and",
+      "feedback": "Conjunction means both.",
+      "choices": [
+        {
+          "value": "and",
+          "label": "and"
+        },
+        {
+          "value": "hypothesis",
+          "label": "hypothesis"
+        },
+        {
+          "value": "conclusion",
+          "label": "conclusion"
+        },
+        {
+          "value": "contradiction",
+          "label": "contradiction"
+        }
+      ]
     }
   ]
 };

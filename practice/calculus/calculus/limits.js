@@ -31,6 +31,41 @@
       "answer": "4",
       "hint": "When left and right agree, the limit is that shared value.",
       "label": "two-sided limit"
+    },
+    {
+      "prompt": "As x approaches 5, what does x - 2 approach?",
+      "answer": "3",
+      "hint": "Substitute the nearby value: 5 - 2.",
+      "label": "basic limit",
+      "feedback": "For continuous simple expressions, direct substitution works."
+    },
+    {
+      "prompt": "As x approaches -1, what does x^2 approach?",
+      "answer": "1",
+      "hint": "Square -1.",
+      "label": "square limit",
+      "feedback": "Use the value being approached."
+    },
+    {
+      "prompt": "If the left-hand limit is 2 and the right-hand limit is 3, does the two-sided limit exist?",
+      "answer": "no",
+      "answers": [
+        "no",
+        "false"
+      ],
+      "hint": "The two sides must agree.",
+      "label": "two-sided limit",
+      "feedback": "Compare the two one-sided limits.",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     }
   ]
 };

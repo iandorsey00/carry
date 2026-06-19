@@ -23,13 +23,49 @@
         "same"
       ],
       "hint": "All right angles measure 90 degrees.",
-      "label": "right angle conclusion"
+      "label": "right angle conclusion",
+      "choices": [
+        {
+          "value": "equal",
+          "label": "equal"
+        },
+        {
+          "value": "acute",
+          "label": "acute"
+        },
+        {
+          "value": "right",
+          "label": "right"
+        },
+        {
+          "value": "obtuse",
+          "label": "obtuse"
+        }
+      ]
     },
     {
       "prompt": "In a proof, what word describes information stated at the start?",
       "answer": "given",
       "hint": "A proof often begins with given information.",
-      "label": "proof starting fact"
+      "label": "proof starting fact",
+      "choices": [
+        {
+          "value": "given",
+          "label": "given"
+        },
+        {
+          "value": "hypothesis",
+          "label": "hypothesis"
+        },
+        {
+          "value": "conclusion",
+          "label": "conclusion"
+        },
+        {
+          "value": "contradiction",
+          "label": "contradiction"
+        }
+      ]
     },
     {
       "prompt": "If AB = CD and CD = EF, which property lets you conclude AB = EF?",
@@ -40,7 +76,25 @@
         "transitiveproperty"
       ],
       "hint": "Equality can pass through a shared equal quantity.",
-      "label": "equality reason"
+      "label": "equality reason",
+      "choices": [
+        {
+          "value": "transitive",
+          "label": "transitive"
+        },
+        {
+          "value": "closure",
+          "label": "closure"
+        },
+        {
+          "value": "identity",
+          "label": "identity"
+        },
+        {
+          "value": "inverse",
+          "label": "inverse"
+        }
+      ]
     }
   ]
 };

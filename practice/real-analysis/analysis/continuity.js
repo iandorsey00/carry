@@ -22,7 +22,17 @@
         "true"
       ],
       "hint": "This is the definition of continuity at a point.",
-      "label": "continuity definition"
+      "label": "continuity definition",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     },
     {
       "prompt": "If a graph has a jump at x = 2, is it continuous there?",
@@ -32,7 +42,17 @@
         "false"
       ],
       "hint": "A jump means the nearby values do not meet smoothly at one value.",
-      "label": "jump discontinuity"
+      "label": "jump discontinuity",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     },
     {
       "prompt": "For f(x) = x + 1, is f continuous at x = 0?",
@@ -42,7 +62,17 @@
         "true"
       ],
       "hint": "Linear functions are continuous everywhere.",
-      "label": "linear continuity"
+      "label": "linear continuity",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     }
   ]
 };

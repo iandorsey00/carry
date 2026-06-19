@@ -2725,24 +2725,24 @@ body[data-surface="scratchpad"] .scratch-line-math-aligned {
 
 .concept-choice-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
   gap: 8px;
 }
 
 .concept-choice-button {
   display: inline-flex;
-  min-height: 56px;
+  min-height: 64px;
   align-items: center;
   justify-content: flex-start;
   gap: 10px;
-  padding: 11px 12px;
+  padding: 12px 14px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--surface);
   color: var(--text);
   cursor: pointer;
   font-weight: 800;
-  line-height: 1.2;
+  line-height: 1.25;
   text-align: left;
 }
 
@@ -2765,6 +2765,7 @@ body[data-surface="scratchpad"] .scratch-line-math-aligned {
 .concept-choice-label {
   min-width: 0;
   flex: 1;
+  overflow-wrap: anywhere;
 }
 
 .concept-choice-button.selected {

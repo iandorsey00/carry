@@ -24,7 +24,25 @@
       "prompt": "Momentum depends on mass and what?",
       "answer": "velocity",
       "hint": "p = mv.",
-      "label": "momentum factor"
+      "label": "momentum factor",
+      "choices": [
+        {
+          "value": "velocity",
+          "label": "velocity"
+        },
+        {
+          "value": "prime",
+          "label": "prime"
+        },
+        {
+          "value": "composite",
+          "label": "composite"
+        },
+        {
+          "value": "factor",
+          "label": "factor"
+        }
+      ]
     },
     {
       "prompt": "In an isolated collision, total momentum is conserved: yes or no?",
@@ -34,7 +52,17 @@
         "true"
       ],
       "hint": "Momentum conservation is the key collision rule.",
-      "label": "momentum conservation"
+      "label": "momentum conservation",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     }
   ]
 };
