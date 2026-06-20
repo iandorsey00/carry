@@ -1,13 +1,17 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-alpha.99";
+const APP_VERSION = "0.1.0-alpha.101";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 const GAMES_STORAGE_KEY = "carry.games.v1";
 const TOOLS_STORAGE_KEY = "carry.tools.v1";
 const GAME_IDS = ["sudoku", "mod-clock", "prime-factors", "gcd-race", "divisibility", "residue-match", "graph-paths"];
-const TOOL_IDS = ["random-number", "normal-simulator", "unit-circle", "complex-plane", "number-theory"];
+const TOOL_IDS = ["random-number", "normal-simulator", "unit-circle", "complex-plane", "graphing", "number-theory"];
 const MAX_CONCEPT_CHOICES = 4;
+const GRAPH_FUNCTION_NAMES = ["sin", "cos", "tan", "asin", "acos", "atan", "sqrt", "abs", "log", "ln", "exp", "min", "max"];
+const GRAPH_FUNCTIONS = new Set(GRAPH_FUNCTION_NAMES);
+const GRAPH_VARIABLES = new Set(["x", "y", "z"]);
+const graphPointerState = { dragging: false, x: 0, y: 0 };
 
 const mathTopicCategories = new Map([
   ["Arithmetic", "Foundations"],
@@ -825,6 +829,16 @@ function cacheElements() {
   els.complexAngle = document.querySelector("#complexAngle");
   els.complexFigure = document.querySelector("#complexFigure");
   els.complexResults = document.querySelector("#complexResults");
+  els.graphMode = document.querySelector("#graphMode");
+  els.graphEquation2d = document.querySelector("#graphEquation2d");
+  els.graphEquation3d = document.querySelector("#graphEquation3d");
+  els.graphRange = document.querySelector("#graphRange");
+  els.graphDraw = document.querySelector("#graphDraw");
+  els.graphStatus = document.querySelector("#graphStatus");
+  els.graphEquationPreview = document.querySelector("#graphEquationPreview");
+  els.graph2dSvg = document.querySelector("#graph2dSvg");
+  els.graph3dCanvas = document.querySelector("#graph3dCanvas");
+  els.graphResults = document.querySelector("#graphResults");
   els.factorInput = document.querySelector("#factorInput");
   els.calculateFactors = document.querySelector("#calculateFactors");
   els.factorResults = document.querySelector("#factorResults");
@@ -1060,6 +1074,14 @@ function loadTools() {
       radius: 1,
       angle: "pi/4"
     },
+    graphing: {
+      mode: "2d",
+      equation2d: "y = sin(x)",
+      equation3d: "z = sin(x) + cos(y)",
+      range: 10,
+      yaw: -0.65,
+      pitch: 0.55
+    },
     numberTheory: {
       factorInput: 84,
       gcdLeft: 84,
@@ -1091,6 +1113,10 @@ function loadTools() {
       complexPlane: {
         ...fallback.complexPlane,
         ...(parsed.complexPlane || {})
+      },
+      graphing: {
+        ...fallback.graphing,
+        ...(parsed.graphing || {})
       },
       numberTheory: {
         ...fallback.numberTheory,
@@ -1452,6 +1478,7 @@ function updatePrimaryAction() {
   if (!els.checkStep) return;
   const workspace = getActiveWorkspace();
   const isComplete = isCurrentProblemComplete();
+  const actionMode = isComplete ? (isLastProblemInSet() ? "restart" : "next") : "check";
   const guidedChoice = workspace.type === "concept" && state.mode === "guided";
   if (guidedChoice && !isComplete) {
     els.checkStep.hidden = false;
@@ -1464,7 +1491,7 @@ function updatePrimaryAction() {
   els.checkStep.hidden = false;
   els.checkStep.disabled = false;
   els.checkStep.style.visibility = "";
-  setPrimaryActionButton(isComplete ? "next" : "check");
+  setPrimaryActionButton(actionMode);
   updateLocalConceptActions(isComplete);
 }
 
@@ -1474,20 +1501,23 @@ function setPrimaryActionButton(mode) {
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.setAttribute("viewBox", "0 0 24 24");
   svg.setAttribute("aria-hidden", "true");
-  const paths = mode === "next"
-    ? ["M5 12h14", "m13 5 6-5-6-5"]
-    : ["m20 6-11 11-5-5"];
+  const paths = mode === "restart"
+    ? ["M3 12a9 9 0 1 0 3-6.7", "M3 4v6h6"]
+    : mode === "next"
+      ? ["M5 12h14", "m13 5 6-5-6-5"]
+      : ["m20 6-11 11-5-5"];
   paths.forEach((value) => {
     const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
     path.setAttribute("d", value);
     svg.append(path);
   });
-  els.checkStep.replaceChildren(svg, document.createTextNode(mode === "next" ? "Next" : "Check"));
+  const label = mode === "restart" ? "Restart" : mode === "next" ? "Next" : "Check";
+  els.checkStep.replaceChildren(svg, document.createTextNode(label));
 }
 
 function updateLocalConceptActions(isComplete) {
   els.grid?.querySelectorAll(".concept-check-button").forEach((button) => {
-    button.textContent = isComplete ? "⏎ Continue" : "⏎ Check";
+    button.textContent = isComplete ? (isLastProblemInSet() ? "⏎ Restart" : "⏎ Continue") : "⏎ Check";
     button.classList.toggle("primary-action", isComplete);
   });
 }
@@ -1919,6 +1949,7 @@ function toolLabel(tool) {
     "normal-simulator": "Normal Simulator",
     "unit-circle": "Unit Circle",
     "complex-plane": "Complex Plane",
+    graphing: "Graphing",
     "number-theory": "Number Theory"
   }[tool] || "Random Number";
 }
@@ -1937,6 +1968,7 @@ function renderTools() {
   renderNormalSimulator();
   renderUnitCircle();
   renderComplexPlane();
+  renderGraphingTool();
   renderNumberTheoryTools();
 }
 
@@ -2151,6 +2183,440 @@ function formatComplexForm(real, imaginary) {
   if (real === "0") return `${imaginary}i`;
   if (imaginary.startsWith("-")) return `${real} − ${imaginary.slice(1)}i`;
   return `${real} + ${imaginary}i`;
+}
+
+function clampGraphingSettings(settings = {}) {
+  return {
+    mode: settings.mode === "3d" ? "3d" : "2d",
+    equation2d: String(settings.equation2d || "y = sin(x)").slice(0, 180),
+    equation3d: String(settings.equation3d || "z = sin(x) + cos(y)").slice(0, 180),
+    range: Math.min(50, Math.max(1, Number(settings.range) || 10)),
+    yaw: Number.isFinite(Number(settings.yaw)) ? Number(settings.yaw) : -0.65,
+    pitch: Math.min(1.25, Math.max(-1.25, Number(settings.pitch) || 0.55))
+  };
+}
+
+function updateGraphingSettings(activity = "Updated Graphing") {
+  if (!els.graphMode) return;
+  state.tools.graphing = {
+    ...state.tools.graphing,
+    ...clampGraphingSettings({
+      mode: els.graphMode.value,
+      equation2d: els.graphEquation2d.value,
+      equation3d: els.graphEquation3d.value,
+      range: els.graphRange.value,
+      yaw: state.tools.graphing?.yaw,
+      pitch: state.tools.graphing?.pitch
+    })
+  };
+  saveTools(activity);
+  renderGraphingTool();
+}
+
+function renderGraphingTool() {
+  if (!els.graphMode) return;
+  const settings = clampGraphingSettings(state.tools.graphing || {});
+  const equation = settings.mode === "3d" ? settings.equation3d : settings.equation2d;
+  state.tools.graphing = { ...state.tools.graphing, ...settings };
+  els.graphMode.value = settings.mode;
+  els.graphEquation2d.value = settings.equation2d;
+  els.graphEquation3d.value = settings.equation3d;
+  els.graphRange.value = String(settings.range);
+  document.querySelectorAll("[data-graph-equation]").forEach((field) => {
+    field.hidden = field.dataset.graphEquation !== settings.mode;
+  });
+  els.graph2dSvg.hidden = settings.mode !== "2d";
+  els.graph3dCanvas.hidden = settings.mode !== "3d";
+  els.graphEquationPreview.replaceChildren(createMathMlExpression(normalizePlainMathLine(equation)));
+
+  try {
+    const model = compileGraphEquation(equation, settings.mode);
+    if (settings.mode === "2d") {
+      const count = renderGraph2d(model, settings.range);
+      els.graphStatus.textContent = count
+        ? "Graph ready. Dragging is available in 3D mode."
+        : "Graph ready, but no visible curve crossed the current window.";
+    } else {
+      const count = renderGraph3d(model, settings);
+      els.graphStatus.textContent = count
+        ? "Drag the graph to rotate the 3D view."
+        : "Graph ready, but no visible points landed in the current window.";
+    }
+    renderDefinitionList(els.graphResults, [
+      ["Mode", settings.mode === "3d" ? "3D" : "2D"],
+      ["Graph type", model.kind === "explicit" ? "explicit" : "implicit"],
+      ["Window", `−${settings.range} to ${settings.range}`],
+      ["Syntax", "Use ^, sin, cos, sqrt, pi, and explicit multiplication when needed."]
+    ]);
+  } catch (error) {
+    clearGraphingView(settings.mode);
+    els.graphStatus.textContent = error.message || "That equation could not be graphed.";
+    renderDefinitionList(els.graphResults, [
+      ["Status", "Check the equation syntax."],
+      ["Example", settings.mode === "3d" ? "z = sin(x) + cos(y)" : "y = sin(x)"]
+    ]);
+  }
+}
+
+function clearGraphingView(mode) {
+  if (mode === "2d") {
+    els.graph2dSvg.innerHTML = "";
+    return;
+  }
+  const canvas = els.graph3dCanvas;
+  const context = canvas?.getContext?.("2d");
+  if (context) context.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+function compileGraphEquation(equation, mode) {
+  const raw = String(equation || "").trim();
+  if (!raw) throw new Error("Enter an equation before graphing.");
+  const parts = raw.split("=");
+  const left = parts.length > 1 ? parts.shift().trim() : (mode === "3d" ? "z" : "y");
+  const right = parts.length ? parts.join("=").trim() : raw;
+  if (!left || !right) throw new Error("Use an equation such as y = sin(x).");
+  if (mode === "2d") {
+    if (/^y$/iu.test(left)) {
+      return { mode, kind: "explicit", expression: right, fn: compileGraphExpression(right) };
+    }
+    if (/^y$/iu.test(right)) {
+      return { mode, kind: "explicit", expression: left, fn: compileGraphExpression(left) };
+    }
+    const leftFn = compileGraphExpression(left);
+    const rightFn = compileGraphExpression(right);
+    return { mode, kind: "implicit", fn: (x, y, z = 0) => leftFn(x, y, z) - rightFn(x, y, z) };
+  }
+  if (/^z$/iu.test(left)) {
+    return { mode, kind: "explicit", expression: right, fn: compileGraphExpression(right) };
+  }
+  if (/^z$/iu.test(right)) {
+    return { mode, kind: "explicit", expression: left, fn: compileGraphExpression(left) };
+  }
+  const leftFn = compileGraphExpression(left);
+  const rightFn = compileGraphExpression(right);
+  return { mode, kind: "implicit", fn: (x, y, z = 0) => leftFn(x, y, z) - rightFn(x, y, z) };
+}
+
+function compileGraphExpression(expression) {
+  const normalized = normalizeGraphExpression(expression);
+  if (!normalized) throw new Error("Enter an expression to graph.");
+  if (/[;{}\[\]"'`]|=>|(?:^|[^A-Za-z])(?:new|this|window|document|Function)(?:$|[^A-Za-z])/u.test(normalized)) {
+    throw new Error("Use ordinary math notation only.");
+  }
+  const identifiers = normalized.match(/[A-Za-z_][A-Za-z0-9_]*/gu) || [];
+  const allowed = new Set([...GRAPH_FUNCTIONS, ...GRAPH_VARIABLES, "pi", "e"]);
+  const unknown = identifiers.find((name) => !allowed.has(name.toLowerCase()));
+  if (unknown) throw new Error(`Unknown symbol: ${unknown}`);
+  let jsExpression = normalized;
+  GRAPH_FUNCTION_NAMES.filter((name) => name !== "ln").forEach((name) => {
+    jsExpression = jsExpression.replace(new RegExp(`\\b${name}\\b`, "giu"), `Math.${name}`);
+  });
+  jsExpression = jsExpression
+    .replace(/\bln\b/giu, "Math.log")
+    .replace(/\bpi\b/giu, "Math.PI")
+    .replace(/\be\b/gu, "Math.E");
+  try {
+    return Function("x", "y", "z", `"use strict"; return (${jsExpression});`);
+  } catch {
+    throw new Error("Use syntax like y = sin(x), y = x^2, or x^2 + y^2 = 9.");
+  }
+}
+
+function normalizeGraphExpression(expression) {
+  const functionNames = GRAPH_FUNCTION_NAMES.join("|");
+  return String(expression || "")
+    .trim()
+    .toLowerCase()
+    .replace(/[−–—]/gu, "-")
+    .replace(/π/gu, "pi")
+    .replace(/[×·]/gu, "*")
+    .replace(/\bMath\./gu, "")
+    .replace(/\^/gu, "**")
+    .replace(new RegExp(`(\\d|\\)|\\b(?:x|y|z|pi|e)\\b)\\s*(?=(?:\\(|\\b(?:x|y|z|pi|e)\\b|\\b(?:${functionNames})\\b))`, "giu"), "$1*")
+    .replace(new RegExp(`(\\d|\\)|\\b(?:x|y|z|pi|e)\\b)\\s+(?=(?:\\d|\\(|\\b(?:x|y|z|pi|e)\\b|\\b(?:${functionNames})\\b))`, "giu"), "$1*");
+}
+
+function renderGraph2d(model, range) {
+  const svg = els.graph2dSvg;
+  svg.innerHTML = "";
+  const width = 640;
+  const height = 420;
+  const margin = 32;
+  const plotWidth = width - (margin * 2);
+  const plotHeight = height - (margin * 2);
+  const xToScreen = (x) => margin + ((x + range) / (range * 2)) * plotWidth;
+  const yToScreen = (y) => margin + ((range - y) / (range * 2)) * plotHeight;
+  svg.append(svgEl("rect", { x: 0, y: 0, width, height, class: "graph-background" }));
+  graphTicks(range).forEach((tick) => {
+    const x = xToScreen(tick);
+    const y = yToScreen(tick);
+    svg.append(svgEl("line", { x1: x, y1: margin, x2: x, y2: height - margin, class: approximatelyZero(tick) ? "graph-axis" : "graph-grid-line" }));
+    svg.append(svgEl("line", { x1: margin, y1: y, x2: width - margin, y2: y, class: approximatelyZero(tick) ? "graph-axis" : "graph-grid-line" }));
+  });
+  if (model.kind === "explicit") {
+    return renderExplicitGraph2d(svg, model, range, xToScreen, yToScreen);
+  }
+  return renderImplicitGraph2d(svg, model, range, xToScreen, yToScreen);
+}
+
+function renderExplicitGraph2d(svg, model, range, xToScreen, yToScreen) {
+  const samples = 420;
+  let path = "";
+  let count = 0;
+  let active = false;
+  for (let index = 0; index <= samples; index += 1) {
+    const x = -range + ((range * 2 * index) / samples);
+    const y = model.fn(x, 0, 0);
+    const visible = Number.isFinite(y) && Math.abs(y) <= range * 6;
+    if (!visible) {
+      active = false;
+      continue;
+    }
+    const command = active ? "L" : "M";
+    path += `${command}${formatNumber(xToScreen(x), 2)} ${formatNumber(yToScreen(y), 2)} `;
+    active = true;
+    count += 1;
+  }
+  if (path) svg.append(svgEl("path", { d: path.trim(), class: "graph-curve" }));
+  return count;
+}
+
+function renderImplicitGraph2d(svg, model, range, xToScreen, yToScreen) {
+  const cells = 88;
+  const step = (range * 2) / cells;
+  let count = 0;
+  for (let xIndex = 0; xIndex < cells; xIndex += 1) {
+    for (let yIndex = 0; yIndex < cells; yIndex += 1) {
+      const x0 = -range + xIndex * step;
+      const x1 = x0 + step;
+      const y0 = -range + yIndex * step;
+      const y1 = y0 + step;
+      const values = [
+        model.fn(x0, y0, 0),
+        model.fn(x1, y0, 0),
+        model.fn(x1, y1, 0),
+        model.fn(x0, y1, 0)
+      ];
+      if (values.some((value) => !Number.isFinite(value))) continue;
+      const points = [];
+      addMarchingPoint(points, values[0], values[1], [x0, y0], [x1, y0]);
+      addMarchingPoint(points, values[1], values[2], [x1, y0], [x1, y1]);
+      addMarchingPoint(points, values[2], values[3], [x1, y1], [x0, y1]);
+      addMarchingPoint(points, values[3], values[0], [x0, y1], [x0, y0]);
+      for (let pointIndex = 0; pointIndex + 1 < points.length; pointIndex += 2) {
+        const start = points[pointIndex];
+        const end = points[pointIndex + 1];
+        svg.append(svgEl("line", {
+          x1: xToScreen(start[0]),
+          y1: yToScreen(start[1]),
+          x2: xToScreen(end[0]),
+          y2: yToScreen(end[1]),
+          class: "graph-curve"
+        }));
+        count += 1;
+      }
+    }
+  }
+  return count;
+}
+
+function addMarchingPoint(points, leftValue, rightValue, leftPoint, rightPoint) {
+  if (approximatelyZero(leftValue)) {
+    points.push(leftPoint);
+    return;
+  }
+  if (leftValue * rightValue > 0) return;
+  const ratio = leftValue / (leftValue - rightValue);
+  points.push([
+    leftPoint[0] + (rightPoint[0] - leftPoint[0]) * ratio,
+    leftPoint[1] + (rightPoint[1] - leftPoint[1]) * ratio
+  ]);
+}
+
+function renderGraph3d(model, settings) {
+  const canvas = els.graph3dCanvas;
+  const context = canvas.getContext("2d");
+  const rect = canvas.getBoundingClientRect();
+  const cssWidth = Math.max(320, rect.width || 720);
+  const cssHeight = Math.max(320, rect.height || 480);
+  const ratio = window.devicePixelRatio || 1;
+  if (canvas.width !== Math.round(cssWidth * ratio) || canvas.height !== Math.round(cssHeight * ratio)) {
+    canvas.width = Math.round(cssWidth * ratio);
+    canvas.height = Math.round(cssHeight * ratio);
+  }
+  context.setTransform(ratio, 0, 0, ratio, 0, 0);
+  context.clearRect(0, 0, cssWidth, cssHeight);
+  drawGraph3dAxes(context, settings, cssWidth, cssHeight);
+  return model.kind === "explicit"
+    ? drawExplicitGraph3d(context, model, settings, cssWidth, cssHeight)
+    : drawImplicitGraph3d(context, model, settings, cssWidth, cssHeight);
+}
+
+function drawGraph3dAxes(context, settings, width, height) {
+  const range = settings.range;
+  const axes = [
+    [[-range, 0, 0], [range, 0, 0], "x"],
+    [[0, -range, 0], [0, range, 0], "y"],
+    [[0, 0, -range], [0, 0, range], "z"]
+  ];
+  context.save();
+  context.lineWidth = 1.5;
+  context.strokeStyle = getCssColor("--graph-axis");
+  context.fillStyle = getCssColor("--muted");
+  context.font = "700 13px Inter, Helvetica, Arial, sans-serif";
+  axes.forEach(([start, end, label]) => {
+    const a = projectGraphPoint(start[0], start[1], start[2], settings, width, height);
+    const b = projectGraphPoint(end[0], end[1], end[2], settings, width, height);
+    context.beginPath();
+    context.moveTo(a.x, a.y);
+    context.lineTo(b.x, b.y);
+    context.stroke();
+    context.fillText(label, b.x + 5, b.y - 5);
+  });
+  context.restore();
+}
+
+function drawExplicitGraph3d(context, model, settings, width, height) {
+  const range = settings.range;
+  const samples = 32;
+  const points = [];
+  for (let row = 0; row <= samples; row += 1) {
+    points[row] = [];
+    const y = -range + ((range * 2 * row) / samples);
+    for (let column = 0; column <= samples; column += 1) {
+      const x = -range + ((range * 2 * column) / samples);
+      const z = model.fn(x, y, 0);
+      points[row][column] = Number.isFinite(z) && Math.abs(z) <= range * 4
+        ? projectGraphPoint(x, y, z, settings, width, height)
+        : null;
+    }
+  }
+  context.save();
+  context.lineWidth = 1.2;
+  context.strokeStyle = getCssColor("--graph-surface");
+  let count = 0;
+  const drawLine = (a, b) => {
+    if (!a || !b) return;
+    context.beginPath();
+    context.moveTo(a.x, a.y);
+    context.lineTo(b.x, b.y);
+    context.stroke();
+    count += 1;
+  };
+  for (let row = 0; row <= samples; row += 1) {
+    for (let column = 0; column < samples; column += 1) {
+      drawLine(points[row][column], points[row][column + 1]);
+    }
+  }
+  for (let column = 0; column <= samples; column += 1) {
+    for (let row = 0; row < samples; row += 1) {
+      drawLine(points[row][column], points[row + 1][column]);
+    }
+  }
+  context.restore();
+  return count;
+}
+
+function drawImplicitGraph3d(context, model, settings, width, height) {
+  const range = settings.range;
+  const samples = 30;
+  const step = (range * 2) / samples;
+  const threshold = Math.max(0.12, step * 2);
+  const points = [];
+  for (let xIndex = 0; xIndex <= samples; xIndex += 1) {
+    const x = -range + xIndex * step;
+    for (let yIndex = 0; yIndex <= samples; yIndex += 1) {
+      const y = -range + yIndex * step;
+      for (let zIndex = 0; zIndex <= samples; zIndex += 1) {
+        const z = -range + zIndex * step;
+        const value = model.fn(x, y, z);
+        if (!Number.isFinite(value) || Math.abs(value) > threshold) continue;
+        points.push(projectGraphPoint(x, y, z, settings, width, height));
+      }
+    }
+  }
+  points.sort((a, b) => a.depth - b.depth);
+  context.save();
+  context.fillStyle = getCssColor("--graph-surface");
+  points.forEach((point) => {
+    context.globalAlpha = Math.max(0.3, Math.min(0.95, 0.55 + point.depth * 0.02));
+    context.beginPath();
+    context.arc(point.x, point.y, 2.6, 0, Math.PI * 2);
+    context.fill();
+  });
+  context.restore();
+  return points.length;
+}
+
+function projectGraphPoint(x, y, z, settings, width, height) {
+  const yaw = settings.yaw;
+  const pitch = settings.pitch;
+  const cosYaw = Math.cos(yaw);
+  const sinYaw = Math.sin(yaw);
+  const cosPitch = Math.cos(pitch);
+  const sinPitch = Math.sin(pitch);
+  const rotatedX = (cosYaw * x) - (sinYaw * y);
+  const rotatedY = (sinYaw * x) + (cosYaw * y);
+  const projectedY = (cosPitch * rotatedY) - (sinPitch * z);
+  const depth = (sinPitch * rotatedY) + (cosPitch * z);
+  const scale = Math.min(width, height) / (settings.range * 3);
+  return {
+    x: (width / 2) + rotatedX * scale,
+    y: (height / 2) - projectedY * scale,
+    depth
+  };
+}
+
+function graphTicks(range) {
+  const step = graphTickStep(range);
+  const ticks = [];
+  for (let value = Math.ceil(-range / step) * step; value <= range + step * 0.5; value += step) {
+    ticks.push(Number(value.toFixed(8)));
+  }
+  return ticks;
+}
+
+function graphTickStep(range) {
+  const raw = range / 4;
+  const magnitude = 10 ** Math.floor(Math.log10(raw));
+  return [1, 2, 5, 10].map((factor) => factor * magnitude).find((candidate) => candidate >= raw) || magnitude;
+}
+
+function approximatelyZero(value) {
+  return Math.abs(value) < 1e-9;
+}
+
+function getCssColor(name) {
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || "#1d4ed8";
+}
+
+function startGraphDrag(event) {
+  if (state.tools.activeTool !== "graphing" || state.tools.graphing?.mode !== "3d") return;
+  graphPointerState.dragging = true;
+  graphPointerState.x = event.clientX;
+  graphPointerState.y = event.clientY;
+  els.graph3dCanvas.setPointerCapture?.(event.pointerId);
+}
+
+function dragGraphView(event) {
+  if (!graphPointerState.dragging) return;
+  const dx = event.clientX - graphPointerState.x;
+  const dy = event.clientY - graphPointerState.y;
+  graphPointerState.x = event.clientX;
+  graphPointerState.y = event.clientY;
+  const settings = clampGraphingSettings(state.tools.graphing || {});
+  state.tools.graphing = {
+    ...settings,
+    yaw: settings.yaw + dx * 0.01,
+    pitch: Math.min(1.25, Math.max(-1.25, settings.pitch + dy * 0.01))
+  };
+  renderGraphingTool();
+}
+
+function endGraphDrag() {
+  if (!graphPointerState.dragging) return;
+  graphPointerState.dragging = false;
+  saveTools("Rotated Graphing view");
 }
 
 function primeFactorsOf(value) {
@@ -3060,35 +3526,7 @@ function renderIntroWorkspace(workspace) {
 }
 
 function renderIntroCopy(workspace) {
-  const intros = {
-    addition: [
-      "Start at the ones column and move left.",
-      "Add the two digits in the active column, plus any carry already above that column.",
-      "Write the ones digit in the sum row. If the column total is 10 or more, place the carry above the next column.",
-      "At the last column, bring down any final carry."
-    ],
-    subtraction: [
-      "Start at the ones column and move left.",
-      "If the top digit is large enough, subtract the lower digit and write the difference.",
-      "If the top digit is too small, borrow from the next available column on the left.",
-      "A digit that lends is crossed out and replaced with its reduced value. A digit that receives ten gets a small 1 mark."
-    ],
-    multiplication: [
-      "Multiply one bottom digit at a time, starting with the ones digit.",
-      "Within each partial row, move from right to left and carry into the next column as needed.",
-      "Use a zero when a partial row shifts left for tens or hundreds.",
-      "After all partial rows are complete, add them from right to left."
-    ],
-    division: [
-      "Move through the dividend from left to right.",
-      "For each column, form the partial dividend, choose the quotient digit, multiply, then subtract.",
-      "Carry each remainder into the next partial dividend.",
-      workspace.allowsRemainder
-        ? "At the end, write the final remainder instead of forcing another quotient digit."
-        : "In this lesson, the final remainder is zero."
-    ]
-  };
-  const items = workspace.intro || intros[workspace.type] || ["This interactive workspace is planned."];
+  const items = workspace.intro || introCoreItems(workspace);
   const figures = createIntroFigures(workspace);
   const sections = document.createElement("div");
   sections.className = "intro-sections";
@@ -3109,6 +3547,10 @@ function renderIntroCopy(workspace) {
   els.introCopy.replaceChildren(...figures, sections);
 }
 
+function introCoreItems(workspace) {
+  return window.CarryHowThisWorks?.introCoreItems?.(workspace) || ["This interactive workspace is planned."];
+}
+
 function createIntroFigures(workspace) {
   return [createIntroFigure(workspace), ...supplementalIntroFigures(workspace)].filter(Boolean);
 }
@@ -3121,171 +3563,11 @@ function introExplanationSection(workspace) {
 }
 
 function introWorkspaceItems(workspace) {
-  if (workspace.type === "addition") {
-    return [
-      "Use one digit per square.",
-      "Check validates the active column, then moves left.",
-      "Carry marks sit above the next column only when a column total reaches 10."
-    ];
-  }
-
-  if (workspace.type === "subtraction") {
-    return [
-      "Use one digit per square for the answer row.",
-      "Borrow marks show the changed top number before you subtract.",
-      "Check one column at a time so a borrow mistake stays local."
-    ];
-  }
-
-  if (workspace.type === "multiplication") {
-    return [
-      "Build one partial product row at a time.",
-      "Zeros mark the place shift for tens and hundreds rows.",
-      "The final sum has its own carry row."
-    ];
-  }
-
-  if (workspace.type === "division") {
-    return workspace.allowsRemainder
-      ? [
-          "Use the divide, multiply, subtract cycle from left to right.",
-          "The last nonzero amount is written as the final remainder.",
-          "If there is no remainder, write 0 when the lesson asks for it."
-        ]
-      : [
-          "Use the divide, multiply, subtract cycle from left to right.",
-          "This lesson uses problems that end with remainder 0.",
-          "A problem with a final remainder moves to the remainders lesson."
-        ];
-  }
-
-  if (workspace.type === "equation") {
-    return [
-      "Write the same operation on both sides before simplifying.",
-      "Each row should keep left side, relation, and right side aligned.",
-      "The last row names the value of the variable."
-    ];
-  }
-
-  if (workspace.type === "inequality") {
-    return [
-      "Use inverse operations as you would for equations.",
-      "Reverse the inequality only when multiplying or dividing by a negative number.",
-      "The last row should state the variable, comparison sign, and boundary value."
-    ];
-  }
-
-  if (workspace.type === "system") {
-    return [
-      "Show the method first: substitution or elimination.",
-      "Find one variable, substitute it back, then write the ordered pair.",
-      "The pair should work in both original equations."
-    ];
-  }
-
-  if (workspace.type === "factoring" || workspace.type === "quadratic") {
-    return [
-      "Name the expression shape before choosing a method.",
-      "For simple quadratics, look for a pair whose product and sum both fit.",
-      "Multiply the factors back out as a check."
-    ];
-  }
-
-  return [];
+  return window.CarryHowThisWorks?.introWorkspaceItems?.(workspace) || [];
 }
 
 function introApplicationItems(workspace) {
-  const byId = {
-    "arithmetic.place-value": [
-      "Reading prices, scores, measurements, and large numbers quickly.",
-      "Catching errors when a digit is in the wrong place."
-    ],
-    "arithmetic.number-sense": [
-      "Estimating whether a result is reasonable before trusting a calculator.",
-      "Comparing quantities in money, distance, time, and data."
-    ],
-    "arithmetic.fractions": [
-      "Sharing, scaling recipes, interpreting ratios, and reading probability.",
-      "Moving between exact values and decimal approximations."
-    ],
-    "algebra.linear-equations": [
-      "Solving for an unknown cost, distance, rate, or missing measurement.",
-      "Rearranging formulas in science and engineering."
-    ],
-    "algebra.systems": [
-      "Finding where two constraints are true at the same time.",
-      "Comparing plans, mixtures, break-even points, and intersections."
-    ],
-    "geometry.coordinate": [
-      "Mapping, screen graphics, robotics, design grids, and analytic geometry.",
-      "Turning shapes into numbers that can be measured."
-    ],
-    "trigonometry.unit-circle": [
-      "Modeling rotation, waves, sound, light, and seasonal cycles.",
-      "Connecting angles to coordinates."
-    ],
-    "calculus.derivatives": [
-      "Measuring instantaneous speed, slope, sensitivity, and marginal change.",
-      "Understanding how a changing system responds right now."
-    ],
-    "calculus.integrals": [
-      "Accumulating distance, area, total change, mass, charge, and probability.",
-      "Turning many tiny contributions into a whole."
-    ],
-    "statistics.normal-distribution": [
-      "Modeling measurement error, natural variation, test scores, and averages.",
-      "Judging whether an observation is ordinary or unusual."
-    ],
-    "statistics.correlation-regression": [
-      "Finding relationships in real data while remembering that association is not proof of cause.",
-      "Making simple predictions with uncertainty."
-    ],
-    "number-theory.modular-arithmetic": [
-      "Clock arithmetic, calendars, cycles, checksums, music patterns, and cryptography.",
-      "Reasoning with remainders instead of full numbers."
-    ],
-    "graph-theory.vertices-edges": [
-      "Networks: friends, roads, websites, circuits, dependencies, and maps.",
-      "Separating objects from the connections between them."
-    ],
-    "physics.kinematics": [
-      "Motion in vehicles, sports, animation, experiments, and sensors.",
-      "Connecting position, velocity, acceleration, and time."
-    ]
-  };
-  if (byId[workspace.id]) return byId[workspace.id];
-
-  if (workspace.topic === "Statistics") {
-    return [
-      "Reading data claims in science, business, medicine, and public life.",
-      "Separating signal, variation, uncertainty, and context."
-    ];
-  }
-  if (workspace.topic === "Probability") {
-    return [
-      "Reasoning about risk, games, sampling, forecasts, and uncertainty.",
-      "Making the possible outcomes explicit before judging likelihood."
-    ];
-  }
-  if (workspace.topic === "Graph Theory") {
-    return [
-      "Networks, routes, dependencies, search, scheduling, and communication.",
-      "Using simple diagrams to reveal structure."
-    ];
-  }
-  if (workspace.topic === "Physics Foundations" || isPhysicsWorkspaceId(workspace.id)) {
-    return [
-      "Connecting formulas to measurable quantities in the world.",
-      "Using units and diagrams to keep calculations grounded."
-    ];
-  }
-  if (workspace.topic === "Proofs" || workspace.topic === "Real Analysis" || workspace.topic === "Abstract Algebra") {
-    return [
-      "Building definitions carefully enough that examples and counterexamples become visible.",
-      "Learning how mathematical certainty is assembled one reason at a time."
-    ];
-  }
-  return [];
+  return window.CarryHowThisWorks?.introApplicationItems?.(workspace) || [];
 }
 
 function createIntroSection(title, items) {
@@ -3307,55 +3589,11 @@ function createIntroSection(title, items) {
 }
 
 function lessonStudioMove(workspace) {
-  if (workspace.type === "addition") return "Build the sum one column at a time.";
-  if (workspace.type === "subtraction") return "Rewrite the top number only when a borrow is needed.";
-  if (workspace.type === "multiplication") return "Build partial products, then add them.";
-  if (workspace.type === "division") return "Repeat divide, multiply, subtract from left to right.";
-  if (workspace.type === "equation") return "Keep both sides balanced on every row.";
-  if (workspace.type === "inequality") return "Track the comparison sign while you solve.";
-  if (workspace.type === "system") return "Show the method before writing the solution.";
-  if (workspace.type === "quadratic" || workspace.type === "factoring") return "Choose the structure before calculating.";
-  if (workspace.topic === "Statistics") return "Name the data structure before calculating.";
-  return `Review ${workspace.title.toLowerCase()}, then try the prompt.`;
+  return window.CarryHowThisWorks?.lessonStudioMove?.(workspace) || `Review ${workspace.title.toLowerCase()}, then try the prompt.`;
 }
 
 function lessonStudioItems(workspace) {
-  if (workspace.type === "addition") {
-    return [
-      "Treat each column as a small checkpoint.",
-      "Only write a carry when a column total reaches 10 or more."
-    ];
-  }
-
-  if (workspace.type === "subtraction") {
-    return [
-      "Make the top digit large enough before subtracting.",
-      "Use borrow marks to preserve what changed."
-    ];
-  }
-
-  if (workspace.type === "multiplication") {
-    return [
-      "Finish one partial row before starting the next.",
-      "Use place-value zeros to show the row shift."
-    ];
-  }
-
-  if (workspace.type === "division") {
-    return [
-      "Each cycle asks what fits, checks by multiplying, then subtracts.",
-      "Remainders become part of the next partial dividend."
-    ];
-  }
-
-  if (workspace.topic === "Statistics") {
-    return [
-      "First ask what the data values represent.",
-      "Then choose the summary, display, or inference idea that matches the question."
-    ];
-  }
-
-  return [];
+  return window.CarryHowThisWorks?.lessonStudioItems?.(workspace) || [];
 }
 
 function createWorkedExampleSection(workspace) {
@@ -3415,203 +3653,20 @@ function appendAlignedMathLine(target, latex, prefix, align = true) {
 }
 
 function introWorkedExampleRows(workspace) {
-  if (workspace.type === "addition") {
-    return [
-      { math: "6 + 7 = 13", note: "Write 3 in ones and carry 1." },
-      { math: "8 + 5 + 1 = 14", note: "Write 4 in tens and carry 1." },
-      { math: "4 + 2 + 1 = 7", note: "The sum is 743." }
-    ];
-  }
-
-  if (workspace.type === "subtraction") {
-    return [
-      { math: "15 - 8 = 7", note: "Borrow because 5 is too small." },
-      { math: "13 - 7 = 6", note: "Borrow again in the tens column." },
-      { math: "5 - 2 = 3", note: "The difference is 367." }
-    ];
-  }
-
-  if (workspace.type === "multiplication") {
-    return [
-      { math: "247 × 6 = 1482", note: "Build the ones partial row." },
-      { math: "247 × 80 = 19760", note: "Shift one place for tens." },
-      { math: "247 × 300 = 74100", note: "Shift two places for hundreds." }
-    ];
-  }
-
-  if (workspace.type === "division") {
-    return [
-      { math: "8 ÷ 4 = 2", note: "First quotient digit." },
-      { math: "6 ÷ 4 = 1 r 2", note: "Carry the remainder forward." },
-      { math: "24 ÷ 4 = 6", note: "Final quotient digit." }
-    ];
-  }
-
-  if (workspace.type === "equation") {
-    return [
-      { math: "x + 7 = 12", note: "Start with the equation." },
-      { math: "x + 7 - 7 = 12 - 7", note: "Subtract 7 from both sides." },
-      { math: "x = 5", note: "Simplify." }
-    ];
-  }
-
-  if (workspace.type === "inequality") {
-    return [
-      { math: "x + 4 > 9", note: "Start with the inequality." },
-      { math: "x + 4 - 4 > 9 - 4", note: "Subtract 4 from both sides." },
-      { math: "x > 5", note: "Direction stays the same." }
-    ];
-  }
-
-  if (workspace.type === "factoring" || workspace.type === "quadratic") {
-    return [
-      { math: "x^2 + 5x + 6", note: "Find a pair with product 6 and sum 5." },
-      { math: "2 × 3 = 6", note: "Product matches c." },
-      { math: "2 + 3 = 5", note: "Sum matches b." },
-      { math: "x^2 + 5x + 6 = (x + 2)(x + 3)", note: "Write the factors." }
-    ];
-  }
-
-  return conceptWorkedExampleRows(workspace);
+  return window.CarryHowThisWorks?.introWorkedExampleRows?.(workspace) || conceptWorkedExampleRows(workspace);
 }
 
 function introWorkedExampleItems(workspace) {
-  if (workspace.type === "concept" && workspace.problems?.length) {
-    return conceptWorkedExampleItems(workspace);
-  }
-
-  if (workspace.type === "addition") {
-    return [
-      "For 486 + 257, start with ones: 6 + 7 = 13, so write 3 and carry 1.",
-      "Then tens: 8 + 5 + 1 = 14, so write 4 and carry 1.",
-      "Then hundreds: 4 + 2 + 1 = 7, so the sum is 743."
-    ];
-  }
-
-  if (workspace.type === "subtraction") {
-    return [
-      "For 645 - 278, ones needs a borrow: 15 - 8 = 7.",
-      "The tens column became 3, so borrow again: 13 - 7 = 6.",
-      "The hundreds column became 5, so 5 - 2 = 3. The difference is 367."
-    ];
-  }
-
-  if (workspace.type === "multiplication") {
-    return [
-      "For 247 × 386, multiply 247 by 6 first to make the ones partial row.",
-      "Then multiply by 80 and 300, shifting those partial rows left.",
-      "Add the partial rows to get the final product."
-    ];
-  }
-
-  if (workspace.type === "division") {
-    return [
-      "For 864 ÷ 4, ask how many 4s fit into the current part of the dividend.",
-      "8 ÷ 4 = 2, then 6 ÷ 4 = 1 remainder 2, then 24 ÷ 4 = 6.",
-      "The quotient is 216, with no final remainder in the exact division lesson."
-    ];
-  }
-
-  if (workspace.type === "equation") {
-    return [
-      "For x + 7 = 12, subtract 7 from both sides.",
-      "The left side becomes x, and the right side becomes 5.",
-      "So x = 5."
-    ];
-  }
-
-  if (workspace.type === "inequality") {
-    return [
-      "For x + 4 > 9, subtract 4 from both sides.",
-      "The comparison direction stays the same because you did not multiply or divide by a negative.",
-      "So x > 5."
-    ];
-  }
-
-  if (workspace.type === "factoring" || workspace.type === "quadratic") {
-    return [
-      "For x^2 + 5x + 6, find two numbers that multiply to 6 and add to 5.",
-      "The pair 2 and 3 works.",
-      "So x^2 + 5x + 6 = (x + 2)(x + 3)."
-    ];
-  }
-
-  return [
+  if (workspace.type === "concept" && workspace.problems?.length) return conceptWorkedExampleItems(workspace);
+  return window.CarryHowThisWorks?.introWorkedExampleItems?.(workspace) || [
     "Read the prompt, identify the current rule, and make one small move.",
     "Check that move before continuing."
   ];
 }
 
 function introWhyItems(workspace) {
-  if (workspace.type === "addition") {
-    return [
-      "Each column represents a place value.",
-      "Ten ones become one ten, ten tens become one hundred, and so on.",
-      "Carries keep the total value the same while moving it to the correct column."
-    ];
-  }
-
-  if (workspace.type === "subtraction") {
-    return [
-      "Borrowing rewrites the same number using a neighboring place value.",
-      "One ten can be exchanged for ten ones, and one hundred can be exchanged for ten tens.",
-      "The value of the top number stays the same; only its form changes."
-    ];
-  }
-
-  if (workspace.type === "multiplication") {
-    return [
-      "Long multiplication breaks one factor into ones, tens, and hundreds.",
-      "Each partial product is a smaller multiplication with the correct place shift.",
-      "Adding the partial products recombines the whole product."
-    ];
-  }
-
-  if (workspace.type === "division") {
-    return [
-      "Long division repeatedly asks how many groups fit into the current part of the dividend.",
-      "Multiplying checks the size of the chosen quotient digit.",
-      "Subtracting leaves the remainder that carries into the next place."
-    ];
-  }
-
-  if (workspace.type === "equation") {
-    return [
-      "An equation is balanced when both sides have the same value.",
-      "Doing the same operation to both sides keeps that balance.",
-      "The goal is to rewrite the equation until the variable is alone."
-    ];
-  }
-
-  if (workspace.type === "inequality") {
-    return [
-      "An inequality compares two sides instead of making them equal.",
-      "Most inverse operations preserve the comparison.",
-      "Multiplying or dividing by a negative reverses order, so the sign must flip."
-    ];
-  }
-
-  if (workspace.type === "system") {
-    return [
-      "A system solution must satisfy every equation at the same time.",
-      "Substitution and elimination reduce two unknowns to one unknown.",
-      "The final ordered pair should work in both original equations."
-    ];
-  }
-
-  if (workspace.type === "factoring" || workspace.type === "quadratic") {
-    return [
-      "Factoring rewrites an expression as a product without changing its value.",
-      "Multiplying the factors back out checks the rewrite.",
-      "For quadratics, factored form makes zeros easier to see."
-    ];
-  }
-
-  if (workspace.type === "concept") {
-    return conceptWhyItems(workspace);
-  }
-
-  return [
+  if (workspace.type === "concept") return conceptWhyItems(workspace);
+  return window.CarryHowThisWorks?.introWhyItems?.(workspace) || [
     "The rule connects the notation to one small action.",
     "Checking a small action prevents a mistake from spreading.",
     "The same pattern can then be reused on new numbers."
@@ -4949,16 +5004,7 @@ function addIntroRule(grid, row) {
 }
 
 function introFigureCaption(workspace) {
-  if (workspace.type === "inequality") return conceptFigureCaption(workspace.figure);
-  if (workspace.type === "equation") return conceptFigureCaption(workspace.figure);
-  if (workspace.type === "concept") return conceptFigureCaption(workspace.figure);
-  if (workspace.type === "quadratic") return conceptFigureCaption(workspace.figure);
-  if (workspace.type === "addition") return "A carry mark sits above the next column; the active column is highlighted.";
-  if (workspace.type === "subtraction") return "Borrow marks show what changed: lent digits are crossed out, received tens sit above the digit.";
-  if (workspace.type === "multiplication") return "Each partial row is built from right to left, with carries above the top row.";
-  return workspace.allowsRemainder
-    ? "The final remainder is written at the end of the same divide, multiply, subtract cycle."
-    : "Exact division ends with a final remainder of zero.";
+  return window.CarryHowThisWorks?.introFigureCaption?.(workspace) || conceptFigureCaption(workspace.figure);
 }
 
 function updateProblemSetup(workspace) {
@@ -5162,141 +5208,7 @@ function addConceptIntroFigure(grid, figure) {
 }
 
 function conceptFigureCaption(figure) {
-  const captions = {
-    "place-value": "The same digit has a different value depending on its column.",
-    "number-line": "Position helps compare, round, and continue patterns.",
-    "integer-line": "Negative and positive integers are ordered by position on the number line.",
-    estimation: "Rounded numbers make a quick reasonableness check.",
-    "fraction-bar": "Fractions count equal parts of the same whole.",
-    "decimal-grid": "Decimals use the same place-value system to the right of the ones place.",
-    "percent-grid": "Percents are hundredths in another notation.",
-    "ratio-bars": "Equivalent ratios scale both parts by the same factor.",
-    "factor-pairs": "Factor pairs multiply to make the target number.",
-    "operation-order": "Order rules decide which operation happens first.",
-    "word-problem": "Translate the situation into the operation before calculating.",
-    "mixed-review": "Mixed review asks you to choose a method, then check the result.",
-    "expression-terms": "Like terms can be combined without changing the expression's value.",
-    "equation-balance": "Solving an equation keeps both sides balanced.",
-    "inequality-line": "Inequality solutions often describe a whole region on a number line.",
-    "exponent-stack": "The exponent tells how many repeated factors the base has.",
-    "coordinate-plane": "Coordinates move horizontally first, then vertically.",
-    "system-intersection": "A system solution makes both equations true at once.",
-    "polynomial-terms": "Like polynomial terms combine by matching variable and exponent.",
-    "factoring-pairs": "Factoring reverses expansion by finding useful products.",
-    "rational-cancel": "Common factors can cancel after factoring.",
-    "quadratic-roots": "Factored quadratics show where the expression equals zero.",
-    "geometry-angles": "Angle facts often come from a shared total such as 90 or 180 degrees.",
-    "geometry-triangle": "Triangle angle measures always add to 180 degrees.",
-    "geometry-circle": "Radius, diameter, and circumference describe the same circle in different ways.",
-    "geometry-area-volume": "Area counts flat space; volume counts three-dimensional space.",
-    "geometry-coordinate": "Coordinates turn geometric distance into differences on a grid.",
-    "geometry-proof": "Proofs connect each claim to a reason.",
-    "trig-unit-circle": "The unit circle turns angles into coordinates.",
-    "trig-right-triangle": "Right-triangle trigonometry compares sides relative to an angle.",
-    "trig-graphs": "Trigonometric graphs repeat in predictable waves.",
-    "trig-identities": "Identities let you rewrite trig expressions without changing their values.",
-    "trig-inverse": "Inverse trig functions recover an angle from a ratio.",
-    "precalc-functions": "Functions connect each input to one output.",
-    "precalc-transformations": "Transformations move a parent graph without losing its structure.",
-    "precalc-polynomial-rational": "Polynomial and rational functions reveal zeros, degrees, and restrictions.",
-    "precalc-exponential-log": "Logarithms reverse exponential growth.",
-    "precalc-sequences": "Sequences track ordered patterns term by term.",
-    "precalc-complex": "Complex numbers extend the number line into a plane.",
-    "calc-limits": "Limits describe the value a function approaches.",
-    "calc-derivatives": "Derivatives measure tangent slope and instantaneous change.",
-    "calc-integrals": "Integrals accumulate area or total change.",
-    "calc-applications": "Calculus connects rates, totals, and optimization.",
-    "calc-series": "Series add ordered terms and track partial sums.",
-    "diff-eq-slope-fields": "Slope fields turn a differential equation into local direction marks.",
-    "diff-eq-separable": "Separable equations move variables to opposite sides before integration.",
-    "diff-eq-first-order": "First-order models describe change with a first derivative.",
-    "diff-eq-second-order": "Second-order models connect position, velocity, and acceleration.",
-    "linear-vectors": "Vectors encode size and direction with coordinates.",
-    "linear-matrices": "Matrices organize linear rules in rows and columns.",
-    "linear-transformations": "Linear transformations move vectors while preserving linear structure.",
-    "linear-determinants": "Determinants describe how a matrix scales area or volume.",
-    "linear-eigenvalues": "Eigenvectors keep direction while eigenvalues give the scale.",
-    "linear-vector-spaces": "Vector spaces collect all combinations allowed by addition and scaling.",
-    "complex-functions": "Complex functions move points and regions in the complex plane.",
-    "complex-analytic": "Analytic functions are complex differentiable on open regions.",
-    "complex-contour": "Contour integrals add a complex function along a path.",
-    "complex-power-series": "Power series represent analytic functions near a center.",
-    "complex-residues": "Residues capture local singular behavior that controls closed integrals.",
-    "proof-logic": "Logic tracks how one statement forces another.",
-    "proof-quantifiers": "Quantifiers control whether a claim covers all cases or at least one.",
-    "proof-induction": "Induction proves infinitely many cases by linking each case to the next.",
-    "proof-contradiction": "Contradiction proves a claim by showing its negation cannot work.",
-    "proof-construction": "Construction proves existence by building and checking an example.",
-    "proof-counterexamples": "Counterexamples disprove universal claims with one failing case.",
-    "set-notation": "Set notation names collections and membership.",
-    "set-subsets": "Subsets sit completely inside larger sets.",
-    "set-operations": "Union and intersection compare what sets contain.",
-    "set-relations": "Relations are sets of ordered pairs.",
-    "set-functions": "Functions map each input to exactly one output.",
-    "set-countability": "Countability asks whether elements can be listed.",
-    "number-divisibility": "Divisibility means equal groups with no remainder.",
-    "number-primes": "Prime factorization breaks numbers into prime building blocks.",
-    "number-gcd-lcm": "GCD and LCM organize shared divisors and multiples.",
-    "number-euclidean": "The Euclidean algorithm finds a GCD by remainders.",
-    "number-modular": "Modular arithmetic tracks remainders after wrapping.",
-    "number-congruences": "Congruences say two numbers share a remainder system.",
-    "graph-vertices-edges": "Vertices are the objects; edges are the connections between them.",
-    "graph-paths-cycles": "A path follows edges; a cycle returns to its starting vertex.",
-    "graph-degree": "The degree of a vertex counts the edges that touch it.",
-    "graph-trees": "A tree is connected and has no cycles.",
-    "graph-connectedness": "Connected components are separated pieces with paths inside each piece.",
-    "probability-sample-space": "Sample spaces list all possible outcomes.",
-    "probability-basic": "Basic probability compares favorable outcomes to all outcomes.",
-    "probability-counting": "Counting rules organize multi-step choices.",
-    "probability-conditional": "Conditional probability narrows what outcomes remain possible.",
-    "probability-random-variable": "Random variables assign numbers to outcomes.",
-    "statistics-data-summaries": "Statistics begins by naming variables, observations, and context.",
-    "statistics-center-spread": "Center and spread describe typical value and variability.",
-    "statistics-displays": "Data displays should match the variable type and the question.",
-    "statistics-variance": "Variance and standard deviation measure distance from the mean.",
-    "statistics-normal": "Normal distributions are symmetric and centered at the mean.",
-    "statistics-binomial": "Binomial models count successes across repeated yes-or-no trials.",
-    "statistics-correlation": "Correlation and regression model relationships between quantitative variables.",
-    "statistics-confidence": "Confidence intervals turn an estimate into a plausible range.",
-    "statistics-sampling": "Sampling connects observed data to a larger population.",
-    "real-sets": "Intervals and bounds make sets of real numbers precise.",
-    "real-sequences": "Sequences converge when their tails stay close to one value.",
-    "real-limits": "Epsilon bands make approaching a limit precise.",
-    "real-continuity": "Continuity means the limit and function value agree.",
-    "real-differentiation": "Differentiability is a limit-based tangent slope.",
-    "real-integration": "Integration can be built from increasingly fine sums.",
-    "topology-open-sets": "Open sets define the local shape of a topological space.",
-    "topology-closed-sets": "Closed sets are sets whose complements are open.",
-    "topology-metric-spaces": "Metric spaces turn distance rules into topological neighborhoods.",
-    "topology-bases": "Bases build open sets from smaller basic open pieces.",
-    "topology-continuity": "Topological continuity preserves open-set structure through preimages.",
-    "topology-compactness": "Compactness turns open covers into finite subcovers.",
-    "topology-connectedness": "Connected spaces cannot be split into separated nonempty open pieces.",
-    "topology-homeomorphisms": "Homeomorphisms identify spaces with the same topological shape.",
-    "abstract-groups": "Groups package one operation with identity and inverses.",
-    "abstract-rings": "Rings combine addition, multiplication, and distributivity.",
-    "abstract-fields": "Fields make division by nonzero elements possible.",
-    "abstract-homomorphisms": "Homomorphisms preserve algebraic structure across maps.",
-    "abstract-examples": "Examples and counterexamples test definitions precisely.",
-    "physics-units": "Units show what kind of quantity a formula produces.",
-    "physics-vectors": "Vectors need both size and direction.",
-    "physics-graphs": "Graphs turn motion into slopes and areas.",
-    "physics-kinematics": "Kinematics compares changes in position, velocity, and time.",
-    "physics-forces": "Net force connects mass and acceleration.",
-    "physics-energy": "Energy formulas track motion and stored height.",
-    "physics-momentum": "Momentum combines mass with velocity.",
-    "physics-oscillations": "Period and frequency are reciprocal ways to measure repetition.",
-    "physics-waves": "Wave speed comes from frequency times wavelength.",
-    "physics-sound": "Sound is a mechanical wave with pitch tied to frequency.",
-    "physics-charge-fields": "The signs of two charges determine whether they push apart or pull together.",
-    "physics-circuits": "Ohm's law connects voltage, current, and resistance.",
-    "physics-magnetism": "Magnetism is tied to poles and moving charge.",
-    "physics-heat": "Heat transfer follows temperature differences.",
-    "physics-ideal-gas": "The ideal gas law links pressure, volume, amount, and temperature.",
-    "physics-quantum": "Quantum ideas describe light and energy in discrete packets.",
-    "physics-relativity": "Relativity matters near light speed and connects mass with energy."
-  };
-  return captions[figure] || captions["mixed-review"];
+  return window.CarryHowThisWorks?.conceptFigureCaption?.(figure) || "Mixed review asks you to choose a method, then check the result.";
 }
 
 function renderPlannedWorkspace(workspace) {
@@ -8125,7 +8037,12 @@ function completeLesson() {
     input.disabled = false;
   });
   els.grid.querySelectorAll(".active-column").forEach((cell) => cell.classList.remove("active-column"));
-  setStatus("Lesson complete. Continue to the next problem.", "complete");
+  setStatus(
+    isLastProblemInSet()
+      ? "All questions in this lesson are complete. Restart from the first question when ready."
+      : "Lesson complete. Continue to the next problem.",
+    "complete"
+  );
   saveProgress(`Completed ${getActiveWorkspace().title.toLowerCase()}`);
   updatePrimaryAction();
   updateStepText();
@@ -8135,7 +8052,9 @@ function updateStepText() {
   const steps = orderedSteps();
   const target = steps[state.activeStep];
   if (!target) {
-    els.stepText.textContent = "The lesson is complete.";
+    els.stepText.textContent = isLastProblemInSet()
+      ? "All questions in this lesson are complete."
+      : "The lesson is complete.";
     return;
   }
   if (state.mode === "guided") {
@@ -8323,6 +8242,16 @@ function bindEvents() {
     saveTools("Changed Complex Plane angle");
     renderComplexPlane();
   });
+  els.graphMode.addEventListener("change", () => updateGraphingSettings("Changed Graphing mode"));
+  els.graphEquation2d.addEventListener("change", () => updateGraphingSettings("Changed 2D graph"));
+  els.graphEquation3d.addEventListener("change", () => updateGraphingSettings("Changed 3D graph"));
+  els.graphRange.addEventListener("change", () => updateGraphingSettings("Changed Graphing window"));
+  els.graphDraw.addEventListener("click", () => updateGraphingSettings("Graphed equation"));
+  els.graph3dCanvas.addEventListener("pointerdown", startGraphDrag);
+  els.graph3dCanvas.addEventListener("pointermove", dragGraphView);
+  els.graph3dCanvas.addEventListener("pointerup", endGraphDrag);
+  els.graph3dCanvas.addEventListener("pointercancel", endGraphDrag);
+  els.graph3dCanvas.addEventListener("lostpointercapture", endGraphDrag);
   els.calculateFactors.addEventListener("click", () => updateNumberTheoryTools("factors"));
   els.calculateGcd.addEventListener("click", () => updateNumberTheoryTools("gcd"));
   els.modClockDial.addEventListener("click", (event) => {
@@ -8466,6 +8395,10 @@ function handleToolsKeydown(event) {
     runNormalSimulation();
     return true;
   }
+  if (state.tools.activeTool === "graphing") {
+    updateGraphingSettings("Graphed equation");
+    return true;
+  }
   if (state.tools.activeTool === "number-theory") {
     updateNumberTheoryTools(event.target === els.gcdLeft || event.target === els.gcdRight ? "gcd" : "factors");
     return true;
@@ -8546,6 +8479,7 @@ function randomProblemForWorkspace(workspaceId) {
 
 function startNextProblem() {
   const setLength = problemSetForWorkspace(state.activeWorkspaceId).length;
+  const restarting = isLastProblemInSet();
   state.selectedProblemIndex = (state.selectedProblemIndex + 1) % setLength;
   delete state.customProblems[state.activeWorkspaceId];
   state.activeTopic = getActiveWorkspace().topic || state.activeTopic;
@@ -8553,12 +8487,19 @@ function startNextProblem() {
   state.showIntro = false;
   renderTopics();
   renderWorkspace();
-  saveProgress("Started a new problem");
+  saveProgress(restarting ? "Restarted lesson questions" : "Started a new problem");
 }
 
 function isCurrentProblemComplete() {
   const steps = orderedSteps();
   return steps.length > 0 && state.activeStep >= steps.length;
+}
+
+function isLastProblemInSet() {
+  if (state.customProblems[state.activeWorkspaceId]) return false;
+  const setLength = problemSetForWorkspace(state.activeWorkspaceId).length;
+  if (!setLength) return false;
+  return state.selectedProblemIndex % setLength === setLength - 1;
 }
 
 function randomThreeDigit() {

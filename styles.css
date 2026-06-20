@@ -25,6 +25,9 @@
   --sudoku-given: #eef3f4;
   --sudoku-selected: #d7eeea;
   --sudoku-wrong: #f4e1d9;
+  --graph-axis: #303239;
+  --graph-grid: #d7d9df;
+  --graph-surface: #2457d6;
   --radius: 8px;
   --font: "Helvetica Neue", Helvetica, Arial, sans-serif;
   --math-font: KaTeX_Main, "Latin Modern Math", "STIX Two Math", "Cambria Math", "Times New Roman", serif;
@@ -57,6 +60,9 @@
     --sudoku-given: #263033;
     --sudoku-selected: #254844;
     --sudoku-wrong: #4b2d25;
+    --graph-axis: #d7d9df;
+    --graph-grid: #44464d;
+    --graph-surface: #9bb7ff;
   }
 }
 
@@ -1301,6 +1307,82 @@ body[data-surface="scratchpad"] .site-footer {
 
 .circle-point {
   fill: var(--accent);
+}
+
+.graph-layout {
+  display: grid;
+  grid-template-columns: minmax(300px, 1fr) minmax(220px, 340px);
+  gap: 18px;
+  align-items: stretch;
+}
+
+.graphing-controls {
+  grid-template-columns: minmax(120px, 150px) minmax(260px, 1fr) minmax(100px, 130px) auto;
+}
+
+.graph-equation-field input {
+  min-width: 260px;
+}
+
+.graph-stage {
+  display: grid;
+  gap: 12px;
+}
+
+.graph-equation-preview {
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.graph-equation-preview .scratch-mathml-line {
+  font-size: 1.35rem;
+}
+
+.graph-svg,
+.graph-canvas {
+  width: 100%;
+  min-height: 360px;
+  border: 2px solid var(--sudoku-ink);
+  border-radius: var(--radius);
+  background: var(--sudoku-surface);
+}
+
+.graph-canvas {
+  height: 420px;
+  cursor: grab;
+  touch-action: none;
+}
+
+.graph-canvas:active {
+  cursor: grabbing;
+}
+
+.graph-background {
+  fill: var(--sudoku-surface);
+}
+
+.graph-grid-line {
+  stroke: var(--graph-grid);
+  stroke-width: 1;
+}
+
+.graph-axis {
+  stroke: var(--graph-axis);
+  stroke-width: 2.5;
+}
+
+.graph-curve {
+  fill: none;
+  stroke: var(--graph-surface);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 3;
 }
 
 .tool-results {
@@ -3177,6 +3259,7 @@ body[data-surface="scratchpad"] .scratch-line-math-aligned {
   .random-number-layout,
   .distribution-layout,
   .circle-tool-layout,
+  .graph-layout,
   .tool-grid,
   .mod-clock-layout,
   .number-game-layout {
@@ -3195,6 +3278,14 @@ body[data-surface="scratchpad"] .scratch-line-math-aligned {
 
   .tool-tab {
     flex: 1;
+  }
+
+  .graphing-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .graph-equation-field input {
+    min-width: 0;
   }
 
   .game-tabs {
