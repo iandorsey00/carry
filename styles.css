@@ -398,6 +398,20 @@ body[data-surface="scratchpad"] .site-footer {
   margin-top: 12px;
 }
 
+.topic-category-heading {
+  margin: 14px 0 2px;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.topic-category-heading:first-child {
+  margin-top: 0;
+}
+
 .topic-group {
   display: block;
 }

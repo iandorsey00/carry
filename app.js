@@ -1,6 +1,6 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-alpha.96";
+const APP_VERSION = "0.1.0-alpha.97";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 const GAMES_STORAGE_KEY = "carry.games.v1";
@@ -8,6 +8,30 @@ const TOOLS_STORAGE_KEY = "carry.tools.v1";
 const GAME_IDS = ["sudoku", "mod-clock", "prime-factors", "gcd-race", "divisibility", "residue-match", "graph-paths"];
 const TOOL_IDS = ["random-number", "normal-simulator", "unit-circle", "complex-plane", "number-theory"];
 const MAX_CONCEPT_CHOICES = 4;
+
+const mathTopicCategories = new Map([
+  ["Arithmetic", "Foundations"],
+  ["Pre-Algebra", "Foundations"],
+  ["Algebra", "Core Math"],
+  ["Geometry", "Core Math"],
+  ["Trigonometry", "Core Math"],
+  ["Precalculus", "Core Math"],
+  ["Calculus", "Advanced Math"],
+  ["Differential Equations", "Advanced Math"],
+  ["Linear Algebra", "Advanced Math"],
+  ["Complex Analysis", "Advanced Math"],
+  ["Real Analysis", "Advanced Math"],
+  ["Topology", "Advanced Math"],
+  ["Proofs", "Discrete and Structures"],
+  ["Set Theory", "Discrete and Structures"],
+  ["Number Theory", "Discrete and Structures"],
+  ["Graph Theory", "Discrete and Structures"],
+  ["Probability", "Data and Chance"],
+  ["Statistics", "Data and Chance"],
+  ["Abstract Algebra", "Discrete and Structures"]
+]);
+
+const mathCategoryOrder = ["Foundations", "Core Math", "Advanced Math", "Discrete and Structures", "Data and Chance"];
 
 const topicGroups = [
   {
@@ -167,6 +191,21 @@ const topicGroups = [
     ]
   },
   {
+    name: "Complex Analysis",
+    sections: [
+      {
+        title: "Functions of a Complex Variable",
+        lessons: [
+          { id: "complex-analysis.complex-functions", title: "Complex functions" },
+          { id: "complex-analysis.analytic-functions", title: "Analytic functions" },
+          { id: "complex-analysis.contour-integrals", title: "Contour integrals" },
+          { id: "complex-analysis.power-series", title: "Power series" },
+          { id: "complex-analysis.residues", title: "Residues" }
+        ]
+      }
+    ]
+  },
+  {
     name: "Proofs",
     sections: [
       {
@@ -275,6 +314,21 @@ const topicGroups = [
           { id: "real-analysis.continuity", title: "Continuity" },
           { id: "real-analysis.differentiation", title: "Differentiation" },
           { id: "real-analysis.integration", title: "Integration" }
+        ]
+      }
+    ]
+  },
+  {
+    name: "Topology",
+    sections: [
+      {
+        title: "Spaces and Continuity",
+        lessons: [
+          { id: "topology.open-sets", title: "Open sets" },
+          { id: "topology.closed-sets", title: "Closed sets" },
+          { id: "topology.continuity", title: "Continuity" },
+          { id: "topology.compactness", title: "Compactness" },
+          { id: "topology.connectedness", title: "Connectedness" }
         ]
       }
     ]
@@ -423,6 +477,10 @@ const statisticsConceptWorkspaces = window.CarryPractice?.sections?.["statistics
 
 const realAnalysisConceptWorkspaces = window.CarryPractice?.sections?.["real-analysis"] || {};
 
+const complexAnalysisConceptWorkspaces = window.CarryPractice?.sections?.["complex-analysis"] || {};
+
+const topologyConceptWorkspaces = window.CarryPractice?.sections?.["topology"] || {};
+
 const abstractAlgebraConceptWorkspaces = window.CarryPractice?.sections?.["abstract-algebra"] || {};
 
 const physicsConceptWorkspaces = window.CarryPractice?.sections?.["physics"] || {};
@@ -444,6 +502,8 @@ const conceptWorkspaces = {
   ...probabilityConceptWorkspaces,
   ...statisticsConceptWorkspaces,
   ...realAnalysisConceptWorkspaces,
+  ...complexAnalysisConceptWorkspaces,
+  ...topologyConceptWorkspaces,
   ...abstractAlgebraConceptWorkspaces,
   ...physicsConceptWorkspaces
 };
@@ -467,7 +527,9 @@ const workspaceRegistry = {
   "Graph Theory": { id: "graph-theory.placeholders", title: "Graphs and networks", status: "planned" },
   "Probability": { id: "probability.placeholders", title: "Chance and counting", status: "planned" },
   "Statistics": { id: "statistics.placeholders", title: "Data and inference", status: "planned" },
+  "Complex Analysis": { id: "complex-analysis.placeholders", title: "Complex functions", status: "planned" },
   "Real Analysis": { id: "real-analysis.placeholders", title: "Definitions and proofs", status: "planned" },
+  "Topology": { id: "topology.placeholders", title: "Spaces and continuity", status: "planned" },
   "Abstract Algebra": { id: "abstract-algebra.placeholders", title: "Groups and examples", status: "planned" },
   "Proofs": { id: "proofs.placeholders", title: "Proof construction", status: "planned" }
 };
@@ -1185,7 +1247,14 @@ function applyRouteState(routeState) {
 }
 
 function currentTopicGroups() {
-  return state.activeSurface === "physics" ? physicsTopicGroups : topicGroups;
+  if (state.activeSurface === "physics") return physicsTopicGroups;
+  return [...topicGroups].sort((a, b) => mathCategoryRank(a) - mathCategoryRank(b));
+}
+
+function mathCategoryRank(group) {
+  const category = mathTopicCategories.get(group.name);
+  const rank = mathCategoryOrder.indexOf(category);
+  return rank === -1 ? mathCategoryOrder.length : rank;
 }
 
 function ensureSurfaceWorkspace() {
@@ -1225,7 +1294,17 @@ function saveProgress(activity) {
 
 function renderTopics() {
   els.topicList.innerHTML = "";
+  let currentCategory = "";
   for (const group of currentTopicGroups()) {
+    const nextCategory = topicCategoryForGroup(group);
+    if (nextCategory && nextCategory !== currentCategory) {
+      const categoryHeading = document.createElement("p");
+      categoryHeading.className = "topic-category-heading";
+      categoryHeading.textContent = nextCategory;
+      els.topicList.append(categoryHeading);
+      currentCategory = nextCategory;
+    }
+
     const details = document.createElement("details");
     details.className = "topic-group";
     details.open = group.name === state.activeTopic;
@@ -1264,6 +1343,11 @@ function renderTopics() {
 
     els.topicList.append(details);
   }
+}
+
+function topicCategoryForGroup(group) {
+  if (state.activeSurface !== "learn") return "";
+  return mathTopicCategories.get(group.name) || "";
 }
 
 function lessonsForGroup(group) {
@@ -4612,6 +4696,16 @@ function staticMathFigureRows(workspace) {
     "probability-conditional": ["P(A | B)", "\\text{condition narrows the sample space}"],
     "probability-random-variable": ["X(H)=1", "X(T)=0", "E[X] = \\frac{1}{2}"],
     "real-limits": ["\\lim_{x \\to a} f(x) = L"],
+    "complex-functions": ["z = x + iy", "f(z) = z^2"],
+    "complex-analytic": ["f \\text{ analytic on } U", "U \\text{ open}"],
+    "complex-contour": ["\\oint_C f(z)\\,dz", "C \\text{ closed}"],
+    "complex-power-series": ["\\sum_{n=0}^{\\infty} a_n(z-a)^n", "|z-a| < R"],
+    "complex-residues": ["f(z)=\\frac{1}{z-a}", "\\operatorname{Res}(f,a)=1"],
+    "topology-open-sets": ["(0,1) \\text{ is open in } \\mathbb{R}", "x \\in U \\Rightarrow \\text{room around }x"],
+    "topology-closed-sets": ["F \\text{ closed} \\Leftrightarrow X \\setminus F \\text{ open}"],
+    "topology-continuity": ["f^{-1}(U) \\text{ open whenever } U \\text{ is open}"],
+    "topology-compactness": ["\\text{open cover} \\Rightarrow \\text{finite subcover}"],
+    "topology-connectedness": ["\\text{connected} \\Rightarrow \\text{one piece}"],
     "abstract-rings": ["a(b + c) = ab + ac"],
     "abstract-fields": ["a · a^{-1} = 1"],
     "abstract-homomorphisms": ["f(a + b) = f(a) + f(b)"],
@@ -5998,6 +6092,11 @@ function conceptFigureCaption(figure) {
     "linear-determinants": "Determinants describe how a matrix scales area or volume.",
     "linear-eigenvalues": "Eigenvectors keep direction while eigenvalues give the scale.",
     "linear-vector-spaces": "Vector spaces collect all combinations allowed by addition and scaling.",
+    "complex-functions": "Complex functions move points and regions in the complex plane.",
+    "complex-analytic": "Analytic functions are complex differentiable on open regions.",
+    "complex-contour": "Contour integrals add a complex function along a path.",
+    "complex-power-series": "Power series represent analytic functions near a center.",
+    "complex-residues": "Residues capture local singular behavior that controls closed integrals.",
     "proof-logic": "Logic tracks how one statement forces another.",
     "proof-quantifiers": "Quantifiers control whether a claim covers all cases or at least one.",
     "proof-induction": "Induction proves infinitely many cases by linking each case to the next.",
@@ -6041,6 +6140,11 @@ function conceptFigureCaption(figure) {
     "real-continuity": "Continuity means the limit and function value agree.",
     "real-differentiation": "Differentiability is a limit-based tangent slope.",
     "real-integration": "Integration can be built from increasingly fine sums.",
+    "topology-open-sets": "Open sets define the local shape of a topological space.",
+    "topology-closed-sets": "Closed sets are sets whose complements are open.",
+    "topology-continuity": "Topological continuity preserves open-set structure through preimages.",
+    "topology-compactness": "Compactness turns open covers into finite subcovers.",
+    "topology-connectedness": "Connected spaces cannot be split into separated nonempty open pieces.",
     "abstract-groups": "Groups package one operation with identity and inverses.",
     "abstract-rings": "Rings combine addition, multiplication, and distributivity.",
     "abstract-fields": "Fields make division by nonzero elements possible.",
@@ -8524,6 +8628,7 @@ function requestStepCheck(event) {
 
 function handleCommandEvent(event) {
   const checkButton = event.target?.closest?.("#checkStep");
+  const conceptAction = event.target?.closest?.(".concept-check-button, .concept-choice-button");
   if (["click", "pointerdown", "mousedown", "mouseup", "touchstart"].includes(event.type) && checkButton) {
     requestStepCheck(event);
     return;
@@ -8533,12 +8638,15 @@ function handleCommandEvent(event) {
     requestStepCheck(event);
     return;
   }
+  if (event.key === "Enter" && conceptAction) {
+    requestStepCheck(event);
+    return;
+  }
   if (event.key !== "Enter" || !event.target?.classList?.contains("digit-input")) return;
   event.preventDefault();
   event.stopPropagation();
   event.stopImmediatePropagation();
-  if (isCurrentProblemComplete()) return;
-  checkCurrentStep();
+  requestStepCheck(event);
 }
 
 function handleAnswerKeydown(event) {
@@ -8546,8 +8654,7 @@ function handleAnswerKeydown(event) {
   event.preventDefault();
   event.stopPropagation();
   event.stopImmediatePropagation();
-  if (isCurrentProblemComplete()) return;
-  checkCurrentStep();
+  requestStepCheck(event);
 }
 
 document.addEventListener("carry-check-command", () => requestStepCheck());
@@ -8561,13 +8668,7 @@ document.addEventListener("carry-concept-input-command", (event) => {
 });
 
 function runReturnCommand() {
-  if (state.showIntro) {
-    startCurrentLesson();
-  } else if (isCurrentProblemComplete()) {
-    startNextProblem();
-  } else if (!isCurrentProblemComplete()) {
-    checkCurrentStep();
-  }
+  requestStepCheck();
 }
 
 function shouldAutoAdvance(input) {
@@ -8595,8 +8696,7 @@ function handleDigitKeydown(event) {
   if (event.key === "Enter") {
     event.preventDefault();
     event.stopPropagation();
-    if (isCurrentProblemComplete()) return;
-    checkCurrentStep();
+    requestStepCheck(event);
   }
 }
 
@@ -9190,11 +9290,7 @@ function handlePageKeydown(event) {
   if (event.key === "Enter") {
     if (isFormControl(event.target) && !event.target.classList?.contains("digit-input")) return;
     event.preventDefault();
-    if (state.showIntro) {
-      startCurrentLesson();
-    } else if (!state.showIntro && orderedSteps().length > 0) {
-      checkCurrentStep();
-    }
+    requestStepCheck(event);
     return;
   }
   if (isFormControl(event.target) || !/^\d$/.test(event.key)) return;
