@@ -1,6 +1,6 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-alpha.97";
+const APP_VERSION = "0.1.0-alpha.99";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 const GAMES_STORAGE_KEY = "carry.games.v1";
@@ -326,9 +326,12 @@ const topicGroups = [
         lessons: [
           { id: "topology.open-sets", title: "Open sets" },
           { id: "topology.closed-sets", title: "Closed sets" },
+          { id: "topology.metric-spaces", title: "Metric spaces" },
+          { id: "topology.bases", title: "Bases" },
           { id: "topology.continuity", title: "Continuity" },
           { id: "topology.compactness", title: "Compactness" },
-          { id: "topology.connectedness", title: "Connectedness" }
+          { id: "topology.connectedness", title: "Connectedness" },
+          { id: "topology.homeomorphisms", title: "Homeomorphisms" }
         ]
       }
     ]
@@ -3616,907 +3619,26 @@ function introWhyItems(workspace) {
 }
 
 function conceptWhyItems(workspace) {
-  if (workspace.topic === "Probability") {
-    return [
-      "Probability compares an event with the outcomes that could happen.",
-      "A clear sample space makes the denominator clear.",
-      "Changing the known information can change the sample space."
-    ];
-  }
-
-  if (workspace.topic === "Statistics") {
-    return [
-      "Statistics turns data into summaries, displays, and decisions.",
-      "Good statistical reasoning keeps the context and units attached to the numbers.",
-      "Samples are useful because they help estimate what may be true about a larger population."
-    ];
-  }
-
-  if (workspace.topic === "Differential Equations") {
-    return [
-      "A differential equation describes how a quantity changes, not only what it is.",
-      "Derivatives connect a current state to a rate of change.",
-      "Solutions are functions whose derivatives match the rule."
-    ];
-  }
-
-  if (workspace.topic === "Calculus") {
-    return [
-      "Calculus studies change and accumulation.",
-      "Derivatives measure local rate; integrals collect small pieces into totals.",
-      "Limits make those ideas precise."
-    ];
-  }
-
-  if (workspace.topic === "Physics Foundations" || isPhysicsWorkspaceId(workspace.id)) {
-    return [
-      "Physics formulas connect quantities with units and meaning.",
-      "The units help check whether a calculation is reasonable.",
-      "A diagram or model should match the formula, not replace it."
-    ];
-  }
-
-  if (workspace.topic === "Proofs") {
-    return [
-      "Proofs are controlled chains of reasons.",
-      "Each step should follow from definitions, earlier facts, or a named rule.",
-      "A counterexample can disprove a universal claim with one failing case."
-    ];
-  }
-
-  if (workspace.topic === "Set Theory") {
-    return [
-      "Set notation makes collections precise.",
-      "Membership asks about individual objects; subsets ask about whole collections.",
-      "Operations such as union and intersection describe how collections overlap."
-    ];
-  }
-
-  if (workspace.topic === "Number Theory") {
-    return [
-      "Number theory often turns division into structure.",
-      "Remainders, factors, and multiples reveal patterns.",
-      "Definitions matter because small wording changes can change the answer."
-    ];
-  }
-
-  if (workspace.topic === "Real Analysis") {
-    return [
-      "Analysis makes calculus ideas precise using definitions.",
-      "The focus is often on what happens arbitrarily close to a value.",
-      "Examples and counterexamples test whether the definition really applies."
-    ];
-  }
-
-  if (workspace.topic === "Abstract Algebra") {
-    return [
-      "Abstract algebra studies operations through their rules.",
-      "The same structure can appear in numbers, symmetries, functions, or matrices.",
-      "Checking a definition means checking every required rule."
-    ];
-  }
-
-  return [
-    "The lesson gives one rule or relationship to recognize.",
-    "The worked example uses different values so the practice answer is not copied.",
-    "The question asks you to transfer the rule to the current case."
+  return window.CarryHowThisWorks?.conceptWhyItems?.(workspace) || [
+    "Name the objects in the definition before choosing an answer.",
+    "Check the condition stated in the lesson directly.",
+    "Use the example as a model for the kind of test to apply."
   ];
 }
 
 function conceptNoticeItems(workspace) {
-  const specificNotices = {
-    "arithmetic.number-sense": [
-      "Compare numbers from left to right, starting with the largest place.",
-      "Use distance from friendly numbers when a question asks for closest.",
-      "A pattern question depends on the repeated change between terms."
-    ],
-    "arithmetic.integers": [
-      "On the number line, greater means farther right.",
-      "Adding a positive moves right; subtracting a positive moves left.",
-      "For multiplication and division, decide the sign before doing the arithmetic."
-    ],
-    "arithmetic.fractions": [
-      "The denominator names the size of the parts.",
-      "Equivalent fractions multiply or divide top and bottom by the same value.",
-      "When numerators match, the smaller denominator gives larger pieces."
-    ],
-    "arithmetic.decimals": [
-      "Compare decimals by lining up place values.",
-      "Adding a trailing zero can make comparison easier without changing the value.",
-      "Tenths and hundredths are place-value names, not separate number systems."
-    ],
-    "arithmetic.percents": [
-      "Percent means out of 100.",
-      "Use familiar anchors: 50% is half, 25% is a quarter, 10% is one tenth.",
-      "Move between percent, decimal, and fraction forms when one form is easier."
-    ],
-    "arithmetic.ratios": [
-      "A ratio compares two quantities in order.",
-      "Equivalent ratios scale both parts by the same factor.",
-      "Simplifying a ratio is like simplifying a fraction with two named parts."
-    ],
-    "arithmetic.factors-multiples-primes": [
-      "Factors divide evenly into a number.",
-      "Multiples are numbers you land on by repeated multiplication.",
-      "Prime means exactly two positive factors: 1 and itself."
-    ],
-    "arithmetic.order-of-operations": [
-      "Parentheses are handled before the rest of the expression.",
-      "Multiplication and division come before addition and subtraction.",
-      "Operations with the same priority are handled from left to right."
-    ],
-    "arithmetic.word-problems": [
-      "Name what the question asks for before calculating.",
-      "Look for action words and structure: more, left, equal groups, each.",
-      "Check that the final number has the right unit."
-    ],
-    "arithmetic.mixed-review": [
-      "First decide which operation or method fits the question.",
-      "Estimate before exact calculation when numbers are large.",
-      "Use the estimate to reject answers that are far too small or too large."
-    ],
-    "prealgebra.integers": [
-      "Separate sign from size: first decide positive or negative, then calculate.",
-      "Same signs in multiplication or division give a positive result.",
-      "Different signs in multiplication or division give a negative result."
-    ],
-    "prealgebra.exponents": [
-      "The base is the repeated factor.",
-      "The exponent counts how many factors there are.",
-      "Evaluate powers before ordinary multiplication, addition, or subtraction."
-    ],
-    "prealgebra.coordinate-plane": [
-      "Coordinates are written in x, y order.",
-      "The x-coordinate moves horizontally before the y-coordinate moves vertically.",
-      "Quadrants are determined by the signs of x and y."
-    ],
-    "algebra.rational-expressions": [
-      "A rational expression is an algebraic fraction.",
-      "Factor before canceling so you only cancel common factors.",
-      "Excluded values come from the original denominator, even after simplifying."
-    ],
-    "geometry.coordinate": [
-      "Horizontal distance compares x-values.",
-      "Vertical distance compares y-values.",
-      "Midpoints average the x-values and average the y-values separately."
-    ]
-  };
-  if (specificNotices[workspace.id]) return specificNotices[workspace.id];
-
-  if (workspace.topic === "Arithmetic" && workspace.id === "arithmetic.place-value") {
-    return [
-      "Read the digit and its column together.",
-      "A digit in the hundreds column counts hundreds, not ones.",
-      "Expanded form is a quick way to check the value of each digit."
-    ];
-  }
-
-  if (workspace.id === "prealgebra.expressions") {
-    return [
-      "Like terms have the same variable part.",
-      "When you combine like terms, add the coefficients and keep the variable part.",
-      "Constants do not combine with variable terms."
-    ];
-  }
-
-  if (workspace.id === "algebra.polynomials") {
-    return [
-      "Polynomial terms are like terms only when the variable and exponent match.",
-      "Combine coefficients, not exponents.",
-      "A leftover unlike term stays in the expression."
-    ];
-  }
-
-  if (workspace.topic === "Graph Theory") {
-    return [
-      "Count edges when a question asks for path length.",
-      "Count edges touching one vertex when a question asks for degree.",
-      "Connectedness asks whether a path exists, not whether the path is short."
-    ];
-  }
-
-  if (workspace.topic === "Probability") {
-    return [
-      "Name the sample space before counting.",
-      "The denominator should match the outcomes still possible.",
-      "Conditional information can shrink the sample space."
-    ];
-  }
-
-  if (workspace.topic === "Statistics") {
-    const statisticsNotices = {
-      "statistics.data-summaries": [
-        "First identify the variable and whether it is categorical or quantitative.",
-        "Count observations before computing summaries.",
-        "Keep units and context with every data summary."
-      ],
-      "statistics.center-spread": [
-        "Mean uses every value, so outliers can pull it.",
-        "Median uses ordered position, so it is more resistant.",
-        "Spread is separate from center; two data sets can have the same center and different spread."
-      ],
-      "statistics.displays": [
-        "Bar charts compare categories.",
-        "Histograms show the shape of quantitative data.",
-        "Scatterplots show relationships between two quantitative variables."
-      ],
-      "statistics.variance-standard-deviation": [
-        "Deviations compare each value to the mean.",
-        "Variance averages squared deviations.",
-        "Standard deviation is in the original units, so it is usually easier to explain."
-      ],
-      "statistics.normal-distribution": [
-        "Normal curves are symmetric around the mean.",
-        "Standard deviation controls how wide the curve is.",
-        "z-scores measure distance from the mean in standard deviations."
-      ],
-      "statistics.binomial-distribution": [
-        "A binomial model counts successes.",
-        "The number of trials is fixed before observing the data.",
-        "The success probability stays the same for each trial."
-      ],
-      "statistics.correlation-regression": [
-        "Correlation describes linear direction and strength.",
-        "Regression gives a line for summarizing or predicting.",
-        "Association alone does not prove cause."
-      ],
-      "statistics.confidence-intervals": [
-        "An interval has a lower endpoint and an upper endpoint.",
-        "The margin of error extends both directions from the estimate.",
-        "Higher confidence usually means a wider interval."
-      ],
-      "statistics.sampling-inference": [
-        "Samples describe observed data; populations are what you want to learn about.",
-        "Random sampling reduces selection bias.",
-        "Larger random samples usually make estimates more stable, but uncertainty never disappears completely."
-      ]
-    };
-    return statisticsNotices[workspace.id] || [
-      "Identify the data, the summary, and the context.",
-      "Choose a display or statistic that matches the question.",
-      "Remember that sample results still carry uncertainty."
-    ];
-  }
-
-  if (isPhysicsWorkspaceId(workspace.id)) {
-    return [
-      "Keep units upright and attached to the quantity.",
-      "Use the diagram to identify what the symbols mean before calculating.",
-      "Direction matters for vectors, forces, momentum, and fields."
-    ];
-  }
-
-  if (workspace.topic === "Proofs") {
-    return [
-      "Separate the claim from the reason.",
-      "Universal claims need all cases; existence claims need one working case.",
-      "A counterexample must satisfy the setup and break the conclusion."
-    ];
-  }
-
-  if (workspace.topic === "Set Theory") {
-    return [
-      "Membership is about one object.",
-      "Subset is about every element of one set being inside another set.",
-      "Union means either set; intersection means both sets."
-    ];
-  }
-
-  if (workspace.topic === "Number Theory") {
-    return [
-      "Divisibility means no remainder.",
-      "Modular arithmetic keeps the remainder and ignores completed groups.",
-      "Congruent numbers have the same remainder in the chosen modulus."
-    ];
-  }
-
-  if (workspace.topic === "Real Analysis") {
-    return [
-      "Definitions are the main object of study.",
-      "Look for what happens arbitrarily close to a value.",
-      "Examples test a definition; counterexamples find its boundary."
-    ];
-  }
-
-  if (workspace.topic === "Abstract Algebra") {
-    return [
-      "Identify the set and operation before checking a structure.",
-      "A definition usually has several required rules.",
-      "One failed rule is enough to reject the structure."
-    ];
-  }
-
-  return conceptWhyItems(workspace);
+  return window.CarryHowThisWorks?.conceptNoticeItems?.(workspace) || conceptWhyItems(workspace);
 }
 
 function conceptWorkedExampleRows(workspace) {
-  const examples = {
-    "arithmetic.number-sense": [
-      { math: "409 < 490", note: "Hundreds match, so compare tens." },
-      { math: "9 > 0", note: "The tens digit decides the larger number." }
-    ],
-    "arithmetic.estimation": [
-      { math: "296 + 401", note: "Round before calculating." },
-      { math: "300 + 400 = 700", note: "Use a nearby estimate." }
-    ],
-    "arithmetic.integers": [
-      { math: "-3 + 8", note: "Start at -3 and move right 8." },
-      { math: "-3 + 8 = 5", note: "The landing point is the sum." }
-    ],
-    "arithmetic.fractions": [
-      { math: "\\frac{8}{12} = \\frac{8 ÷ 4}{12 ÷ 4}", note: "Divide top and bottom by 4." },
-      { math: "\\frac{8}{12} = \\frac{2}{3}", note: "Write the simplified fraction." }
-    ],
-    "arithmetic.decimals": [
-      { math: "0.6 = 0.60", note: "Use the same number of decimal places." },
-      { math: "0.60 > 0.54", note: "Compare hundredths." }
-    ],
-    "arithmetic.percents": [
-      { math: "25% = \\frac{1}{4}", note: "Rewrite the percent." },
-      { math: "\\frac{1}{4} × 40 = 10", note: "Find one quarter." }
-    ],
-    "arithmetic.ratios": [
-      { math: "10:15 = 2:3", note: "Divide both parts by 5." }
-    ],
-    "arithmetic.order-of-operations": [
-      { math: "5 + 2 × 6 = 5 + 12", note: "Multiply first." },
-      { math: "5 + 12 = 17", note: "Then add." }
-    ],
-    "arithmetic.mixed-review": [
-      { math: "98 + 203", note: "Estimate first." },
-      { math: "100 + 200 = 300", note: "Check the size." },
-      { math: "98 + 203 = 301", note: "Now calculate exactly." }
-    ],
-    "prealgebra.integers": [
-      { math: "-3 × -5", note: "Start with the sign." },
-      { math: "-3 × -5 = +(3 × 5)", note: "Same signs make a positive product." },
-      { math: "+(3 × 5) = 15", note: "Multiply the sizes." }
-    ],
-    "prealgebra.expressions": [
-      { math: "5a + 3 + 2a = 5a + 2a + 3", note: "Move like terms together." },
-      { math: "5a + 2a + 3 = (5 + 2)a + 3", note: "Add coefficients of a." },
-      { math: "(5 + 2)a + 3 = 7a + 3", note: "Keep the constant term." }
-    ],
-    "prealgebra.exponents": [
-      { math: "2^5 = 2 × 2 × 2 × 2 × 2", note: "An exponent counts equal factors." },
-      { math: "2^5 = 32", note: "Multiply the factors." }
-    ],
-    "prealgebra.coordinate-plane": [
-      { math: "(3, -2)", note: "Move 3 right from the origin." },
-      { math: "y = -2", note: "Then move 2 down." }
-    ],
-    "algebra.polynomials": [
-      { math: "2x^2 + 5x^2 - x = (2 + 5)x^2 - x", note: "Group terms with the same variable and exponent." },
-      { math: "(2 + 5)x^2 - x = 7x^2 - x", note: "Combine the squared terms." }
-    ],
-    "algebra.rational-expressions": [
-      { math: "\\frac{12x}{18} = \\frac{12 ÷ 6}{18 ÷ 6}x", note: "Reduce the numerical factor." },
-      { math: "\\frac{12x}{18} = \\frac{2x}{3}", note: "Keep the variable factor." }
-    ],
-    "geometry.coordinate": [
-      { math: "(2, 3) \\to (7, 3)", note: "The y-values match, so the movement is horizontal." },
-      { math: "7 - 2 = 5", note: "Subtract the x-values for horizontal distance." }
-    ],
-    "trigonometry.right-triangles": [
-      { math: "\\sin\\,\\theta = \\frac{\\text{opposite}}{\\text{hypotenuse}}", note: "Choose the side across from the angle." },
-      { math: "\\sin\\,\\theta = \\frac{6}{10}", note: "Substitute the side lengths." },
-      { math: "\\frac{6}{10} = \\frac{3}{5}", note: "Simplify if needed." }
-    ],
-    "trigonometry.identities": [
-      { math: "\\sin^2 x + \\cos^2 x = 1", note: "Start with the Pythagorean identity." },
-      { math: "\\frac{1}{4} + \\cos^2 x = 1", note: "Substitute the known value." },
-      { math: "\\cos^2 x = \\frac{3}{4}", note: "Subtract from 1." }
-    ],
-    "precalculus.sequences": [
-      { math: "1, \\frac{1}{3}, \\frac{1}{9}", note: "Each term is multiplied by the same ratio." },
-      { math: "\\frac{1}{9} × \\frac{1}{3} = \\frac{1}{27}", note: "Continue the pattern." }
-    ],
-    "calculus.limits": [
-      { math: "x \\to 2", note: "Look near the input, not only at the point." },
-      { math: "f(x) \\to 5", note: "The nearby outputs approach 5." }
-    ],
-    "differential-equations.slope-fields": [
-      { math: "\\frac{dy}{dx} = x", note: "The slope depends on the x-position." },
-      { math: "x = 2 \\Rightarrow \\frac{dy}{dx} = 2", note: "Each mark at x = 2 has slope 2." }
-    ],
-    "differential-equations.separable": [
-      { math: "\\frac{dy}{dx} = 3xy", note: "Start with a separable equation." },
-      { math: "\\frac{1}{y}\\,dy = 3x\\,dx", note: "Move y terms with dy and x terms with dx." },
-      { math: "\\int \\frac{1}{y}\\,dy = \\int 3x\\,dx", note: "Integrate both sides." }
-    ],
-    "differential-equations.first-order-models": [
-      { math: "\\frac{dP}{dt} = kP", note: "Growth rate is proportional to current amount." },
-      { math: "\\frac{dP}{dt} = 0", note: "Zero derivative means equilibrium." }
-    ],
-    "differential-equations.second-order-models": [
-      { math: "x'(t) = v(t)", note: "First derivative is velocity." },
-      { math: "x''(t) = a(t)", note: "Second derivative is acceleration." },
-      { math: "m x'' + kx = 0", note: "A basic spring model." }
-    ],
-    "probability.sample-spaces": [
-      { math: "S = \\{H, T\\}", note: "List every possible coin-flip outcome." },
-      { math: "A = \\{H\\}", note: "An event is a subset of the sample space." }
-    ],
-    "probability.basic-probability": [
-      { math: "P(A) = \\frac{\\text{favorable}}{\\text{total}}", note: "Use equally likely outcomes." },
-      { math: "P(3) = \\frac{1}{6}", note: "One die face out of six." }
-    ],
-    "probability.counting": [
-      { math: "3 \\times 2 = 6", note: "Multiply choices made in sequence." },
-      { math: "\\text{color} \\times \\text{size}", note: "Each color pairs with each size." }
-    ],
-    "probability.conditional-probability": [
-      { math: "P(A | B)", note: "Read as probability of A given B." },
-      { math: "\\{2,4,6\\}", note: "Given even, only three die outcomes remain." }
-    ],
-    "probability.random-variables": [
-      { math: "X(H) = 1", note: "Assign a number to heads." },
-      { math: "X(T) = 0", note: "Assign a number to tails." },
-      { math: "E[X] = \\frac{1}{2}", note: "Average the equally likely values." }
-    ],
-    "statistics.data-summaries": [
-      { math: "4, 7, 9", note: "Each value is one observation." },
-      { math: "n = 3", note: "Count observations before summarizing." }
-    ],
-    "statistics.center-spread": [
-      { math: "\\bar{x} = \\frac{2 + 4 + 6}{3}", note: "Mean is total divided by count." },
-      { math: "\\bar{x} = 4", note: "This mean is the balance point." }
-    ],
-    "statistics.displays": [
-      { math: "\\text{category} \\to \\text{bar chart}", note: "Use bars for categories." },
-      { math: "\\text{quantity} \\to \\text{histogram}", note: "Use intervals for quantitative distributions." }
-    ],
-    "statistics.variance-standard-deviation": [
-      { math: "x - \\bar{x}", note: "A deviation compares a value to the mean." },
-      { math: "\\sigma = \\sqrt{\\text{variance}}", note: "Standard deviation returns spread to original units." }
-    ],
-    "statistics.normal-distribution": [
-      { math: "z = \\frac{x - \\mu}{\\sigma}", note: "A z-score measures distance from the mean." },
-      { math: "z = 1", note: "One standard deviation above the mean." }
-    ],
-    "statistics.binomial-distribution": [
-      { math: "X \\sim \\text{Binomial}(n,p)", note: "X counts successes in n trials." },
-      { math: "n = 5,\\, p = \\frac{1}{2}", note: "Five fair coin flips make a binomial model." }
-    ],
-    "statistics.correlation-regression": [
-      { math: "r > 0", note: "Positive correlation means values tend to increase together." },
-      { math: "\\hat{y} = mx + b", note: "A regression line predicts y from x." }
-    ],
-    "statistics.confidence-intervals": [
-      { math: "\\text{estimate} \\pm \\text{margin}", note: "Intervals extend around an estimate." },
-      { math: "50 \\pm 3 = [47, 53]", note: "Subtract and add the margin of error." }
-    ],
-    "statistics.sampling-inference": [
-      { math: "\\text{sample statistic} \\to \\text{population parameter}", note: "Use a sample to estimate a population value." },
-      { math: "n \\uparrow \\Rightarrow \\text{more stable estimates}", note: "Larger random samples usually vary less." }
-    ],
-    "real-analysis.sequences": [
-      { math: "\\frac{3}{n} \\to 0", note: "The denominator grows without bound." }
-    ],
-    "physics.units": [
-      { math: "\\text{speed} = \\frac{20\\,\\text{m}}{4\\,\\text{s}}", note: "Divide distance by time." },
-      { math: "\\text{speed} = 5\\,\\frac{\\text{m}}{\\text{s}}", note: "Keep the unit with the number." }
-    ],
-    "physics.kinematics": [
-      { math: "v = \\frac{\\Delta x}{\\Delta t}", note: "Velocity compares position change to time." },
-      { math: "v = \\frac{20\\,\\text{m}}{4\\,\\text{s}} = 5\\,\\frac{\\text{m}}{\\text{s}}", note: "Substitute the measured values." }
-    ],
-    "physics.forces": [
-      { math: "F = ma", note: "Use Newton's second law." },
-      { math: "F = 2\\,\\text{kg} \\cdot 3\\,\\frac{\\text{m}}{\\text{s}^2}", note: "Substitute mass and acceleration." },
-      { math: "F = 6\\,\\text{N}", note: "Force is measured in newtons." }
-    ],
-    "physics.momentum": [
-      { math: "p = mv", note: "Momentum combines mass and velocity." },
-      { math: "p = 3\\,\\text{kg} \\cdot 4\\,\\frac{\\text{m}}{\\text{s}}", note: "Substitute the values." },
-      { math: "p = 12\\,\\text{kg}\\,\\frac{\\text{m}}{\\text{s}}", note: "Keep direction if velocity has one." }
-    ],
-    "physics.waves": [
-      { math: "v = f\\lambda", note: "Wave speed equals frequency times wavelength." },
-      { math: "v = 2\\,\\text{Hz} \\cdot 3\\,\\text{m}", note: "Substitute the values." },
-      { math: "v = 6\\,\\frac{\\text{m}}{\\text{s}}", note: "The wave moves six meters each second." }
-    ],
-    "physics.circuits": [
-      { math: "V = IR", note: "Use Ohm's law." },
-      { math: "V = 2\\,\\text{A} \\cdot 5\\,\\text{Ω}", note: "Substitute current and resistance." },
-      { math: "V = 10\\,\\text{V}", note: "Voltage is measured in volts." }
-    ],
-    "physics.ideal-gas": [
-      { math: "PV = nRT", note: "Pressure, volume, amount, and temperature move together." },
-      { math: "T = \\text{kelvin}", note: "Use an absolute temperature scale." }
-    ],
-    "physics.relativity": [
-      { math: "E = mc^2", note: "Mass and energy are connected." },
-      { math: "c = \\text{speed of light}", note: "Relativity becomes important near this speed." }
-    ]
-  };
-
-  return examples[workspace.id] || null;
+  return window.CarryHowThisWorks?.conceptWorkedExampleRows?.(workspace) || null;
 }
 
 function conceptWorkedExampleItems(workspace) {
-  const examples = {
-    "arithmetic.place-value": [
-      "Example: in 358, the 3 is in the hundreds place.",
-      "Think: hundreds are groups of 100.",
-      "So the 3 contributes 300."
-    ],
-    "arithmetic.number-sense": [
-      "Example: to compare 572 and 527, compare from left to right.",
-      "The hundreds match, but 7 tens is greater than 2 tens.",
-      "So 572 is larger."
-    ],
-    "arithmetic.estimation": [
-      "Example: 296 + 401 is about 300 + 400.",
-      "Use the rounded numbers to check the size of the result.",
-      "The estimate is about 700."
-    ],
-    "arithmetic.integers": [
-      "Example: -4 + 9 means start at -4 and move 9 steps right.",
-      "Moving right passes zero and lands at 5.",
-      "So the result is positive."
-    ],
-    "arithmetic.fractions": [
-      "Example: simplify 8/12 by dividing top and bottom by 4.",
-      "The numerator becomes 2 and the denominator becomes 3.",
-      "So the simplified fraction is 2/3."
-    ],
-    "arithmetic.decimals": [
-      "Example: compare 0.6 and 0.54 by writing 0.6 as 0.60.",
-      "Now compare hundredths: 60 hundredths is greater than 54 hundredths.",
-      "So 0.6 is greater."
-    ],
-    "arithmetic.percents": [
-      "Example: 25% of 40 is one quarter of 40.",
-      "One quarter means divide by 4.",
-      "So 25% of 40 is 10."
-    ],
-    "arithmetic.ratios": [
-      "Example: simplify 10:15 by dividing both parts by 5.",
-      "The first part becomes 2 and the second becomes 3.",
-      "So the equivalent ratio is 2:3."
-    ],
-    "arithmetic.factors-multiples-primes": [
-      "Example: 18 has factor pairs 1×18, 2×9, and 3×6.",
-      "Because it has factor pairs besides 1 and itself, it is composite.",
-      "A prime number would have exactly two positive factors."
-    ],
-    "arithmetic.order-of-operations": [
-      "Example: in 5 + 2 × 6, multiply before adding.",
-      "Compute 2 × 6 first to get 12.",
-      "Then add 5."
-    ],
-    "arithmetic.word-problems": [
-      "Example: 4 bags with 6 marbles each describes equal groups.",
-      "Equal groups suggest multiplication.",
-      "Compute bags times marbles per bag."
-    ],
-    "arithmetic.mixed-review": [
-      "Example: before calculating 98 + 203, estimate 100 + 200.",
-      "Then do the exact operation.",
-      "Use the estimate to catch an unreasonable result."
-    ],
-    "prealgebra.integers": [
-      "Example: -3 × -5 has two negative factors.",
-      "Same signs make a positive product.",
-      "Then multiply the sizes: 3 × 5."
-    ],
-    "prealgebra.expressions": [
-      "Example: 4n + 2n + 7 has two like variable terms.",
-      "Combine 4n and 2n to make 6n.",
-      "Keep the constant term separate."
-    ],
-    "prealgebra.exponents": [
-      "Example: 3^4 means four factors of 3.",
-      "That is 3 × 3 × 3 × 3.",
-      "The exponent counts factors, not how much to add."
-    ],
-    "prealgebra.coordinate-plane": [
-      "Example: the point (2, -5) moves 2 right and 5 down from the origin.",
-      "The first coordinate is horizontal.",
-      "The second coordinate is vertical."
-    ],
-    "algebra.polynomials": [
-      "Example: 2x^2 + 5x^2 - x has like squared terms.",
-      "Combine only the x^2 terms.",
-      "The x term stays separate."
-    ],
-    "algebra.rational-expressions": [
-      "Example: simplify 12x/18 by dividing top and bottom by 6.",
-      "The numerical fraction becomes 2/3.",
-      "The x remains in the numerator."
-    ],
-    "geometry.angles": [
-      "Example: two angles on a straight line add to 180 degrees.",
-      "If one angle is 70 degrees, subtract 70 from 180.",
-      "The missing angle is the amount needed to complete the straight line."
-    ],
-    "geometry.triangles": [
-      "Example: triangle angles always add to 180 degrees.",
-      "If two angles are 45 degrees and 80 degrees, add them first.",
-      "Subtract that total from 180 for the third angle."
-    ],
-    "geometry.circles": [
-      "Example: a radius of 5 gives a diameter of 10.",
-      "The diameter is twice the radius.",
-      "For exact circumference, keep π in the answer unless a decimal is requested."
-    ],
-    "geometry.area-volume": [
-      "Example: a rectangle with sides 6 and 4 has area 6 × 4.",
-      "Area counts square units.",
-      "Volume would require a third dimension."
-    ],
-    "geometry.coordinate": [
-      "Example: the horizontal distance from (2, 3) to (7, 3) uses x-values only.",
-      "The y-values match, so subtract 2 from 7.",
-      "That gives the horizontal length."
-    ],
-    "geometry.proof-basics": [
-      "Example: if two quantities are both equal to 10, they are equal to each other.",
-      "Name the reason, not just the result.",
-      "A proof step should connect a fact to a valid rule."
-    ],
-    "trigonometry.unit-circle": [
-      "Example: at angle 0, the unit-circle point is (1, 0).",
-      "Cosine is the x-coordinate and sine is the y-coordinate.",
-      "So read trig values from the point."
-    ],
-    "trigonometry.right-triangles": [
-      "Example: if opposite is 6 and hypotenuse is 10, sine is 6/10.",
-      "Simplify the ratio when possible.",
-      "Choose the side names relative to the marked angle."
-    ],
-    "trigonometry.graphs": [
-      "Example: y = 2 sin x has amplitude 2.",
-      "Amplitude is the distance from the midline to a peak.",
-      "Basic sine repeats after 2π."
-    ],
-    "trigonometry.identities": [
-      "Example: if sin^2 x = 1/4, then cos^2 x is the rest of 1.",
-      "Use sin^2 x + cos^2 x = 1.",
-      "Subtract the known squared value from 1."
-    ],
-    "trigonometry.inverse": [
-      "Example: arcsin asks which angle has a given sine value.",
-      "Since sin 0 = 0, arcsin 0 returns 0 in the principal range.",
-      "Always check which inverse trig function is being used."
-    ],
-    "precalculus.functions": [
-      "Example: if g(x) = 3x - 2, then g(4) uses 4 wherever x appears.",
-      "Compute 3 × 4 first.",
-      "Then subtract 2."
-    ],
-    "precalculus.transformations": [
-      "Example: y = (x - 4)^2 + 1 has vertex (4, 1).",
-      "The number inside gives the horizontal shift.",
-      "The number outside gives the vertical shift."
-    ],
-    "precalculus.polynomial-rational": [
-      "Example: p(x) = 2x^5 + x has degree 5.",
-      "The degree is the largest exponent with a nonzero coefficient.",
-      "Lower powers do not change the degree."
-    ],
-    "precalculus.exponential-log": [
-      "Example: log base 10 of 1000 asks what power of 10 gives 1000.",
-      "10^3 = 1000.",
-      "So the logarithm is the exponent."
-    ],
-    "precalculus.sequences": [
-      "Example: 6, 10, 14, 18 has common difference 4.",
-      "Subtract neighboring terms.",
-      "Use the same difference to continue an arithmetic sequence."
-    ],
-    "precalculus.complex-numbers": [
-      "Example: (2 + 3i) + (5 - i) combines real and imaginary parts separately.",
-      "Real parts add with real parts.",
-      "Imaginary parts add with imaginary parts."
-    ],
-    "calculus.limits": [
-      "Example: as x approaches 4, x + 6 approaches 10.",
-      "For simple continuous expressions, substitute the approached value.",
-      "Limits describe nearby behavior."
-    ],
-    "calculus.derivatives": [
-      "Example: the derivative of x^4 is 4x^3.",
-      "Bring down the exponent as a coefficient.",
-      "Reduce the exponent by 1."
-    ],
-    "calculus.integrals": [
-      "Example: an antiderivative of 5 is 5x + C.",
-      "Differentiate 5x + C to check.",
-      "The constant C disappears under differentiation."
-    ],
-    "calculus.applications": [
-      "Example: a constant rate of 3 units per second for 8 seconds accumulates 24 units.",
-      "Rate times time gives total when the rate is constant.",
-      "Derivatives describe rates; integrals accumulate rates."
-    ],
-    "calculus.series": [
-      "Example: the geometric sequence 1, 1/3, 1/9 keeps multiplying by 1/3.",
-      "A series adds the terms of a sequence.",
-      "A small ratio can make an infinite series settle."
-    ],
-    "linear-algebra.vectors": [
-      "Example: (1, 4) + (6, -2) is found component by component.",
-      "Add the first components together.",
-      "Then add the second components together."
-    ],
-    "linear-algebra.matrices": [
-      "Example: a matrix with 3 rows and 2 columns has size 3×2.",
-      "Rows are counted first.",
-      "Columns are counted second."
-    ],
-    "linear-algebra.transformations": [
-      "Example: T(x, y) = (x, -y) reflects across the x-axis.",
-      "The x-coordinate stays the same.",
-      "The y-coordinate changes sign."
-    ],
-    "linear-algebra.determinants": [
-      "Example: for [[3, 0], [0, 4]], the determinant is 3 × 4.",
-      "Diagonal scaling multiplies area by the product of the scale factors.",
-      "A zero scale factor would flatten area to zero."
-    ],
-    "linear-algebra.eigenvalues": [
-      "Example: if Av = 5v, the vector keeps its direction and scales by 5.",
-      "The scale factor is the eigenvalue.",
-      "The direction v is the eigenvector direction."
-    ],
-    "linear-algebra.vector-spaces": [
-      "Example: (1, 0) and (0, 1) can build any vector (a, b).",
-      "Use a copies of the first and b copies of the second.",
-      "That is why they span the plane."
-    ],
-    "proofs.logic": [
-      "Example: in if R then S, R is the hypothesis and S is the conclusion.",
-      "If R is true, the implication lets you conclude S.",
-      "Do not reverse the direction unless another rule allows it."
-    ],
-    "proofs.quantifiers": [
-      "Example: to disprove all birds can fly, one flightless bird would be enough.",
-      "A universal statement fails when one case fails.",
-      "An existence statement needs one successful case."
-    ],
-    "proofs.induction": [
-      "Example: induction first proves the starting case.",
-      "Then it proves that one case forces the next.",
-      "Together those steps create a chain."
-    ],
-    "proofs.contradiction": [
-      "Example: to prove a claim by contradiction, temporarily assume the claim is false.",
-      "Then reason until that assumption creates an impossibility.",
-      "The failed assumption supports the original claim."
-    ],
-    "proofs.construction": [
-      "Example: to prove an even number greater than 20 exists, you can build one.",
-      "After naming it, verify it is even and greater than 20.",
-      "Construction proves existence by giving an object."
-    ],
-    "proofs.counterexamples": [
-      "Example: the claim all odd numbers are prime fails at 9.",
-      "9 is odd, but it is not prime.",
-      "One specific failing case disproves a universal claim."
-    ],
-    "set-theory.sets-notation": [
-      "Example: if B = {4, 5}, then 4 is an element of B.",
-      "Membership asks whether the object appears in the set.",
-      "Use braces to read the listed elements."
-    ],
-    "set-theory.subsets": [
-      "Example: {2, 4} is a subset of {2, 3, 4}.",
-      "Every element of the smaller set appears in the larger set.",
-      "That is the subset test."
-    ],
-    "set-theory.operations": [
-      "Example: {1, 3} ∩ {3, 5} keeps only the shared element.",
-      "Intersection means in both sets.",
-      "Union would keep everything from either set."
-    ],
-    "set-theory.cartesian-relations": [
-      "Example: {1, 2} × {a, b} has four ordered pairs.",
-      "Each element of the first set pairs with each element of the second.",
-      "Order matters in ordered pairs."
-    ],
-    "set-theory.functions": [
-      "Example: a map that sends 1 to 5 and 1 to 6 is not a function.",
-      "One input cannot have two different outputs.",
-      "The domain names the allowed inputs."
-    ],
-    "set-theory.countability": [
-      "Example: {red, blue, green} is finite with three elements.",
-      "A countable infinite set can be arranged in a list.",
-      "Countability asks whether listing is possible."
-    ],
-    "number-theory.divisibility": [
-      "Example: 5 divides 35 because 35 = 5 × 7.",
-      "There is no remainder.",
-      "Divisibility is exact division."
-    ],
-    "number-theory.primes": [
-      "Example: 15 is composite because 15 = 3 × 5.",
-      "Prime numbers have exactly two positive factors.",
-      "Composite numbers have more."
-    ],
-    "number-theory.gcd-lcm": [
-      "Example: gcd(8, 12) is 4.",
-      "List shared factors and choose the largest.",
-      "LCM instead asks for the first shared multiple."
-    ],
-    "number-theory.euclidean-algorithm": [
-      "Example: 20 = 12 × 1 + 8 starts a GCD calculation.",
-      "The next pair is the old divisor and the remainder.",
-      "Continue until the remainder is zero."
-    ],
-    "number-theory.modular-arithmetic": [
-      "Example: 16 mod 7 is 2 because 16 = 7 × 2 + 2.",
-      "Modular arithmetic tracks remainders.",
-      "Clock arithmetic is a familiar model."
-    ],
-    "number-theory.congruences": [
-      "Example: 14 is congruent to 2 mod 6 because their difference is 12.",
-      "12 is divisible by 6.",
-      "Congruent numbers have the same remainder."
-    ],
-    "real-analysis.sets": [
-      "Example: [1, 4) includes 1 but not 4.",
-      "A square bracket includes the endpoint.",
-      "A parenthesis excludes the endpoint."
-    ],
-    "real-analysis.sequences": [
-      "Example: 3/n approaches 0 as n grows.",
-      "The numerator stays fixed while the denominator grows.",
-      "The terms get closer and closer to 0."
-    ],
-    "real-analysis.limits": [
-      "Example: a function can approach 8 near a point even if the point itself is missing.",
-      "Limits care about nearby behavior.",
-      "The value at the point is a separate question."
-    ],
-    "real-analysis.continuity": [
-      "Example: a continuous function at a has its nearby limit equal to f(a).",
-      "The graph has no break at that point.",
-      "A jump or hole breaks continuity."
-    ],
-    "real-analysis.differentiation": [
-      "Example: |x| has a corner at 0.",
-      "The left and right slopes disagree there.",
-      "So differentiability can fail even when continuity holds."
-    ],
-    "real-analysis.integration": [
-      "Example: a partition splits [0, 1] into smaller intervals.",
-      "A Riemann sum uses pieces to approximate area.",
-      "Finer partitions improve the approximation."
-    ],
-    "abstract-algebra.groups": [
-      "Example: integers under addition have identity 0.",
-      "Every integer has an additive inverse.",
-      "Those are two of the group rules."
-    ],
-    "abstract-algebra.rings": [
-      "Example: integers have addition and multiplication.",
-      "Multiplication distributes over addition.",
-      "That is part of why integers form a ring."
-    ],
-    "abstract-algebra.fields": [
-      "Example: rational numbers form a field under usual operations.",
-      "Every nonzero rational number has a reciprocal.",
-      "Integers fail this division requirement."
-    ],
-    "abstract-algebra.homomorphisms": [
-      "Example: an additive homomorphism satisfies f(a + b) = f(a) + f(b).",
-      "It preserves the operation.",
-      "That is what structure-preserving means."
-    ],
-    "abstract-algebra.examples-counterexamples": [
-      "Example: positive integers under addition fail to be a group.",
-      "The additive inverse of 3 is -3, which is not positive.",
-      "The counterexample identifies the failed rule."
-    ]
-  };
-
-  return examples[workspace.id] || [
-    "Example: choose a similar problem with different numbers.",
-    "Use the rule from the core idea on that example.",
-    "Then apply the same method to the active question."
+  return window.CarryHowThisWorks?.conceptWorkedExampleItems?.(workspace) || [
+    "Example: name the objects in the definition first.",
+    "Check the condition the lesson is about.",
+    "Decide whether the example satisfies that condition."
   ];
 }
 
@@ -4701,11 +3823,14 @@ function staticMathFigureRows(workspace) {
     "complex-contour": ["\\oint_C f(z)\\,dz", "C \\text{ closed}"],
     "complex-power-series": ["\\sum_{n=0}^{\\infty} a_n(z-a)^n", "|z-a| < R"],
     "complex-residues": ["f(z)=\\frac{1}{z-a}", "\\operatorname{Res}(f,a)=1"],
-    "topology-open-sets": ["(0,1) \\text{ is open in } \\mathbb{R}", "x \\in U \\Rightarrow \\text{room around }x"],
-    "topology-closed-sets": ["F \\text{ closed} \\Leftrightarrow X \\setminus F \\text{ open}"],
-    "topology-continuity": ["f^{-1}(U) \\text{ open whenever } U \\text{ is open}"],
+    "topology-open-sets": ["(0,1)\\,\\text{is open in}\\,\\mathbb{R}", "x \\in U \\Rightarrow \\text{small interval around }x"],
+    "topology-closed-sets": ["F\\,\\text{closed} \\iff X \\setminus F\\,\\text{open}"],
+    "topology-metric-spaces": ["d(x,y) \\ge 0", "d(x,z) \\le d(x,y) + d(y,z)"],
+    "topology-bases": ["U = B_1 \\cup B_2", "B_i\\,\\text{basic open}"],
+    "topology-continuity": ["U\\,\\text{open} \\Rightarrow f^{-1}(U)\\,\\text{open}"],
     "topology-compactness": ["\\text{open cover} \\Rightarrow \\text{finite subcover}"],
     "topology-connectedness": ["\\text{connected} \\Rightarrow \\text{one piece}"],
+    "topology-homeomorphisms": ["f:X \\to Y", "f\\,\\text{and}\\,f^{-1}\\,\\text{continuous}"],
     "abstract-rings": ["a(b + c) = ab + ac"],
     "abstract-fields": ["a · a^{-1} = 1"],
     "abstract-homomorphisms": ["f(a + b) = f(a) + f(b)"],
@@ -6142,9 +5267,12 @@ function conceptFigureCaption(figure) {
     "real-integration": "Integration can be built from increasingly fine sums.",
     "topology-open-sets": "Open sets define the local shape of a topological space.",
     "topology-closed-sets": "Closed sets are sets whose complements are open.",
+    "topology-metric-spaces": "Metric spaces turn distance rules into topological neighborhoods.",
+    "topology-bases": "Bases build open sets from smaller basic open pieces.",
     "topology-continuity": "Topological continuity preserves open-set structure through preimages.",
     "topology-compactness": "Compactness turns open covers into finite subcovers.",
     "topology-connectedness": "Connected spaces cannot be split into separated nonempty open pieces.",
+    "topology-homeomorphisms": "Homeomorphisms identify spaces with the same topological shape.",
     "abstract-groups": "Groups package one operation with identity and inverses.",
     "abstract-rings": "Rings combine addition, multiplication, and distributivity.",
     "abstract-fields": "Fields make division by nonzero elements possible.",
@@ -9694,7 +8822,13 @@ function normalizePlainMathLine(line) {
     .replace(/[⌉]/g, " \\rceil")
     .replace(/[→]/g, "->")
     .replace(/[⇒]/g, "=>")
+    .replace(/[↔]/g, "\\leftrightarrow")
     .replace(/⇔/g, "\\iff")
+    .replace(/∞/g, "\\infty")
+    .replace(/[↑]/g, "\\uparrow")
+    .replace(/[↓]/g, "\\downarrow")
+    .replace(/[∖]/g, "\\setminus")
+    .replace(/[∼~]/g, "\\sim")
     .replace(/∧/g, "\\land")
     .replace(/∨/g, "\\lor")
     .replace(/¬\s*/g, "\\neg ")
@@ -10064,6 +9198,15 @@ function appendMathMlContent(target, value) {
       }
     }
 
+    if (text.startsWith("\\operatorname", cursor)) {
+      const group = readBraceGroup(text, cursor + 13);
+      if (group) {
+        target.append(createMathMlToken("mi", group.value, { mathvariant: "normal" }));
+        cursor = group.end;
+        continue;
+      }
+    }
+
     const command = mathMlCommandAt(text, cursor);
     if (command) {
       appendMathMlCommand(target, command);
@@ -10306,7 +9449,7 @@ function appendMathMlIntegral(target, text, index) {
 }
 
 function mathMlCommandAt(text, index) {
-  const commands = ["\\Rightarrow", "\\rightarrow", "\\therefore", "\\subseteq", "\\emptyset", "\\because", "\\arcsin", "\\arccos", "\\arctan", "\\lfloor", "\\rfloor", "\\lceil", "\\rceil", "\\forall", "\\exists", "\\lambda", "\\approx", "\\equiv", "\\models", "\\bmod", "\\Delta", "\\Omega", "\\sigma", "\\notin", "\\subset", "\\theta", "\\vdash", "\\times", "\\quad", "\\land", "\\oplus", "\\cdot", "\\rho", "\\chi", "\\bot", "\\top", "\\div", "\\lim", "\\lor", "\\neg", "\\iff", "\\sin", "\\cos", "\\tan", "\\sec", "\\csc", "\\cot", "\\log", "\\cup", "\\cap", "\\mu", "\\ln", "\\pi", "\\le", "\\ge", "\\ne", "\\pm", "\\to", "\\in", "\\;", "\\,"];
+  const commands = ["\\Leftrightarrow", "\\leftrightarrow", "\\Rightarrow", "\\rightarrow", "\\operatorname", "\\therefore", "\\setminus", "\\subseteq", "\\emptyset", "\\downarrow", "\\because", "\\epsilon", "\\uparrow", "\\arcsin", "\\arccos", "\\arctan", "\\lfloor", "\\rfloor", "\\lceil", "\\rceil", "\\forall", "\\exists", "\\lambda", "\\approx", "\\equiv", "\\models", "\\infty", "\\bmod", "\\Delta", "\\Omega", "\\sigma", "\\notin", "\\subset", "\\theta", "\\vdash", "\\times", "\\quad", "\\land", "\\oplus", "\\cdot", "\\oint", "\\rho", "\\chi", "\\sum", "\\bot", "\\top", "\\div", "\\lim", "\\lor", "\\neg", "\\iff", "\\sim", "\\sin", "\\cos", "\\tan", "\\sec", "\\csc", "\\cot", "\\log", "\\cup", "\\cap", "\\mu", "\\ln", "\\pi", "\\le", "\\ge", "\\ne", "\\pm", "\\to", "\\in", "\\;", "\\,"];
   return commands.find((command) => text.startsWith(command, index));
 }
 
@@ -10323,10 +9466,14 @@ function appendMathMlCommand(target, command) {
     "\\sigma": ["mi", "σ"],
     "\\rho": ["mi", "ρ"],
     "\\chi": ["mi", "χ"],
+    "\\epsilon": ["mi", "ε"],
+    "\\sum": ["mo", "∑"],
+    "\\oint": ["mo", "∮"],
     "\\le": ["mo", "≤"],
     "\\ge": ["mo", "≥"],
     "\\ne": ["mo", "≠"],
     "\\equiv": ["mo", "≡"],
+    "\\sim": ["mo", "∼"],
     "\\approx": ["mo", "≈"],
     "\\lfloor": ["mo", "⌊"],
     "\\rfloor": ["mo", "⌋"],
@@ -10334,9 +9481,13 @@ function appendMathMlCommand(target, command) {
     "\\rceil": ["mo", "⌉"],
     "\\pm": ["mo", "±"],
     "\\to": ["mo", "→"],
+    "\\leftrightarrow": ["mo", "↔"],
     "\\rightarrow": ["mo", "→"],
     "\\Rightarrow": ["mo", "⇒"],
+    "\\Leftrightarrow": ["mo", "⇔"],
     "\\iff": ["mo", "⇔"],
+    "\\uparrow": ["mo", "↑"],
+    "\\downarrow": ["mo", "↓"],
     "\\land": ["mo", "∧"],
     "\\lor": ["mo", "∨"],
     "\\neg": ["mo", "¬"],
@@ -10350,6 +9501,7 @@ function appendMathMlCommand(target, command) {
     "\\lambda": ["mi", "λ"],
     "\\Delta": ["mi", "Δ", "normal"],
     "\\Omega": ["mi", "Ω", "normal"],
+    "\\infty": ["mo", "∞"],
     "\\times": ["mo", "×"],
     "\\cdot": ["mo", "·"],
     "\\div": ["mo", "÷"],
@@ -10360,6 +9512,7 @@ function appendMathMlCommand(target, command) {
     "\\notin": ["mo", "∉"],
     "\\subset": ["mo", "⊂"],
     "\\subseteq": ["mo", "⊆"],
+    "\\setminus": ["mo", "∖"],
     "\\cup": ["mo", "∪"],
     "\\cap": ["mo", "∩"],
     "\\emptyset": ["mi", "∅", "normal"],
@@ -10392,7 +9545,7 @@ function doubleStruckSymbol(value) {
 }
 
 function mathMlOperatorTag(token) {
-  return /[+\-*/=<>()[\]{}|,×÷·∈∉⊂⊆∪∩∧∨¬∀∃∴∵⊕⊢⊨⊥⊤⇔≡≈≤≥≠⌊⌋⌈⌉]/.test(token) ? "mo" : "mtext";
+  return /[+\-*/=<>()[\]{}|,×÷·∈∉⊂⊆∪∩∖∧∨¬∀∃∴∵⊕⊢⊨⊥⊤⇔↔≡∼≈≤≥≠∞↑↓⌊⌋⌈⌉]/.test(token) ? "mo" : "mtext";
 }
 
 function displayMathMlOperator(token) {
