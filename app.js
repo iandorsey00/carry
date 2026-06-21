@@ -1,6 +1,6 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-alpha.101";
+const APP_VERSION = "0.1.0-alpha.104";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 const GAMES_STORAGE_KEY = "carry.games.v1";
@@ -11,7 +11,8 @@ const MAX_CONCEPT_CHOICES = 4;
 const GRAPH_FUNCTION_NAMES = ["sin", "cos", "tan", "asin", "acos", "atan", "sqrt", "abs", "log", "ln", "exp", "min", "max"];
 const GRAPH_FUNCTIONS = new Set(GRAPH_FUNCTION_NAMES);
 const GRAPH_VARIABLES = new Set(["x", "y", "z"]);
-const graphPointerState = { dragging: false, x: 0, y: 0 };
+const graphPointerState = { dragging: false, x: 0, y: 0, mode: "", saveTimer: 0 };
+const unitCircleDragState = { dragging: false };
 
 const mathTopicCategories = new Map([
   ["Arithmetic", "Foundations"],
@@ -597,7 +598,7 @@ function createLessonQaReport() {
     const problems = workspace.problems || [];
     const usesTopLevelAnswers = workspace.type === "concept";
     const missingHint = usesTopLevelAnswers ? problems.filter((problem) => !problem.hint).length : 0;
-    const missingFeedback = usesTopLevelAnswers ? problems.filter((problem) => !problem.feedback).length : 0;
+    const missingFeedback = usesTopLevelAnswers ? problems.filter((problem) => !effectiveProblemFeedback(problem)).length : 0;
     const choiceReports = usesTopLevelAnswers ? problems.map((problem) => {
       const answers = acceptedProblemAnswers(problem);
       const explicitChoices = uniqueChoiceObjects(problem.choices || []);
@@ -834,6 +835,7 @@ function cacheElements() {
   els.graphEquation3d = document.querySelector("#graphEquation3d");
   els.graphRange = document.querySelector("#graphRange");
   els.graphDraw = document.querySelector("#graphDraw");
+  els.graphReset = document.querySelector("#graphReset");
   els.graphStatus = document.querySelector("#graphStatus");
   els.graphEquationPreview = document.querySelector("#graphEquationPreview");
   els.graph2dSvg = document.querySelector("#graph2dSvg");
@@ -1079,6 +1081,8 @@ function loadTools() {
       equation2d: "y = sin(x)",
       equation3d: "z = sin(x) + cos(y)",
       range: 10,
+      centerX: 0,
+      centerY: 0,
       yaw: -0.65,
       pitch: 0.55
     },
@@ -1129,26 +1133,37 @@ function loadTools() {
 }
 
 function saveGames(activity) {
-  localStorage.setItem(GAMES_STORAGE_KEY, JSON.stringify(state.games, null, 2));
+  safeLocalStorageSet(GAMES_STORAGE_KEY, JSON.stringify(state.games, null, 2), "Game progress could not be saved in this browser.");
   if (activity) {
     state.progress.recentActivity = [
       { label: activity, at: new Date().toISOString() },
       ...state.progress.recentActivity.filter((item) => item.label !== activity)
     ].slice(0, 8);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state.progress, null, 2));
+    safeLocalStorageSet(STORAGE_KEY, JSON.stringify(state.progress, null, 2), "Recent activity could not be saved in this browser.");
     updateProgressPanel();
   }
 }
 
 function saveTools(activity) {
-  localStorage.setItem(TOOLS_STORAGE_KEY, JSON.stringify(state.tools, null, 2));
+  safeLocalStorageSet(TOOLS_STORAGE_KEY, JSON.stringify(state.tools, null, 2), "Tool settings could not be saved in this browser.");
   if (activity) {
     state.progress.recentActivity = [
       { label: activity, at: new Date().toISOString() },
       ...state.progress.recentActivity.filter((item) => item.label !== activity)
     ].slice(0, 8);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state.progress, null, 2));
+    safeLocalStorageSet(STORAGE_KEY, JSON.stringify(state.progress, null, 2), "Recent activity could not be saved in this browser.");
     updateProgressPanel();
+  }
+}
+
+function safeLocalStorageSet(key, value, message = "Progress could not be saved in this browser.") {
+  try {
+    localStorage.setItem(key, value);
+    return true;
+  } catch {
+    if (els.status && !state.showIntro) setStatus(message, "hint");
+    if (els.scratchpadStatus && state.activeSurface === "scratchpad") setScratchpadStatus(message);
+    return false;
   }
 }
 
@@ -1317,7 +1332,7 @@ function saveProgress(activity) {
       ...state.progress.recentActivity.filter((item) => item.label !== activity)
     ].slice(0, 8);
   }
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state.progress, null, 2));
+  safeLocalStorageSet(STORAGE_KEY, JSON.stringify(state.progress, null, 2), "Progress could not be saved in this browser.");
   updateProgressPanel();
 }
 
@@ -2153,6 +2168,51 @@ function renderUnitCircle() {
   ]);
 }
 
+function startUnitCircleDrag(event) {
+  if (state.tools.activeTool !== "unit-circle") return;
+  unitCircleDragState.dragging = true;
+  els.unitCircleFigure.setPointerCapture?.(event.pointerId);
+  updateUnitCircleFromPointer(event, false);
+}
+
+function dragUnitCircle(event) {
+  if (!unitCircleDragState.dragging) return;
+  updateUnitCircleFromPointer(event, false);
+}
+
+function endUnitCircleDrag(event) {
+  if (!unitCircleDragState.dragging) return;
+  unitCircleDragState.dragging = false;
+  updateUnitCircleFromPointer(event, true);
+}
+
+function updateUnitCircleFromPointer(event, shouldSave) {
+  const angle = snappedUnitCircleAngle(event);
+  if (!angle) return;
+  state.tools.unitCircle.angle = angle.value;
+  renderUnitCircle();
+  if (shouldSave) saveTools(`Changed Unit Circle angle to ${angle.label}`);
+}
+
+function snappedUnitCircleAngle(event) {
+  const rect = els.unitCircleFigure.getBoundingClientRect();
+  const width = rect.width || 1;
+  const height = rect.height || 1;
+  const x = ((event.clientX - rect.left) / width) * 240 - 120;
+  const y = ((event.clientY - rect.top) / height) * 240 - 120;
+  if (!Number.isFinite(x) || !Number.isFinite(y) || (Math.abs(x) < 1e-6 && Math.abs(y) < 1e-6)) return null;
+  const raw = Math.atan2(-y, x);
+  const normalized = raw < 0 ? raw + Math.PI * 2 : raw;
+  return exactAngles.reduce((best, candidate) => (
+    angularDistance(candidate.rad, normalized) < angularDistance(best.rad, normalized) ? candidate : best
+  ), exactAngles[0]);
+}
+
+function angularDistance(left, right) {
+  const distance = Math.abs(left - right) % (Math.PI * 2);
+  return Math.min(distance, (Math.PI * 2) - distance);
+}
+
 function scaleExact(value, radius) {
   const r = Number(radius);
   if (r === 1) return value;
@@ -2190,7 +2250,9 @@ function clampGraphingSettings(settings = {}) {
     mode: settings.mode === "3d" ? "3d" : "2d",
     equation2d: String(settings.equation2d || "y = sin(x)").slice(0, 180),
     equation3d: String(settings.equation3d || "z = sin(x) + cos(y)").slice(0, 180),
-    range: Math.min(50, Math.max(1, Number(settings.range) || 10)),
+    range: Math.min(50, Math.max(0.5, Number(settings.range) || 10)),
+    centerX: Math.min(1000, Math.max(-1000, Number.isFinite(Number(settings.centerX)) ? Number(settings.centerX) : 0)),
+    centerY: Math.min(1000, Math.max(-1000, Number.isFinite(Number(settings.centerY)) ? Number(settings.centerY) : 0)),
     yaw: Number.isFinite(Number(settings.yaw)) ? Number(settings.yaw) : -0.65,
     pitch: Math.min(1.25, Math.max(-1.25, Number(settings.pitch) || 0.55))
   };
@@ -2205,6 +2267,8 @@ function updateGraphingSettings(activity = "Updated Graphing") {
       equation2d: els.graphEquation2d.value,
       equation3d: els.graphEquation3d.value,
       range: els.graphRange.value,
+      centerX: state.tools.graphing?.centerX,
+      centerY: state.tools.graphing?.centerY,
       yaw: state.tools.graphing?.yaw,
       pitch: state.tools.graphing?.pitch
     })
@@ -2225,16 +2289,15 @@ function renderGraphingTool() {
   document.querySelectorAll("[data-graph-equation]").forEach((field) => {
     field.hidden = field.dataset.graphEquation !== settings.mode;
   });
-  els.graph2dSvg.hidden = settings.mode !== "2d";
-  els.graph3dCanvas.hidden = settings.mode !== "3d";
+  setGraphViewMode(settings.mode);
   els.graphEquationPreview.replaceChildren(createMathMlExpression(normalizePlainMathLine(equation)));
 
   try {
     const model = compileGraphEquation(equation, settings.mode);
     if (settings.mode === "2d") {
-      const count = renderGraph2d(model, settings.range);
+      const count = renderGraph2d(model, settings);
       els.graphStatus.textContent = count
-        ? "Graph ready. Dragging is available in 3D mode."
+        ? "Drag to pan. Use the mouse wheel or trackpad to zoom."
         : "Graph ready, but no visible curve crossed the current window.";
     } else {
       const count = renderGraph3d(model, settings);
@@ -2245,8 +2308,8 @@ function renderGraphingTool() {
     renderDefinitionList(els.graphResults, [
       ["Mode", settings.mode === "3d" ? "3D" : "2D"],
       ["Graph type", model.kind === "explicit" ? "explicit" : "implicit"],
-      ["Window", `−${settings.range} to ${settings.range}`],
-      ["Syntax", "Use ^, sin, cos, sqrt, pi, and explicit multiplication when needed."]
+      ["Window", graphWindowLabel(settings)],
+      ["Syntax", "Use ^, sin, cos, sqrt, pi, and natural forms like 4x + 3."]
     ]);
   } catch (error) {
     clearGraphingView(settings.mode);
@@ -2255,6 +2318,22 @@ function renderGraphingTool() {
       ["Status", "Check the equation syntax."],
       ["Example", settings.mode === "3d" ? "z = sin(x) + cos(y)" : "y = sin(x)"]
     ]);
+  }
+}
+
+function setGraphViewMode(mode) {
+  const is2d = mode === "2d";
+  els.graph2dSvg.hidden = !is2d;
+  els.graph3dCanvas.hidden = is2d;
+  els.graph2dSvg.style.display = is2d ? "" : "none";
+  els.graph3dCanvas.style.display = is2d ? "none" : "";
+  els.graph2dSvg.setAttribute("aria-hidden", is2d ? "false" : "true");
+  els.graph3dCanvas.setAttribute("aria-hidden", is2d ? "true" : "false");
+  if (is2d) {
+    const context = els.graph3dCanvas.getContext?.("2d");
+    if (context) context.clearRect(0, 0, els.graph3dCanvas.width, els.graph3dCanvas.height);
+  } else {
+    els.graph2dSvg.innerHTML = "";
   }
 }
 
@@ -2332,42 +2411,59 @@ function normalizeGraphExpression(expression) {
     .replace(/[×·]/gu, "*")
     .replace(/\bMath\./gu, "")
     .replace(/\^/gu, "**")
+    .replace(new RegExp(`(\\d)(?=(?:x|y|z|pi|e|${functionNames})\\b|\\()`, "giu"), "$1*")
     .replace(new RegExp(`(\\d|\\)|\\b(?:x|y|z|pi|e)\\b)\\s*(?=(?:\\(|\\b(?:x|y|z|pi|e)\\b|\\b(?:${functionNames})\\b))`, "giu"), "$1*")
     .replace(new RegExp(`(\\d|\\)|\\b(?:x|y|z|pi|e)\\b)\\s+(?=(?:\\d|\\(|\\b(?:x|y|z|pi|e)\\b|\\b(?:${functionNames})\\b))`, "giu"), "$1*");
 }
 
-function renderGraph2d(model, range) {
+function graphWindowLabel(settings) {
+  if (settings.mode === "3d") return `−${settings.range} to ${settings.range}`;
+  const xMin = settings.centerX - settings.range;
+  const xMax = settings.centerX + settings.range;
+  const yMin = settings.centerY - settings.range;
+  const yMax = settings.centerY + settings.range;
+  return `x ${formatNumber(xMin, 2)} to ${formatNumber(xMax, 2)}, y ${formatNumber(yMin, 2)} to ${formatNumber(yMax, 2)}`;
+}
+
+function renderGraph2d(model, settings) {
   const svg = els.graph2dSvg;
   svg.innerHTML = "";
+  const { range, centerX, centerY } = settings;
   const width = 640;
   const height = 420;
   const margin = 32;
   const plotWidth = width - (margin * 2);
   const plotHeight = height - (margin * 2);
-  const xToScreen = (x) => margin + ((x + range) / (range * 2)) * plotWidth;
-  const yToScreen = (y) => margin + ((range - y) / (range * 2)) * plotHeight;
+  const xMin = centerX - range;
+  const xMax = centerX + range;
+  const yMin = centerY - range;
+  const yMax = centerY + range;
+  const xToScreen = (x) => margin + ((x - xMin) / (range * 2)) * plotWidth;
+  const yToScreen = (y) => margin + ((yMax - y) / (range * 2)) * plotHeight;
   svg.append(svgEl("rect", { x: 0, y: 0, width, height, class: "graph-background" }));
-  graphTicks(range).forEach((tick) => {
+  graphTicks(xMin, xMax).forEach((tick) => {
     const x = xToScreen(tick);
-    const y = yToScreen(tick);
     svg.append(svgEl("line", { x1: x, y1: margin, x2: x, y2: height - margin, class: approximatelyZero(tick) ? "graph-axis" : "graph-grid-line" }));
+  });
+  graphTicks(yMin, yMax).forEach((tick) => {
+    const y = yToScreen(tick);
     svg.append(svgEl("line", { x1: margin, y1: y, x2: width - margin, y2: y, class: approximatelyZero(tick) ? "graph-axis" : "graph-grid-line" }));
   });
   if (model.kind === "explicit") {
-    return renderExplicitGraph2d(svg, model, range, xToScreen, yToScreen);
+    return renderExplicitGraph2d(svg, model, { range, xMin, xMax, yMin, yMax }, xToScreen, yToScreen);
   }
-  return renderImplicitGraph2d(svg, model, range, xToScreen, yToScreen);
+  return renderImplicitGraph2d(svg, model, { range, xMin, xMax, yMin, yMax }, xToScreen, yToScreen);
 }
 
-function renderExplicitGraph2d(svg, model, range, xToScreen, yToScreen) {
+function renderExplicitGraph2d(svg, model, window, xToScreen, yToScreen) {
   const samples = 420;
   let path = "";
   let count = 0;
   let active = false;
   for (let index = 0; index <= samples; index += 1) {
-    const x = -range + ((range * 2 * index) / samples);
+    const x = window.xMin + (((window.xMax - window.xMin) * index) / samples);
     const y = model.fn(x, 0, 0);
-    const visible = Number.isFinite(y) && Math.abs(y) <= range * 6;
+    const visible = Number.isFinite(y) && y >= window.yMin - window.range * 2 && y <= window.yMax + window.range * 2;
     if (!visible) {
       active = false;
       continue;
@@ -2381,16 +2477,17 @@ function renderExplicitGraph2d(svg, model, range, xToScreen, yToScreen) {
   return count;
 }
 
-function renderImplicitGraph2d(svg, model, range, xToScreen, yToScreen) {
+function renderImplicitGraph2d(svg, model, window, xToScreen, yToScreen) {
   const cells = 88;
-  const step = (range * 2) / cells;
+  const xStep = (window.xMax - window.xMin) / cells;
+  const yStep = (window.yMax - window.yMin) / cells;
   let count = 0;
   for (let xIndex = 0; xIndex < cells; xIndex += 1) {
     for (let yIndex = 0; yIndex < cells; yIndex += 1) {
-      const x0 = -range + xIndex * step;
-      const x1 = x0 + step;
-      const y0 = -range + yIndex * step;
-      const y1 = y0 + step;
+      const x0 = window.xMin + xIndex * xStep;
+      const x1 = x0 + xStep;
+      const y0 = window.yMin + yIndex * yStep;
+      const y1 = y0 + yStep;
       const values = [
         model.fn(x0, y0, 0),
         model.fn(x1, y0, 0),
@@ -2567,10 +2664,10 @@ function projectGraphPoint(x, y, z, settings, width, height) {
   };
 }
 
-function graphTicks(range) {
-  const step = graphTickStep(range);
+function graphTicks(min, max) {
+  const step = graphTickStep(Math.max(Math.abs(max - min) / 2, 1));
   const ticks = [];
-  for (let value = Math.ceil(-range / step) * step; value <= range + step * 0.5; value += step) {
+  for (let value = Math.ceil(min / step) * step; value <= max + step * 0.5; value += step) {
     ticks.push(Number(value.toFixed(8)));
   }
   return ticks;
@@ -2591,11 +2688,15 @@ function getCssColor(name) {
 }
 
 function startGraphDrag(event) {
-  if (state.tools.activeTool !== "graphing" || state.tools.graphing?.mode !== "3d") return;
+  if (state.tools.activeTool !== "graphing") return;
+  const is2d = event.currentTarget === els.graph2dSvg && state.tools.graphing?.mode === "2d";
+  const is3d = event.currentTarget === els.graph3dCanvas && state.tools.graphing?.mode === "3d";
+  if (!is2d && !is3d) return;
   graphPointerState.dragging = true;
   graphPointerState.x = event.clientX;
   graphPointerState.y = event.clientY;
-  els.graph3dCanvas.setPointerCapture?.(event.pointerId);
+  graphPointerState.mode = is2d ? "2d" : "3d";
+  event.currentTarget.setPointerCapture?.(event.pointerId);
 }
 
 function dragGraphView(event) {
@@ -2605,18 +2706,61 @@ function dragGraphView(event) {
   graphPointerState.x = event.clientX;
   graphPointerState.y = event.clientY;
   const settings = clampGraphingSettings(state.tools.graphing || {});
-  state.tools.graphing = {
-    ...settings,
-    yaw: settings.yaw + dx * 0.01,
-    pitch: Math.min(1.25, Math.max(-1.25, settings.pitch + dy * 0.01))
-  };
+  if (graphPointerState.mode === "2d") {
+    const rect = els.graph2dSvg.getBoundingClientRect();
+    const plotWidth = Math.max(1, (rect.width || 640) - 64);
+    const plotHeight = Math.max(1, (rect.height || 420) - 64);
+    state.tools.graphing = {
+      ...settings,
+      centerX: settings.centerX - (dx / plotWidth) * settings.range * 2,
+      centerY: settings.centerY + (dy / plotHeight) * settings.range * 2
+    };
+  } else {
+    state.tools.graphing = {
+      ...settings,
+      yaw: settings.yaw + dx * 0.01,
+      pitch: Math.min(1.25, Math.max(-1.25, settings.pitch + dy * 0.01))
+    };
+  }
   renderGraphingTool();
 }
 
 function endGraphDrag() {
   if (!graphPointerState.dragging) return;
+  const mode = graphPointerState.mode;
   graphPointerState.dragging = false;
-  saveTools("Rotated Graphing view");
+  graphPointerState.mode = "";
+  saveTools(mode === "2d" ? "Panned Graphing view" : "Rotated Graphing view");
+}
+
+function zoomGraphView(event) {
+  if (state.tools.activeTool !== "graphing") return;
+  event.preventDefault();
+  const settings = clampGraphingSettings(state.tools.graphing || {});
+  const factor = event.deltaY > 0 ? 1.16 : 0.86;
+  state.tools.graphing = {
+    ...settings,
+    range: Math.min(50, Math.max(0.5, settings.range * factor))
+  };
+  renderGraphingTool();
+  window.clearTimeout(graphPointerState.saveTimer);
+  graphPointerState.saveTimer = window.setTimeout(() => {
+    saveTools("Zoomed Graphing view");
+  }, 250);
+}
+
+function resetGraphView() {
+  const settings = clampGraphingSettings(state.tools.graphing || {});
+  state.tools.graphing = {
+    ...settings,
+    range: 10,
+    centerX: 0,
+    centerY: 0,
+    yaw: -0.65,
+    pitch: 0.55
+  };
+  saveTools("Reset Graphing view");
+  renderGraphingTool();
 }
 
 function primeFactorsOf(value) {
@@ -5291,7 +5435,7 @@ function buildConceptModel(workspace) {
         sequence: 0,
         label: workspace.problem.label || "answer",
         hint: workspace.problem.hint,
-        feedback: workspace.problem.feedback
+        feedback: effectiveProblemFeedback(workspace.problem)
       }
     ]
   };
@@ -5299,6 +5443,40 @@ function buildConceptModel(workspace) {
 
 function acceptedProblemAnswers(problem) {
   return uniqueChoiceValues([problem?.answer, ...(problem?.answers || [])]);
+}
+
+function effectiveProblemFeedback(problem) {
+  if (!problem) return "";
+  if (problem.feedback) return String(problem.feedback);
+  return generatedProblemFeedback(problem);
+}
+
+function generatedProblemFeedback(problem) {
+  const hint = stripMathTags(problem.hint || "").trim();
+  const prompt = stripMathTags(problem.prompt || "").trim();
+  const label = answerValue(problem.label || "");
+  const answer = stripMathTags(problem.answer || "").trim();
+  if (!hint && !prompt) return "";
+
+  if (label.includes("symbol")) {
+    return hint || "Match the symbol to the relationship named in the prompt.";
+  }
+  if (label.includes("unit")) {
+    return hint || "Track the physical quantity first, then choose the unit that measures it.";
+  }
+  if (label.includes("definition") || label.includes("property") || label.includes("rule")) {
+    return hint || "Use the definition, not the visual appearance of the expression.";
+  }
+  if (label.includes("graph") || label.includes("display")) {
+    return hint || "Match the graph feature to the quantity the question asks about.";
+  }
+  if (label.includes("probability") || label.includes("statistic") || label.includes("distribution")) {
+    return hint || "Identify what is being counted or summarized before choosing.";
+  }
+  if (answer && /^(yes|no|true|false)$/i.test(answer)) {
+    return hint || "Test the statement against the rule in the prompt.";
+  }
+  return hint ? `Use the lesson idea: ${hint}` : "Compare the choices with the rule named in the prompt.";
 }
 
 function renderConceptGrid(model) {
@@ -7827,8 +8005,12 @@ function setConceptInlineHint(input, text) {
 function feedbackForInput(input) {
   if (input.classList.contains("concept-answer-choice-control")) {
     const selected = selectedChoiceLabel(input);
-    const hint = input.dataset.hint ? stripMathTags(input.dataset.hint) : "Use the main idea from the lesson, then compare the choices again.";
-    return selected ? `Not quite. You chose ${selected}. ${hint}` : hint;
+    const feedback = input.dataset.feedback
+      ? stripMathTags(input.dataset.feedback)
+      : input.dataset.hint
+        ? stripMathTags(input.dataset.hint)
+        : "Use the main idea from the lesson, then compare the choices again.";
+    return selected ? `Not quite. You chose ${selected}. ${feedback}` : feedback;
   }
   if (input.dataset.feedback) return input.dataset.feedback;
   const label = answerValue(input.dataset.label);
@@ -8232,6 +8414,13 @@ function bindEvents() {
     saveTools("Changed Unit Circle angle");
     renderUnitCircle();
   });
+  els.unitCircleFigure.addEventListener("pointerdown", startUnitCircleDrag);
+  els.unitCircleFigure.addEventListener("pointermove", dragUnitCircle);
+  els.unitCircleFigure.addEventListener("pointerup", endUnitCircleDrag);
+  els.unitCircleFigure.addEventListener("pointercancel", endUnitCircleDrag);
+  els.unitCircleFigure.addEventListener("lostpointercapture", () => {
+    unitCircleDragState.dragging = false;
+  });
   els.complexRadius.addEventListener("change", () => {
     state.tools.complexPlane.radius = Math.max(0, Number(els.complexRadius.value) || 1);
     saveTools("Changed Complex Plane radius");
@@ -8247,11 +8436,21 @@ function bindEvents() {
   els.graphEquation3d.addEventListener("change", () => updateGraphingSettings("Changed 3D graph"));
   els.graphRange.addEventListener("change", () => updateGraphingSettings("Changed Graphing window"));
   els.graphDraw.addEventListener("click", () => updateGraphingSettings("Graphed equation"));
+  els.graphReset.addEventListener("click", resetGraphView);
+  els.graph2dSvg.addEventListener("pointerdown", startGraphDrag);
+  els.graph2dSvg.addEventListener("pointermove", dragGraphView);
+  els.graph2dSvg.addEventListener("pointerup", endGraphDrag);
+  els.graph2dSvg.addEventListener("pointercancel", endGraphDrag);
+  els.graph2dSvg.addEventListener("lostpointercapture", endGraphDrag);
+  els.graph2dSvg.addEventListener("wheel", zoomGraphView, { passive: false });
+  els.graph2dSvg.addEventListener("dblclick", resetGraphView);
   els.graph3dCanvas.addEventListener("pointerdown", startGraphDrag);
   els.graph3dCanvas.addEventListener("pointermove", dragGraphView);
   els.graph3dCanvas.addEventListener("pointerup", endGraphDrag);
   els.graph3dCanvas.addEventListener("pointercancel", endGraphDrag);
   els.graph3dCanvas.addEventListener("lostpointercapture", endGraphDrag);
+  els.graph3dCanvas.addEventListener("wheel", zoomGraphView, { passive: false });
+  els.graph3dCanvas.addEventListener("dblclick", resetGraphView);
   els.calculateFactors.addEventListener("click", () => updateNumberTheoryTools("factors"));
   els.calculateGcd.addEventListener("click", () => updateNumberTheoryTools("gcd"));
   els.modClockDial.addEventListener("click", (event) => {
@@ -8580,7 +8779,7 @@ function importProgress(event) {
       state.activeWorkspaceId = state.progress.currentWorkspaceId || "arithmetic.long-addition.3x3";
       state.mode = state.progress.preferences.mode || "guided";
       els.autoAdvance.checked = state.progress.preferences.autoAdvance !== false;
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state.progress, null, 2));
+      safeLocalStorageSet(STORAGE_KEY, JSON.stringify(state.progress, null, 2), "Imported progress could not be saved in this browser.");
       els.modeTabs.forEach((item) => {
         item.setAttribute("aria-selected", item.dataset.mode === state.mode ? "true" : "false");
       });
@@ -8609,7 +8808,7 @@ function activeScratchpad() {
 }
 
 function saveScratchpads() {
-  localStorage.setItem(SCRATCHPAD_STORAGE_KEY, JSON.stringify(state.scratchpads, null, 2));
+  safeLocalStorageSet(SCRATCHPAD_STORAGE_KEY, JSON.stringify(state.scratchpads, null, 2), "Scratchpads could not be saved in this browser.");
 }
 
 function renderScratchpad() {
@@ -10017,10 +10216,23 @@ function updateProgressPanel() {
   els.progressRecent.textContent = state.progress.recentActivity[0]?.label || "Just started";
   if (els.betaQaStatus) {
     const qa = createLessonQaReport();
-    els.betaQaStatus.textContent = qa.betaBlockerCount === 0 ? "Choice and feedback gate clear" : `${qa.betaBlockerCount} lesson QA ${qa.betaBlockerCount === 1 ? "blocker" : "blockers"}`;
+    els.betaQaStatus.textContent = betaQaStatusText(qa);
     els.betaQaStatus.title = betaQaStatusTitle(qa);
   }
   els.savedWorkspaces.textContent = state.progress.savedWorkspaces.join(", ");
+}
+
+function betaQaStatusText(qa) {
+  if (qa.betaBlockerCount > 0) {
+    return `${qa.betaBlockerCount} lesson QA ${qa.betaBlockerCount === 1 ? "blocker" : "blockers"}`;
+  }
+  if (qa.feedbackPolishTargetCount > 0) {
+    return `Beta gate clear; ${qa.feedbackPolishTargetCount} feedback polish ${qa.feedbackPolishTargetCount === 1 ? "target" : "targets"}`;
+  }
+  if (qa.curriculumDepthTargetCount > 0) {
+    return "Beta gate clear; depth backlog tracked";
+  }
+  return "Beta gate clear";
 }
 
 function betaQaStatusTitle(qa) {

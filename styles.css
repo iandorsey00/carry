@@ -1293,6 +1293,11 @@ body[data-surface="scratchpad"] .site-footer {
   background: var(--sudoku-surface);
 }
 
+#unitCircleFigure {
+  cursor: pointer;
+  touch-action: none;
+}
+
 .circle-guide,
 .circle-axis {
   fill: none;
@@ -1359,6 +1364,12 @@ body[data-surface="scratchpad"] .site-footer {
   touch-action: none;
 }
 
+.graph-svg {
+  cursor: grab;
+  touch-action: none;
+}
+
+.graph-svg:active,
 .graph-canvas:active {
   cursor: grabbing;
 }
