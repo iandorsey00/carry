@@ -1,6 +1,6 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-alpha.107";
+const APP_VERSION = "0.1.0-alpha.109";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 const GAMES_STORAGE_KEY = "carry.games.v1";
@@ -4183,20 +4183,20 @@ function createDiagramIntroSvg(figure) {
     svgText(svg, "3 of 4 equal parts", 104, 142, "geometry-label geometry-math result");
     svgText(svg, "same whole", 124, 48, "geometry-note");
   } else if (figure === "decimal-grid" || figure === "percent-grid") {
-    for (let row = 0; row < 5; row += 1) {
+    for (let row = 0; row < 10; row += 1) {
       for (let col = 0; col < 10; col += 1) {
         const index = row * 10 + col;
         svg.append(svgElement("rect", {
-          class: index < 30 ? "geometry-shape active" : "geometry-shape",
-          x: 58 + col * 20,
-          y: 38 + row * 20,
-          width: 18,
-          height: 18,
+          class: index < 60 ? "geometry-shape active" : "geometry-shape",
+          x: 70 + col * 18,
+          y: 30 + row * 11,
+          width: 14,
+          height: 8,
           rx: 2
         }));
       }
     }
-    svgText(svg, figure === "percent-grid" ? "30 of 100 = 30%" : "3 tenths = 0.3", 206, 154, "geometry-label geometry-math result", "middle");
+    svgText(svg, figure === "percent-grid" ? "60 of 100 = 60%" : "6 tenths = 0.6", 206, 154, "geometry-label geometry-math result", "middle");
   } else if (figure === "ratio-bars") {
     svg.append(
       svgElement("rect", { class: "geometry-shape active", x: 62, y: 54, width: 72, height: 28, rx: 4 }),
@@ -5499,7 +5499,7 @@ function renderConceptGrid(model) {
   const prompt = document.createElement("section");
   prompt.className = "concept-card";
   prompt.style.gridRow = "1";
-  prompt.style.gridColumn = "1 / 8";
+  prompt.style.gridColumn = "1";
 
   const text = document.createElement("p");
   text.className = "concept-prompt";
