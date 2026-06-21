@@ -198,8 +198,8 @@ body[data-surface="scratchpad"] .site-footer {
   position: relative;
   display: inline-block;
   justify-self: center;
-  font-size: clamp(4.25rem, 12vw, 8.5rem);
-  line-height: 0.88;
+  font-size: clamp(2.8rem, 7vw, 5.2rem);
+  line-height: 0.92;
 }
 
 .brand-mark {
