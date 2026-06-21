@@ -1,6 +1,6 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-alpha.104";
+const APP_VERSION = "0.1.0-alpha.107";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 const GAMES_STORAGE_KEY = "carry.games.v1";
@@ -1465,17 +1465,33 @@ function renderWorkspace() {
   }
   setStatus(workspaceStartStatus(workspace), "");
   setActiveStep();
+  focusConceptBlank();
   updatePrimaryAction();
   drawOverlays();
   updateStepText();
 }
 
 function workspaceStartStatus(workspace) {
-  if (workspace.type === "concept") return "Choose an answer, then Check.";
+  if (workspace.type === "concept") {
+    return state.currentModel?.cells?.[0]?.choices?.length
+      ? "Choose an answer, then Check."
+      : "Enter the answer, then Check.";
+  }
   if (["equation", "inequality", "system", "factoring", "quadratic"].includes(workspace.type)) {
     return "Enter the active step, then check it.";
   }
   return "Place the first digit in the active box.";
+}
+
+function focusConceptBlank() {
+  if (state.showIntro || state.currentModel?.cells?.[0]?.kind !== "conceptAnswer") return;
+  const input = els.grid.querySelector(".concept-answer-input:not(.concept-answer-choice-control)");
+  if (!input || input.disabled) return;
+  window.setTimeout(() => {
+    if (!document.body.contains(input) || input.disabled) return;
+    input.focus({ preventScroll: true });
+    input.select();
+  }, 0);
 }
 
 function setWorkspaceView(view) {
@@ -5544,6 +5560,10 @@ function renderConceptGrid(model) {
     answerLabel.textContent = "Answer";
     answerLabel.append(input);
     answerPanel.append(answerLabel);
+    answerPanel.addEventListener("click", (event) => {
+      if (event.target.closest("button")) return;
+      input.focus({ preventScroll: true });
+    });
   }
   const inlineHint = document.createElement("p");
   inlineHint.className = "concept-inline-hint";
@@ -5587,9 +5607,12 @@ function answerNoteForMode(choiceCount = MAX_CONCEPT_CHOICES) {
 function createConceptAnswerInput(model) {
   const input = document.createElement("input");
   input.className = "digit-input concept-answer-input";
-  input.inputMode = "text";
+  input.inputMode = numericConceptAnswers(model.cells[0].answers) ? "decimal" : "text";
   input.autocomplete = "off";
+  input.autocapitalize = "off";
+  input.spellcheck = false;
   input.maxLength = 48;
+  input.placeholder = "Type answer";
   input.dataset.cellId = model.cells[0].id;
   input.dataset.expected = model.cells[0].expected;
   input.dataset.answers = JSON.stringify(model.cells[0].answers);
@@ -5612,6 +5635,10 @@ function createConceptAnswerInput(model) {
     event.target.select();
   });
   return input;
+}
+
+function numericConceptAnswers(answers = []) {
+  return answers.length > 0 && answers.every((answer) => /^[-+]?(\d+(\.\d+)?|\.\d+)$/.test(String(answer).trim()));
 }
 
 function conceptChoicesForProblem(problem, answers) {
