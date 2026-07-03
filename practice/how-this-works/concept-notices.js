@@ -149,7 +149,7 @@
         "precalculus.transformations": [
           "Adding outside the function moves the graph up or down: x^2 + 4 shifts up 4.",
           "Changes inside the input shift sideways and read backwards: (x - 5)^2 shifts right 5.",
-          "Vertex form shows the result directly: y = (x - 2)^2 + 3 has vertex (2, 3)."
+          "Vertex form shows the result directly: <math>y = (x - 2)^2 + 3</math> has vertex (2, 3)."
         ],
         "precalculus.polynomial-rational": [
           "The degree is the highest power of x with a nonzero coefficient, wherever it appears.",
@@ -182,19 +182,144 @@
           "The hypotenuse is the longest side, so sine and cosine never exceed 1."
         ],
         "trigonometry.graphs": [
-          "Amplitude is the number in front: y = 3 sin x has amplitude 3.",
-          "Plain sin x and cos x repeat every 2π.",
-          "The waves start differently: sin 0 = 0 while cos 0 = 1."
+          "Amplitude is the number in front: <math>y = 3 \\sin x</math> has amplitude 3.",
+          "Plain <math>\\sin x</math> and <math>\\cos x</math> repeat every <math>2\\pi</math>.",
+          "The waves start differently: <math>\\sin 0 = 0</math> while <math>\\cos 0 = 1</math>."
         ],
         "trigonometry.identities": [
-          "sin^2 x + cos^2 x = 1 lets you trade sin^2 x for 1 - cos^2 x and back.",
-          "tan x is sin x over cos x; cot x flips it to cos x over sin x.",
-          "Dividing the Pythagorean identity by cos^2 x gives 1 + tan^2 x = sec^2 x."
+          "<math>\\sin^2 x + \\cos^2 x = 1</math> lets you trade <math>\\sin^2 x</math> for <math>1 - \\cos^2 x</math> and back.",
+          "<math>\\tan x</math> is <math>\\sin x</math> over <math>\\cos x</math>; <math>\\cot x</math> flips it to <math>\\cos x</math> over <math>\\sin x</math>.",
+          "Dividing the Pythagorean identity by <math>\\cos^2 x</math> gives <math>1 + \\tan^2 x = \\sec^2 x</math>."
         ],
         "trigonometry.inverse": [
           "Inverse trig functions return an angle, not a ratio.",
           "Read arcsin 0 as a question: which angle has sine 0?",
           "Principal ranges keep the answer unique, so arctan 1 is 45 degrees."
+        ],
+        "topology.open-sets": [
+          "Open is a chosen status: the topology is exactly the list of sets that count as open.",
+          "In the usual real line, (0, 1) is open but [0, 1] is not, because the endpoints have no room to move.",
+          "The empty set and the whole space are open in every topology."
+        ],
+        "topology.closed-sets": [
+          "Closed is a statement about the complement: a set is closed when its outside is open.",
+          "Closed is not the opposite of open; a set can be both at once, like the whole space.",
+          "In the usual real line, [0, 1] is closed because everything outside it is open."
+        ],
+        "topology.bases": [
+          "A basis is a stock of building-block open sets; every open set is a union of them.",
+          "In the usual real line, the open intervals form the standard basis.",
+          "To check openness with a basis, look for a basis element around each point of the set."
+        ],
+        "topology.metric-spaces": [
+          "A metric must be nonnegative, symmetric, and obey the triangle inequality d(x, z) <= d(x, y) + d(y, z).",
+          "Balls of points within a chosen radius become the basic open neighborhoods.",
+          "The metric supplies distances; the topology it creates only remembers which sets are open."
+        ],
+        "topology.continuity": [
+          "The topological test runs backwards: check preimages, not images.",
+          "A function is continuous when the preimage of every open set is open.",
+          "No formulas, slopes, or distances are needed, only the open-set structure."
+        ],
+        "topology.compactness": [
+          "Compactness tests covers: every open cover must admit a finite subcover.",
+          "In the real line, Heine-Borel makes the test concrete: compact means closed and bounded.",
+          "(0, 1) is bounded but not closed, so it is not compact; [0, 1] is both, so it is."
+        ],
+        "topology.connectedness": [
+          "Connected means the space cannot be split into two nonempty separated open pieces.",
+          "Intervals are the model connected subsets of the real line.",
+          "A set like {0} union {1} splits into separated pieces, so it is not connected."
+        ],
+        "topology.homeomorphisms": [
+          "A homeomorphism needs three things: a bijection, continuity, and a continuous inverse.",
+          "Homeomorphic spaces share every topological property, such as connectedness and compactness.",
+          "Stretching and bending are allowed; tearing or gluing would break continuity somewhere."
+        ],
+        "physics.units": [
+          "Every physics answer needs a number and a unit.",
+          "Units mirror the formula: speed is distance over time, so its unit is m/s.",
+          "Newtons measure force and joules measure energy; matching unit to quantity catches errors."
+        ],
+        "physics.scalars-vectors": [
+          "Ask one question: does the quantity carry a direction?",
+          "Speed is a scalar; velocity is speed plus a direction, so it is a vector.",
+          "A value with a direction attached, like 10 N east, is a vector."
+        ],
+        "physics.graphs": [
+          "Slope and area answer different questions: on a position-time graph, slope is velocity.",
+          "On a velocity-time graph, the area under the curve is displacement.",
+          "A horizontal position-time line means the position is not changing, so the object is at rest."
+        ],
+        "physics.kinematics": [
+          "Average speed is distance divided by time: 20 m in 4 s gives 5 m/s.",
+          "Acceleration is about changing velocity, not about moving fast.",
+          "Constant velocity means zero acceleration."
+        ],
+        "physics.forces": [
+          "F = ma links force, mass, and acceleration; report force in newtons.",
+          "Balanced forces cancel to zero net force, so the motion does not change.",
+          "Friction acts against the direction of motion."
+        ],
+        "physics.energy": [
+          "Kinetic energy tracks motion; gravitational potential energy tracks height.",
+          "Raising an object stores more potential energy.",
+          "Work is a transfer of energy, not a separate substance."
+        ],
+        "physics.momentum": [
+          "Momentum is p = mv, so 3 kg at 4 m/s carries 12 units of momentum.",
+          "Mass and velocity matter equally: doubling either doubles momentum.",
+          "In an isolated collision, total momentum before equals total momentum after."
+        ],
+        "physics.oscillations": [
+          "Period is seconds per cycle; frequency is cycles per second.",
+          "The two are reciprocals: T = 1/f.",
+          "If the period doubles, the frequency halves."
+        ],
+        "physics.waves": [
+          "Wave speed is <math>v = f \\lambda</math>: frequency times wavelength.",
+          "Check the units: Hz times meters gives m/s.",
+          "A wave carries energy forward while the medium mostly stays in place."
+        ],
+        "physics.sound": [
+          "Sound is mechanical: it needs a medium and cannot cross a vacuum.",
+          "Pitch follows frequency: higher frequency means higher pitch.",
+          "In air, sound is longitudinal; the air moves back and forth along the travel direction."
+        ],
+        "physics.charge-fields": [
+          "Like charges repel; opposite charges attract.",
+          "Decide attract or repel from the signs before calculating anything.",
+          "The electric field is force per unit charge, pointing the way a positive test charge would be pushed."
+        ],
+        "physics.circuits": [
+          "Ohm's law is V = IR: 2 A through 5 ohms needs 10 V.",
+          "Current is flowing charge; voltage is the energy carried per unit of that charge.",
+          "In a series circuit, the same current passes through every component."
+        ],
+        "physics.magnetism": [
+          "Magnetic poles pair up like charges: like poles repel, opposite poles attract.",
+          "Moving charges create magnetic fields; stationary charges do not.",
+          "Direction matters: magnetic forces depend on how the motion and the field line up."
+        ],
+        "physics.temperature-heat": [
+          "Temperature describes a state; heat describes a transfer.",
+          "Heat flows on its own from hotter to colder, never the reverse.",
+          "Temperature tracks the average kinetic energy of the particles."
+        ],
+        "physics.ideal-gas": [
+          "Read PV = nRT letter by letter: P pressure, V volume, n amount, T temperature.",
+          "Gas-law temperatures must be absolute, so use kelvin, not celsius.",
+          "R is the constant that makes the units agree."
+        ],
+        "physics.quantum": [
+          "Quantum effects appear at small scales, where classical rules stop being enough.",
+          "Energy comes in discrete packets, so some in-between values simply do not occur.",
+          "A photon is one quantum of light."
+        ],
+        "physics.relativity": [
+          "Relativity matters near light speed or in strong gravity, not in everyday motion.",
+          "Every inertial observer measures the same vacuum light speed c.",
+          "<math>E = mc^2</math> ties mass and energy together, with c the speed of light."
         ]
       };
       if (specificNotices[workspace.id]) return specificNotices[workspace.id];
