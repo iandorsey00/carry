@@ -1,12 +1,14 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-alpha.110";
+const APP_VERSION = "0.1.0-alpha.111";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 const GAMES_STORAGE_KEY = "carry.games.v1";
 const TOOLS_STORAGE_KEY = "carry.tools.v1";
 const GAME_IDS = ["sudoku", "mod-clock", "prime-factors", "gcd-race", "divisibility", "residue-match", "graph-paths"];
 const TOOL_IDS = ["random-number", "normal-simulator", "unit-circle", "complex-plane", "graphing", "number-theory"];
+const EXPLORATION_ENTRIES = Array.isArray(window.CarryExplorations?.entries) ? window.CarryExplorations.entries : [];
+const EXPLORATION_DEFAULT_ID = EXPLORATION_ENTRIES[0]?.id || "";
 const MAX_CONCEPT_CHOICES = 4;
 const GRAPH_FUNCTION_NAMES = ["sin", "cos", "tan", "asin", "acos", "atan", "sqrt", "abs", "log", "ln", "exp", "min", "max"];
 const GRAPH_FUNCTIONS = new Set(GRAPH_FUNCTION_NAMES);
@@ -568,6 +570,7 @@ const state = {
   games: loadGames(),
   tools: loadTools(),
   activeSurface: "learn",
+  activeExplorationId: EXPLORATION_DEFAULT_ID,
   mode: "guided",
   activeTopic: "Arithmetic",
   activeWorkspaceId: "arithmetic.long-addition.3x3",
@@ -732,6 +735,7 @@ document.addEventListener("DOMContentLoaded", () => {
   state.activeSurface = routeState?.surface || state.scratchpads.activeSurface || "learn";
   if (routeState?.tool) state.tools.activeTool = routeState.tool;
   if (routeState?.game) state.games.activeGame = routeState.game;
+  if (routeState?.exploration) state.activeExplorationId = routeState.exploration;
   state.activeTopic = routeState?.topic || state.progress.currentTopic || "Arithmetic";
   state.activeWorkspaceId = routeState?.workspaceId || state.progress.currentWorkspaceId || "arithmetic.long-addition.3x3";
   state.mode = state.progress.preferences.mode || "guided";
@@ -742,6 +746,7 @@ document.addEventListener("DOMContentLoaded", () => {
   renderScratchpad();
   renderTools();
   renderGames();
+  renderExplorations();
   bindEvents();
   updateProgressPanel();
   updateUrlFromState({ replace: true });
@@ -788,10 +793,14 @@ function cacheElements() {
   els.physicsSurface = document.querySelector("#physicsSurface");
   els.toolsSurface = document.querySelector("#toolsSurface");
   els.gamesSurface = document.querySelector("#gamesSurface");
+  els.explorationsSurface = document.querySelector("#explorationsSurface");
   els.scratchpadSurface = document.querySelector("#scratchpadSurface");
   els.lessonPanel = document.querySelector("#lessonPanel");
   els.scratchpadPanel = document.querySelector("#scratchpadPanel");
   els.toolsPanel = document.querySelector("#toolsPanel");
+  els.explorationsPanel = document.querySelector("#explorationsPanel");
+  els.explorationList = document.querySelector("#explorationList");
+  els.explorationArticle = document.querySelector("#explorationArticle");
   els.toolTabs = Array.from(document.querySelectorAll(".tool-tab"));
   els.toolPanels = Array.from(document.querySelectorAll("[data-tool-panel]"));
   els.sudokuPanel = document.querySelector("#sudokuPanel");
@@ -1195,8 +1204,13 @@ function routePrefixForSurface(surface) {
   if (surface === "physics") return "physics";
   if (surface === "tools") return "tools";
   if (surface === "games") return "games";
+  if (surface === "explorations") return "explorations";
   if (surface === "scratchpad") return "scratchpad";
   return "math";
+}
+
+function findExploration(id) {
+  return window.CarryExplorations?.find?.(id) || EXPLORATION_ENTRIES.find((entry) => entry.id === id) || EXPLORATION_ENTRIES[0] || null;
 }
 
 function routeGroupsForSurface(surface) {
@@ -1245,6 +1259,13 @@ function resolveRouteFromPath() {
       game
     };
   }
+  if (parts[0] === "explorations") {
+    const exploration = findExploration(parts[1])?.id || EXPLORATION_DEFAULT_ID;
+    return {
+      surface: "explorations",
+      exploration
+    };
+  }
   if (parts[0] !== "math" && parts[0] !== "physics") return null;
   if (parts.length < 3) return null;
   return findRouteMatch(parts[0] === "physics" ? "physics" : "learn", parts[1], parts[2]);
@@ -1257,6 +1278,8 @@ function updateUrlFromState(options = {}) {
       ? { path: `/tools/${TOOL_IDS.includes(state.tools.activeTool) ? state.tools.activeTool : "random-number"}` }
     : state.activeSurface === "games"
       ? { path: `/games/${GAME_IDS.includes(state.games.activeGame) ? state.games.activeGame : "sudoku"}` }
+    : state.activeSurface === "explorations"
+      ? { path: `/explorations/${findExploration(state.activeExplorationId)?.id || EXPLORATION_DEFAULT_ID}` }
     : findRouteForWorkspace(state.activeWorkspaceId);
   if (!route) return;
   const nextUrl = `${route.path}${window.location.search}`;
@@ -1270,6 +1293,7 @@ function applyRouteState(routeState) {
   state.activeSurface = routeState.surface;
   if (routeState.game) state.games.activeGame = routeState.game;
   if (routeState.tool) state.tools.activeTool = routeState.tool;
+  if (routeState.exploration) state.activeExplorationId = routeState.exploration;
   if (routeState.topic) state.activeTopic = routeState.topic;
   if (routeState.workspaceId) {
     state.activeWorkspaceId = routeState.workspaceId;
@@ -1284,6 +1308,8 @@ function applyRouteState(routeState) {
     renderTools();
   } else if (state.activeSurface === "games") {
     renderGames();
+  } else if (state.activeSurface === "explorations") {
+    renderExplorations();
   } else {
     renderWorkspace();
   }
@@ -1304,6 +1330,7 @@ function mathCategoryRank(group) {
 function ensureSurfaceWorkspace() {
   if (state.activeSurface === "tools") return;
   if (state.activeSurface === "games") return;
+  if (state.activeSurface === "explorations") return;
 
   if (state.activeSurface === "physics") {
     if (!isPhysicsWorkspaceId(state.activeWorkspaceId)) {
@@ -2001,6 +2028,200 @@ function renderTools() {
   renderComplexPlane();
   renderGraphingTool();
   renderNumberTheoryTools();
+}
+
+function renderExplorations() {
+  if (!els.explorationsPanel || !els.explorationList || !els.explorationArticle) return;
+  const entries = Array.isArray(window.CarryExplorations?.entries) ? window.CarryExplorations.entries : EXPLORATION_ENTRIES;
+  els.explorationList.innerHTML = "";
+  if (!entries.length) {
+    els.explorationArticle.replaceChildren(createTextBlock("No explorations are available yet."));
+    return;
+  }
+
+  const activeEntry = findExploration(state.activeExplorationId) || entries[0];
+  state.activeExplorationId = activeEntry.id;
+  entries.forEach((entry) => {
+    const button = document.createElement("button");
+    button.className = "exploration-list-button";
+    button.type = "button";
+    button.dataset.explorationId = entry.id;
+    button.setAttribute("aria-current", entry.id === activeEntry.id ? "true" : "false");
+    const date = document.createElement("span");
+    date.textContent = formatExplorationDate(entry.date);
+    const title = document.createElement("strong");
+    title.textContent = entry.title;
+    button.append(date, title);
+    els.explorationList.append(button);
+  });
+
+  els.explorationArticle.replaceChildren(renderExplorationArticle(activeEntry));
+}
+
+function formatExplorationDate(date) {
+  const parsed = new Date(`${date}T12:00:00`);
+  if (Number.isNaN(parsed.getTime())) return String(date || "");
+  return parsed.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
+}
+
+function createTextBlock(text) {
+  const p = document.createElement("p");
+  p.textContent = text;
+  return p;
+}
+
+function renderExplorationArticle(entry) {
+  const fragment = document.createDocumentFragment();
+  const header = document.createElement("header");
+  header.className = "exploration-entry-header";
+  const date = document.createElement("p");
+  date.className = "eyebrow";
+  date.textContent = formatExplorationDate(entry.date);
+  const title = document.createElement("h3");
+  title.textContent = entry.title;
+  const deck = document.createElement("p");
+  deck.className = "exploration-deck";
+  deck.textContent = entry.deck;
+  header.append(date, title, deck);
+  if (entry.tags?.length) {
+    const tags = document.createElement("div");
+    tags.className = "exploration-tags";
+    entry.tags.forEach((tag) => {
+      const item = document.createElement("span");
+      item.textContent = tag;
+      tags.append(item);
+    });
+    header.append(tags);
+  }
+  fragment.append(header);
+
+  const figure = renderExplorationFigure(entry.figure);
+  if (figure) fragment.append(figure);
+
+  (entry.sections || []).forEach((section) => {
+    const sectionEl = document.createElement("section");
+    sectionEl.className = "exploration-section";
+    if (section.heading) {
+      const heading = document.createElement("h4");
+      heading.textContent = section.heading;
+      sectionEl.append(heading);
+    }
+    (section.body || []).forEach((text) => sectionEl.append(createTextBlock(text)));
+    fragment.append(sectionEl);
+  });
+
+  const response = renderExplorationResponse(entry.hiddenResponse);
+  if (response) fragment.append(response);
+  return fragment;
+}
+
+function renderExplorationFigure(figure) {
+  if (!figure) return null;
+  const wrapper = document.createElement("figure");
+  wrapper.className = "exploration-figure";
+  if (figure.type === "binary-signature") {
+    renderBinarySignature(wrapper, {
+      signature: figure.signature,
+      interactive: false
+    });
+  }
+  if (figure.caption) {
+    const caption = document.createElement("figcaption");
+    caption.textContent = figure.caption;
+    wrapper.append(caption);
+  }
+  return wrapper;
+}
+
+function renderExplorationResponse(response) {
+  if (!response) return null;
+  const details = document.createElement("details");
+  details.className = "exploration-response";
+  const summary = document.createElement("summary");
+  summary.textContent = response.title || "Reveal hidden response";
+  details.append(summary);
+
+  const body = document.createElement("div");
+  body.className = "exploration-response-body";
+  if (response.answer) {
+    const answer = document.createElement("p");
+    answer.className = "exploration-answer";
+    answer.textContent = response.answer;
+    body.append(answer);
+  }
+  (response.body || []).forEach((text) => body.append(createTextBlock(text)));
+  if (response.interactive?.type === "binary-signature") {
+    const interactive = document.createElement("div");
+    interactive.className = "exploration-interactive";
+    renderBinarySignature(interactive, {
+      signature: response.interactive.signature,
+      interactive: true,
+      note: response.interactive.note
+    });
+    body.append(interactive);
+  }
+  details.append(body);
+  return details;
+}
+
+function renderBinarySignature(container, options) {
+  const weights = [512, 256, 128, 64, 32, 16, 8, 4, 2, 1];
+  const bits = String(options.signature || "").padStart(weights.length, "0").slice(-weights.length).split("").map((bit) => bit === "1");
+  const shell = document.createElement("div");
+  shell.className = "binary-signature";
+
+  const row = document.createElement("div");
+  row.className = "binary-signature-row";
+  const output = document.createElement("output");
+  output.className = "binary-signature-output";
+
+  function update() {
+    const value = bits.reduce((sum, isOn, index) => sum + (isOn ? weights[index] : 0), 0);
+    const signatureText = bits.map((bit) => bit ? "1" : "0").join("");
+    output.value = options.interactive ? String(value) : signatureText;
+    output.textContent = options.interactive
+      ? `Signature ${signatureText} names box ${value}`
+      : `Signature ${signatureText}`;
+    row.querySelectorAll("[data-bit-index]").forEach((button) => {
+      const index = Number(button.dataset.bitIndex);
+      button.dataset.bitState = bits[index] ? "1" : "0";
+      button.setAttribute("aria-pressed", bits[index] ? "true" : "false");
+      button.querySelector(".binary-bit-value").textContent = bits[index] ? "1" : "0";
+    });
+  }
+
+  weights.forEach((weight, index) => {
+    const bit = document.createElement(options.interactive ? "button" : "span");
+    bit.className = "binary-bit";
+    bit.dataset.bitIndex = String(index);
+    bit.dataset.bitState = bits[index] ? "1" : "0";
+    if (options.interactive) {
+      bit.type = "button";
+      bit.setAttribute("aria-pressed", bits[index] ? "true" : "false");
+      bit.addEventListener("click", () => {
+        bits[index] = !bits[index];
+        update();
+      });
+    }
+    const weightEl = document.createElement("span");
+    weightEl.className = "binary-bit-weight";
+    weightEl.textContent = String(weight);
+    const valueEl = document.createElement("span");
+    valueEl.className = "binary-bit-value";
+    valueEl.textContent = bits[index] ? "1" : "0";
+    bit.append(weightEl, valueEl);
+    row.append(bit);
+  });
+
+  shell.append(row, output);
+  if (options.note) {
+    const note = document.createElement("p");
+    note.className = "exploration-interactive-note";
+    note.textContent = options.note;
+    shell.append(note);
+  }
+  container.append(shell);
+  update();
 }
 
 function copyText(text) {
@@ -3636,17 +3857,20 @@ function renderSurface() {
   const isPhysics = state.activeSurface === "physics";
   const isTools = state.activeSurface === "tools";
   const isGames = state.activeSurface === "games";
+  const isExplorations = state.activeSurface === "explorations";
   document.body.dataset.surface = state.activeSurface;
-  els.lessonPanel.hidden = isScratchpad || isTools || isGames;
+  els.lessonPanel.hidden = isScratchpad || isTools || isGames || isExplorations;
   els.scratchpadPanel.hidden = !isScratchpad;
   els.toolsPanel.hidden = !isTools;
   els.sudokuPanel.hidden = !isGames;
-  els.topicPanel.hidden = isScratchpad || isTools || isGames;
-  els.workspaceLayout.classList.toggle("single-column", isScratchpad || isTools || isGames);
-  els.learnSurface.setAttribute("aria-pressed", !isScratchpad && !isPhysics && !isTools && !isGames ? "true" : "false");
+  els.explorationsPanel.hidden = !isExplorations;
+  els.topicPanel.hidden = isScratchpad || isTools || isGames || isExplorations;
+  els.workspaceLayout.classList.toggle("single-column", isScratchpad || isTools || isGames || isExplorations);
+  els.learnSurface.setAttribute("aria-pressed", !isScratchpad && !isPhysics && !isTools && !isGames && !isExplorations ? "true" : "false");
   els.physicsSurface.setAttribute("aria-pressed", isPhysics ? "true" : "false");
   els.toolsSurface.setAttribute("aria-pressed", isTools ? "true" : "false");
   els.gamesSurface.setAttribute("aria-pressed", isGames ? "true" : "false");
+  els.explorationsSurface.setAttribute("aria-pressed", isExplorations ? "true" : "false");
   els.scratchpadSurface.setAttribute("aria-pressed", isScratchpad ? "true" : "false");
   if (isScratchpad) {
     els.scratchpadInput?.focus({ preventScroll: true });
@@ -3654,6 +3878,8 @@ function renderSurface() {
     renderTools();
   } else if (isGames) {
     renderGames();
+  } else if (isExplorations) {
+    renderExplorations();
   }
 }
 
@@ -3670,6 +3896,8 @@ function setSurface(surface) {
     renderTools();
   } else if (surface === "games") {
     renderGames();
+  } else if (surface === "explorations") {
+    renderExplorations();
   } else {
     renderWorkspace();
   }
@@ -8308,7 +8536,15 @@ function bindEvents() {
   els.physicsSurface.addEventListener("click", () => setSurface("physics"));
   els.toolsSurface.addEventListener("click", () => setSurface("tools"));
   els.gamesSurface.addEventListener("click", () => setSurface("games"));
+  els.explorationsSurface.addEventListener("click", () => setSurface("explorations"));
   els.scratchpadSurface.addEventListener("click", () => setSurface("scratchpad"));
+  els.explorationList?.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-exploration-id]");
+    if (!button) return;
+    state.activeExplorationId = button.dataset.explorationId;
+    renderExplorations();
+    updateUrlFromState();
+  });
   document.querySelectorAll("[data-scratchpad-surface]").forEach((button) => {
     button.addEventListener("click", () => {
       button.closest(".scratchpad-drawer")?.removeAttribute("open");

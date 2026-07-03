@@ -163,6 +163,8 @@ body[data-surface="scratchpad"] .site-footer {
 
 .surface-switch {
   display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
   padding: 3px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -836,7 +838,8 @@ body[data-surface="scratchpad"] .site-footer {
 }
 
 .sudoku-panel,
-.tools-panel {
+.tools-panel,
+.explorations-panel {
   display: grid;
   gap: 14px;
   padding: 16px;
@@ -845,13 +848,15 @@ body[data-surface="scratchpad"] .site-footer {
   background: var(--surface);
 }
 
-.sudoku-header {
+.sudoku-header,
+.explorations-header {
   display: grid;
   gap: 12px;
   align-items: start;
 }
 
-.tools-header {
+.tools-header,
+.explorations-header {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 16px;
@@ -859,7 +864,8 @@ body[data-surface="scratchpad"] .site-footer {
 }
 
 .sudoku-header h2,
-.tools-header h2 {
+.tools-header h2,
+.explorations-header h2 {
   margin: 0;
   font-size: 22px;
   line-height: 1.15;
@@ -916,6 +922,216 @@ body[data-surface="scratchpad"] .site-footer {
   border-color: var(--sudoku-ink);
   background: var(--sudoku-soft);
   color: var(--sudoku-ink);
+}
+
+.exploration-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.exploration-list-button {
+  display: grid;
+  min-height: 44px;
+  min-width: 180px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+}
+
+.exploration-list-button span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.exploration-list-button strong {
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.exploration-list-button[aria-current="true"] {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.exploration-article {
+  display: grid;
+  gap: 18px;
+  max-width: 980px;
+  width: 100%;
+}
+
+.exploration-entry-header {
+  display: grid;
+  gap: 8px;
+  padding-top: 6px;
+  border-top: 1px solid var(--line);
+}
+
+.exploration-entry-header h3 {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3.75rem);
+  letter-spacing: 0;
+  line-height: 1;
+}
+
+.exploration-deck {
+  max-width: 720px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 1.05rem;
+}
+
+.exploration-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.exploration-tags span {
+  padding: 4px 8px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.exploration-section {
+  display: grid;
+  gap: 8px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.exploration-section h4 {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.exploration-section p,
+.exploration-response-body p {
+  max-width: 760px;
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.exploration-figure {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: clamp(16px, 4vw, 28px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.exploration-figure figcaption,
+.exploration-interactive-note {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.binary-signature {
+  display: grid;
+  gap: 12px;
+}
+
+.binary-signature-row {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(56px, 1fr));
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+
+.binary-bit {
+  display: grid;
+  gap: 5px;
+  min-width: 56px;
+  min-height: 70px;
+  align-content: center;
+  justify-items: center;
+  padding: 8px 6px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-muted);
+  color: var(--muted);
+}
+
+button.binary-bit {
+  cursor: pointer;
+}
+
+.binary-bit[data-bit-state="1"] {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.binary-bit-weight {
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.binary-bit-value {
+  color: var(--text);
+  font-size: 1.8rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.binary-signature-output {
+  display: block;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-weight: 800;
+}
+
+.exploration-response {
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-muted);
+}
+
+.exploration-response summary {
+  min-height: 36px;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.exploration-response-body {
+  display: grid;
+  gap: 12px;
+  padding-top: 12px;
+}
+
+.exploration-answer {
+  color: var(--accent);
+  font-weight: 800;
+}
+
+.exploration-interactive {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
 }
 
 .sudoku-game,
@@ -3306,6 +3522,18 @@ body[data-surface="scratchpad"] .scratch-line-math-aligned {
 
   .tool-tab {
     flex: 1;
+  }
+
+  .explorations-header {
+    grid-template-columns: 1fr;
+  }
+
+  .exploration-list {
+    justify-content: start;
+  }
+
+  .exploration-list-button {
+    width: 100%;
   }
 
   .graphing-controls {
