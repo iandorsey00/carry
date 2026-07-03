@@ -440,6 +440,151 @@
           "Countable means listable: the elements can be lined up first, second, third, and so on.",
           "The positive integers are the model countable set; they already form a list.",
           "The real numbers cannot be listed; some infinite sets are genuinely bigger than others."
+        ],
+        "abstract-algebra.groups": [
+          "Four rules make a group: closed, associative, an identity, and an inverse for every element.",
+          "The identity leaves things alone: 0 for addition, 1 for multiplication.",
+          "Closure asks whether combining two members can ever land outside the set."
+        ],
+        "abstract-algebra.rings": [
+          "A ring runs two operations at once: addition and multiplication.",
+          "Addition behaves like a group; multiplication is tied to it by distribution.",
+          "The integers are the model ring: adding, subtracting, and multiplying all stay inside."
+        ],
+        "abstract-algebra.fields": [
+          "A field is a ring where division works too, by everything except 0.",
+          "Every nonzero element needs a multiplicative inverse; 0 is excused.",
+          "The integers fail the test: no integer multiplies with 2 to give 1."
+        ],
+        "abstract-algebra.homomorphisms": [
+          "A homomorphism respects the operation: combine first or map first, the result agrees.",
+          "For addition that reads <math>f(a + b) = f(a) + f(b)</math>.",
+          "It does not need to be one-to-one; it only needs to preserve structure."
+        ],
+        "abstract-algebra.examples-counterexamples": [
+          "To show a definition can be met, exhibit an example; to defeat a claim, exhibit one failure.",
+          "Name the set and the operation before judging: positive integers under addition fail only because inverses are missing.",
+          "To disprove every ring is a field, produce one ring that is not a field, like the integers."
+        ],
+        "calculus.limits": [
+          "A limit reports the destination: as x approaches 2, x + 3 approaches 5.",
+          "The input never has to arrive; the outputs just need a clear target.",
+          "The two-sided limit exists only when both one-sided limits agree."
+        ],
+        "calculus.derivatives": [
+          "The derivative is the slope: for a line like <math>y = 3x + 2</math> it is simply 3.",
+          "Power rule: bring the exponent down and lower it by one, so <math>x^2</math> becomes <math>2x</math>.",
+          "Constants ride along: the derivative of 5x is 5."
+        ],
+        "calculus.integrals": [
+          "An antiderivative reverses a derivative and always carries the constant C.",
+          "For simple regions the integral is just area: <math>y = 2</math> from 0 to 3 encloses a 2-by-3 rectangle, area 6.",
+          "To check an antiderivative, differentiate it and watch the original return."
+        ],
+        "calculus.applications": [
+          "The derivative of position is velocity: <math>s(t) = t^2</math> gives velocity 2t, which is 6 at t = 3.",
+          "A steady rate times its duration accumulates a total: 5 per second for 4 seconds is 20.",
+          "Where the derivative flips from positive to negative, the function peaks: a local maximum."
+        ],
+        "calculus.series": [
+          "A series is a sequence with plus signs: the terms are added instead of listed.",
+          "Watch the partial sums: 1 + 1/2 + 1/4 + ... climbs toward 2 without ever passing it.",
+          "A geometric series settles only when the ratio stays strictly between -1 and 1."
+        ],
+        "complex-analysis.complex-functions": [
+          "A complex input <math>z = x + iy</math> carries two real numbers at once.",
+          "Evaluate by substitution and use <math>i^2 = -1</math>: squaring i gives -1.",
+          "Reading parts is positional: in 3 + 2i, the real part is 3 and the imaginary part is 2."
+        ],
+        "complex-analysis.analytic-functions": [
+          "Analytic is a neighborhood property: complex differentiable throughout an open region, not just at one point.",
+          "Entire means analytic everywhere; <math>e^z</math> is the standard example.",
+          "Watch for trouble spots: <math>1/z</math> is fine everywhere except <math>z = 0</math>."
+        ],
+        "complex-analysis.contour-integrals": [
+          "A contour integral accumulates a function's values along a chosen path.",
+          "A closed contour loops back to its start; the <math>\\oint</math> sign announces one.",
+          "What sits inside a closed loop matters: singularities inside can change the integral."
+        ],
+        "complex-analysis.power-series": [
+          "A power series is an infinite polynomial in powers of <math>z - a</math>, centered at a.",
+          "It converges on a disk; the radius of convergence says how far from the center it works.",
+          "Inside that disk the series is the function: evaluate, differentiate, or integrate it freely."
+        ],
+        "complex-analysis.residues": [
+          "The residue is one number attached to each isolated singularity.",
+          "In the Laurent series, it is the coefficient of <math>1/(z - a)</math>.",
+          "The residue theorem turns a closed contour integral into a sum of residues inside the loop."
+        ],
+        "graph-theory.vertices-edges": [
+          "Vertices are the dots and edges are the connections; node is another word for vertex.",
+          "Count them separately: 5 vertices and 4 edges answer different questions.",
+          "An edge always joins two vertices; it is the connection, not an object of its own."
+        ],
+        "graph-theory.degree": [
+          "Degree is a local count: how many edges touch this one vertex.",
+          "Degree 1 means a single connection; in a tree, such a vertex is a leaf.",
+          "Changing a faraway part of the graph never changes this vertex's degree."
+        ],
+        "graph-theory.paths-cycles": [
+          "Path length counts edges, not vertices.",
+          "A cycle is a path that returns to its starting vertex.",
+          "For shortest-path questions, count the edges along each candidate route."
+        ],
+        "graph-theory.trees": [
+          "A tree needs both halves: connected, and no cycles.",
+          "No cycles means no closed loop anywhere, so there is exactly one route between any two vertices.",
+          "Break either condition and it is not a tree: a loop or a separated piece disqualifies it."
+        ],
+        "graph-theory.connectedness": [
+          "Connected asks only whether a path exists, not whether it is short.",
+          "A component is one piece: two separated pieces means two components.",
+          "If no path joins A and B, they live in different components."
+        ],
+        "probability.sample-spaces": [
+          "The sample space is the complete list of what can happen: 2 outcomes for a coin, 6 for a die.",
+          "An outcome is a single result; an event is a set of outcomes, like rolling an even number.",
+          "Write the list before assigning any probabilities."
+        ],
+        "probability.basic-probability": [
+          "With equally likely outcomes, probability is favorable over total: one face out of six is 1/6.",
+          "The scale runs from 0, impossible, to 1, certain.",
+          "Fractions, decimals, and percents are the same probability in different clothes."
+        ],
+        "probability.counting": [
+          "Choices in sequence multiply: 3 colors times 2 sizes is 6 shirts.",
+          "Permutations count arrangements where order matters; combinations ignore order.",
+          "Ask about order first: the answer decides which method applies."
+        ],
+        "probability.conditional-probability": [
+          "<math>P(A | B)</math> reads: the probability of A once B is known.",
+          "The condition shrinks the world: a die known to be even has only 3 outcomes left.",
+          "Recompute inside the smaller world: given even, rolling a 6 is 1 out of 3."
+        ],
+        "probability.random-variables": [
+          "A random variable numbers the outcomes: heads becomes 1, tails becomes 0.",
+          "The distribution pairs each value with its probability.",
+          "Expected value is the long-run average: the coin above averages 1/2."
+        ],
+        "differential-equations.slope-fields": [
+          "The equation assigns a slope to each point; the field draws a small mark there.",
+          "Read marks by substitution: for <math>dy/dx = y</math>, the slope at height 2 is 2.",
+          "A solution curve threads through the marks, following them smoothly."
+        ],
+        "differential-equations.separable": [
+          "Separable means sortable: all y factors to one side, all x factors to the other.",
+          "In <math>dy/dx = 3xy</math>, divide by y so that <math>1/y</math> pairs with dy.",
+          "Then integrate both sides and remember the constant C."
+        ],
+        "differential-equations.first-order-models": [
+          "First-order means the first derivative drives the story.",
+          "In <math>dP/dt = kP</math>, growth is proportional to the current amount: the exponential signature.",
+          "Equilibrium is where the derivative is 0, so nothing changes at that instant."
+        ],
+        "differential-equations.second-order-models": [
+          "Second-order equations use the second derivative; for position, that is acceleration.",
+          "Springs and pendulums repeat, which is why oscillations are the classic examples.",
+          "Check the highest derivative that appears to classify an equation's order."
         ]
       };
       if (specificNotices[workspace.id]) return specificNotices[workspace.id];
