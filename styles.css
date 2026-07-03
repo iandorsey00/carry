@@ -2329,7 +2329,8 @@ body[data-surface="scratchpad"] .scratch-line-math-aligned {
   text-transform: uppercase;
 }
 
-.intro-copy ol {
+.intro-copy ol,
+.intro-copy ul {
   display: grid;
   gap: 8px;
   max-width: 740px;

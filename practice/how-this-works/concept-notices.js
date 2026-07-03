@@ -80,6 +80,121 @@
           "Horizontal distance compares x-values.",
           "Vertical distance compares y-values.",
           "Midpoints average the x-values and average the y-values separately."
+        ],
+        "arithmetic.estimation": [
+          "Round each number to a friendly value before combining.",
+          "An estimate stands in for the exact answer, so expect close, not equal.",
+          "If rounding pushed both numbers up, the true answer sits below the estimate."
+        ],
+        "geometry.angles": [
+          "Two adjacent angles on a straight line add to 180 degrees, so subtract the known angle from 180.",
+          "A right angle is exactly 90 degrees; acute is less, obtuse is more.",
+          "To classify an angle, compare it with 90 and 180 before naming it."
+        ],
+        "geometry.area-volume": [
+          "Area multiplies two lengths; volume multiplies three.",
+          "A triangle's area is half of base times height, so do not skip the half.",
+          "If a volume answer only used two numbers, a dimension is missing."
+        ],
+        "geometry.circles": [
+          "The diameter is twice the radius, so converting is doubling or halving.",
+          "With C = πd, a diameter of 6 gives circumference 6π; keep the exact form unless asked for a decimal.",
+          "Check whether the question gives the radius or the diameter before calculating."
+        ],
+        "geometry.proof-basics": [
+          "Given facts are starting points and need no justification.",
+          "Every other statement should name its reason: a definition, a given, or a theorem.",
+          "The transitive property chains equalities: if AB = CD and CD = EF, then AB = EF."
+        ],
+        "geometry.triangles": [
+          "The three interior angles add to 180 degrees, so two known angles determine the third.",
+          "Triangle names describe sides: equilateral means three equal sides, isosceles means two.",
+          "If proposed angles do not add to exactly 180, the triangle is impossible."
+        ],
+        "linear-algebra.vectors": [
+          "Add vectors component by component: (2, 3) + (4, 1) = (6, 4).",
+          "A scalar multiplies every component, and a negative scalar also reverses direction.",
+          "Length uses the Pythagorean theorem, so (3, 4) has length 5."
+        ],
+        "linear-algebra.matrices": [
+          "Size reads rows by columns, so 2 x 3 means 2 rows and 3 columns.",
+          "Entry positions read row first: row 2, column 1 sits in the second row.",
+          "The identity matrix leaves every vector unchanged."
+        ],
+        "linear-algebra.transformations": [
+          "Read the rule coordinate by coordinate: (2x, 2y) doubles both, so lengths double.",
+          "A sign flip on one coordinate is a reflection: (-x, y) reflects across the y-axis.",
+          "Where (1, 0) and (0, 1) land determines the whole transformation."
+        ],
+        "linear-algebra.determinants": [
+          "For [[a, b], [c, d]], the determinant is ad - bc; keep the order straight.",
+          "For a diagonal matrix, the determinant is the product of the diagonal entries.",
+          "Determinant zero means the matrix flattens space and has no inverse."
+        ],
+        "linear-algebra.eigenvalues": [
+          "In A v = λ v, the eigenvalue λ is the scale factor on the eigenvector v.",
+          "For a diagonal matrix, each axis direction is an eigenvector with the diagonal entry as its eigenvalue.",
+          "If applying the matrix changes a vector's direction, that vector is not an eigenvector."
+        ],
+        "linear-algebra.vector-spaces": [
+          "Span asks what is reachable using linear combinations of the given vectors.",
+          "(1, 0) and (0, 1) span the plane, so a standard basis for R^2 has 2 vectors.",
+          "If one vector is a multiple of another, the pair is dependent and adds no new direction."
+        ],
+        "precalculus.functions": [
+          "Evaluate f(3) by replacing every x with 3, then simplifying.",
+          "In a point (input, output), the input comes first: (4, 9) says the output at 4 is 9.",
+          "Each input gets exactly one output; the vertical line test checks this on a graph."
+        ],
+        "precalculus.transformations": [
+          "Adding outside the function moves the graph up or down: x^2 + 4 shifts up 4.",
+          "Changes inside the input shift sideways and read backwards: (x - 5)^2 shifts right 5.",
+          "Vertex form shows the result directly: y = (x - 2)^2 + 3 has vertex (2, 3)."
+        ],
+        "precalculus.polynomial-rational": [
+          "The degree is the highest power of x with a nonzero coefficient, wherever it appears.",
+          "A factor like x - 2 equals zero when x = 2.",
+          "Excluded values of a rational function come from making the denominator zero."
+        ],
+        "precalculus.exponential-log": [
+          "An exponent counts factors: 2^3 means three factors of 2.",
+          "A logarithm asks for the exponent: log base 2 of 8 is 3 because 2^3 = 8.",
+          "To solve 2^x = 8, ask which exponent turns 2 into 8."
+        ],
+        "precalculus.sequences": [
+          "Arithmetic sequences add the same difference; subtract neighboring terms to find it.",
+          "Geometric sequences multiply by the same ratio; divide neighboring terms to find it.",
+          "Before extending a sequence, decide whether neighbors differ by addition or multiplication."
+        ],
+        "precalculus.complex-numbers": [
+          "In a + bi, a is the real part and b is the imaginary part.",
+          "Everything follows from one rule: i^2 = -1.",
+          "Add complex numbers by adding real parts and imaginary parts separately."
+        ],
+        "trigonometry.unit-circle": [
+          "A unit-circle point is (cos θ, sin θ): x is cosine, y is sine.",
+          "Walk the quarter turns: 0 is at (1, 0), π/2 at (0, 1), π at (-1, 0).",
+          "Signs follow the quadrant, which is why cos π is negative."
+        ],
+        "trigonometry.right-triangles": [
+          "Label the sides from the angle's point of view: opposite, adjacent, hypotenuse.",
+          "Sine is opposite over hypotenuse, cosine is adjacent over hypotenuse, tangent is opposite over adjacent.",
+          "The hypotenuse is the longest side, so sine and cosine never exceed 1."
+        ],
+        "trigonometry.graphs": [
+          "Amplitude is the number in front: y = 3 sin x has amplitude 3.",
+          "Plain sin x and cos x repeat every 2π.",
+          "The waves start differently: sin 0 = 0 while cos 0 = 1."
+        ],
+        "trigonometry.identities": [
+          "sin^2 x + cos^2 x = 1 lets you trade sin^2 x for 1 - cos^2 x and back.",
+          "tan x is sin x over cos x; cot x flips it to cos x over sin x.",
+          "Dividing the Pythagorean identity by cos^2 x gives 1 + tan^2 x = sec^2 x."
+        ],
+        "trigonometry.inverse": [
+          "Inverse trig functions return an angle, not a ratio.",
+          "Read arcsin 0 as a question: which angle has sine 0?",
+          "Principal ranges keep the answer unique, so arctan 1 is 45 degrees."
         ]
       };
       if (specificNotices[workspace.id]) return specificNotices[workspace.id];

@@ -1,6 +1,6 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-beta.1";
+const APP_VERSION = "0.1.0-beta.2";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 const GAMES_STORAGE_KEY = "carry.games.v1";
@@ -3916,9 +3916,10 @@ function renderIntroWorkspace(workspace) {
 function renderIntroCopy(workspace) {
   const items = workspace.intro || introCoreItems(workspace);
   const figures = createIntroFigures(workspace);
+  const isProcedural = workspace.type !== "concept";
   const sections = document.createElement("div");
   sections.className = "intro-sections";
-  sections.append(createIntroSection("Core idea", items), createWorkedExampleSection(workspace));
+  sections.append(createIntroSection("Core idea", items, isProcedural), createWorkedExampleSection(workspace));
 
   const studioMove = lessonStudioItems(workspace);
   if (studioMove.length) sections.append(createIntroSection("Studio move", studioMove));
@@ -3958,14 +3959,14 @@ function introApplicationItems(workspace) {
   return window.CarryHowThisWorks?.introApplicationItems?.(workspace) || [];
 }
 
-function createIntroSection(title, items) {
+function createIntroSection(title, items, ordered = false) {
   const section = document.createElement("section");
   section.className = "intro-section";
 
   const heading = document.createElement("h4");
   heading.textContent = title;
 
-  const list = document.createElement("ol");
+  const list = document.createElement(ordered ? "ol" : "ul");
   for (const item of items.filter(Boolean)) {
     const li = document.createElement("li");
     setMathText(li, item);
@@ -3986,7 +3987,7 @@ function lessonStudioItems(workspace) {
 
 function createWorkedExampleSection(workspace) {
   const rows = introWorkedExampleRows(workspace);
-  if (!rows) return createIntroSection("Worked example", introWorkedExampleItems(workspace));
+  if (!rows) return createIntroSection("Worked example", introWorkedExampleItems(workspace), workspace.type !== "concept");
 
   const section = document.createElement("section");
   section.className = "intro-section";
