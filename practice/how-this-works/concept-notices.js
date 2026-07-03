@@ -320,6 +320,126 @@
           "Relativity matters near light speed or in strong gravity, not in everyday motion.",
           "Every inertial observer measures the same vacuum light speed c.",
           "<math>E = mc^2</math> ties mass and energy together, with c the speed of light."
+        ],
+        "number-theory.divisibility": [
+          "Divides means fits evenly: 4 divides 20 because 20 is 4 × 5 with nothing left over.",
+          "The vertical bar is shorthand: <math>3 | 18</math> reads as 3 divides 18.",
+          "To test divisibility, do the division and check whether the remainder is 0."
+        ],
+        "number-theory.primes": [
+          "Prime means exactly two positive factors: 1 and the number itself.",
+          "21 is 3 × 7, so it is composite; 17 has no such split, so it is prime.",
+          "A factor tree ends in primes: 12 breaks into 2 × 2 × 3."
+        ],
+        "number-theory.gcd-lcm": [
+          "GCD looks down at shared factors; LCM looks up at shared multiples.",
+          "gcd(12, 18) is 6, the largest number that divides both.",
+          "lcm(4, 6) is 12, the first number that both counts reach."
+        ],
+        "number-theory.euclidean-algorithm": [
+          "Each step divides and keeps the remainder: 18 = 12 × 1 + 6.",
+          "Then the pair shrinks: (18, 12) becomes (12, 6).",
+          "When the remainder reaches 0, the last nonzero remainder is the GCD."
+        ],
+        "number-theory.modular-arithmetic": [
+          "mod n asks one question: what is left after dividing by n? So 14 mod 5 is 4.",
+          "A clock runs mod 12: 10 + 5 lands on 3.",
+          "Numbers that differ by a multiple of n count as the same, so 9 and 2 match mod 7."
+        ],
+        "number-theory.congruences": [
+          "<math>a ≡ b mod n</math> says a and b leave the same remainder when divided by n.",
+          "Same remainder is the practical test: 17 and 2 both leave 2 when divided by 5.",
+          "Equivalently, n divides the difference: 5 divides 17 - 2."
+        ],
+        "proofs.logic": [
+          "An implication has two parts: in if P then Q, P is the hypothesis and Q is the conclusion.",
+          "Knowing if P then Q and knowing P is true lets you conclude Q.",
+          "It also runs backwards: if the conclusion is false, the hypothesis must be false too."
+        ],
+        "proofs.quantifiers": [
+          "For all claims cover every case; there exists claims need only one success.",
+          "One counterexample sinks a for all claim.",
+          "One working example proves a there exists claim."
+        ],
+        "proofs.counterexamples": [
+          "A counterexample is one concrete case where the claim fails.",
+          "Every prime is odd falls to a single number: 2 is prime and even.",
+          "Make counterexamples specific and easy to check, like a 2-by-3 rectangle that is not a square."
+        ],
+        "proofs.contradiction": [
+          "Start by assuming the opposite of what you want to prove.",
+          "Push that assumption until it produces something impossible.",
+          "The impossibility means the assumption was wrong, so the original claim is true."
+        ],
+        "proofs.induction": [
+          "Induction is a ladder: the base case is the first rung.",
+          "The inductive step shows each rung leads to the next: case k forces case k + 1.",
+          "Base case plus inductive step together cover every case from the base onward."
+        ],
+        "proofs.construction": [
+          "To prove something exists, build one concrete example.",
+          "For an even number greater than 10, the number 12 settles it.",
+          "Building is only half the job: check that the example meets every required condition."
+        ],
+        "real-analysis.limits": [
+          "A limit describes where the outputs are heading, not what happens at the point itself.",
+          "As x approaches 3, the outputs of 2x crowd toward 6.",
+          "Epsilon sets a tolerance on outputs; delta answers with a tolerance on inputs."
+        ],
+        "real-analysis.sequences": [
+          "Convergence is about the tail: where the terms eventually settle, not how they start.",
+          "1/n converges to 0; the terms get as close to 0 as you like and stay there.",
+          "1, -1, 1, -1 never settles, so it has no limit; a constant sequence converges immediately."
+        ],
+        "real-analysis.continuity": [
+          "Continuity at a point is a match: the limit of the outputs equals the actual value f(a).",
+          "A hole, a jump, or a vertical blow-up each break that match in a different way.",
+          "Simple pieces like x + 1 are continuous everywhere, so checks focus on the risky points."
+        ],
+        "real-analysis.differentiation": [
+          "Differentiable means the graph has one well-defined slope at that point.",
+          "A corner defeats it: <math>|x|</math> is continuous at 0 but turns too sharply to have a slope there.",
+          "Differentiability is the stronger property: it implies continuity, never the reverse."
+        ],
+        "real-analysis.integration": [
+          "Riemann integration approximates area with rectangles built on a partition.",
+          "Finer partitions give better approximations; the integral is the value they settle on.",
+          "Sanity-check with simple shapes: a constant 3 over [0, 2] encloses area 6."
+        ],
+        "real-analysis.sets": [
+          "Brackets report endpoints: [2, 5] includes 2, while (2, 5) does not.",
+          "Square means reached, round means approached but never touched.",
+          "A closed interval has a smallest member; an open interval has none at all."
+        ],
+        "set-theory.sets-notation": [
+          "A set asks one question about an object: in or out?",
+          "<math>∈</math> claims membership and <math>∉</math> denies it.",
+          "Braces list the members: in <math>A = {1, 2, 3}</math>, the number 2 is in and 7 is out."
+        ],
+        "set-theory.subsets": [
+          "Subset is an every-element claim: each member of A must also belong to B.",
+          "The empty set is a subset of every set, because no element exists to fail the test.",
+          "Subsets double with each new element: 3 elements give <math>2^3 = 8</math> subsets."
+        ],
+        "set-theory.operations": [
+          "Union means or: <math>A ∪ B</math> collects members of either set.",
+          "Intersection means and: <math>A ∩ B</math> keeps only the shared members.",
+          "With <math>A = {1, 2}</math> and <math>B = {2, 3}</math>, the union is {1, 2, 3} and the intersection is {2}."
+        ],
+        "set-theory.cartesian-relations": [
+          "Ordered pairs care about position: (3, 5) is not (5, 3).",
+          "The product <math>A × B</math> pairs every element of A with every element of B, so sizes multiply.",
+          "A relation is a chosen set of pairs: the ones where some connection holds."
+        ],
+        "set-theory.functions": [
+          "A function is a relation with a one-output rule: each input gets exactly one output.",
+          "The domain is where inputs come from; the codomain is where outputs are allowed to land.",
+          "<math>f(2) = 7</math> reads: input 2, output 7."
+        ],
+        "set-theory.countability": [
+          "Countable means listable: the elements can be lined up first, second, third, and so on.",
+          "The positive integers are the model countable set; they already form a list.",
+          "The real numbers cannot be listed; some infinite sets are genuinely bigger than others."
         ]
       };
       if (specificNotices[workspace.id]) return specificNotices[workspace.id];
