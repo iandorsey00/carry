@@ -2697,6 +2697,134 @@ body[data-surface="scratchpad"] .scratch-line-math-aligned {
   fill: var(--complete);
 }
 
+.intro-figures {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 14px;
+  max-width: 740px;
+  margin-bottom: 22px;
+  align-items: stretch;
+}
+
+.intro-figures .intro-figure {
+  padding: 0;
+  border: 0;
+  align-content: start;
+}
+
+.intro-figures .intro-fig {
+  gap: 12px;
+}
+
+.intro-figures .intro-math-figure {
+  display: grid;
+  align-content: center;
+  gap: 12px;
+  padding: 18px 20px;
+  border-radius: 10px;
+  background: var(--surface-muted);
+}
+
+.intro-figures .intro-figure-grid {
+  padding: 6px 0;
+}
+
+.intro-fig-svg {
+  width: 100%;
+  max-width: 480px;
+}
+
+.intro-fig-readout {
+  margin: 0;
+  color: var(--text);
+  font-size: 17px;
+  line-height: 1.4;
+}
+
+.intro-fig-controls {
+  display: grid;
+  gap: 6px;
+  max-width: 480px;
+}
+
+.intro-fig-readout {
+  max-width: 480px;
+}
+
+.intro-fig-control {
+  display: grid;
+  grid-template-columns: minmax(56px, max-content) 1fr minmax(52px, max-content);
+  align-items: center;
+  gap: 12px;
+}
+
+.intro-fig-control-name {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.intro-fig-control-value {
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.intro-fig-control input[type="range"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  height: 24px;
+  margin: 0;
+  background: transparent;
+}
+
+.intro-fig-control input[type="range"]::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--line);
+}
+
+.intro-fig-control input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  margin-top: -7px;
+  border: 2px solid var(--surface);
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.intro-fig-control input[type="range"]::-moz-range-track {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--line);
+}
+
+.intro-fig-control input[type="range"]::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--surface);
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.intro-fig-hint {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.intro-fig-handle {
+  cursor: grab;
+  touch-action: none;
+}
+
+.intro-fig-handle:active {
+  cursor: grabbing;
+}
+
 .geometry-note {
   fill: var(--muted);
   font-size: 13px;

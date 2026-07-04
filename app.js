@@ -1,6 +1,6 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-beta.5";
+const APP_VERSION = "0.1.0-beta.6";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 const GAMES_STORAGE_KEY = "carry.games.v1";
@@ -3916,6 +3916,9 @@ function renderIntroWorkspace(workspace) {
 function renderIntroCopy(workspace) {
   const items = workspace.intro || introCoreItems(workspace);
   const figures = createIntroFigures(workspace);
+  const figureWrap = document.createElement("div");
+  figureWrap.className = "intro-figures";
+  figureWrap.append(...figures);
   const isProcedural = workspace.type !== "concept";
   const sections = document.createElement("div");
   sections.className = "intro-sections";
@@ -3933,7 +3936,7 @@ function renderIntroCopy(workspace) {
   const workspaceItems = introWorkspaceItems(workspace);
   if (workspaceItems.length) sections.append(createIntroSection("In the workspace", workspaceItems));
 
-  els.introCopy.replaceChildren(...figures, sections);
+  els.introCopy.replaceChildren(...(figures.length ? [figureWrap] : []), sections);
 }
 
 function introCoreItems(workspace) {
@@ -3941,7 +3944,16 @@ function introCoreItems(workspace) {
 }
 
 function createIntroFigures(workspace) {
-  return [createIntroFigure(workspace), ...supplementalIntroFigures(workspace)].filter(Boolean);
+  const custom = window.CarryIntroFigures?.create?.(workspace);
+  if (custom?.length) return [...custom, ...supplementalIntroFigures(workspace)].filter(Boolean);
+  const primary = createIntroFigure(workspace);
+  const figures = [primary];
+  if (primary && !primary.classList.contains("intro-math-figure")) {
+    const rows = staticMathFigureRows(workspace);
+    if (rows) figures.push(createIntroMathFigure(rows, "The same idea in symbols.", workspace.type));
+  }
+  figures.push(...supplementalIntroFigures(workspace));
+  return figures.filter(Boolean);
 }
 
 function introExplanationSection(workspace) {
@@ -4087,7 +4099,7 @@ function conceptWorkedExampleItems(workspace) {
 }
 
 function createIntroFigure(workspace) {
-  if (!["addition", "subtraction", "multiplication", "division", "concept", "equation", "inequality", "quadratic"].includes(workspace.type)) return null;
+  if (!["addition", "subtraction", "multiplication", "division", "concept", "equation", "inequality", "quadratic", "system", "factoring"].includes(workspace.type)) return null;
 
   if (shouldUseDiagramIntroFigure(workspace.figure)) {
     const figure = document.createElement("figure");
@@ -4187,8 +4199,30 @@ function createIntroFigure(workspace) {
   return figure;
 }
 
+const DRAWN_FIGURE_OVERRIDES = new Set([
+  "fraction-bar",
+  "mixed-review",
+  "operation-order",
+  "factor-pairs",
+  "expression-terms",
+  "polynomial-terms",
+  "rational-cancel",
+  "quadratic-roots",
+  "geometry-circle",
+  "geometry-area-volume",
+  "trig-right-triangle",
+  "trig-identities",
+  "precalc-exponential-log",
+  "calc-derivatives",
+  "calc-integrals",
+  "real-limits",
+  "abstract-rings",
+  "abstract-fields",
+  "abstract-homomorphisms"
+]);
+
 function shouldUseDiagramIntroFigure(figure) {
-  return isPhysicsDiagramFigure(figure) || (isDiagramFigure(figure) && !staticMathFigureRows({ figure }));
+  return isPhysicsDiagramFigure(figure) || DRAWN_FIGURE_OVERRIDES.has(figure) || (isDiagramFigure(figure) && !staticMathFigureRows({ figure }));
 }
 
 function createStaticMathIntroFigure(workspace) {
