@@ -137,7 +137,7 @@
           "Choose the side names relative to the marked angle."
         ],
         "trigonometry.graphs": [
-          "Example: y = 2 sin x has amplitude 2.",
+          "Example: <math>y = 2 \\sin x</math> has amplitude 2.",
           "Amplitude is the distance from the midline to a peak.",
           "Basic sine repeats after 2π."
         ],
@@ -202,9 +202,9 @@
           "Derivatives describe rates; integrals accumulate rates."
         ],
         "calculus.series": [
-          "Example: the geometric sequence 1, 1/3, 1/9 keeps multiplying by 1/3.",
-          "A series adds the terms of a sequence.",
-          "A small ratio can make an infinite series settle."
+          "Example: add the sequence 1, 1/3, 1/9, ... term by term.",
+          "The partial sums run 1, then 4/3, then 13/9 — climbing but slowing.",
+          "With ratio 1/3, the infinite sum settles at exactly 3/2."
         ],
         "linear-algebra.vectors": [
           "Example: (1, 4) + (6, -2) is found component by component.",
@@ -357,14 +357,14 @@
           "Finer partitions improve the approximation."
         ],
         "abstract-algebra.groups": [
-          "Example: integers under addition have identity 0.",
-          "Every integer has an additive inverse.",
-          "Those are two of the group rules."
+          "Example: check the integers under addition against all four group rules.",
+          "Closed: 3 + 5 = 8 stays an integer. Identity: adding 0 changes nothing. Inverse: 5 undoes to -5. Associativity holds for addition.",
+          "All four rules pass, so the integers under addition form a group."
         ],
         "abstract-algebra.rings": [
-          "Example: integers have addition and multiplication.",
-          "Multiplication distributes over addition.",
-          "That is part of why integers form a ring."
+          "Example: check the integers with both operations at once.",
+          "Addition behaves like a group, and 3 × (4 + 5) = 3 × 4 + 3 × 5 shows multiplication distributing over addition.",
+          "The two operations cooperate, so the integers form a ring."
         ],
         "abstract-algebra.fields": [
           "Example: rational numbers form a field under usual operations.",
@@ -372,14 +372,84 @@
           "Integers fail this division requirement."
         ],
         "abstract-algebra.homomorphisms": [
-          "Example: an additive homomorphism satisfies f(a + b) = f(a) + f(b).",
-          "It preserves the operation.",
-          "That is what structure-preserving means."
+          "Example: test <math>f(x) = 2x</math> from the integers to the integers.",
+          "Combine first: f(3 + 4) = f(7) = 14. Map first: f(3) + f(4) = 6 + 8 = 14. They agree.",
+          "The operation survives the trip through f, so f is a homomorphism."
         ],
         "abstract-algebra.examples-counterexamples": [
           "Example: positive integers under addition fail to be a group.",
           "The additive inverse of 3 is -3, which is not positive.",
           "The counterexample identifies the failed rule."
+        ],
+        "graph-theory.vertices-edges": [
+          "Example: draw a triangle as a graph: vertices A, B, C and edges AB, BC, CA.",
+          "Count the objects and the connections separately: 3 vertices, 3 edges.",
+          "A graph is exactly that pair — a set of dots and a set of links."
+        ],
+        "graph-theory.degree": [
+          "Example: a star has center C joined to A, B, and D.",
+          "Three edges touch C, so deg(C) = 3.",
+          "Each outer vertex touches one edge, so its degree is 1."
+        ],
+        "graph-theory.paths-cycles": [
+          "Example: walk A to B to C along edges AB and BC.",
+          "The walk uses 2 edges, so the path has length 2.",
+          "Add edge CA and return to the start — that closed route is a cycle."
+        ],
+        "graph-theory.trees": [
+          "Example: the path A - B - C - D is connected and has no cycle, so it is a tree.",
+          "Add edge DA and a loop appears: no longer a tree.",
+          "Remove edge BC instead and it splits in two: also no longer a tree."
+        ],
+        "graph-theory.connectedness": [
+          "Example: vertices A, B, C with edges AB and BC form one piece.",
+          "A reaches C through B, so all three share one component.",
+          "Add an isolated vertex D and the graph now has 2 components."
+        ],
+        "physics.scalars-vectors": [
+          "Example: a car's speed is 60 km/h; its velocity is 60 km/h north.",
+          "Speed answers only how fast, so it is a scalar.",
+          "Velocity adds a direction, so it is a vector."
+        ],
+        "physics.graphs": [
+          "Example: a position-time graph climbs steadily from 0 m to 20 m over 4 s.",
+          "Slope is rise over run: 20 ÷ 4 = 5, so the velocity is 5 m/s.",
+          "A flat stretch would mean zero slope: the object is parked."
+        ],
+        "physics.energy": [
+          "Example: lift a book onto a shelf — work stores gravitational potential energy.",
+          "Knock it off, and the stored energy becomes kinetic energy as it falls.",
+          "Nothing is lost along the way; energy only changes form."
+        ],
+        "physics.oscillations": [
+          "Example: a swing completes one full back-and-forth in 2 seconds.",
+          "That time is the period: T = 2 s.",
+          "Frequency counts cycles per second: f = 1/T = 0.5 Hz."
+        ],
+        "physics.sound": [
+          "Example: a speaker cone vibrates 440 times each second.",
+          "The air is pushed back and forth at 440 Hz — heard as the note A.",
+          "Double the frequency to 880 Hz and the pitch rises one octave."
+        ],
+        "physics.temperature-heat": [
+          "Example: drop a hot spoon into cool water.",
+          "Heat flows from spoon to water until their temperatures meet.",
+          "Temperature described each object; heat was the energy moving between them."
+        ],
+        "physics.charge-fields": [
+          "Example: bring two negative charges together and each feels a push.",
+          "Like signs repel; a positive and a negative would attract instead.",
+          "The field at any spot is the force a small positive test charge would feel there."
+        ],
+        "physics.magnetism": [
+          "Example: point two north poles at each other and they push apart.",
+          "Flip one magnet and the opposite poles pull together.",
+          "A current in a wire adds its own magnetic field: moving charge is the source."
+        ],
+        "physics.quantum": [
+          "Example: an electron in an atom can sit at energy level 1 or level 2, but nowhere between.",
+          "To jump levels it absorbs or emits one photon carrying exactly the difference.",
+          "Discrete steps replace the smooth ramp classical physics expected."
         ]
       };
     
