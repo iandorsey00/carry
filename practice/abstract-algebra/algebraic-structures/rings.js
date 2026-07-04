@@ -63,6 +63,106 @@
           "label": "No"
         }
       ]
+    },
+    {
+      "prompt": "In a ring, which operation must distribute over the other?",
+      "answer": "multiplication over addition",
+      "answers": [
+        "multiplication over addition",
+        "multiplication"
+      ],
+      "hint": "The rule reads a(b + c) = ab + ac.",
+      "label": "distribution direction",
+      "choices": [
+        {
+          "value": "multiplication over addition",
+          "label": "multiplication over addition"
+        },
+        {
+          "value": "addition over multiplication",
+          "label": "addition over multiplication"
+        }
+      ]
+    },
+    {
+      "prompt": "Is subtraction always possible inside a ring?",
+      "answer": "yes",
+      "answers": [
+        "yes",
+        "true"
+      ],
+      "hint": "Additive inverses exist, so a - b means a + (-b).",
+      "label": "ring subtraction",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "Must division by every nonzero element work in a ring?",
+      "answer": "no",
+      "answers": [
+        "no",
+        "false"
+      ],
+      "hint": "That extra requirement is exactly what upgrades a ring to a field.",
+      "label": "ring division",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "In the integers, do 3 × (4 + 5) and 3 × 4 + 3 × 5 give the same result?",
+      "answer": "yes",
+      "answers": [
+        "yes",
+        "true"
+      ],
+      "hint": "Both equal 27; that agreement is distribution at work.",
+      "label": "distribution check",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "Which set is a ring: the integers or the positive integers?",
+      "answer": "integers",
+      "answers": [
+        "integers",
+        "the integers"
+      ],
+      "hint": "Positive integers have no additive inverses.",
+      "label": "ring example",
+      "choices": [
+        {
+          "value": "integers",
+          "label": "the integers"
+        },
+        {
+          "value": "positive integers",
+          "label": "the positive integers"
+        }
+      ]
     }
   ]
 };

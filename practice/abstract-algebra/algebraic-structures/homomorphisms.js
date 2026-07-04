@@ -72,6 +72,129 @@
           "label": "No"
         }
       ]
+    },
+    {
+      "prompt": "For f(x) = 2x on the integers, what is f(3 + 4)?",
+      "answer": "14",
+      "answers": [
+        "14"
+      ],
+      "hint": "Add first to get 7, then apply f.",
+      "label": "evaluate homomorphism",
+      "choices": [
+        {
+          "value": "14",
+          "label": "14"
+        },
+        {
+          "value": "7",
+          "label": "7"
+        },
+        {
+          "value": "12",
+          "label": "12"
+        },
+        {
+          "value": "24",
+          "label": "24"
+        }
+      ]
+    },
+    {
+      "prompt": "For an additive homomorphism f, what is f(0)?",
+      "answer": "0",
+      "answers": [
+        "0",
+        "zero"
+      ],
+      "hint": "Since 0 + 0 = 0, applying f forces f(0) + f(0) = f(0).",
+      "label": "identity image",
+      "choices": [
+        {
+          "value": "0",
+          "label": "0"
+        },
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "-1",
+          "label": "-1"
+        }
+      ]
+    },
+    {
+      "prompt": "Is g(x) = x + 1 an additive homomorphism on the integers?",
+      "answer": "no",
+      "answers": [
+        "no",
+        "false"
+      ],
+      "hint": "Test it: g(0 + 0) = 1, but g(0) + g(0) = 2.",
+      "label": "shift not homomorphism",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "A homomorphism that is also a bijection is called what?",
+      "answer": "isomorphism",
+      "answers": [
+        "isomorphism",
+        "an isomorphism"
+      ],
+      "hint": "Two structures connected this way are the same up to renaming.",
+      "label": "isomorphism name",
+      "choices": [
+        {
+          "value": "isomorphism",
+          "label": "an isomorphism"
+        },
+        {
+          "value": "permutation",
+          "label": "a permutation"
+        },
+        {
+          "value": "identity map",
+          "label": "an identity map"
+        },
+        {
+          "value": "inverse",
+          "label": "an inverse"
+        }
+      ]
+    },
+    {
+      "prompt": "Must a group homomorphism send the identity to the identity?",
+      "answer": "yes",
+      "answers": [
+        "yes",
+        "true"
+      ],
+      "hint": "Preserving the operation leaves the identity nowhere else to go.",
+      "label": "identity preserved",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     }
   ]
 };

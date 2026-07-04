@@ -78,6 +78,123 @@
           "label": "No"
         }
       ]
+    },
+    {
+      "prompt": "To disprove a claim about every group, how many failing examples do you need?",
+      "answer": "1",
+      "answers": [
+        "1",
+        "one"
+      ],
+      "hint": "A universal claim collapses at a single failure.",
+      "label": "one counterexample",
+      "choices": [
+        {
+          "value": "1",
+          "label": "one"
+        },
+        {
+          "value": "2",
+          "label": "two"
+        },
+        {
+          "value": "all",
+          "label": "all of them"
+        },
+        {
+          "value": "most",
+          "label": "most of them"
+        }
+      ]
+    },
+    {
+      "prompt": "Is the set {0, 1, 2} closed under usual addition?",
+      "answer": "no",
+      "answers": [
+        "no",
+        "false"
+      ],
+      "hint": "Try 1 + 2 and see whether the result stays in the set.",
+      "label": "closure counterexample",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "To show a definition can be satisfied, what is the most direct evidence?",
+      "answer": "example",
+      "answers": [
+        "example",
+        "an example",
+        "one example"
+      ],
+      "hint": "Existence is settled by an exhibit.",
+      "label": "existence evidence",
+      "choices": [
+        {
+          "value": "example",
+          "label": "one concrete example"
+        },
+        {
+          "value": "restated definition",
+          "label": "restating the definition"
+        }
+      ]
+    },
+    {
+      "prompt": "Are the nonzero rational numbers a group under multiplication?",
+      "answer": "yes",
+      "answers": [
+        "yes",
+        "true"
+      ],
+      "hint": "Every nonzero fraction has a reciprocal, and products of nonzero fractions stay nonzero.",
+      "label": "rational multiplicative group",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "The integers under multiplication fail to be a group. Which rule breaks?",
+      "answer": "inverses",
+      "answers": [
+        "inverses",
+        "missing inverses"
+      ],
+      "hint": "2 times what integer gives 1?",
+      "label": "integer multiplication failure",
+      "choices": [
+        {
+          "value": "inverses",
+          "label": "inverses"
+        },
+        {
+          "value": "closure",
+          "label": "closure"
+        },
+        {
+          "value": "associativity",
+          "label": "associativity"
+        },
+        {
+          "value": "identity",
+          "label": "identity"
+        }
+      ]
     }
   ]
 };

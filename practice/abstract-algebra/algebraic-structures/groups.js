@@ -160,6 +160,54 @@
           "label": "element"
         }
       ]
+    },
+    {
+      "prompt": "In the group of integers under addition, what is 7 + (-7)?",
+      "answer": "0",
+      "answers": [
+        "0",
+        "zero"
+      ],
+      "hint": "An element plus its inverse returns the identity.",
+      "label": "inverse cancellation",
+      "choices": [
+        {
+          "value": "0",
+          "label": "0"
+        },
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "14",
+          "label": "14"
+        },
+        {
+          "value": "-14",
+          "label": "-14"
+        }
+      ]
+    },
+    {
+      "prompt": "Is subtraction on the integers associative?",
+      "answer": "no",
+      "answers": [
+        "no",
+        "false"
+      ],
+      "hint": "Compare (2 - 3) - 4 with 2 - (3 - 4).",
+      "label": "subtraction associativity",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     }
   ]
 };
