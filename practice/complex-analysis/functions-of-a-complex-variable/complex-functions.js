@@ -60,6 +60,58 @@
           { value: "2i", label: "2i" },
           { value: "3 + 2i", label: "3 + 2i" }
         ]
+      },
+      {
+        prompt: "Compute (3 + 4i) + (2 - i).",
+        answer: "5+3i",
+        answers: ["5+3i", "5 + 3i"],
+        hint: "Add real parts and imaginary parts separately.",
+        label: "complex addition",
+        choices: [
+          { value: "5+3i", label: "5 + 3i" },
+          { value: "5+5i", label: "5 + 5i" },
+          { value: "1+5i", label: "1 + 5i" },
+          { value: "6-4i", label: "6 - 4i" }
+        ]
+      },
+      {
+        prompt: "What is i^4?",
+        answer: "1",
+        answers: ["1", "one"],
+        hint: "i^2 = -1, and squaring -1 gives 1.",
+        label: "powers of i",
+        choices: [
+          { value: "1", label: "1" },
+          { value: "-1", label: "-1" },
+          { value: "i", label: "i" },
+          { value: "-i", label: "-i" }
+        ]
+      },
+      {
+        prompt: "What is the complex conjugate of 3 + 2i?",
+        answer: "3-2i",
+        answers: ["3-2i", "3 - 2i"],
+        hint: "Keep the real part and flip the sign of the imaginary part.",
+        label: "conjugate",
+        choices: [
+          { value: "3-2i", label: "3 - 2i" },
+          { value: "-3+2i", label: "-3 + 2i" },
+          { value: "-3-2i", label: "-3 - 2i" },
+          { value: "2+3i", label: "2 + 3i" }
+        ]
+      },
+      {
+        prompt: "What is the modulus of 3 + 4i?",
+        answer: "5",
+        answers: ["5", "five"],
+        hint: "Use Pythagoras on the parts: the square root of 9 + 16.",
+        label: "modulus",
+        choices: [
+          { value: "5", label: "5" },
+          { value: "7", label: "7" },
+          { value: "12", label: "12" },
+          { value: "25", label: "25" }
+        ]
       }
     ]
   };

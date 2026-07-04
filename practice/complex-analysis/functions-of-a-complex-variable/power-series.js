@@ -61,6 +61,54 @@
           { value: "truth value", label: "a truth value" },
           { value: "triangle angle", label: "a triangle angle" }
         ]
+      },
+      {
+        prompt: "The geometric series 1 + z + z^2 + ... converges when |z| is less than what?",
+        answer: "1",
+        answers: ["1", "one"],
+        hint: "Same rule as the real geometric series: the ratio must stay small.",
+        label: "geometric radius",
+        choices: [
+          { value: "1", label: "1" },
+          { value: "2", label: "2" },
+          { value: "π", label: "π" },
+          { value: "any value", label: "any value" }
+        ]
+      },
+      {
+        prompt: "A power series centered at 0 converges for |z| < 3. Does it converge at z = 2i?",
+        answer: "yes",
+        answers: ["yes", "true"],
+        hint: "The modulus of 2i is 2, which is inside the disk of radius 3.",
+        label: "inside the disk",
+        choices: [
+          { value: "yes", label: "Yes" },
+          { value: "no", label: "No" }
+        ]
+      },
+      {
+        prompt: "Inside its disk of convergence, can a power series be differentiated term by term?",
+        answer: "yes",
+        answers: ["yes", "true"],
+        hint: "Inside the disk it behaves like a polynomial with infinitely many terms.",
+        label: "term by term",
+        choices: [
+          { value: "yes", label: "Yes" },
+          { value: "no", label: "No" }
+        ]
+      },
+      {
+        prompt: "What is the radius of convergence of the power series for e^z?",
+        answer: "infinite",
+        answers: ["infinite", "infinity", "∞"],
+        hint: "e^z is entire, so its series works everywhere.",
+        label: "entire radius",
+        choices: [
+          { value: "infinite", label: "infinite" },
+          { value: "1", label: "1" },
+          { value: "2π", label: "2π" },
+          { value: "0", label: "0" }
+        ]
       }
     ]
   };

@@ -61,6 +61,54 @@
           { value: "yes", label: "Yes" },
           { value: "no", label: "No" }
         ]
+      },
+      {
+        prompt: "Is the conjugate map f(z) = x - iy analytic?",
+        answer: "no",
+        answers: ["no", "false"],
+        hint: "It fails the Cauchy-Riemann equations at every point.",
+        label: "conjugate not analytic",
+        choices: [
+          { value: "yes", label: "Yes" },
+          { value: "no", label: "No" }
+        ]
+      },
+      {
+        prompt: "Entire means analytic on how much of the complex plane?",
+        answer: "all of it",
+        answers: ["all of it", "all", "the whole plane", "everywhere"],
+        hint: "Entire functions have no bad points anywhere.",
+        label: "entire meaning",
+        choices: [
+          { value: "all of it", label: "all of it" },
+          { value: "an open disk", label: "an open disk" },
+          { value: "a closed disk", label: "a closed disk" },
+          { value: "the real axis", label: "just the real axis" }
+        ]
+      },
+      {
+        prompt: "Is every polynomial in z entire?",
+        answer: "yes",
+        answers: ["yes", "true"],
+        hint: "Polynomials are complex differentiable at every point of the plane.",
+        label: "polynomials entire",
+        choices: [
+          { value: "yes", label: "Yes" },
+          { value: "no", label: "No" }
+        ]
+      },
+      {
+        prompt: "Where does f(z) = 1/(z - 2) fail to be analytic?",
+        answer: "z = 2",
+        answers: ["z = 2", "z=2", "2"],
+        hint: "Look for the point where the denominator vanishes.",
+        label: "locate singularity",
+        choices: [
+          { value: "z = 2", label: "z = 2" },
+          { value: "z = 0", label: "z = 0" },
+          { value: "z = -2", label: "z = -2" },
+          { value: "nowhere", label: "nowhere" }
+        ]
       }
     ]
   };

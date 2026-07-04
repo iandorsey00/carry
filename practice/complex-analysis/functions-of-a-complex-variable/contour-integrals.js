@@ -61,6 +61,54 @@
           { value: "partial", label: "∂" },
           { value: "forall", label: "∀" }
         ]
+      },
+      {
+        prompt: "If a function is analytic everywhere inside and on a closed contour, what is the contour integral?",
+        answer: "0",
+        answers: ["0", "zero"],
+        hint: "That is Cauchy's integral theorem.",
+        label: "cauchy theorem",
+        choices: [
+          { value: "0", label: "0" },
+          { value: "1", label: "1" },
+          { value: "2πi", label: "2πi" },
+          { value: "undefined", label: "undefined" }
+        ]
+      },
+      {
+        prompt: "What is the integral of 1/z once counterclockwise around the unit circle?",
+        answer: "2πi",
+        answers: ["2πi", "2 pi i", "2pii", "2i pi"],
+        hint: "The one value every complex analyst memorizes first.",
+        label: "unit circle integral",
+        choices: [
+          { value: "2πi", label: "2πi" },
+          { value: "0", label: "0" },
+          { value: "1", label: "1" },
+          { value: "πi", label: "πi" }
+        ]
+      },
+      {
+        prompt: "Does the direction of travel around a closed contour matter?",
+        answer: "yes",
+        answers: ["yes", "true"],
+        hint: "Reversing the orientation flips the sign of the integral.",
+        label: "orientation",
+        choices: [
+          { value: "yes", label: "Yes" },
+          { value: "no", label: "No" }
+        ]
+      },
+      {
+        prompt: "A path from 1 to i that stops there: is it a closed contour?",
+        answer: "no",
+        answers: ["no", "false"],
+        hint: "Closed means the path ends exactly where it began.",
+        label: "open path",
+        choices: [
+          { value: "yes", label: "Yes" },
+          { value: "no", label: "No" }
+        ]
       }
     ]
   };

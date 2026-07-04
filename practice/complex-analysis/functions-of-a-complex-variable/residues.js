@@ -63,6 +63,58 @@
           { value: "coefficient of z-a", label: "coefficient of z - a" },
           { value: "largest exponent", label: "largest exponent" }
         ]
+      },
+      {
+        prompt: "What is the residue of 1/z at z = 0?",
+        answer: "1",
+        answers: ["1", "one"],
+        hint: "1/z is already a Laurent series; read off the coefficient of 1/z.",
+        label: "basic residue",
+        choices: [
+          { value: "1", label: "1" },
+          { value: "0", label: "0" },
+          { value: "2πi", label: "2πi" },
+          { value: "-1", label: "-1" }
+        ]
+      },
+      {
+        prompt: "What is the residue of 3/(z - 5) at z = 5?",
+        answer: "3",
+        answers: ["3", "three"],
+        hint: "For a simple pole a/(z - c), the residue is a.",
+        label: "simple pole residue",
+        choices: [
+          { value: "3", label: "3" },
+          { value: "5", label: "5" },
+          { value: "0", label: "0" },
+          { value: "1/3", label: "1/3" }
+        ]
+      },
+      {
+        prompt: "The residue theorem multiplies the sum of residues by what factor?",
+        answer: "2πi",
+        answers: ["2πi", "2 pi i", "2pii"],
+        hint: "The same 2πi that comes from integrating 1/z around a circle.",
+        label: "residue factor",
+        choices: [
+          { value: "2πi", label: "2πi" },
+          { value: "π", label: "π" },
+          { value: "i", label: "i" },
+          { value: "2", label: "2" }
+        ]
+      },
+      {
+        prompt: "If a function has no singularities inside a closed contour, what does the residue theorem give?",
+        answer: "0",
+        answers: ["0", "zero"],
+        hint: "No singularities inside means no residues to sum.",
+        label: "empty residue sum",
+        choices: [
+          { value: "0", label: "0" },
+          { value: "1", label: "1" },
+          { value: "2πi", label: "2πi" },
+          { value: "undefined", label: "undefined" }
+        ]
       }
     ]
   };
