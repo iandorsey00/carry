@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "linear-eigenvalues",
   "intro": [
-    "An eigenvector keeps its direction under a transformation.",
-    "The eigenvalue tells how much that eigenvector is scaled.",
-    "Eigenvectors reveal stable directions inside a linear transformation."
-  ],
+    "Most vectors get knocked off course by a transformation — eigenvectors are the stubborn ones that keep their direction.",
+    "Each stubborn direction comes with a number, its eigenvalue: how much the transformation stretches or shrinks along it.",
+    "In symbols, <math>Av = λv</math>: matrix times vector equals a plain number times the same vector."
+],
   "problems": [
     {
       "prompt": "If A v = 3v, what is the eigenvalue?",

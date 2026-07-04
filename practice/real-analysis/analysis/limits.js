@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "real-limits",
   "intro": [
-    "A function limit describes output behavior near an input.",
-    "The function does not need to equal the limiting value at the point.",
-    "Epsilon-delta language makes the idea of getting close precise."
-  ],
+    "Real analysis takes the limit idea calculus relies on and makes it airtight enough to survive any challenge.",
+    "The value at the point is deliberately ignored: only nearby behavior counts, which is why a hole cannot break a limit.",
+    "Epsilon-delta is tolerance language: for every output tolerance ε, some input tolerance δ must deliver it."
+],
   "problems": [
     {
       "prompt": "As x approaches 3, what does 2x approach?",

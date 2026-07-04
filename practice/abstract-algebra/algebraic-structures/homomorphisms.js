@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "abstract-homomorphisms",
   "intro": [
-    "A homomorphism is a structure-preserving map.",
-    "It sends a combined input to the corresponding combination of outputs.",
-    "Homomorphisms let you compare algebraic systems without ignoring their operations."
-  ],
+    "A homomorphism is a translation between two algebraic worlds that never garbles the grammar.",
+    "The test: combine then translate, or translate then combine — the results must agree, as in <math>f(a + b) = f(a) + f(b)</math>.",
+    "Logarithms pass the test by turning multiplication into addition; that is why slide rules ever worked."
+],
   "problems": [
     {
       "prompt": "A homomorphism is a map that preserves what?",

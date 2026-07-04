@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "abstract-examples",
   "intro": [
-    "Examples show that a definition can be satisfied.",
-    "Counterexamples show exactly where a proposed claim fails.",
-    "In abstract algebra, checking the operation is just as important as checking the set."
-  ],
+    "In abstract algebra, claims live or die by exhibits: an example proves something is possible, a counterexample proves a claim false.",
+    "Always name the set and the operation before judging — the same set can succeed with one operation and fail with another.",
+    "One failed rule is enough to reject a structure, so good counterexamples aim at the weakest promise."
+],
   "problems": [
     {
       "prompt": "Under usual addition, give an example of an integer identity element.",

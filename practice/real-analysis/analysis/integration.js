@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "real-integration",
   "intro": [
-    "Integration can be defined through sums over partitions.",
-    "A partition cuts an interval into smaller pieces.",
-    "Riemann sums approximate area, and the integral is the limiting value when the mesh becomes fine."
-  ],
+    "Riemann integration answers 'how much area?' with a process honest enough to prove things about.",
+    "Cut the interval, build rectangles, add them up — then refine the cuts and watch the totals converge.",
+    "The integral is the number all sufficiently fine partitions agree on; when they cannot agree, the function is not integrable."
+],
   "problems": [
     {
       "prompt": "A partition divides an interval into smaller what?",

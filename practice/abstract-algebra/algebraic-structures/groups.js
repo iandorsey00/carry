@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "abstract-groups",
   "intro": [
-    "A group is a set with one operation that follows specific rules.",
-    "The operation must be closed, associative, have an identity, and give every element an inverse.",
-    "Groups abstract symmetry, addition, and modular arithmetic."
-  ],
+    "A group is the mathematics of moves that can be undone — rotations, shuffles, additions — studied apart from what is being moved.",
+    "Four promises make it work: combining stays inside the set, grouping does not matter, one move does nothing, and every move reverses.",
+    "The integers under addition keep all four promises; so do the symmetries of any shape. One theory covers both."
+],
   "problems": [
     {
       "prompt": "Under addition, what is the identity element for integers?",

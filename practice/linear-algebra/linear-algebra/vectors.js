@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "linear-vectors",
   "intro": [
-    "A vector has both size and direction.",
-    "In coordinates, vectors add component by component.",
-    "Scalar multiplication stretches, shrinks, or reverses a vector."
-  ],
+    "A vector answers two questions at once: how much, and which way.",
+    "Written in coordinates it becomes pure arithmetic: add component by component, scale every component together.",
+    "The same object works as an arrow in space or as any ordered list of numbers — that double life is the point."
+],
   "problems": [
     {
       "prompt": "Add the vectors (2, 3) + (4, 1).",

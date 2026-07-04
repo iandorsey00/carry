@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "calc-limits",
   "intro": [
-    "A limit describes what a value approaches.",
-    "The input can get close to a number without being exactly there.",
-    "Limits are the foundation for derivatives, integrals, and continuity."
-  ],
+    "A limit is a destination: not where the function is, but where its outputs are heading.",
+    "That distinction lets calculus work at points a formula cannot touch — which is exactly what instantaneous speed requires.",
+    "Derivatives, integrals, and continuity are all limits in costume; this one idea is the foundation under all three."
+],
   "problems": [
     {
       "prompt": "As x approaches 2, what does x + 3 approach?",

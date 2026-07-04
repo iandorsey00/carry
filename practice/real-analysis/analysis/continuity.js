@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "real-continuity",
   "intro": [
-    "Continuity means the function value matches the limiting value.",
-    "A function can fail continuity through a hole, jump, or vertical blow-up.",
-    "On intervals, continuity supports powerful existence theorems."
-  ],
+    "A continuous function keeps its promises locally: small changes in input can only cause small changes in output.",
+    "The precise test is a match — the limit of the outputs equals the actual value <math>f(a)</math> — and holes, jumps, and blow-ups each break it differently.",
+    "On a closed interval, continuity buys real theorems: in-between values must be hit, and a maximum must exist."
+],
   "problems": [
     {
       "prompt": "If lim f(x) as x approaches a equals f(a), is f continuous at a?",

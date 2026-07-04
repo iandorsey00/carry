@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "abstract-fields",
   "intro": [
-    "A field is a number system where addition, subtraction, multiplication, and division work well.",
-    "Every nonzero element has a multiplicative inverse.",
-    "The rational, real, and complex numbers are standard examples of fields."
-  ],
+    "A field is a number system with no dead ends: add, subtract, multiply, or divide by anything but zero, and you stay inside.",
+    "That last freedom — division — is what separates fields from rings, and the integers fail it: 1/2 is not an integer.",
+    "The rationals, reals, and complex numbers are the classic fields; finite fields power error correction and cryptography."
+],
   "problems": [
     {
       "prompt": "In a field, does every nonzero element have a multiplicative inverse?",

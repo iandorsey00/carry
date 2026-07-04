@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "linear-determinants",
   "intro": [
-    "A determinant describes how a matrix scales area or volume.",
-    "A zero determinant means the transformation flattens space.",
-    "For a 2 by 2 matrix, the determinant is ad - bc."
-  ],
+    "The determinant compresses a whole transformation into one number: the factor by which it scales area or volume.",
+    "A negative value means the transformation also flips orientation; zero means space was flattened and information was lost.",
+    "For a 2 × 2 matrix the number is ad - bc, and the matrix is invertible exactly when it is not zero."
+],
   "problems": [
     {
       "prompt": "For [[2, 0], [0, 3]], what is the determinant?",

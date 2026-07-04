@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "real-sets",
   "intro": [
-    "Real analysis uses sets to say exactly which numbers are under discussion.",
-    "An interval contains every real number between its endpoints.",
-    "Bounds describe whether a set stays below, above, or inside a range."
-  ],
+    "Analysis begins by saying exactly which numbers are on the table — and intervals are its favorite way of saying it.",
+    "The brackets carry real information: [2, 5] owns its endpoints, while (2, 5) only approaches them.",
+    "Bounds, suprema, and open versus closed all grow from this endpoint bookkeeping, and major theorems turn on it."
+],
   "problems": [
     {
       "prompt": "Does the interval [2, 5] include 2?",

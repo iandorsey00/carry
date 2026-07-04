@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "real-sequences",
   "intro": [
-    "A sequence is a list of numbers indexed by positive integers.",
-    "Convergence means the terms eventually stay close to one value.",
-    "The tail of a sequence matters more than its first few terms."
-  ],
+    "A sequence is an infinite to-do list of numbers, and analysis asks it one question: does it settle down?",
+    "Convergence is entirely about the tail — the first million terms may misbehave if the rest commit to the limit.",
+    "Formally: for every ε, beyond some index N, every term stays within ε of the limit."
+],
   "problems": [
     {
       "prompt": "What number does the sequence 1/n approach?",

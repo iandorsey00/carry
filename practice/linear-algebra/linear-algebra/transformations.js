@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "linear-transformations",
   "intro": [
-    "A linear transformation sends vectors to vectors.",
-    "Matrices can represent linear transformations.",
-    "Scaling, rotation, reflection, and shear are common geometric examples."
-  ],
+    "A linear transformation moves every point of the plane in one coordinated sweep: rotations, reflections, stretches, and shears.",
+    "Linearity is a fairness rule: lines stay lines, the origin stays put, and scaling before or after the map gives the same result.",
+    "Because of that rule, a matrix holding the images of the basis vectors captures the entire transformation."
+],
   "problems": [
     {
       "prompt": "The transformation T(x, y) = (2x, 2y) does what to lengths?",

@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "calc-derivatives",
   "intro": [
-    "A derivative measures instantaneous rate of change.",
-    "On a graph, the derivative is the slope of the tangent line.",
-    "Power rules make many polynomial derivatives quick to compute."
-  ],
+    "The derivative answers the question 'how fast, right now?' — the instantaneous rate hiding inside any changing quantity.",
+    "Graphically it is the slope of the tangent line: zoom in far enough and every smooth curve looks straight.",
+    "For powers the rule is mechanical — bring the exponent down, lower it by one — so <math>x^2</math> has derivative <math>2x</math>."
+],
   "problems": [
     {
       "prompt": "Find the derivative of x^2.",

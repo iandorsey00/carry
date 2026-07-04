@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "linear-vector-spaces",
   "intro": [
-    "A vector space is a set where vectors can be added and scaled.",
-    "A span contains every linear combination of chosen vectors.",
-    "A basis spans the space without redundant vectors."
-  ],
+    "A vector space is anywhere the rules of adding and scaling hold — arrows, polynomials, signals, and datasets all qualify.",
+    "The span of some vectors is everything you can reach by combining them; a basis reaches everything with no redundancy.",
+    "The size of a basis is the dimension: how many independent numbers a description truly needs."
+],
   "problems": [
     {
       "prompt": "Do the vectors (1, 0) and (0, 1) span the plane?",

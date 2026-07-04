@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "real-differentiation",
   "intro": [
-    "Differentiability is a precise version of having a tangent slope.",
-    "The derivative is defined by a limit of difference quotients.",
-    "Differentiability implies continuity, but continuity alone is not enough."
-  ],
+    "Differentiability asks more of a function than continuity: not just an unbroken graph, but a well-defined slope at the point.",
+    "The slope is a limit of difference quotients — average rates over shrinking intervals converging to one number.",
+    "Every differentiable function is continuous, but corners like <math>|x|</math> at 0 prove the reverse is false."
+],
   "problems": [
     {
       "prompt": "If a function is differentiable at a point, is it continuous there?",

@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "calc-series",
   "intro": [
-    "A sequence lists terms; a series adds them.",
-    "Partial sums show how much has accumulated so far.",
-    "Some infinite series settle toward a finite value."
-  ],
+    "A series dares to add infinitely many numbers — and sometimes the total is an ordinary finite value.",
+    "The trick is to watch partial sums: add the first few terms and see whether the running total settles or runs away.",
+    "Geometric series settle exactly when the ratio stays strictly between -1 and 1; that single test powers many others."
+],
   "problems": [
     {
       "prompt": "What is the next term in 1/2, 1/4, 1/8?",

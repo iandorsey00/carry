@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "linear-matrices",
   "intro": [
-    "A matrix is a rectangular array of numbers.",
-    "Rows run horizontally and columns run vertically.",
-    "Matrix-vector multiplication combines columns according to the vector entries."
-  ],
+    "A matrix is a machine for moving many numbers at once: one grid that acts on a whole vector in a single step.",
+    "Its shape reads rows first — a 2 × 3 matrix has 2 rows and 3 columns — and entry positions work the same way.",
+    "Multiplying a matrix by a vector mixes the matrix's columns, using the vector's entries as the recipe."
+],
   "problems": [
     {
       "prompt": "A matrix with 2 rows and 3 columns has what size?",

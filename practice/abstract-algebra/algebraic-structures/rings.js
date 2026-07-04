@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "abstract-rings",
   "intro": [
-    "A ring has two operations, usually called addition and multiplication.",
-    "Addition behaves like an abelian group.",
-    "Multiplication distributes over addition."
-  ],
+    "A ring is a world where addition and multiplication live together, modeled on the integers that inspired it.",
+    "Addition behaves like a group on its own; multiplication is bound to it by the distributive law <math>a(b + c) = ab + ac</math>.",
+    "Polynomials, matrices, and integers mod n all form rings — prove something once and it works everywhere."
+],
   "problems": [
     {
       "prompt": "How many operations does a ring have?",

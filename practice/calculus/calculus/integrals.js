@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "calc-integrals",
   "intro": [
-    "An integral accumulates change.",
-    "Definite integrals can measure area under a curve.",
-    "Antiderivatives reverse derivatives and include a constant."
-  ],
+    "An integral is a total assembled from countless tiny contributions: distance from speed, area from height, mass from density.",
+    "The definite integral measures the amount accumulated between two endpoints; on a graph, that is the area under the curve.",
+    "Antiderivatives run derivatives backwards and always carry the constant C, because a constant leaves no trace in a rate."
+],
   "problems": [
     {
       "prompt": "What is an antiderivative of 2x?",

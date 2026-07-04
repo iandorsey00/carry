@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "calc-applications",
   "intro": [
-    "Calculus connects formulas to motion, growth, area, and optimization.",
-    "Derivatives turn position into velocity and reveal local change.",
-    "Integrals turn rates into accumulated totals."
-  ],
+    "Calculus earns its keep by answering two everyday questions: how fast is this changing, and how much has piled up?",
+    "Derivatives turn position into velocity and find the peaks and valleys where the best answers live.",
+    "Integrals run the other way, turning rates into totals — and the two operations undo each other."
+],
   "problems": [
     {
       "prompt": "If s(t) = t^2, what is the velocity at t = 3?",
