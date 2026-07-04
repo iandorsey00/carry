@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "set-subsets",
   "intro": [
-    "A subset sits entirely inside another set.",
-    "<math>A</math> is a subset of <math>B</math> if every element of <math>A</math> is also in <math>B</math>.",
-    "The power set contains every subset of a set, including the empty set."
-  ],
+    "A subset is a set living entirely inside another — every one of its members already belongs to the larger set.",
+    "The test is universal: check every element of <math>A</math> for membership in <math>B</math>, because one stray element ruins it.",
+    "Collect all subsets of a set and you get its power set, the empty set and the whole set included."
+],
   "problems": [
     {
       "prompt": "Is <math>{1, 2}</math> a subset of <math>{1, 2, 3}</math>?",

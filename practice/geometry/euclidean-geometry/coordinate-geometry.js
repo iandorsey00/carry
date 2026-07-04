@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "geometry-coordinate",
   "intro": [
-    "Coordinate geometry studies shapes using points on a grid.",
-    "Horizontal distance comes from the x-values.",
-    "Vertical distance comes from the y-values."
-  ],
+    "Coordinate geometry gives every point a name — two numbers — so shapes can be measured by arithmetic.",
+    "Horizontal questions read the x-values, vertical questions read the y-values, and distance combines both by Pythagoras.",
+    "Once shapes are numbers, algebra and geometry become the same subject working two shifts."
+],
   "problems": [
     {
       "prompt": "What is the horizontal distance from (1, 2) to (5, 2)?",

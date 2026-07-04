@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "set-functions",
   "intro": [
-    "A function is a relation with exactly one output for each allowed input.",
-    "The domain is the set of inputs.",
-    "The codomain is the set where outputs are allowed to land."
-  ],
+    "Among relations, functions are the disciplined ones: each input is paired with exactly one output.",
+    "The domain says which inputs are allowed; the codomain says where outputs are permitted to land.",
+    "That one-output discipline is why functions can be composed, inverted, and computed with confidence."
+],
   "problems": [
     {
       "prompt": "Can one input of a function have two different outputs?",

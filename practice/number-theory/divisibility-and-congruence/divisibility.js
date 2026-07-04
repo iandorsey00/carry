@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "number-divisibility",
   "intro": [
-    "A number divides another number when there is no remainder.",
-    "Divisibility turns multiplication facts into structure.",
-    "The notation a | b means a divides b."
-  ],
+    "Divisibility is the whole numbers' idea of a perfect fit: a divides b when nothing is left over.",
+    "Every divisibility fact is a multiplication fact in reverse: 4 divides 20 because 20 = 4 × 5.",
+    "The bar notation <math>a | b</math> says a divides b — the quiet backbone of factors, primes, and remainders."
+],
   "problems": [
     {
       "prompt": "Does 4 divide 20?",

@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "precalc-polynomial-rational",
   "intro": [
-    "Polynomials are built from powers of x with number coefficients.",
-    "The degree is the highest power with a nonzero coefficient.",
-    "Rational functions are ratios of polynomials and may have restrictions."
-  ],
+    "Polynomials are the smoothest functions arithmetic can build: powers of x, scaled and added.",
+    "The degree — the highest power present — sets the personality: how many roots, turns, and end behaviors are possible.",
+    "Divide two polynomials and you get a rational function, which stays smooth except where the denominator hits zero."
+],
   "problems": [
     {
       "prompt": "What is the degree of p(x) = 4x^3 - x + 8?",

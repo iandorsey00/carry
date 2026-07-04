@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "number-congruences",
   "intro": [
-    "A congruence says two numbers have the same remainder.",
-    "The notation a ≡ b mod n means n divides a - b.",
-    "Congruences let equations be solved in remainder systems."
-  ],
+    "A congruence is an equation for remainder worlds: <math>a ≡ b mod n</math> says a and b agree where it counts.",
+    "Two equivalent readings: they leave the same remainder on division by n, or n divides their difference.",
+    "Congruences can be added and multiplied like ordinary equations, which is what makes remainder algebra possible."
+],
   "problems": [
     {
       "prompt": "Is 17 ≡ 2 mod 5?",

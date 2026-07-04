@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "geometry-triangle",
   "intro": [
-    "Every triangle has three sides and three angles.",
-    "The three interior angles of a triangle add to 180 degrees.",
-    "Equal side lengths usually create equal angle relationships."
-  ],
+    "The triangle is geometry's sturdiest object: three sides lock its shape, and its angles obey one unbreakable rule.",
+    "Inside every triangle the three angles total exactly 180° — no exceptions, whatever the shape or size.",
+    "Sides and angles mirror each other: equal sides sit opposite equal angles."
+],
   "problems": [
     {
       "prompt": "A triangle has angles 60 degrees and 70 degrees. What is the third angle?",

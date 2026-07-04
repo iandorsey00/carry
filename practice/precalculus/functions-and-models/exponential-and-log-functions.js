@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "precalc-exponential-log",
   "intro": [
-    "Exponential functions use the input as an exponent.",
-    "Logarithms undo exponentials.",
-    "A logarithm asks which exponent creates a given value."
-  ],
+    "Exponential growth is multiplication on a schedule: each step multiplies again, which is why it starts slow and ends enormous.",
+    "The logarithm is the same relationship read backwards: it recovers the exponent from the result.",
+    "In symbols they undo each other: <math>2^x = 8</math> exactly when <math>\\log_2 8 = x</math>."
+],
   "problems": [
     {
       "prompt": "What is 2^3?",

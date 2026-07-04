@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "geometry-circle",
   "intro": [
-    "The radius runs from the center of a circle to its edge.",
-    "The diameter runs all the way across through the center.",
-    "Circumference is the distance around the circle."
-  ],
+    "A circle is perfect fairness: every point on it keeps exactly the same distance — the radius — from the center.",
+    "That one distance controls everything else: the diameter is twice it, and the circumference is π times the diameter.",
+    "Formally, <math>C = πd</math> and <math>A = πr^2</math> — the same π in both, for every circle ever drawn."
+],
   "problems": [
     {
       "prompt": "A circle has radius 4. What is its diameter?",

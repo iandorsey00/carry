@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "trig-unit-circle",
   "intro": [
-    "The unit circle has radius 1 and center at the origin.",
-    "A point on the unit circle has coordinates (cos θ, sin θ).",
-    "Special angles give exact values that are used throughout trigonometry."
-  ],
+    "The unit circle is trigonometry's master diagram: one circle of radius 1 that stores every sine and cosine at once.",
+    "Walk an angle θ around from the positive x-axis and your landing point is exactly <math>(\\cos θ, \\sin θ)</math>.",
+    "Special angles land on exact coordinates, which is where memorable values like 1/2 and <math>\\frac{\\sqrt{2}}{2}</math> come from."
+],
   "problems": [
     {
       "prompt": "On the unit circle, what is cos 0?",

@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "proof-construction",
   "intro": [
-    "A construction proof shows an object exists by building it.",
-    "The object must satisfy the required conditions.",
-    "After building it, verify that it really works."
-  ],
+    "The most convincing proof that something exists is the thing itself — so build it.",
+    "A construction proof names a concrete object and verifies it meets every required condition.",
+    "Verification is half the proof: an exhibit without the check is only a candidate."
+],
   "problems": [
     {
       "prompt": "To prove there exists an even number greater than 10, is 12 a valid example?",

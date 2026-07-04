@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "number-primes",
   "intro": [
-    "A prime number has exactly two positive factors: 1 and itself.",
-    "Composite numbers can be broken into prime factors.",
-    "Prime factorization describes a number using prime building blocks."
-  ],
+    "Primes are the numbers that cannot be built by multiplying smaller ones — arithmetic's raw ingredients.",
+    "The definition is strict: exactly two positive factors, 1 and the number itself.",
+    "The fundamental theorem of arithmetic says every whole number above 1 is a product of primes in exactly one way."
+],
   "problems": [
     {
       "prompt": "Is 17 prime?",

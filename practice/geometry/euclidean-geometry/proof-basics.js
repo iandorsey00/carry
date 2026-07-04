@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "geometry-proof",
   "intro": [
-    "A proof explains why a conclusion must be true.",
-    "Each step should have a reason, such as a definition, a given fact, or a theorem.",
-    "Good proof writing moves from known information toward the claim."
-  ],
+    "A proof is an argument with no gaps: it shows a conclusion must be true, not just that it seems true.",
+    "Every step names its reason — a given fact, a definition, or an earlier theorem — so anyone can audit the chain.",
+    "The craft is direction: start from what is known and move deliberately toward the claim."
+],
   "problems": [
     {
       "prompt": "If two angles are both right angles, what can you conclude about their measures?",

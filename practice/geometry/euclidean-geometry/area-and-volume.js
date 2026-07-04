@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "geometry-area-volume",
   "intro": [
-    "Area measures how much flat space a shape covers.",
-    "Volume measures how much space a solid holds.",
-    "Track the unit: square units for area, cubic units for volume."
-  ],
+    "Area and volume answer 'how much space?' — flat space for area, filled space for volume.",
+    "Both are counts: unit squares tiling a shape, unit cubes packing a solid.",
+    "The units carry the meaning — square units for area, cubic units for volume — and mixing them up is the classic error."
+],
   "problems": [
     {
       "prompt": "What is the area of a rectangle with length 8 and width 3?",

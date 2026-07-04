@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "proof-counterexamples",
   "intro": [
-    "A counterexample is one case that breaks a claim.",
-    "Counterexamples disprove universal statements.",
-    "The best counterexamples are specific and easy to check."
-  ],
+    "A counterexample is the shortest proof in mathematics: one concrete case, and a universal claim is finished.",
+    "It must do both halves of the job: satisfy the claim's conditions and break its conclusion.",
+    "The best ones are small and unarguable, like the number 2 defeating every prime is odd."
+],
   "problems": [
     {
       "prompt": "Claim: every prime number is odd. Which number is a counterexample?",

@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "proof-logic",
   "intro": [
-    "Logic tracks how statements imply other statements.",
-    "An implication has a hypothesis and a conclusion.",
-    "A proof can use known true statements to force a new statement to be true."
-  ],
+    "Logic is quality control for reasoning: it tracks exactly what follows from what, and refuses everything else.",
+    "The workhorse is the implication if P then Q — a promise that whenever P holds, Q must follow.",
+    "Chains of solid implications carry truth from known facts to new conclusions; that is all a proof is."
+],
   "problems": [
     {
       "prompt": "In the statement if P then Q, which part is the hypothesis?",

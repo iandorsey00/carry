@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "precalc-functions",
   "intro": [
-    "A function assigns each input exactly one output.",
-    "Function notation names the rule and the input, such as f(x).",
-    "Graphs, tables, and formulas can describe the same function."
-  ],
+    "A function is a dependable rule: give it an input and it returns one output — the same one, every time.",
+    "The notation <math>f(x)</math> names the rule and its input together, so <math>f(3)</math> means the output when the input is 3.",
+    "Formulas, tables, and graphs are three portraits of the same rule; the one-output promise is what makes them match."
+],
   "problems": [
     {
       "prompt": "If f(x) = 2x + 1, what is f(3)?",

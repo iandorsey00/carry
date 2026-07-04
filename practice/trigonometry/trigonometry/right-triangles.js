@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "trig-right-triangle",
   "intro": [
-    "Right-triangle trigonometry compares side lengths relative to an acute angle.",
-    "Sine uses opposite over hypotenuse.",
-    "Cosine uses adjacent over hypotenuse, and tangent uses opposite over adjacent."
-  ],
+    "Right-triangle trigonometry turns an angle into ratios of sides — and the ratios ignore the triangle's size completely.",
+    "Fix an acute angle and the side labels follow from its point of view: opposite, adjacent, hypotenuse.",
+    "Sine is opposite over hypotenuse, cosine is adjacent over hypotenuse, and tangent is opposite over adjacent."
+],
   "problems": [
     {
       "prompt": "In a right triangle, opposite = 3 and hypotenuse = 5. What is sin θ?",

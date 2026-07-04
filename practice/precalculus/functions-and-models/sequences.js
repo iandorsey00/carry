@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "precalc-sequences",
   "intro": [
-    "A sequence is an ordered list of numbers.",
-    "Arithmetic sequences add the same difference each time.",
-    "Geometric sequences multiply by the same ratio each time."
-  ],
+    "A sequence is a numbered list with a rule — and the rule, not the list, is the real object of study.",
+    "Arithmetic sequences climb by a fixed difference; geometric sequences scale by a fixed ratio.",
+    "That one distinction — add versus multiply — separates steady growth from explosive growth."
+],
   "problems": [
     {
       "prompt": "What is the common difference in 4, 7, 10, 13?",

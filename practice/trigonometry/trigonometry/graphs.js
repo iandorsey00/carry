@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "trig-graphs",
   "intro": [
-    "Sine and cosine repeat in waves.",
-    "Amplitude is the distance from the midline to a peak.",
-    "The basic sine and cosine period is 2π."
-  ],
+    "Graphed over time, sine and cosine become waves — the mathematical shape of anything that repeats.",
+    "Two dials describe a wave: amplitude for its height from the midline, period for how long one cycle takes.",
+    "Plain <math>\\sin x</math> and <math>\\cos x</math> have amplitude 1 and period <math>2\\pi</math>; coefficients retune both."
+],
   "problems": [
     {
       "prompt": "What is the amplitude of y = 3 sin x?",

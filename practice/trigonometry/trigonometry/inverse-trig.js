@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "trig-inverse",
   "intro": [
-    "Inverse trig functions recover an angle from a ratio.",
-    "arcsin answers the question: what angle has this sine value?",
-    "Principal values keep inverse trig functions single-valued."
-  ],
+    "Inverse trig runs the questions backwards: given the ratio, recover the angle.",
+    "arcsin, arccos, and arctan each answer one such question — which angle has this sine, cosine, or tangent?",
+    "Because many angles share a ratio, principal ranges pick one official answer and keep the functions single-valued."
+],
   "problems": [
     {
       "prompt": "What is arcsin 0?",

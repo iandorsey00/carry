@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "trig-identities",
   "intro": [
-    "An identity is an equation that is true for every allowed input.",
-    "The Pythagorean identity connects sine and cosine.",
-    "Identities let you rewrite expressions without changing their value."
-  ],
+    "An identity is stronger than an equation: it holds for every allowed input, so it can be used as a rewriting rule.",
+    "The Pythagorean identity <math>\\sin^2 θ + \\cos^2 θ = 1</math> is the workhorse, trading sines for cosines on demand.",
+    "Rewriting with identities never changes a value — only its costume, into whichever form the problem prefers."
+],
   "problems": [
     {
       "prompt": "Complete the identity: sin^2 x + cos^2 x = __.",

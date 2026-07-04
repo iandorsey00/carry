@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "number-euclidean",
   "intro": [
-    "The Euclidean algorithm finds a GCD by repeated division with remainder.",
-    "Replace the larger number by the remainder and keep going.",
-    "The last nonzero remainder is the GCD."
-  ],
+    "The Euclidean algorithm finds a GCD without factoring anything: divide, keep the remainder, repeat.",
+    "Each round shrinks the problem — the pair (a, b) becomes (b, remainder) — and the answer never changes.",
+    "When the remainder reaches 0, the last nonzero remainder is the GCD, after remarkably few steps."
+],
   "problems": [
     {
       "prompt": "In 18 = 12 × 1 + 6, what is the remainder?",

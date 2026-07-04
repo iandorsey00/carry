@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "precalc-transformations",
   "intro": [
-    "Transformations move or reshape a parent function.",
-    "Adding outside the function moves the graph up or down.",
-    "Changing the input inside the function moves the graph left or right."
-  ],
+    "Once you know one graph, transformations give you a thousand more: slide it, stretch it, flip it — without re-plotting a point.",
+    "Changes outside the function act on outputs and move the graph vertically; changes inside act on inputs and move it sideways, backwards.",
+    "Vertex form displays the result: <math>y = (x - h)^2 + k</math> is the parent parabola parked at <math>(h, k)</math>."
+],
   "problems": [
     {
       "prompt": "Compared with y = x^2, y = x^2 + 4 shifts which direction?",

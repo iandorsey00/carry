@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "set-relations",
   "intro": [
-    "A Cartesian product forms ordered pairs.",
-    "A relation is a selected set of ordered pairs.",
-    "Relations can describe matching, ordering, equivalence, or many other connections."
-  ],
+    "Ordered pairs let sets describe relationships: (3, 5) pairs 3 with 5, in that order and no other.",
+    "The Cartesian product <math>A × B</math> manufactures every possible pair, one member from each set.",
+    "A relation is a curated selection of those pairs — the ones where some connection genuinely holds."
+],
   "problems": [
     {
       "prompt": "If <math>A = {1, 2}</math> and <math>B = {x}</math>, how many ordered pairs are in <math>A × B</math>?",

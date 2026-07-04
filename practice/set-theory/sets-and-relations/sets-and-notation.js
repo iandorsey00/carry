@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "set-notation",
   "intro": [
-    "A set is a collection of objects called elements.",
-    "Set notation uses braces, such as <math>A = {1, 2, 3}</math>.",
-    "The symbol <math>∈</math> means is an element of, and <math>∉</math> means is not an element of."
-  ],
+    "A set is mathematics' simplest container: it only remembers which objects are in and which are out.",
+    "Braces list the members, as in <math>A = {1, 2, 3}</math> — no order, no repeats, no other information.",
+    "The symbol <math>∈</math> claims membership and <math>∉</math> denies it: one question, two possible answers."
+],
   "problems": [
     {
       "prompt": "If <math>A = {1, 2, 3}</math>, is <math>2</math> in <math>A</math>?",

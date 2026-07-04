@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "proof-quantifiers",
   "intro": [
-    "Quantifiers say how many objects a statement covers.",
-    "For all means every object in the chosen set.",
-    "There exists means at least one object works."
-  ],
+    "Quantifiers set a claim's scope: is this about every case, or just about some case?",
+    "For all promises no exceptions; there exists promises at least one success.",
+    "The scope decides the burden of proof: universal claims die by one counterexample, existence claims live by one example."
+],
   "problems": [
     {
       "prompt": "Which phrase means every object: for all or there exists?",

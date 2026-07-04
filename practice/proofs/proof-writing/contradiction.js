@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "proof-contradiction",
   "intro": [
-    "Proof by contradiction starts by assuming the opposite of the claim.",
-    "The goal is to derive something impossible.",
-    "Once the opposite fails, the original claim must be true."
-  ],
+    "Proof by contradiction wins by generosity: assume the opposite of your claim, then follow the consequences honestly.",
+    "If that assumption leads to something impossible, the assumption itself was the lie.",
+    "So the original claim stands — proved not by building it up, but by demolishing its opposite."
+],
   "problems": [
     {
       "prompt": "In a contradiction proof, do you first assume the claim or its opposite?",

@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "number-gcd-lcm",
   "intro": [
-    "The greatest common divisor is the largest number that divides both numbers.",
-    "The least common multiple is the smallest positive number both numbers divide.",
-    "GCD and LCM organize shared factors and shared multiples."
-  ],
+    "GCD and LCM answer two matching questions: the biggest piece that measures both numbers, and the first milestone both reach.",
+    "The greatest common divisor looks down into shared factors; the least common multiple looks up along shared multiples.",
+    "They cooperate: for positive numbers, gcd times lcm equals the product of the numbers themselves."
+],
   "problems": [
     {
       "prompt": "What is gcd(12, 18)?",

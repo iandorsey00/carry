@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "set-operations",
   "intro": [
-    "Union collects everything in either set.",
-    "Intersection keeps only what the sets share.",
-    "Complement means everything in the universe that is outside the set."
-  ],
+    "Union, intersection, and complement are the or, and, and not of collections.",
+    "Union pools everything from either set; intersection keeps only what both share.",
+    "Complement flips the view: everything in the universe that the set leaves out."
+],
   "problems": [
     {
       "prompt": "If <math>A = {1, 2}</math> and <math>B = {2, 3}</math>, what is <math>A ∩ B</math>?",

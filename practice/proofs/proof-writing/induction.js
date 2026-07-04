@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "proof-induction",
   "intro": [
-    "Induction proves a statement for every integer in a sequence.",
-    "First prove the base case.",
-    "Then prove that one true case forces the next case."
-  ],
+    "Induction proves infinitely many statements with two finite moves.",
+    "The base case starts the chain; the inductive step shows every true case forces the next one.",
+    "Together they cover 1, then 2, then 3, and onward forever — a complete proof no checklist could finish."
+],
   "problems": [
     {
       "prompt": "In induction, what is the first case called?",

@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "set-countability",
   "intro": [
-    "A finite set has a specific whole-number size.",
-    "An infinite set is countable when its elements can be listed in a sequence.",
-    "Some infinite sets, such as the real numbers, are uncountable."
-  ],
+    "Set theory's boldest discovery: infinities come in sizes, and some are genuinely bigger than others.",
+    "An infinite set is countable if its members can be lined up in a list — first, second, third — without missing any.",
+    "The integers and even the fractions can be listed; Cantor proved the real numbers cannot."
+],
   "problems": [
     {
       "prompt": "How many elements are in {a, b, c}?",

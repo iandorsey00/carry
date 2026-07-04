@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "precalc-complex",
   "intro": [
-    "Complex numbers have a real part and an imaginary part.",
-    "The imaginary unit satisfies i^2 = -1.",
-    "A complex number a + bi can be plotted as the point (a, b)."
-  ],
+    "Complex numbers finish arithmetic: with them, every polynomial equation finally has a full set of solutions.",
+    "One new ingredient does it all — the unit i with <math>i^2 = -1</math> — and a + bi mixes it with ordinary numbers.",
+    "Geometrically, a + bi is the point (a, b), so complex arithmetic is plane geometry in disguise."
+],
   "problems": [
     {
       "prompt": "What is i^2?",

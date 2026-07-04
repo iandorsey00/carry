@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "number-modular",
   "intro": [
-    "Modular arithmetic tracks remainders after division.",
-    "Working mod n means values that differ by n are treated as equivalent.",
-    "Clock arithmetic is the everyday model for modular arithmetic."
-  ],
+    "Modular arithmetic keeps only what survives division: the remainder.",
+    "Working mod n, numbers that differ by a multiple of n count as the same number.",
+    "This remainder world has its own consistent addition and multiplication — small, closed, and everywhere in computing."
+],
   "problems": [
     {
       "prompt": "What is 14 mod 5?",

@@ -9,10 +9,10 @@
   "type": "concept",
   "figure": "geometry-angles",
   "intro": [
-    "Angles measure turning.",
-    "A straight angle measures 180 degrees.",
-    "Adjacent angles share a side. If they form a straight line, their measures add to 180 degrees."
-  ],
+    "An angle records an amount of turn — how far one direction has swung away from another.",
+    "The degree is just a unit for turn: 360 for a full spin, 180 for an about-face, 90 for a square corner.",
+    "Angles that fit together share their totals, which is why a straight line splits into pieces summing to 180°."
+],
   "problems": [
     {
       "prompt": "Two adjacent angles make a straight line. One is 120 degrees. What is the other?",
