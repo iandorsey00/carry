@@ -81,7 +81,108 @@
           "label": "≥"
         }
       ]
+    },
+    {
+      "prompt": "Does 7 divide 91?",
+      "answer": "yes",
+      "answers": [
+        "yes",
+        "true"
+      ],
+      "hint": "91 = 7 × 13.",
+      "label": "seven divides",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "Does every positive number divide 0?",
+      "answer": "yes",
+      "answers": [
+        "yes",
+        "true"
+      ],
+      "hint": "0 = a × 0 with nothing left over.",
+      "label": "divides zero",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "If a divides b and b divides c, does a divide c?",
+      "answer": "yes",
+      "answers": [
+        "yes",
+        "true"
+      ],
+      "hint": "Chains of perfect fits stay perfect.",
+      "label": "divisibility chain",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "Which fact shows 3 divides 123 without dividing?",
+      "answer": "its digits sum to a multiple of 3",
+      "answers": [
+        "its digits sum to a multiple of 3",
+        "digit sum"
+      ],
+      "hint": "1 + 2 + 3 = 6.",
+      "label": "digit test",
+      "choices": [
+        {
+          "value": "its digits sum to a multiple of 3",
+          "label": "its digits sum to a multiple of 3"
+        },
+        {
+          "value": "it is odd",
+          "label": "it is odd"
+        }
+      ]
+    },
+    {
+      "prompt": "Does 5 divide 5?",
+      "answer": "yes",
+      "answers": [
+        "yes",
+        "true"
+      ],
+      "hint": "Every number divides itself.",
+      "label": "self divides",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     }
+
   ]
 };
 })();

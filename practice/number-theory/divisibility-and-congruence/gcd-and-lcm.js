@@ -45,7 +45,147 @@
           "label": "LCM"
         }
       ]
+    },
+    {
+      "prompt": "What is gcd(7, 13)?",
+      "answer": "1",
+      "answers": [
+        "1",
+        "one"
+      ],
+      "hint": "Two distinct primes share no factors.",
+      "label": "prime gcd",
+      "choices": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "7",
+          "label": "7"
+        },
+        {
+          "value": "13",
+          "label": "13"
+        },
+        {
+          "value": "91",
+          "label": "91"
+        }
+      ]
+    },
+    {
+      "prompt": "Numbers whose gcd is 1 are called what?",
+      "answer": "coprime",
+      "answers": [
+        "coprime",
+        "relatively prime"
+      ],
+      "hint": "They share no factor beyond 1.",
+      "label": "coprime name",
+      "choices": [
+        {
+          "value": "coprime",
+          "label": "coprime"
+        },
+        {
+          "value": "composite",
+          "label": "composite"
+        },
+        {
+          "value": "congruent",
+          "label": "congruent"
+        },
+        {
+          "value": "perfect",
+          "label": "perfect"
+        }
+      ]
+    },
+    {
+      "prompt": "What is lcm(3, 5)?",
+      "answer": "15",
+      "answers": [
+        "15",
+        "fifteen"
+      ],
+      "hint": "The first milestone both counts reach.",
+      "label": "small lcm",
+      "choices": [
+        {
+          "value": "15",
+          "label": "15"
+        },
+        {
+          "value": "8",
+          "label": "8"
+        },
+        {
+          "value": "30",
+          "label": "30"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        }
+      ]
+    },
+    {
+      "prompt": "gcd(12, 18) × lcm(12, 18) equals what?",
+      "answer": "216",
+      "answers": [
+        "216"
+      ],
+      "hint": "It always equals the product 12 × 18.",
+      "label": "gcd lcm product",
+      "choices": [
+        {
+          "value": "216",
+          "label": "216"
+        },
+        {
+          "value": "30",
+          "label": "30"
+        },
+        {
+          "value": "36",
+          "label": "36"
+        },
+        {
+          "value": "6",
+          "label": "6"
+        }
+      ]
+    },
+    {
+      "prompt": "What is gcd(8, 8)?",
+      "answer": "8",
+      "answers": [
+        "8",
+        "eight"
+      ],
+      "hint": "A number is its own greatest divisor.",
+      "label": "self gcd",
+      "choices": [
+        {
+          "value": "8",
+          "label": "8"
+        },
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "64",
+          "label": "64"
+        }
+      ]
     }
+
   ]
 };
 })();

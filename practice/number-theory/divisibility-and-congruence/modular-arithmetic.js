@@ -80,7 +80,64 @@
           "label": "No"
         }
       ]
+    },
+    {
+      "prompt": "What is (6 + 7) mod 10?",
+      "answer": "3",
+      "answers": [
+        "3",
+        "three"
+      ],
+      "hint": "13 wraps once around 10.",
+      "label": "mod addition",
+      "choices": [
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "13",
+          "label": "13"
+        },
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "7",
+          "label": "7"
+        }
+      ]
+    },
+    {
+      "prompt": "What is (4 × 5) mod 6?",
+      "answer": "2",
+      "answers": [
+        "2",
+        "two"
+      ],
+      "hint": "20 = 3 × 6 + 2.",
+      "label": "mod multiplication",
+      "choices": [
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "20",
+          "label": "20"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "0",
+          "label": "0"
+        }
+      ]
     }
+
   ]
 };
 })();
