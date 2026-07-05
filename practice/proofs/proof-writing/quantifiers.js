@@ -94,7 +94,112 @@
           "label": "contradiction"
         }
       ]
+    },
+    {
+      "prompt": "Negating for all x, P(x) gives which statement?",
+      "answer": "there exists x with not P(x)",
+      "answers": [
+        "there exists x with not P(x)",
+        "exists not"
+      ],
+      "hint": "Denying every needs only one failure.",
+      "label": "negate forall",
+      "choices": [
+        {
+          "value": "there exists x with not P(x)",
+          "label": "there exists x with not P(x)"
+        },
+        {
+          "value": "for all x, not P(x)",
+          "label": "for all x, not P(x)"
+        }
+      ]
+    },
+    {
+      "prompt": "To prove a there-exists claim, how many working examples suffice?",
+      "answer": "1",
+      "answers": [
+        "1",
+        "one"
+      ],
+      "hint": "Existence asks for a single success.",
+      "label": "one suffices",
+      "choices": [
+        {
+          "value": "1",
+          "label": "one"
+        },
+        {
+          "value": "2",
+          "label": "two"
+        },
+        {
+          "value": "all",
+          "label": "all of them"
+        }
+      ]
+    },
+    {
+      "prompt": "Is the statement every element of the empty set is purple true or false?",
+      "answer": "true",
+      "answers": [
+        "true",
+        "vacuously true"
+      ],
+      "hint": "No element exists to fail the claim — it is vacuously true.",
+      "label": "vacuous truth",
+      "choices": [
+        {
+          "value": "true",
+          "label": "true"
+        },
+        {
+          "value": "false",
+          "label": "false"
+        }
+      ]
+    },
+    {
+      "prompt": "Some student aced the test — which quantifier is hiding in that sentence?",
+      "answer": "there exists",
+      "answers": [
+        "there exists",
+        "exists"
+      ],
+      "hint": "Some means at least one.",
+      "label": "spot exists",
+      "choices": [
+        {
+          "value": "there exists",
+          "label": "there exists"
+        },
+        {
+          "value": "for all",
+          "label": "for all"
+        }
+      ]
+    },
+    {
+      "prompt": "To disprove a there-exists statement, what must you show?",
+      "answer": "every case fails",
+      "answers": [
+        "every case fails",
+        "all fail"
+      ],
+      "hint": "Killing an existence claim takes a universal argument.",
+      "label": "disprove exists",
+      "choices": [
+        {
+          "value": "every case fails",
+          "label": "every case fails"
+        },
+        {
+          "value": "one case fails",
+          "label": "one case fails"
+        }
+      ]
     }
+
   ]
 };
 })();

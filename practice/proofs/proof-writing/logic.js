@@ -168,7 +168,48 @@
           "label": "contradiction"
         }
       ]
+    },
+    {
+      "prompt": "If P implies Q and Q is true, does P have to be true?",
+      "answer": "no",
+      "answers": [
+        "no",
+        "false"
+      ],
+      "hint": "Affirming the consequent is a classic fallacy — Q may have other causes.",
+      "label": "converse fallacy",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "What is the negation of the statement P and Q?",
+      "answer": "not P or not Q",
+      "answers": [
+        "not P or not Q",
+        "not p or not q"
+      ],
+      "hint": "De Morgan: negation flips and into or.",
+      "label": "de morgan",
+      "choices": [
+        {
+          "value": "not P or not Q",
+          "label": "not P or not Q"
+        },
+        {
+          "value": "not P and not Q",
+          "label": "not P and not Q"
+        }
+      ]
     }
+
   ]
 };
 })();

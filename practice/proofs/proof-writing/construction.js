@@ -83,7 +83,117 @@
           "label": "exists"
         }
       ]
+    },
+    {
+      "prompt": "To prove a multiple of 7 exists between 20 and 30, which number works?",
+      "answer": "21",
+      "answers": [
+        "21",
+        "28"
+      ],
+      "hint": "Check 7 times 3 and 7 times 4.",
+      "label": "construct multiple",
+      "choices": [
+        {
+          "value": "21",
+          "label": "21"
+        },
+        {
+          "value": "14",
+          "label": "14"
+        },
+        {
+          "value": "35",
+          "label": "35"
+        },
+        {
+          "value": "27",
+          "label": "27"
+        }
+      ]
+    },
+    {
+      "prompt": "Does naming an example without checking it complete a construction proof?",
+      "answer": "no",
+      "answers": [
+        "no",
+        "false"
+      ],
+      "hint": "Verification is half the proof.",
+      "label": "must verify",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "Can a single constructed example prove a for-all statement?",
+      "answer": "no",
+      "answers": [
+        "no",
+        "false"
+      ],
+      "hint": "One case cannot cover every case.",
+      "label": "one example limits",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "To prove two odd numbers can sum to an even number, what should you exhibit?",
+      "answer": "one concrete pair",
+      "answers": [
+        "one concrete pair",
+        "a pair",
+        "an example"
+      ],
+      "hint": "3 + 5 = 8 settles it.",
+      "label": "exhibit pair",
+      "choices": [
+        {
+          "value": "one concrete pair",
+          "label": "one concrete pair"
+        },
+        {
+          "value": "a general argument about all pairs",
+          "label": "a general argument about all pairs"
+        }
+      ]
+    },
+    {
+      "prompt": "The number 12 can prove which claim: some even number exceeds 10, or every even number exceeds 10?",
+      "answer": "some",
+      "answers": [
+        "some",
+        "the first"
+      ],
+      "hint": "An example proves existence, never universality.",
+      "label": "some versus every",
+      "choices": [
+        {
+          "value": "some",
+          "label": "some even number exceeds 10"
+        },
+        {
+          "value": "every",
+          "label": "every even number exceeds 10"
+        }
+      ]
     }
+
   ]
 };
 })();

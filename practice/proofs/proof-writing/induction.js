@@ -83,7 +83,122 @@
           "label": "contradiction"
         }
       ]
+    },
+    {
+      "prompt": "Induction over the positive integers usually starts at which case?",
+      "answer": "n = 1",
+      "answers": [
+        "n = 1",
+        "1",
+        "n=1"
+      ],
+      "hint": "The first rung of the ladder.",
+      "label": "starting case",
+      "choices": [
+        {
+          "value": "n = 1",
+          "label": "n = 1"
+        },
+        {
+          "value": "n = 0",
+          "label": "n = 100"
+        },
+        {
+          "value": "n = k",
+          "label": "n = k"
+        }
+      ]
+    },
+    {
+      "prompt": "If the base case holds but the inductive step fails, is the proof complete?",
+      "answer": "no",
+      "answers": [
+        "no",
+        "false"
+      ],
+      "hint": "One standing domino knocks nothing over by itself.",
+      "label": "step required",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "If P(k) implies P(k + 1) but no base case is proved, what has been proved?",
+      "answer": "nothing yet",
+      "answers": [
+        "nothing yet",
+        "nothing"
+      ],
+      "hint": "A chain with no first link lifts nothing.",
+      "label": "base required",
+      "choices": [
+        {
+          "value": "nothing yet",
+          "label": "nothing yet"
+        },
+        {
+          "value": "all cases",
+          "label": "all cases"
+        },
+        {
+          "value": "only P(1)",
+          "label": "only P(1)"
+        }
+      ]
+    },
+    {
+      "prompt": "The inductive step assumes P(k) is true. What is that assumption called?",
+      "answer": "the inductive hypothesis",
+      "answers": [
+        "the inductive hypothesis",
+        "inductive hypothesis"
+      ],
+      "hint": "It is a hypothesis made inside the step.",
+      "label": "hypothesis name",
+      "choices": [
+        {
+          "value": "the inductive hypothesis",
+          "label": "the inductive hypothesis"
+        },
+        {
+          "value": "the base case",
+          "label": "the base case"
+        },
+        {
+          "value": "the conclusion",
+          "label": "the conclusion"
+        }
+      ]
+    },
+    {
+      "prompt": "Standard induction proves statements over which set of numbers?",
+      "answer": "the positive integers",
+      "answers": [
+        "the positive integers",
+        "positive integers",
+        "whole numbers"
+      ],
+      "hint": "The ladder needs discrete rungs.",
+      "label": "induction domain",
+      "choices": [
+        {
+          "value": "the positive integers",
+          "label": "the positive integers"
+        },
+        {
+          "value": "the real numbers",
+          "label": "the real numbers"
+        }
+      ]
     }
+
   ]
 };
 })();
