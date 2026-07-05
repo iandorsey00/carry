@@ -59,7 +59,125 @@
           "label": "No"
         }
       ]
+    },
+    {
+      "prompt": "Is every set a subset of itself?",
+      "answer": "yes",
+      "answers": [
+        "yes",
+        "true"
+      ],
+      "hint": "Each element is certainly in the set.",
+      "label": "self subset",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "How many subsets does the empty set have?",
+      "answer": "1",
+      "answers": [
+        "1",
+        "one"
+      ],
+      "hint": "Just itself: 2 to the power 0.",
+      "label": "empty power set",
+      "choices": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "0",
+          "label": "0"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "8",
+          "label": "8"
+        }
+      ]
+    },
+    {
+      "prompt": "Is {1, 4} a subset of {1, 2, 3}?",
+      "answer": "no",
+      "answers": [
+        "no",
+        "false"
+      ],
+      "hint": "The element 4 is missing from the larger set.",
+      "label": "failed subset",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "A set with 4 elements has how many subsets?",
+      "answer": "16",
+      "answers": [
+        "16",
+        "sixteen"
+      ],
+      "hint": "Each element doubles the count: 2 to the 4th.",
+      "label": "sixteen subsets",
+      "choices": [
+        {
+          "value": "16",
+          "label": "16"
+        },
+        {
+          "value": "8",
+          "label": "8"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "12",
+          "label": "12"
+        }
+      ]
+    },
+    {
+      "prompt": "If A is a subset of B and B is a subset of A, what follows?",
+      "answer": "A equals B",
+      "answers": [
+        "A equals B",
+        "a = b",
+        "they are equal"
+      ],
+      "hint": "Mutual containment is how set equality is proved.",
+      "label": "mutual containment",
+      "choices": [
+        {
+          "value": "A equals B",
+          "label": "A equals B"
+        },
+        {
+          "value": "A is empty",
+          "label": "A is empty"
+        }
+      ]
     }
+
   ]
 };
 })();

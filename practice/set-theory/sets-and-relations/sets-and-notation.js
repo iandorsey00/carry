@@ -165,7 +165,48 @@
           "label": "⊆"
         }
       ]
+    },
+    {
+      "prompt": "Do {1, 2, 3} and {3, 2, 1} describe the same set?",
+      "answer": "yes",
+      "answers": [
+        "yes",
+        "true"
+      ],
+      "hint": "Order carries no information in a set.",
+      "label": "order irrelevant",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "Does the set {2, 2, 3} have three elements?",
+      "answer": "no",
+      "answers": [
+        "no",
+        "false"
+      ],
+      "hint": "Repeats do not count; it is the same set as {2, 3}.",
+      "label": "no repeats",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     }
+
   ]
 };
 })();

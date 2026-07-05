@@ -63,7 +63,124 @@
       "answer": "7",
       "hint": "The value after the equals sign is the output.",
       "label": "function output"
+    },
+    {
+      "prompt": "If <math>f(x) = x + 3</math>, what is f(1)?",
+      "answer": "4",
+      "answers": [
+        "4",
+        "four"
+      ],
+      "hint": "Substitute 1 for x.",
+      "label": "evaluate",
+      "choices": [
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        }
+      ]
+    },
+    {
+      "prompt": "The set of outputs a function actually produces is called its what?",
+      "answer": "range",
+      "answers": [
+        "range",
+        "image"
+      ],
+      "hint": "It sits inside the codomain, sometimes smaller.",
+      "label": "range name",
+      "choices": [
+        {
+          "value": "range",
+          "label": "range"
+        },
+        {
+          "value": "domain",
+          "label": "domain"
+        },
+        {
+          "value": "codomain",
+          "label": "codomain"
+        },
+        {
+          "value": "basis",
+          "label": "basis"
+        }
+      ]
+    },
+    {
+      "prompt": "Is the relation pairing every person with their birth year a function?",
+      "answer": "yes",
+      "answers": [
+        "yes",
+        "true"
+      ],
+      "hint": "Each person has exactly one birth year.",
+      "label": "birth year function",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "Is the relation pairing every year with each person born that year a function?",
+      "answer": "no",
+      "answers": [
+        "no",
+        "false"
+      ],
+      "hint": "One year pairs with many people — the one-output rule breaks.",
+      "label": "year relation",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "Can two different inputs of a function share the same output?",
+      "answer": "yes",
+      "answers": [
+        "yes",
+        "true"
+      ],
+      "hint": "The rule bans two outputs per input, not two inputs per output.",
+      "label": "shared output",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     }
+
   ]
 };
 })();

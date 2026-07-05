@@ -59,7 +59,121 @@
           "label": "No"
         }
       ]
+    },
+    {
+      "prompt": "Are the even numbers countable?",
+      "answer": "yes",
+      "answers": [
+        "yes",
+        "true"
+      ],
+      "hint": "List them: 2, 4, 6, 8, and so on.",
+      "label": "evens countable",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "Is every subset of a countable set countable?",
+      "answer": "yes",
+      "answers": [
+        "yes",
+        "true"
+      ],
+      "hint": "Strike the missing members out of the list and keep the order.",
+      "label": "subset countable",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "Who proved that the real numbers are uncountable?",
+      "answer": "Cantor",
+      "answers": [
+        "Cantor",
+        "cantor"
+      ],
+      "hint": "The founder of set theory, in 1874.",
+      "label": "cantor",
+      "choices": [
+        {
+          "value": "Cantor",
+          "label": "Cantor"
+        },
+        {
+          "value": "Euclid",
+          "label": "Euclid"
+        },
+        {
+          "value": "Gauss",
+          "label": "Gauss"
+        },
+        {
+          "value": "Euler",
+          "label": "Euler"
+        }
+      ]
+    },
+    {
+      "prompt": "The argument that defeats any proposed list of all real numbers is called what?",
+      "answer": "the diagonal argument",
+      "answers": [
+        "the diagonal argument",
+        "diagonal argument",
+        "diagonalization"
+      ],
+      "hint": "It changes the nth digit of the nth number on the list.",
+      "label": "diagonal",
+      "choices": [
+        {
+          "value": "the diagonal argument",
+          "label": "the diagonal argument"
+        },
+        {
+          "value": "the triangle argument",
+          "label": "the triangle argument"
+        },
+        {
+          "value": "induction",
+          "label": "induction"
+        }
+      ]
+    },
+    {
+      "prompt": "Can a countable set be infinite?",
+      "answer": "yes",
+      "answers": [
+        "yes",
+        "true"
+      ],
+      "hint": "Countable includes both finite sets and listable infinite ones.",
+      "label": "countably infinite",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     }
+
   ]
 };
 })();
