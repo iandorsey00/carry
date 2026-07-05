@@ -589,14 +589,6 @@ body[data-surface="scratchpad"] .site-footer {
   text-align: left;
 }
 
-.scratchpad-editor-controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  align-items: center;
-  justify-content: center;
-}
-
 .scratchpad-header-actions {
   display: contents;
 }
@@ -605,8 +597,12 @@ body[data-surface="scratchpad"] .site-footer {
   display: none;
 }
 
-.scratchpad-layout[data-scratchpad-view="rendered"] #duplicateScratchLine {
-  display: none;
+.shortcut-hint {
+  margin-left: 6px;
+  color: var(--muted);
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
 }
 
 .scratchpad-actions,
@@ -3630,14 +3626,6 @@ body[data-surface="scratchpad"] .scratch-line-math-aligned {
 
   #duplicateScratchLineHeader {
     display: inline-flex;
-  }
-
-  .scratchpad-panel[data-scratchpad-view="rendered"] #duplicateScratchLineHeader {
-    display: none;
-  }
-
-  .scratchpad-editor-controls #duplicateScratchLine {
-    display: none;
   }
 
   .scratchpad-actions,
