@@ -75,7 +75,132 @@
       "hint": "Connected vertices can be reached by following edges.",
       "feedback": "Connectedness is about whether a path exists.",
       "label": "connected path"
+    },
+    {
+      "prompt": "Vertices A, B, C with edges AB and BC: how many components?",
+      "answer": "1",
+      "answers": [
+        "1",
+        "one"
+      ],
+      "hint": "A reaches C through B, so everything is one piece.",
+      "label": "one piece",
+      "choices": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        }
+      ]
+    },
+    {
+      "prompt": "Add an isolated vertex D to that graph. Now how many components?",
+      "answer": "2",
+      "answers": [
+        "2",
+        "two"
+      ],
+      "hint": "D has no edges, so it is a piece of its own.",
+      "label": "isolated component",
+      "choices": [
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        }
+      ]
+    },
+    {
+      "prompt": "A connected graph has how many components?",
+      "answer": "1",
+      "answers": [
+        "1",
+        "one"
+      ],
+      "hint": "Connected means the whole graph is one piece.",
+      "label": "connected components",
+      "choices": [
+        {
+          "value": "1",
+          "label": "exactly 1"
+        },
+        {
+          "value": "0",
+          "label": "0"
+        },
+        {
+          "value": "2",
+          "label": "at least 2"
+        }
+      ]
+    },
+    {
+      "prompt": "Does a long winding path between A and B still make them connected?",
+      "answer": "yes",
+      "answers": [
+        "yes",
+        "true"
+      ],
+      "hint": "Connectedness only asks whether a path exists, not how short it is.",
+      "label": "long path counts",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "A graph with 6 vertices and no edges has how many components?",
+      "answer": "6",
+      "answers": [
+        "6",
+        "six"
+      ],
+      "hint": "With no connections, every vertex stands alone.",
+      "label": "all isolated",
+      "choices": [
+        {
+          "value": "6",
+          "label": "6"
+        },
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "0",
+          "label": "0"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        }
+      ]
     }
+
   ]
 };
 })();

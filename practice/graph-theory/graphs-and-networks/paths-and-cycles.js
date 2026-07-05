@@ -80,7 +80,131 @@
       "hint": "The Graph Paths game asks for the fewest edge steps.",
       "feedback": "Shortest path length counts edge steps.",
       "label": "shortest path count"
+    },
+    {
+      "prompt": "Walking A to B to C to D uses how many edges?",
+      "answer": "3",
+      "answers": [
+        "3",
+        "three"
+      ],
+      "hint": "Count the hops, not the vertices.",
+      "label": "count hops",
+      "choices": [
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        }
+      ]
+    },
+    {
+      "prompt": "A path visiting 5 vertices without repeating uses how many edges?",
+      "answer": "4",
+      "answers": [
+        "4",
+        "four"
+      ],
+      "hint": "Edges are always one fewer than the vertices on a simple path.",
+      "label": "vertices minus one",
+      "choices": [
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "6",
+          "label": "6"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        }
+      ]
+    },
+    {
+      "prompt": "What is the shortest possible cycle in a simple graph?",
+      "answer": "triangle",
+      "answers": [
+        "triangle",
+        "a triangle",
+        "3-cycle",
+        "length 3"
+      ],
+      "hint": "Two vertices cannot loop without reusing their edge.",
+      "label": "shortest cycle",
+      "choices": [
+        {
+          "value": "triangle",
+          "label": "a triangle"
+        },
+        {
+          "value": "square",
+          "label": "a square"
+        },
+        {
+          "value": "single edge",
+          "label": "a single edge"
+        }
+      ]
+    },
+    {
+      "prompt": "Does a cycle end at the vertex where it started?",
+      "answer": "yes",
+      "answers": [
+        "yes",
+        "true"
+      ],
+      "hint": "Returning to the start is what makes it a cycle.",
+      "label": "cycle closes",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "Between two vertices, route one uses 4 edges and route two uses 6. Which is shorter?",
+      "answer": "route one",
+      "answers": [
+        "route one",
+        "one",
+        "the first"
+      ],
+      "hint": "Fewer edges means a shorter path.",
+      "label": "compare routes",
+      "choices": [
+        {
+          "value": "route one",
+          "label": "route one"
+        },
+        {
+          "value": "route two",
+          "label": "route two"
+        }
+      ]
     }
+
   ]
 };
 })();
