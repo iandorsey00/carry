@@ -59,7 +59,95 @@
           { value: "true", label: "True" },
           { value: "false", label: "False" }
         ]
-      }
+      },
+    {
+      "prompt": "In the usual real line, is (0, 1) closed?",
+      "answer": "no",
+      "answers": [
+        "no",
+        "false"
+      ],
+      "hint": "Its complement contains 0 and 1 with no room around them.",
+      "label": "open interval not closed",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "Is the empty set closed in every topology?",
+      "answer": "yes",
+      "answers": [
+        "yes",
+        "true"
+      ],
+      "hint": "Its complement is the whole space, which is always open.",
+      "label": "empty set closed",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "In the usual real line, is the set of all integers closed?",
+      "answer": "yes",
+      "answers": [
+        "yes",
+        "true"
+      ],
+      "hint": "Its complement is a union of open intervals between the integers.",
+      "label": "integers closed",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "A set that is both open and closed is often called what?",
+      "answer": "clopen",
+      "answers": [
+        "clopen"
+      ],
+      "hint": "The nickname merges the two words.",
+      "label": "clopen name",
+      "choices": [
+        {
+          "value": "clopen",
+          "label": "clopen"
+        },
+        {
+          "value": "compact",
+          "label": "compact"
+        },
+        {
+          "value": "dense",
+          "label": "dense"
+        },
+        {
+          "value": "bounded",
+          "label": "bounded"
+        }
+      ]
+    }
+
     ]
   };
 })();

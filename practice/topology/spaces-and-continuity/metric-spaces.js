@@ -61,7 +61,112 @@
           { value: "true", label: "True" },
           { value: "false", label: "False" }
         ]
-      }
+      },
+    {
+      "prompt": "In any metric space, what is d(x, x)?",
+      "answer": "0",
+      "answers": [
+        "0",
+        "zero"
+      ],
+      "hint": "The distance from a point to itself.",
+      "label": "self distance",
+      "choices": [
+        {
+          "value": "0",
+          "label": "0"
+        },
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "x",
+          "label": "x"
+        },
+        {
+          "value": "undefined",
+          "label": "undefined"
+        }
+      ]
+    },
+    {
+      "prompt": "Can d(x, y) differ from d(y, x) in a metric space?",
+      "answer": "no",
+      "answers": [
+        "no",
+        "false"
+      ],
+      "hint": "Symmetry is one of the metric rules.",
+      "label": "symmetry rule",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "With the usual metric <math>d(x, y) = |x - y|</math>, what is d(2, 7)?",
+      "answer": "5",
+      "answers": [
+        "5",
+        "five"
+      ],
+      "hint": "Subtract and take the absolute value.",
+      "label": "compute distance",
+      "choices": [
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "9",
+          "label": "9"
+        },
+        {
+          "value": "-5",
+          "label": "-5"
+        },
+        {
+          "value": "14",
+          "label": "14"
+        }
+      ]
+    },
+    {
+      "prompt": "On the real line, the ball of radius 1 around 0 is which interval?",
+      "answer": "(-1, 1)",
+      "answers": [
+        "(-1, 1)",
+        "(-1,1)"
+      ],
+      "hint": "All points within distance 1 of the center.",
+      "label": "unit ball",
+      "choices": [
+        {
+          "value": "(-1, 1)",
+          "label": "(-1, 1)"
+        },
+        {
+          "value": "[-1, 1]",
+          "label": "[-1, 1]"
+        },
+        {
+          "value": "(0, 1)",
+          "label": "(0, 1)"
+        },
+        {
+          "value": "[0, 2]",
+          "label": "[0, 2]"
+        }
+      ]
+    }
+
     ]
   };
 })();

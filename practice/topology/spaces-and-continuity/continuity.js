@@ -61,7 +61,95 @@
           { value: "multiplication table", label: "multiplication table" },
           { value: "chemical formula", label: "chemical formula" }
         ]
-      }
+      },
+    {
+      "prompt": "For a continuous function, the preimage of a closed set is what?",
+      "answer": "closed",
+      "answers": [
+        "closed"
+      ],
+      "hint": "Complements pass cleanly through preimages.",
+      "label": "closed preimage",
+      "choices": [
+        {
+          "value": "closed",
+          "label": "closed"
+        },
+        {
+          "value": "open",
+          "label": "open"
+        },
+        {
+          "value": "empty",
+          "label": "empty"
+        },
+        {
+          "value": "compact",
+          "label": "compact"
+        }
+      ]
+    },
+    {
+      "prompt": "Is every constant function continuous?",
+      "answer": "yes",
+      "answers": [
+        "yes",
+        "true"
+      ],
+      "hint": "Each preimage is the empty set or the whole space — both open.",
+      "label": "constant continuous",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "Is the identity map from a space to itself always continuous?",
+      "answer": "yes",
+      "answers": [
+        "yes",
+        "true"
+      ],
+      "hint": "The preimage of any open set is that same open set.",
+      "label": "identity continuous",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "If f and g are continuous, is the composition g after f continuous?",
+      "answer": "yes",
+      "answers": [
+        "yes",
+        "true"
+      ],
+      "hint": "Preimages chain through both maps, staying open at each step.",
+      "label": "composition continuous",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    }
+
     ]
   };
 })();

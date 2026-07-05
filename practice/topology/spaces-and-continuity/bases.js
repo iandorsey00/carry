@@ -61,7 +61,97 @@
           { value: "single proof line", label: "single proof line" },
           { value: "largest distance", label: "largest distance" }
         ]
-      }
+      },
+    {
+      "prompt": "Every open set in the plane is a union of which basic shapes?",
+      "answer": "open disks",
+      "answers": [
+        "open disks",
+        "disks",
+        "open balls"
+      ],
+      "hint": "Balls form the standard basis of a metric topology.",
+      "label": "plane basis",
+      "choices": [
+        {
+          "value": "open disks",
+          "label": "open disks"
+        },
+        {
+          "value": "closed squares",
+          "label": "closed squares"
+        },
+        {
+          "value": "single points",
+          "label": "single points"
+        }
+      ]
+    },
+    {
+      "prompt": "Is the collection of all open sets itself a basis?",
+      "answer": "yes",
+      "answers": [
+        "yes",
+        "true"
+      ],
+      "hint": "Every open set is trivially a union of open sets.",
+      "label": "trivial basis",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "Are basis elements open in the topology they generate?",
+      "answer": "yes",
+      "answers": [
+        "yes",
+        "true"
+      ],
+      "hint": "They are the first sets declared open.",
+      "label": "basis elements open",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "To show a set is open using a basis, what do you find around each of its points?",
+      "answer": "a basis element",
+      "answers": [
+        "a basis element",
+        "basis element"
+      ],
+      "hint": "Each point needs a building block that fits inside the set.",
+      "label": "basis test",
+      "choices": [
+        {
+          "value": "a basis element",
+          "label": "a basis element inside the set"
+        },
+        {
+          "value": "a closed set",
+          "label": "a closed set"
+        },
+        {
+          "value": "a boundary point",
+          "label": "a boundary point"
+        }
+      ]
+    }
+
     ]
   };
 })();

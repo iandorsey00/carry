@@ -61,7 +61,87 @@
           { value: "exact angle", label: "exact angle" },
           { value: "decimal expansion", label: "decimal expansion" }
         ]
-      }
+      },
+    {
+      "prompt": "Is stretching an interval to twice its length a homeomorphism?",
+      "answer": "yes",
+      "answers": [
+        "yes",
+        "true"
+      ],
+      "hint": "It is continuous, bijective, and its inverse is continuous.",
+      "label": "stretch map",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "Are the open interval (0, 1) and the whole real line homeomorphic?",
+      "answer": "yes",
+      "answers": [
+        "yes",
+        "true"
+      ],
+      "hint": "A suitable stretching map bends one onto the other.",
+      "label": "interval line",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "Can a circle and a line segment be homeomorphic?",
+      "answer": "no",
+      "answers": [
+        "no",
+        "false"
+      ],
+      "hint": "Removing one interior point disconnects a segment but never a circle.",
+      "label": "circle segment",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "Which does every homeomorphism preserve: distances or connectedness?",
+      "answer": "connectedness",
+      "answers": [
+        "connectedness"
+      ],
+      "hint": "Topology forgets distances; it remembers how pieces attach.",
+      "label": "preserved property",
+      "choices": [
+        {
+          "value": "connectedness",
+          "label": "connectedness"
+        },
+        {
+          "value": "distances",
+          "label": "distances"
+        }
+      ]
+    }
+
     ]
   };
 })();

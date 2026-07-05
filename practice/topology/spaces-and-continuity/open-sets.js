@@ -59,7 +59,95 @@
           { value: "true", label: "True" },
           { value: "false", label: "False" }
         ]
-      }
+      },
+    {
+      "prompt": "In the usual topology, is the whole real line an open set?",
+      "answer": "yes",
+      "answers": [
+        "yes",
+        "true"
+      ],
+      "hint": "Every point has room on both sides.",
+      "label": "whole line open",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "Is the single-point set {3} open in the usual real line?",
+      "answer": "no",
+      "answers": [
+        "no",
+        "false"
+      ],
+      "hint": "There is no wiggle room around 3 that stays inside the set.",
+      "label": "point not open",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "The union of any collection of open sets is always what?",
+      "answer": "open",
+      "answers": [
+        "open"
+      ],
+      "hint": "Openness survives unions — that is one of the axioms.",
+      "label": "union axiom",
+      "choices": [
+        {
+          "value": "open",
+          "label": "open"
+        },
+        {
+          "value": "closed",
+          "label": "closed"
+        },
+        {
+          "value": "empty",
+          "label": "empty"
+        },
+        {
+          "value": "finite",
+          "label": "finite"
+        }
+      ]
+    },
+    {
+      "prompt": "Can the same set carry more than one topology?",
+      "answer": "yes",
+      "answers": [
+        "yes",
+        "true"
+      ],
+      "hint": "Choosing different collections of open sets gives different spaces.",
+      "label": "many topologies",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    }
+
     ]
   };
 })();

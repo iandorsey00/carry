@@ -61,7 +61,88 @@
           { value: "counted", label: "counted" },
           { value: "differentiable", label: "differentiable" }
         ]
-      }
+      },
+    {
+      "prompt": "Is the whole real line compact?",
+      "answer": "no",
+      "answers": [
+        "no",
+        "false"
+      ],
+      "hint": "It is closed but not bounded.",
+      "label": "line not compact",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "Is a finite set of points always compact?",
+      "answer": "yes",
+      "answers": [
+        "yes",
+        "true"
+      ],
+      "hint": "Pick one cover set per point — a finite subcover.",
+      "label": "finite compact",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "Must a continuous real function on a compact set attain a maximum?",
+      "answer": "yes",
+      "answers": [
+        "yes",
+        "true"
+      ],
+      "hint": "The extreme value theorem leans exactly on compactness.",
+      "label": "extreme value",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "Is the interval [0, ∞) compact?",
+      "answer": "no",
+      "answers": [
+        "no",
+        "false"
+      ],
+      "hint": "Closed, yes — but boundedness fails.",
+      "label": "half line",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    }
+
     ]
   };
 })();
