@@ -60,7 +60,65 @@
       "hint": "Factor x^2 - 4 as (x - 2)(x + 2).",
       "label": "simplified rational expression",
       "feedback": "Factor first, then cancel common factors."
+    },
+    {
+      "prompt": "Simplify: (x^2 - 1) / (x + 1).",
+      "answer": "x-1",
+      "answers": [
+        "x-1",
+        "x - 1"
+      ],
+      "hint": "Factor the top as (x - 1)(x + 1), then cancel.",
+      "label": "difference of squares",
+      "choices": [
+        {
+          "value": "x-1",
+          "label": "x - 1"
+        },
+        {
+          "value": "x+1",
+          "label": "x + 1"
+        },
+        {
+          "value": "x^2",
+          "label": "x²"
+        },
+        {
+          "value": "1",
+          "label": "1"
+        }
+      ]
+    },
+    {
+      "prompt": "For (x + 2) / (x^2 - 16), which x values are not allowed?",
+      "answer": "4 and -4",
+      "answers": [
+        "4 and -4",
+        "-4 and 4",
+        "±4"
+      ],
+      "hint": "Factor the denominator into (x - 4)(x + 4).",
+      "label": "two exclusions",
+      "choices": [
+        {
+          "value": "4 and -4",
+          "label": "4 and -4"
+        },
+        {
+          "value": "-2",
+          "label": "-2"
+        },
+        {
+          "value": "16",
+          "label": "16"
+        },
+        {
+          "value": "only 4",
+          "label": "only 4"
+        }
+      ]
     }
+
   ]
 };
 })();

@@ -67,7 +67,35 @@
       "hint": "2^3 is 8, then add 1.",
       "label": "exponent expression value",
       "feedback": "Evaluate the exponent before adding."
+    },
+    {
+      "prompt": "Evaluate 6^2 - 5.",
+      "answer": "31",
+      "answers": [
+        "31"
+      ],
+      "hint": "The power comes first: 36, then subtract.",
+      "label": "power before subtraction",
+      "choices": [
+        {
+          "value": "31",
+          "label": "31"
+        },
+        {
+          "value": "7",
+          "label": "7"
+        },
+        {
+          "value": "25",
+          "label": "25"
+        },
+        {
+          "value": "36",
+          "label": "36"
+        }
+      ]
     }
+
   ]
 };
 })();

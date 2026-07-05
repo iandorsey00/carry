@@ -71,7 +71,36 @@
       "hint": "Combine a terms, then constants.",
       "label": "combined expression",
       "feedback": "Group like terms before adding."
+    },
+    {
+      "prompt": "Simplify: 7k + 2 - 3k.",
+      "answer": "4k+2",
+      "answers": [
+        "4k+2",
+        "4k + 2"
+      ],
+      "hint": "Combine the k terms; the constant rides along.",
+      "label": "combine with constant",
+      "choices": [
+        {
+          "value": "4k+2",
+          "label": "4k + 2"
+        },
+        {
+          "value": "10k+2",
+          "label": "10k + 2"
+        },
+        {
+          "value": "4k",
+          "label": "4k"
+        },
+        {
+          "value": "6k",
+          "label": "6k"
+        }
+      ]
     }
+
   ]
 };
 })();

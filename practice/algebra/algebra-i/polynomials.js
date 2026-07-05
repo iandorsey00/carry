@@ -60,7 +60,60 @@
       "hint": "25 - 5 = 20.",
       "label": "polynomial value",
       "feedback": "Substitute the value for every x first."
+    },
+    {
+      "prompt": "Combine like terms: 2x^3 + x^2 + 3x^3.",
+      "answer": "5x^3+x^2",
+      "answers": [
+        "5x^3+x^2",
+        "5x^3 + x^2"
+      ],
+      "hint": "Only the x^3 terms match; the x^2 term stays.",
+      "label": "combine cubics",
+      "choices": [
+        {
+          "value": "5x^3+x^2",
+          "label": "5x³ + x²"
+        },
+        {
+          "value": "6x^5",
+          "label": "6x⁵"
+        },
+        {
+          "value": "5x^3",
+          "label": "5x³"
+        },
+        {
+          "value": "6x^3",
+          "label": "6x³"
+        }
+      ]
+    },
+    {
+      "prompt": "What is the degree of the constant polynomial 9?",
+      "answer": "0",
+      "answers": [
+        "0",
+        "zero"
+      ],
+      "hint": "There is no x at all — the power of x is zero.",
+      "label": "constant degree",
+      "choices": [
+        {
+          "value": "0",
+          "label": "0"
+        },
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "9",
+          "label": "9"
+        }
+      ]
     }
+
   ]
 };
 })();

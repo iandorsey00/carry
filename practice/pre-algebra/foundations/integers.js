@@ -59,7 +59,36 @@
       "hint": "Different signs make a negative quotient.",
       "label": "integer quotient",
       "feedback": "Different signs give a negative result."
+    },
+    {
+      "prompt": "What is -9 + 9?",
+      "answer": "0",
+      "answers": [
+        "0",
+        "zero"
+      ],
+      "hint": "Opposites cancel exactly.",
+      "label": "opposites cancel",
+      "choices": [
+        {
+          "value": "0",
+          "label": "0"
+        },
+        {
+          "value": "-18",
+          "label": "-18"
+        },
+        {
+          "value": "18",
+          "label": "18"
+        },
+        {
+          "value": "-1",
+          "label": "-1"
+        }
+      ]
     }
+
   ]
 };
 })();
