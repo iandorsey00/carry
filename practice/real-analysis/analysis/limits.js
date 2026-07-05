@@ -59,7 +59,124 @@
           "label": "inputs"
         }
       ]
+    },
+    {
+      "prompt": "As x approaches 4, what does <math>x^2</math> approach?",
+      "answer": "16",
+      "answers": [
+        "16",
+        "sixteen"
+      ],
+      "hint": "Squaring is continuous, so substitute.",
+      "label": "square limit",
+      "choices": [
+        {
+          "value": "16",
+          "label": "16"
+        },
+        {
+          "value": "8",
+          "label": "8"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "12",
+          "label": "12"
+        }
+      ]
+    },
+    {
+      "prompt": "In epsilon-delta language, delta controls closeness of what?",
+      "answer": "inputs",
+      "answers": [
+        "inputs",
+        "the inputs"
+      ],
+      "hint": "Epsilon guards outputs; delta answers with inputs.",
+      "label": "delta inputs",
+      "choices": [
+        {
+          "value": "inputs",
+          "label": "inputs"
+        },
+        {
+          "value": "outputs",
+          "label": "outputs"
+        }
+      ]
+    },
+    {
+      "prompt": "If the left and right limits differ at a point, does the two-sided limit exist?",
+      "answer": "no",
+      "answers": [
+        "no",
+        "false"
+      ],
+      "hint": "The outputs need one shared destination.",
+      "label": "one sided disagree",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "Can a function equal its limit at the point itself?",
+      "answer": "yes",
+      "answers": [
+        "yes",
+        "true"
+      ],
+      "hint": "That match is exactly continuity — allowed, just not required.",
+      "label": "match allowed",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "As x approaches 0, what does 5x approach?",
+      "answer": "0",
+      "answers": [
+        "0",
+        "zero"
+      ],
+      "hint": "Five times something tiny is still tiny.",
+      "label": "scaled limit",
+      "choices": [
+        {
+          "value": "0",
+          "label": "0"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "infinity",
+          "label": "infinity"
+        }
+      ]
     }
+
   ]
 };
 })();

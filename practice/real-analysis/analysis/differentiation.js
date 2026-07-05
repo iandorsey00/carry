@@ -63,7 +63,128 @@
       ],
       "hint": "Use the power rule.",
       "label": "basic derivative"
+    },
+    {
+      "prompt": "What is the derivative of 5x + 2?",
+      "answer": "5",
+      "answers": [
+        "5",
+        "five"
+      ],
+      "hint": "A line's derivative is its slope.",
+      "label": "line derivative",
+      "choices": [
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "5x",
+          "label": "5x"
+        },
+        {
+          "value": "7",
+          "label": "7"
+        }
+      ]
+    },
+    {
+      "prompt": "The difference quotient over an interval measures which kind of rate?",
+      "answer": "average",
+      "answers": [
+        "average",
+        "average rate"
+      ],
+      "hint": "The instantaneous rate only appears in the limit.",
+      "label": "average rate",
+      "choices": [
+        {
+          "value": "average",
+          "label": "an average rate"
+        },
+        {
+          "value": "instantaneous",
+          "label": "an instantaneous rate"
+        }
+      ]
+    },
+    {
+      "prompt": "The derivative is the limit of difference quotients as h approaches what?",
+      "answer": "0",
+      "answers": [
+        "0",
+        "zero"
+      ],
+      "hint": "The interval shrinks to nothing.",
+      "label": "h to zero",
+      "choices": [
+        {
+          "value": "0",
+          "label": "0"
+        },
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "infinity",
+          "label": "infinity"
+        },
+        {
+          "value": "a",
+          "label": "a"
+        }
+      ]
+    },
+    {
+      "prompt": "Is every continuous function differentiable?",
+      "answer": "no",
+      "answers": [
+        "no",
+        "false"
+      ],
+      "hint": "A corner is continuous but has no single slope.",
+      "label": "corner counterexample",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "What is the derivative of a constant function?",
+      "answer": "0",
+      "answers": [
+        "0",
+        "zero"
+      ],
+      "hint": "A flat graph has slope zero everywhere.",
+      "label": "constant derivative",
+      "choices": [
+        {
+          "value": "0",
+          "label": "0"
+        },
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "the constant",
+          "label": "the constant itself"
+        }
+      ]
     }
+
   ]
 };
 })();

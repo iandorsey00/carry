@@ -68,7 +68,119 @@
           "label": "No"
         }
       ]
+    },
+    {
+      "prompt": "What is the integral of f(x) = 2 over [0, 5]?",
+      "answer": "10",
+      "answers": [
+        "10",
+        "ten"
+      ],
+      "hint": "A 2-by-5 rectangle of area.",
+      "label": "constant integral",
+      "choices": [
+        {
+          "value": "10",
+          "label": "10"
+        },
+        {
+          "value": "7",
+          "label": "7"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "25",
+          "label": "25"
+        }
+      ]
+    },
+    {
+      "prompt": "As partitions get finer, the Riemann sums of a continuous function do what?",
+      "answer": "converge",
+      "answers": [
+        "converge"
+      ],
+      "hint": "They settle toward the true integral.",
+      "label": "sums converge",
+      "choices": [
+        {
+          "value": "converge",
+          "label": "converge"
+        },
+        {
+          "value": "diverge",
+          "label": "diverge"
+        },
+        {
+          "value": "oscillate forever",
+          "label": "oscillate forever"
+        }
+      ]
+    },
+    {
+      "prompt": "Is every continuous function on [a, b] Riemann integrable?",
+      "answer": "yes",
+      "answers": [
+        "yes",
+        "true"
+      ],
+      "hint": "Continuity on a closed interval is enough.",
+      "label": "continuous integrable",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "The mesh of a partition measures what?",
+      "answer": "the widest piece",
+      "answers": [
+        "the widest piece",
+        "widest piece"
+      ],
+      "hint": "Fine partitions are judged by their worst gap.",
+      "label": "mesh meaning",
+      "choices": [
+        {
+          "value": "the widest piece",
+          "label": "the widest piece"
+        },
+        {
+          "value": "the number of pieces",
+          "label": "the number of pieces"
+        }
+      ]
+    },
+    {
+      "prompt": "Do upper and lower Riemann sums squeeze the true integral between them?",
+      "answer": "yes",
+      "answers": [
+        "yes",
+        "true"
+      ],
+      "hint": "Overestimates above, underestimates below.",
+      "label": "squeeze",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     }
+
   ]
 };
 })();

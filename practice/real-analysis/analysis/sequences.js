@@ -84,7 +84,48 @@
       "hint": "The limit is the value approached by the terms.",
       "label": "limit value",
       "feedback": "Name the destination value."
+    },
+    {
+      "prompt": "Does the sequence 1, 2, 3, 4, ... converge?",
+      "answer": "no",
+      "answers": [
+        "no",
+        "false"
+      ],
+      "hint": "It grows without bound instead of settling.",
+      "label": "unbounded diverges",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "If a sequence converges, is its limit unique?",
+      "answer": "yes",
+      "answers": [
+        "yes",
+        "true"
+      ],
+      "hint": "The tail cannot settle near two different values at once.",
+      "label": "unique limit",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     }
+
   ]
 };
 })();
