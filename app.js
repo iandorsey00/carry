@@ -1,6 +1,6 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-beta.22";
+const APP_VERSION = "0.1.0-beta.23";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 const GAMES_STORAGE_KEY = "carry.games.v1";
@@ -872,6 +872,8 @@ function cacheElements() {
   els.numberGameDifficulties = Object.fromEntries(Array.from(document.querySelectorAll("[data-number-difficulty]")).map((item) => [item.dataset.numberDifficulty, item]));
   els.graphPathsFigure = document.querySelector("#graphPathsFigure");
   els.scratchpadInput = document.querySelector("#scratchpadInput");
+  els.duplicateScratchLine = document.querySelector("#duplicateScratchLine");
+  els.duplicateScratchLineHeader = document.querySelector("#duplicateScratchLineHeader");
   els.scratchpadPreview = document.querySelector("#scratchpadPreview");
   els.scratchpadList = document.querySelector("#scratchpadList");
   els.scratchpadStatus = document.querySelector("#scratchpadStatus");
@@ -8652,6 +8654,8 @@ function bindEvents() {
   els.importProgress.addEventListener("change", importProgress);
   els.scratchpadInput.addEventListener("input", handleScratchpadInput);
   els.scratchpadInput.addEventListener("keydown", handleScratchpadKeydown);
+  els.duplicateScratchLine?.addEventListener("click", duplicateScratchpadLine);
+  els.duplicateScratchLineHeader?.addEventListener("click", duplicateScratchpadLine);
   els.scratchpadPlainView.addEventListener("click", () => setScratchpadView("plain"));
   els.scratchpadRenderedView.addEventListener("click", () => setScratchpadView("rendered"));
   els.scratchpadLineNumbers.addEventListener("change", () => setScratchpadLineNumbers(els.scratchpadLineNumbers.checked));
@@ -9167,6 +9171,7 @@ function renderScratchpad() {
 function setScratchpadView(view) {
   const nextView = view === "rendered" ? "rendered" : "plain";
   if (els.scratchpadLayout) els.scratchpadLayout.dataset.scratchpadView = nextView;
+  if (els.scratchpadPanel) els.scratchpadPanel.dataset.scratchpadView = nextView;
   els.scratchpadPlainView?.setAttribute("aria-pressed", nextView === "plain" ? "true" : "false");
   els.scratchpadRenderedView?.setAttribute("aria-pressed", nextView === "rendered" ? "true" : "false");
   if (nextView === "plain") {

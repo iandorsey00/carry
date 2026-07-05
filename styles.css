@@ -586,7 +586,27 @@ body[data-surface="scratchpad"] .site-footer {
 }
 
 .scratchpad-title-lockup {
-  text-align: center;
+  text-align: left;
+}
+
+.scratchpad-editor-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+}
+
+.scratchpad-header-actions {
+  display: contents;
+}
+
+#duplicateScratchLineHeader {
+  display: none;
+}
+
+.scratchpad-layout[data-scratchpad-view="rendered"] #duplicateScratchLine {
+  display: none;
 }
 
 .scratchpad-actions,
@@ -3599,6 +3619,25 @@ body[data-surface="scratchpad"] .scratch-line-math-aligned {
   .scratchpad-drawer {
     position: static;
     justify-self: start;
+  }
+
+  .scratchpad-header-actions {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    justify-self: start;
+  }
+
+  #duplicateScratchLineHeader {
+    display: inline-flex;
+  }
+
+  .scratchpad-panel[data-scratchpad-view="rendered"] #duplicateScratchLineHeader {
+    display: none;
+  }
+
+  .scratchpad-editor-controls #duplicateScratchLine {
+    display: none;
   }
 
   .scratchpad-actions,
