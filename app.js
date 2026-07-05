@@ -1,6 +1,6 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-beta.13";
+const APP_VERSION = "0.1.0-beta.14";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 const GAMES_STORAGE_KEY = "carry.games.v1";
@@ -9050,14 +9050,56 @@ function modeStatus(mode) {
 
 function exportProgress() {
   saveProgress("Exported progress");
-  const blob = new Blob([JSON.stringify(state.progress, null, 2)], { type: "application/json" });
+  const payload = createBackupPayload();
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement("a");
   anchor.href = url;
-  anchor.download = "carry-progress.json";
+  anchor.download = "carry-backup.json";
   anchor.click();
   URL.revokeObjectURL(url);
-  setStatus("Progress exported as JSON.", "correct");
+  setStatus("Backup exported: progress, scratchpads, games, and tools.", "correct");
+}
+
+function createBackupPayload() {
+  return {
+    format: "carry-backup",
+    version: 1,
+    appVersion: APP_VERSION,
+    exportedAt: new Date().toISOString(),
+    progress: state.progress,
+    scratchpads: state.scratchpads,
+    games: state.games,
+    tools: state.tools
+  };
+}
+
+function applyImportedData(imported) {
+  const isBackup = imported?.format === "carry-backup";
+  const progressData = isBackup ? imported.progress : imported;
+  if (!progressData || progressData.version !== 1) throw new Error("Unsupported progress file.");
+
+  if (isBackup) {
+    if (imported.scratchpads?.scratchpads?.length) {
+      state.scratchpads = { ...imported.scratchpads, activeSurface: state.scratchpads.activeSurface };
+      saveScratchpads();
+    }
+    if (imported.games) {
+      state.games = { ...state.games, ...imported.games };
+      saveGames();
+    }
+    if (imported.tools) {
+      state.tools = { ...state.tools, ...imported.tools };
+      saveTools();
+    }
+  }
+
+  state.progress = {
+    ...state.progress,
+    ...progressData,
+    preferences: { ...state.progress.preferences, ...progressData.preferences }
+  };
+  return isBackup;
 }
 
 function importProgress(event) {
@@ -9067,12 +9109,7 @@ function importProgress(event) {
   reader.addEventListener("load", () => {
     try {
       const imported = JSON.parse(String(reader.result));
-      if (!imported || imported.version !== 1) throw new Error("Unsupported progress file.");
-      state.progress = {
-        ...state.progress,
-        ...imported,
-        preferences: { ...state.progress.preferences, ...imported.preferences }
-      };
+      const isBackup = applyImportedData(imported);
       state.activeTopic = state.progress.currentTopic || "Arithmetic";
       state.activeWorkspaceId = state.progress.currentWorkspaceId || "arithmetic.long-addition.3x3";
       state.mode = state.progress.preferences.mode || "guided";
@@ -9084,11 +9121,16 @@ function importProgress(event) {
       ensureSurfaceWorkspace();
       renderTopics();
       renderWorkspace();
+      if (isBackup) {
+        renderScratchpad();
+        renderTools();
+        renderGames();
+      }
       updateUrlFromState({ replace: true });
       saveProgress("Imported progress");
-      setStatus("Progress imported.", "correct");
+      setStatus(isBackup ? "Backup imported: progress, scratchpads, games, and tools." : "Progress imported.", "correct");
     } catch {
-      setStatus("Choose a valid Carry progress JSON file.", "incorrect");
+      setStatus("Choose a valid Carry backup or progress JSON file.", "incorrect");
     } finally {
       event.target.value = "";
     }
