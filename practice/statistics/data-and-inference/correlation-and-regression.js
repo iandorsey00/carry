@@ -85,7 +85,97 @@
       "hint": "Regression models a quantitative relationship.",
       "label": "regression purpose",
       "feedback": "Regression gives a compact model for prediction."
+    },
+    {
+      "prompt": "Correlation r always stays between which two values?",
+      "answer": "-1 and 1",
+      "answers": [
+        "-1 and 1",
+        "minus one and one"
+      ],
+      "hint": "The endpoints mean perfect linear relationships.",
+      "label": "r range",
+      "choices": [
+        {
+          "value": "-1 and 1",
+          "label": "-1 and 1"
+        },
+        {
+          "value": "0 and 100",
+          "label": "0 and 100"
+        },
+        {
+          "value": "0 and 1",
+          "label": "0 and 1"
+        }
+      ]
+    },
+    {
+      "prompt": "Ice cream sales and drownings rise together. What most likely explains it?",
+      "answer": "a third factor",
+      "answers": [
+        "a third factor",
+        "summer",
+        "a lurking variable"
+      ],
+      "hint": "Hot weather drives both.",
+      "label": "lurking variable",
+      "choices": [
+        {
+          "value": "a third factor",
+          "label": "a third factor, like summer"
+        },
+        {
+          "value": "causation",
+          "label": "ice cream causes drowning"
+        }
+      ]
+    },
+    {
+      "prompt": "An r of -0.9 describes what kind of relationship?",
+      "answer": "strong and negative",
+      "answers": [
+        "strong and negative",
+        "strong negative"
+      ],
+      "hint": "Near the endpoint, sloping downward.",
+      "label": "read r",
+      "choices": [
+        {
+          "value": "strong and negative",
+          "label": "strong and negative"
+        },
+        {
+          "value": "weak and negative",
+          "label": "weak and negative"
+        },
+        {
+          "value": "strong and positive",
+          "label": "strong and positive"
+        }
+      ]
+    },
+    {
+      "prompt": "Regression predicts which variable: the explanatory or the response?",
+      "answer": "response",
+      "answers": [
+        "response",
+        "the response"
+      ],
+      "hint": "The line answers questions about the outcome.",
+      "label": "predict response",
+      "choices": [
+        {
+          "value": "response",
+          "label": "the response variable"
+        },
+        {
+          "value": "explanatory",
+          "label": "the explanatory variable"
+        }
+      ]
     }
+
   ]
 };
 })();

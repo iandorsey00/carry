@@ -72,7 +72,36 @@
       "hint": "Subtract 10 from 21.",
       "label": "range",
       "feedback": "Range measures the full spread from smallest to largest."
+    },
+    {
+      "prompt": "Find the median of 4, 1, 7.",
+      "answer": "4",
+      "answers": [
+        "4",
+        "four"
+      ],
+      "hint": "Order the values first: 1, 4, 7.",
+      "label": "order first",
+      "choices": [
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "7",
+          "label": "7"
+        },
+        {
+          "value": "6",
+          "label": "6"
+        }
+      ]
     }
+
   ]
 };
 })();

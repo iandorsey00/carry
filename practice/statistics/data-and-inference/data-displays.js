@@ -89,7 +89,101 @@
       "hint": "Bar height counts how many observations are in the interval.",
       "label": "histogram bar height",
       "feedback": "Histogram height represents frequency."
+    },
+    {
+      "prompt": "Which display shows a five-number summary at a glance?",
+      "answer": "boxplot",
+      "answers": [
+        "boxplot",
+        "box plot"
+      ],
+      "hint": "Median, quartiles, and extremes in one box.",
+      "label": "five numbers",
+      "choices": [
+        {
+          "value": "boxplot",
+          "label": "a boxplot"
+        },
+        {
+          "value": "bar chart",
+          "label": "a bar chart"
+        },
+        {
+          "value": "pie chart",
+          "label": "a pie chart"
+        }
+      ]
+    },
+    {
+      "prompt": "Measurements taken over time are best shown with which display?",
+      "answer": "line graph",
+      "answers": [
+        "line graph",
+        "a line graph"
+      ],
+      "hint": "Time flows left to right along the line.",
+      "label": "over time",
+      "choices": [
+        {
+          "value": "line graph",
+          "label": "a line graph"
+        },
+        {
+          "value": "bar chart",
+          "label": "a bar chart"
+        },
+        {
+          "value": "pie chart",
+          "label": "a pie chart"
+        }
+      ]
+    },
+    {
+      "prompt": "Should a histogram of continuous data have gaps between its bars?",
+      "answer": "no",
+      "answers": [
+        "no",
+        "false"
+      ],
+      "hint": "The bars touch because the intervals do.",
+      "label": "touching bars",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "A pie chart only makes sense when the slices add up to what?",
+      "answer": "a whole",
+      "answers": [
+        "a whole",
+        "100%",
+        "the whole"
+      ],
+      "hint": "Every slice is a share of one total.",
+      "label": "pie total",
+      "choices": [
+        {
+          "value": "a whole",
+          "label": "one whole"
+        },
+        {
+          "value": "the mean",
+          "label": "the mean"
+        },
+        {
+          "value": "any amount",
+          "label": "any amount"
+        }
+      ]
     }
+
   ]
 };
 })();

@@ -85,7 +85,55 @@
       "hint": "Grade level names ordered groups.",
       "label": "grade variable type",
       "feedback": "Grade level is usually treated as categorical or ordinal."
+    },
+    {
+      "prompt": "Heights recorded only as short, medium, or tall: categorical or quantitative?",
+      "answer": "categorical",
+      "answers": [
+        "categorical"
+      ],
+      "hint": "Labels, even when they describe size.",
+      "label": "labels not numbers",
+      "choices": [
+        {
+          "value": "categorical",
+          "label": "categorical"
+        },
+        {
+          "value": "quantitative",
+          "label": "quantitative"
+        }
+      ]
+    },
+    {
+      "prompt": "What is the mean of 3, 5, 10?",
+      "answer": "6",
+      "answers": [
+        "6",
+        "six"
+      ],
+      "hint": "The total is 18, shared across 3 values.",
+      "label": "small mean",
+      "choices": [
+        {
+          "value": "6",
+          "label": "6"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "9",
+          "label": "9"
+        },
+        {
+          "value": "18",
+          "label": "18"
+        }
+      ]
     }
+
   ]
 };
 })();

@@ -85,7 +85,88 @@
       "hint": "Larger samples usually vary less from sample to sample.",
       "label": "sample size stability",
       "feedback": "Larger random samples usually give more stable estimates."
+    },
+    {
+      "prompt": "Polling only your friends about a citywide issue creates what problem?",
+      "answer": "a biased sample",
+      "answers": [
+        "a biased sample",
+        "bias"
+      ],
+      "hint": "Friends are not a random slice of the city.",
+      "label": "friend poll",
+      "choices": [
+        {
+          "value": "a biased sample",
+          "label": "a biased sample"
+        },
+        {
+          "value": "too much randomness",
+          "label": "too much randomness"
+        }
+      ]
+    },
+    {
+      "prompt": "The sample mean comes out to 72. Is that 72 a statistic or a parameter?",
+      "answer": "statistic",
+      "answers": [
+        "statistic",
+        "a statistic"
+      ],
+      "hint": "It was computed from a sample.",
+      "label": "sample mean",
+      "choices": [
+        {
+          "value": "statistic",
+          "label": "a statistic"
+        },
+        {
+          "value": "parameter",
+          "label": "a parameter"
+        }
+      ]
+    },
+    {
+      "prompt": "Does doubling the sample size fix a biased sampling method?",
+      "answer": "no",
+      "answers": [
+        "no",
+        "false"
+      ],
+      "hint": "More of a biased sample is still biased.",
+      "label": "bias persists",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "A census measures a sample or the whole population?",
+      "answer": "the whole population",
+      "answers": [
+        "the whole population",
+        "population"
+      ],
+      "hint": "Census means everyone.",
+      "label": "census",
+      "choices": [
+        {
+          "value": "the whole population",
+          "label": "the whole population"
+        },
+        {
+          "value": "a sample",
+          "label": "a sample"
+        }
+      ]
     }
+
   ]
 };
 })();

@@ -147,7 +147,60 @@
       "hint": "Use the 68-95-99.7 rule.",
       "label": "empirical rule two sd",
       "feedback": "About 95% lies within two standard deviations."
+    },
+    {
+      "prompt": "A z-score of 0 places a value where?",
+      "answer": "at the mean",
+      "answers": [
+        "at the mean",
+        "the mean"
+      ],
+      "hint": "Zero distance from the center.",
+      "label": "z zero",
+      "choices": [
+        {
+          "value": "at the mean",
+          "label": "exactly at the mean"
+        },
+        {
+          "value": "one above",
+          "label": "one deviation above"
+        },
+        {
+          "value": "at zero",
+          "label": "at the value 0"
+        }
+      ]
+    },
+    {
+      "prompt": "About what percent of normal data lies within three standard deviations?",
+      "answer": "99.7%",
+      "answers": [
+        "99.7%",
+        "99.7"
+      ],
+      "hint": "The last number of the 68-95-99.7 rule.",
+      "label": "three sigma",
+      "choices": [
+        {
+          "value": "99.7%",
+          "label": "99.7%"
+        },
+        {
+          "value": "95%",
+          "label": "95%"
+        },
+        {
+          "value": "68%",
+          "label": "68%"
+        },
+        {
+          "value": "100%",
+          "label": "100%"
+        }
+      ]
     }
+
   ]
 };
 })();
