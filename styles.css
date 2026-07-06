@@ -3918,3 +3918,10 @@ body[data-surface="tools"][data-active-tool="graphing"] .graphing-pane .graph-eq
 body[data-surface="tools"][data-active-tool="graphing"] .graphing-pane .scratchpad-drawer {
   z-index: 3;
 }
+
+.graph-svg,
+.graph-svg text,
+.graph-canvas {
+  user-select: none;
+  -webkit-user-select: none;
+}

@@ -1,6 +1,6 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-beta.29";
+const APP_VERSION = "0.1.0-beta.30";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 const GAMES_STORAGE_KEY = "carry.games.v1";
@@ -2831,6 +2831,17 @@ function drawGraph3dAxes(context, settings, width, height) {
     context.lineTo(b.x, b.y);
     context.stroke();
     context.fillText(label, b.x + 5, b.y - 5);
+  });
+  context.font = "600 11px Inter, Helvetica, Arial, sans-serif";
+  graphTicks(-range, range).forEach((tick) => {
+    if (approximatelyZero(tick)) return;
+    const text = formatNumber(tick, 2);
+    const onX = projectGraphPoint(tick, 0, 0, settings, width, height);
+    const onY = projectGraphPoint(0, tick, 0, settings, width, height);
+    const onZ = projectGraphPoint(0, 0, tick, settings, width, height);
+    context.fillText(text, onX.x + 4, onX.y + 12);
+    context.fillText(text, onY.x + 4, onY.y + 12);
+    context.fillText(text, onZ.x + 6, onZ.y + 4);
   });
   context.restore();
 }
@@ -8772,6 +8783,12 @@ function bindEvents() {
   els.graphEquation3d.addEventListener("change", () => updateGraphingSettings("Changed 3D graph"));
   els.graphRange.addEventListener("change", () => updateGraphingSettings("Changed Graphing window"));
   els.graphDraw.addEventListener("click", () => updateGraphingSettings("Graphed equation"));
+  let graphResizeTimer = 0;
+  window.addEventListener("resize", () => {
+    if (state.activeSurface !== "tools" || state.tools.activeTool !== "graphing") return;
+    window.clearTimeout(graphResizeTimer);
+    graphResizeTimer = window.setTimeout(() => renderGraphingTool(), 120);
+  });
   els.graphReset.addEventListener("click", resetGraphView);
   els.graph2dSvg.addEventListener("pointerdown", startGraphDrag);
   els.graph2dSvg.addEventListener("pointermove", dragGraphView);
