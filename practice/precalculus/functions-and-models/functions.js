@@ -80,7 +80,65 @@
           "label": "No"
         }
       ]
+    },
+    {
+      "prompt": "If f(x) = x², what is f(-3)?",
+      "answer": "9",
+      "answers": [
+        "9",
+        "nine"
+      ],
+      "hint": "Squaring removes the sign.",
+      "label": "square negative",
+      "choices": [
+        {
+          "value": "9",
+          "label": "9"
+        },
+        {
+          "value": "-9",
+          "label": "-9"
+        },
+        {
+          "value": "6",
+          "label": "6"
+        },
+        {
+          "value": "-6",
+          "label": "-6"
+        }
+      ]
+    },
+    {
+      "prompt": "Which input is excluded from the domain of f(x) = 1/x?",
+      "answer": "0",
+      "answers": [
+        "0",
+        "zero",
+        "x = 0"
+      ],
+      "hint": "Division by zero has no answer.",
+      "label": "domain hole",
+      "choices": [
+        {
+          "value": "0",
+          "label": "0"
+        },
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "-1",
+          "label": "-1"
+        },
+        {
+          "value": "none",
+          "label": "none"
+        }
+      ]
     }
+
   ]
 };
 })();

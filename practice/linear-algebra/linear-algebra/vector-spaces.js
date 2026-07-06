@@ -59,7 +59,116 @@
           "label": "No"
         }
       ]
+    },
+    {
+      "prompt": "What is the dimension of R³?",
+      "answer": "3",
+      "answers": [
+        "3",
+        "three"
+      ],
+      "hint": "Three independent directions, three coordinates.",
+      "label": "r3 dimension",
+      "choices": [
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "9",
+          "label": "9"
+        },
+        {
+          "value": "1",
+          "label": "1"
+        }
+      ]
+    },
+    {
+      "prompt": "Can 3 vectors span the plane R²?",
+      "answer": "yes",
+      "answers": [
+        "yes",
+        "true"
+      ],
+      "hint": "Spanning allows redundancy; extra vectors are fine.",
+      "label": "extra spanners",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "Can a single vector span R²?",
+      "answer": "no",
+      "answers": [
+        "no",
+        "false"
+      ],
+      "hint": "One arrow only reaches its own line.",
+      "label": "one vector line",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "Are (2, 4) and (1, 2) linearly independent?",
+      "answer": "no",
+      "answers": [
+        "no",
+        "false"
+      ],
+      "hint": "The first is exactly twice the second.",
+      "label": "dependent pair",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "Does the zero vector belong to every vector space?",
+      "answer": "yes",
+      "answers": [
+        "yes",
+        "true"
+      ],
+      "hint": "Scaling anything by 0 must stay inside.",
+      "label": "zero vector",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     }
+
   ]
 };
 })();

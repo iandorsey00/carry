@@ -40,7 +40,128 @@
       ],
       "hint": "The identity matrix leaves the vector unchanged.",
       "label": "identity matrix"
+    },
+    {
+      "prompt": "What size is the product of a 2×3 matrix and a 3×4 matrix?",
+      "answer": "2×4",
+      "answers": [
+        "2×4",
+        "2x4"
+      ],
+      "hint": "The inner 3s must match and then disappear.",
+      "label": "product size",
+      "choices": [
+        {
+          "value": "2×4",
+          "label": "2 × 4"
+        },
+        {
+          "value": "3×3",
+          "label": "3 × 3"
+        },
+        {
+          "value": "2×3",
+          "label": "2 × 3"
+        },
+        {
+          "value": "6×12",
+          "label": "6 × 12"
+        }
+      ]
+    },
+    {
+      "prompt": "Can you add a 2×2 matrix to a 3×3 matrix?",
+      "answer": "no",
+      "answers": [
+        "no",
+        "false"
+      ],
+      "hint": "Addition needs matching shapes, entry by entry.",
+      "label": "shape mismatch",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "What does the 2×2 identity matrix do to any vector?",
+      "answer": "leaves it unchanged",
+      "answers": [
+        "leaves it unchanged",
+        "nothing"
+      ],
+      "hint": "It is the matrix version of multiplying by 1.",
+      "label": "identity effect",
+      "choices": [
+        {
+          "value": "leaves it unchanged",
+          "label": "leaves it unchanged"
+        },
+        {
+          "value": "doubles it",
+          "label": "doubles it"
+        },
+        {
+          "value": "reverses it",
+          "label": "reverses it"
+        }
+      ]
+    },
+    {
+      "prompt": "In [[5, 1], [2, 8]], what is the entry in row 1, column 2?",
+      "answer": "1",
+      "answers": [
+        "1",
+        "one"
+      ],
+      "hint": "First row, second position.",
+      "label": "read entry",
+      "choices": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "8",
+          "label": "8"
+        }
+      ]
+    },
+    {
+      "prompt": "Matrix addition combines two matrices how?",
+      "answer": "entry by entry",
+      "answers": [
+        "entry by entry",
+        "entrywise"
+      ],
+      "hint": "Each position adds independently.",
+      "label": "entrywise",
+      "choices": [
+        {
+          "value": "entry by entry",
+          "label": "entry by entry"
+        },
+        {
+          "value": "row times column",
+          "label": "row times column"
+        }
+      ]
     }
+
   ]
 };
 })();

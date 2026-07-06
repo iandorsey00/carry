@@ -63,7 +63,128 @@
           "label": "No"
         }
       ]
+    },
+    {
+      "prompt": "For the diagonal matrix [[3, 0], [0, 7]], what are the eigenvalues?",
+      "answer": "3 and 7",
+      "answers": [
+        "3 and 7",
+        "3, 7"
+      ],
+      "hint": "Each axis is stretched by its diagonal entry.",
+      "label": "diagonal eigenvalues",
+      "choices": [
+        {
+          "value": "3 and 7",
+          "label": "3 and 7"
+        },
+        {
+          "value": "0 and 0",
+          "label": "0 and 0"
+        },
+        {
+          "value": "21",
+          "label": "21"
+        },
+        {
+          "value": "10",
+          "label": "10"
+        }
+      ]
+    },
+    {
+      "prompt": "If Av = 0 for a nonzero vector v, what eigenvalue does v carry?",
+      "answer": "0",
+      "answers": [
+        "0",
+        "zero"
+      ],
+      "hint": "Av equals 0 times v.",
+      "label": "zero eigenvalue",
+      "choices": [
+        {
+          "value": "0",
+          "label": "0"
+        },
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "-1",
+          "label": "-1"
+        },
+        {
+          "value": "undefined",
+          "label": "v"
+        }
+      ]
+    },
+    {
+      "prompt": "An eigenvalue of 1 means the eigenvector is what under the transformation?",
+      "answer": "unchanged",
+      "answers": [
+        "unchanged",
+        "fixed"
+      ],
+      "hint": "Scaled by 1 is no change at all.",
+      "label": "eigenvalue one",
+      "choices": [
+        {
+          "value": "unchanged",
+          "label": "unchanged"
+        },
+        {
+          "value": "doubled",
+          "label": "doubled"
+        },
+        {
+          "value": "reversed",
+          "label": "reversed"
+        }
+      ]
+    },
+    {
+      "prompt": "Does a 90° rotation of the plane have any real eigenvectors?",
+      "answer": "no",
+      "answers": [
+        "no",
+        "false"
+      ],
+      "hint": "Every direction gets turned; none is preserved.",
+      "label": "rotation eigenvectors",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "If v is an eigenvector of A, is 2v an eigenvector with the same eigenvalue?",
+      "answer": "yes",
+      "answers": [
+        "yes",
+        "true"
+      ],
+      "hint": "Scaling an eigenvector keeps its direction.",
+      "label": "scaled eigenvector",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     }
+
   ]
 };
 })();

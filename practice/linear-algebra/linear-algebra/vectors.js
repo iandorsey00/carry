@@ -68,7 +68,64 @@
       "hint": "Use the 5-12-13 right triangle.",
       "label": "vector length",
       "feedback": "Square, add, then take the square root."
+    },
+    {
+      "prompt": "What is (5, 2) - (1, 6)?",
+      "answer": "(4,-4)",
+      "answers": [
+        "(4,-4)",
+        "(4, -4)"
+      ],
+      "hint": "Subtract component by component.",
+      "label": "vector subtraction",
+      "choices": [
+        {
+          "value": "(4,-4)",
+          "label": "(4, -4)"
+        },
+        {
+          "value": "(4,4)",
+          "label": "(4, 4)"
+        },
+        {
+          "value": "(6,8)",
+          "label": "(6, 8)"
+        },
+        {
+          "value": "(-4,4)",
+          "label": "(-4, 4)"
+        }
+      ]
+    },
+    {
+      "prompt": "What is the length of the vector (6, 8)?",
+      "answer": "10",
+      "answers": [
+        "10",
+        "ten"
+      ],
+      "hint": "Pythagoras: the square root of 36 + 64.",
+      "label": "six eight ten",
+      "choices": [
+        {
+          "value": "10",
+          "label": "10"
+        },
+        {
+          "value": "14",
+          "label": "14"
+        },
+        {
+          "value": "48",
+          "label": "48"
+        },
+        {
+          "value": "7",
+          "label": "7"
+        }
+      ]
     }
+
   ]
 };
 })();

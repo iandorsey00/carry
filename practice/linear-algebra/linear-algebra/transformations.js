@@ -46,7 +46,134 @@
       ],
       "hint": "The prompt gives the image of (1, 0) directly.",
       "label": "basis image"
+    },
+    {
+      "prompt": "T(x, y) = (y, x) swaps the coordinates. What line does it reflect across?",
+      "answer": "y = x",
+      "answers": [
+        "y = x",
+        "y=x",
+        "the line y = x"
+      ],
+      "hint": "Points on that line are their own swaps.",
+      "label": "swap reflection",
+      "choices": [
+        {
+          "value": "y = x",
+          "label": "the line y = x"
+        },
+        {
+          "value": "the x-axis",
+          "label": "the x-axis"
+        },
+        {
+          "value": "the y-axis",
+          "label": "the y-axis"
+        }
+      ]
+    },
+    {
+      "prompt": "What does T(x, y) = (3x, 3y) do to areas?",
+      "answer": "multiplies them by 9",
+      "answers": [
+        "multiplies them by 9",
+        "9",
+        "times 9"
+      ],
+      "hint": "Both directions stretch by 3, and 3 × 3 = 9.",
+      "label": "area scaling",
+      "choices": [
+        {
+          "value": "multiplies them by 9",
+          "label": "multiplies them by 9"
+        },
+        {
+          "value": "multiplies them by 3",
+          "label": "multiplies them by 3"
+        },
+        {
+          "value": "multiplies them by 6",
+          "label": "multiplies them by 6"
+        }
+      ]
+    },
+    {
+      "prompt": "Is a translation, which shifts every point over, a linear transformation?",
+      "answer": "no",
+      "answers": [
+        "no",
+        "false"
+      ],
+      "hint": "Linear maps must keep the origin fixed.",
+      "label": "translation",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "If T(1, 0) = (2, 0) and T(0, 1) = (0, 2), what is T(1, 1)?",
+      "answer": "(2,2)",
+      "answers": [
+        "(2,2)",
+        "(2, 2)"
+      ],
+      "hint": "Linearity lets the basis answers add.",
+      "label": "linearity adds",
+      "choices": [
+        {
+          "value": "(2,2)",
+          "label": "(2, 2)"
+        },
+        {
+          "value": "(1,1)",
+          "label": "(1, 1)"
+        },
+        {
+          "value": "(4,4)",
+          "label": "(4, 4)"
+        },
+        {
+          "value": "(2,0)",
+          "label": "(2, 0)"
+        }
+      ]
+    },
+    {
+      "prompt": "A 90° counterclockwise rotation sends (1, 0) to what?",
+      "answer": "(0,1)",
+      "answers": [
+        "(0,1)",
+        "(0, 1)"
+      ],
+      "hint": "East turns to north.",
+      "label": "rotate basis",
+      "choices": [
+        {
+          "value": "(0,1)",
+          "label": "(0, 1)"
+        },
+        {
+          "value": "(0,-1)",
+          "label": "(0, -1)"
+        },
+        {
+          "value": "(-1,0)",
+          "label": "(-1, 0)"
+        },
+        {
+          "value": "(1,1)",
+          "label": "(1, 1)"
+        }
+      ]
     }
+
   ]
 };
 })();

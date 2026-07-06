@@ -132,7 +132,56 @@
           "label": "left"
         }
       ]
+    },
+    {
+      "prompt": "Compared with y = x², what does y = -x² look like?",
+      "answer": "reflected across the x-axis",
+      "answers": [
+        "reflected across the x-axis",
+        "flipped upside down"
+      ],
+      "hint": "Every output flips sign.",
+      "label": "flip parabola",
+      "choices": [
+        {
+          "value": "reflected across the x-axis",
+          "label": "reflected across the x-axis"
+        },
+        {
+          "value": "shifted down",
+          "label": "shifted down"
+        },
+        {
+          "value": "reflected across the y-axis",
+          "label": "reflected across the y-axis"
+        }
+      ]
+    },
+    {
+      "prompt": "Compared with y = x², the graph of y = 2x² is what?",
+      "answer": "stretched vertically",
+      "answers": [
+        "stretched vertically",
+        "narrower"
+      ],
+      "hint": "Outputs double, so the parabola climbs faster.",
+      "label": "vertical stretch",
+      "choices": [
+        {
+          "value": "stretched vertically",
+          "label": "stretched vertically"
+        },
+        {
+          "value": "shifted up",
+          "label": "shifted up"
+        },
+        {
+          "value": "wider",
+          "label": "wider"
+        }
+      ]
     }
+
   ]
 };
 })();
