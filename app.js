@@ -1,6 +1,6 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-beta.25";
+const APP_VERSION = "0.1.0-beta.26";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 const GAMES_STORAGE_KEY = "carry.games.v1";
@@ -888,6 +888,7 @@ function cacheElements() {
   els.copyScratchLatex = document.querySelector("#copyScratchLatex");
   els.copyScratchMarkdown = document.querySelector("#copyScratchMarkdown");
   els.exportScratchImage = document.querySelector("#exportScratchImage");
+  els.exportScratchPng = document.querySelector("#exportScratchPng");
   els.shareScratchImage = document.querySelector("#shareScratchImage");
   els.exportScratchLatex = document.querySelector("#exportScratchLatex");
   els.importScratchLatex = document.querySelector("#importScratchLatex");
@@ -2018,6 +2019,7 @@ function toolLabel(tool) {
 function renderTools() {
   const activeTool = TOOL_IDS.includes(state.tools.activeTool) ? state.tools.activeTool : "random-number";
   state.tools.activeTool = activeTool;
+  document.body.dataset.activeTool = activeTool;
   els.toolTabs.forEach((tab) => {
     tab.setAttribute("aria-selected", tab.dataset.tool === activeTool ? "true" : "false");
   });
@@ -2689,6 +2691,26 @@ function renderGraph2d(model, settings) {
     const y = yToScreen(tick);
     svg.append(svgEl("line", { x1: margin, y1: y, x2: width - margin, y2: y, class: approximatelyZero(tick) ? "graph-axis" : "graph-grid-line" }));
   });
+  const tickLabel = (text, x, y, anchor) => {
+    const node = svgEl("text", { x, y, class: "graph-tick-label", "text-anchor": anchor });
+    node.textContent = text;
+    return node;
+  };
+  graphTicks(xMin, xMax).forEach((tick) => {
+    if (approximatelyZero(tick)) return;
+    const x = xToScreen(tick);
+    if (x < margin + 8 || x > width - margin - 8) return;
+    svg.append(tickLabel(formatNumber(tick, 2), x, height - margin + 18, "middle"));
+  });
+  graphTicks(yMin, yMax).forEach((tick) => {
+    if (approximatelyZero(tick)) return;
+    const y = yToScreen(tick);
+    if (y < margin + 10 || y > height - margin - 10) return;
+    svg.append(tickLabel(formatNumber(tick, 2), margin - 6, y + 4, "end"));
+  });
+  if (xMin < 0 && xMax > 0 && yMin < 0 && yMax > 0) {
+    svg.append(tickLabel("0", xToScreen(0) - 6, yToScreen(0) + 16, "end"));
+  }
   if (model.kind === "explicit") {
     return renderExplicitGraph2d(svg, model, { range, xMin, xMax, yMin, yMax }, xToScreen, yToScreen);
   }
@@ -8670,7 +8692,14 @@ function bindEvents() {
   els.copyScratchLatex.addEventListener("click", () => copyScratchpad("latex"));
   els.copyScratchMarkdown.addEventListener("click", () => copyScratchpad("markdown"));
   els.exportScratchImage.addEventListener("click", exportScratchpadImage);
+  els.exportScratchPng?.addEventListener("click", exportScratchpadPng);
   els.shareScratchImage.addEventListener("click", shareScratchpadImage);
+  document.querySelectorAll("[data-grapher-tool]").forEach((button) => {
+    button.addEventListener("click", () => {
+      button.closest(".scratchpad-drawer")?.removeAttribute("open");
+      setActiveTool(button.dataset.grapherTool);
+    });
+  });
   els.exportScratchLatex.addEventListener("click", exportScratchpadLatex);
   els.importScratchLatex.addEventListener("change", importScratchpadLatex);
   els.sudokuBoard.addEventListener("click", (event) => {
@@ -10288,6 +10317,49 @@ async function exportScratchpadImage() {
 
   downloadBlob(snapshot.svgBlob, snapshot.svgName);
   setScratchpadStatus("Rendered preview exported as SVG.");
+}
+
+async function exportScratchpadPng() {
+  const pad = activeScratchpad();
+  const lines = scratchpadPlainText().split("\n");
+  if (!lines.join("").trim()) {
+    setScratchpadStatus("Nothing to export yet.");
+    return;
+  }
+
+  const scale = 2;
+  const fontSize = 28;
+  const lineHeight = fontSize * 1.65;
+  const padding = 56;
+  const fontStack = `${fontSize * scale}px ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono", monospace`;
+  const measure = document.createElement("canvas").getContext("2d");
+  measure.font = fontStack;
+  const textWidth = Math.max(...lines.map((line) => measure.measureText(line).width), 0) / scale;
+  const width = Math.max(Math.ceil(textWidth) + padding * 2, 360);
+  const height = Math.ceil(lines.length * lineHeight) + padding * 2;
+
+  const canvas = document.createElement("canvas");
+  canvas.width = width * scale;
+  canvas.height = height * scale;
+  const context = canvas.getContext("2d");
+  const bodyStyle = getComputedStyle(document.body);
+  context.fillStyle = bodyStyle.backgroundColor || "#ffffff";
+  context.fillRect(0, 0, canvas.width, canvas.height);
+  context.fillStyle = bodyStyle.color || "#111111";
+  context.font = fontStack;
+  context.textAlign = "center";
+  context.textBaseline = "middle";
+  lines.forEach((line, index) => {
+    context.fillText(line, canvas.width / 2, (padding + (index + 0.5) * lineHeight) * scale);
+  });
+
+  const pngBlob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
+  if (!pngBlob) {
+    setScratchpadStatus("PNG export is not available in this browser. Try SVG instead.");
+    return;
+  }
+  downloadBlob(pngBlob, `${safeFilename(pad?.title || "carry-scratchpad")}.png`);
+  setScratchpadStatus("Plain notation exported as PNG.");
 }
 
 async function shareScratchpadImage() {
