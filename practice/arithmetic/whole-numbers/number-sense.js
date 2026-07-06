@@ -121,7 +121,31 @@
           "label": "604"
         }
       ]
+    },
+    {
+      "prompt": "Which is smallest: 234, 243, or 324?",
+      "answer": "234",
+      "answers": [
+        "234"
+      ],
+      "hint": "Compare the tens once the hundreds tie.",
+      "label": "smallest",
+      "choices": [
+        {
+          "value": "234",
+          "label": "234"
+        },
+        {
+          "value": "243",
+          "label": "243"
+        },
+        {
+          "value": "324",
+          "label": "324"
+        }
+      ]
     }
+
   ]
 };
 })();

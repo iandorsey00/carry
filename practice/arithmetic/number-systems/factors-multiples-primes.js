@@ -46,7 +46,132 @@
       "answer": "12",
       "hint": "List multiples until they match.",
       "label": "least common multiple"
+    },
+    {
+      "prompt": "How many factors does 10 have?",
+      "answer": "4",
+      "answers": [
+        "4",
+        "four"
+      ],
+      "hint": "They are 1, 2, 5, and 10.",
+      "label": "count factors",
+      "choices": [
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        }
+      ]
+    },
+    {
+      "prompt": "Is 15 a multiple of 5?",
+      "answer": "yes",
+      "answers": [
+        "yes",
+        "true"
+      ],
+      "hint": "5 × 3 lands exactly on it.",
+      "label": "multiple check",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "What is the greatest common factor of 8 and 12?",
+      "answer": "4",
+      "answers": [
+        "4",
+        "four"
+      ],
+      "hint": "List the shared factors and take the largest.",
+      "label": "gcf",
+      "choices": [
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "8",
+          "label": "8"
+        },
+        {
+          "value": "24",
+          "label": "24"
+        }
+      ]
+    },
+    {
+      "prompt": "What is the smallest prime number?",
+      "answer": "2",
+      "answers": [
+        "2",
+        "two"
+      ],
+      "hint": "It is also the only even one.",
+      "label": "smallest prime",
+      "choices": [
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "0",
+          "label": "0"
+        }
+      ]
+    },
+    {
+      "prompt": "Is 1 a prime number?",
+      "answer": "no",
+      "answers": [
+        "no",
+        "false"
+      ],
+      "hint": "Primes need exactly two factors; 1 has only one.",
+      "label": "one not prime",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     }
+
   ]
 };
 })();

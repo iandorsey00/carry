@@ -62,7 +62,137 @@
           "label": "No"
         }
       ]
+    },
+    {
+      "prompt": "The high point of a wave is called the what?",
+      "answer": "crest",
+      "answers": [
+        "crest"
+      ],
+      "hint": "The trough is its opposite.",
+      "label": "crest",
+      "choices": [
+        {
+          "value": "crest",
+          "label": "crest"
+        },
+        {
+          "value": "trough",
+          "label": "trough"
+        },
+        {
+          "value": "node",
+          "label": "node"
+        },
+        {
+          "value": "period",
+          "label": "period"
+        }
+      ]
+    },
+    {
+      "prompt": "The low point of a wave is called the what?",
+      "answer": "trough",
+      "answers": [
+        "trough"
+      ],
+      "hint": "The crest is its opposite.",
+      "label": "trough",
+      "choices": [
+        {
+          "value": "trough",
+          "label": "trough"
+        },
+        {
+          "value": "crest",
+          "label": "crest"
+        },
+        {
+          "value": "peak",
+          "label": "peak"
+        },
+        {
+          "value": "axis",
+          "label": "axis"
+        }
+      ]
+    },
+    {
+      "prompt": "Wavelength is measured in which units?",
+      "answer": "meters",
+      "answers": [
+        "meters"
+      ],
+      "hint": "It is a distance.",
+      "label": "wavelength unit",
+      "choices": [
+        {
+          "value": "meters",
+          "label": "meters"
+        },
+        {
+          "value": "hertz",
+          "label": "hertz"
+        },
+        {
+          "value": "seconds",
+          "label": "seconds"
+        },
+        {
+          "value": "joules",
+          "label": "joules"
+        }
+      ]
+    },
+    {
+      "prompt": "In a transverse wave, the medium moves in which direction relative to travel?",
+      "answer": "perpendicular",
+      "answers": [
+        "perpendicular",
+        "at right angles"
+      ],
+      "hint": "Think of a shaken rope.",
+      "label": "transverse",
+      "choices": [
+        {
+          "value": "perpendicular",
+          "label": "perpendicular"
+        },
+        {
+          "value": "parallel",
+          "label": "parallel"
+        },
+        {
+          "value": "backward",
+          "label": "backward"
+        }
+      ]
+    },
+    {
+      "prompt": "If wavelength doubles at the same wave speed, frequency does what?",
+      "answer": "halves",
+      "answers": [
+        "halves",
+        "is halved"
+      ],
+      "hint": "v = fλ forces the trade.",
+      "label": "wavelength trade",
+      "choices": [
+        {
+          "value": "halves",
+          "label": "halves"
+        },
+        {
+          "value": "doubles",
+          "label": "doubles"
+        },
+        {
+          "value": "stays the same",
+          "label": "stays the same"
+        }
+      ]
     }
+
   ]
 };
 })();

@@ -60,7 +60,141 @@
           "label": "cause no effect"
         }
       ]
+    },
+    {
+      "prompt": "What is the SI unit of force?",
+      "answer": "newton",
+      "answers": [
+        "newton",
+        "newtons"
+      ],
+      "hint": "One kilogram meter per second squared.",
+      "label": "force unit",
+      "choices": [
+        {
+          "value": "newton",
+          "label": "newton"
+        },
+        {
+          "value": "joule",
+          "label": "joule"
+        },
+        {
+          "value": "watt",
+          "label": "watt"
+        },
+        {
+          "value": "pascal",
+          "label": "pascal"
+        }
+      ]
+    },
+    {
+      "prompt": "Weight equals mass times what?",
+      "answer": "gravity",
+      "answers": [
+        "gravity",
+        "g",
+        "gravitational acceleration"
+      ],
+      "hint": "On Earth, about 9.8 m/s².",
+      "label": "weight formula",
+      "choices": [
+        {
+          "value": "gravity",
+          "label": "gravity"
+        },
+        {
+          "value": "speed",
+          "label": "speed"
+        },
+        {
+          "value": "volume",
+          "label": "volume"
+        },
+        {
+          "value": "height",
+          "label": "height"
+        }
+      ]
+    },
+    {
+      "prompt": "Newton's third law says forces always come in what?",
+      "answer": "pairs",
+      "answers": [
+        "pairs",
+        "action-reaction pairs"
+      ],
+      "hint": "Every push gets an equal push back.",
+      "label": "third law",
+      "choices": [
+        {
+          "value": "pairs",
+          "label": "pairs"
+        },
+        {
+          "value": "triples",
+          "label": "triples"
+        },
+        {
+          "value": "single acts",
+          "label": "single acts"
+        }
+      ]
+    },
+    {
+      "prompt": "If the net force on a moving object is zero, its velocity does what?",
+      "answer": "stays constant",
+      "answers": [
+        "stays constant",
+        "constant"
+      ],
+      "hint": "No net push means no change in motion.",
+      "label": "first law",
+      "choices": [
+        {
+          "value": "stays constant",
+          "label": "stays constant"
+        },
+        {
+          "value": "drops to zero",
+          "label": "drops to zero"
+        },
+        {
+          "value": "increases",
+          "label": "increases"
+        }
+      ]
+    },
+    {
+      "prompt": "Forces of 10 N right and 4 N left combine to what net force?",
+      "answer": "6 N right",
+      "answers": [
+        "6 N right",
+        "6"
+      ],
+      "hint": "Opposite directions subtract.",
+      "label": "net force",
+      "choices": [
+        {
+          "value": "6 N right",
+          "label": "6 N right"
+        },
+        {
+          "value": "14 N right",
+          "label": "14 N right"
+        },
+        {
+          "value": "6 N left",
+          "label": "6 N left"
+        },
+        {
+          "value": "40 N",
+          "label": "40 N"
+        }
+      ]
     }
+
   ]
 };
 })();

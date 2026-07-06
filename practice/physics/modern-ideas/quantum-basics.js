@@ -73,7 +73,127 @@
           "label": "classical physics"
         }
       ]
+    },
+    {
+      "prompt": "Light behaves as a wave and also as what?",
+      "answer": "a particle",
+      "answers": [
+        "a particle",
+        "particle"
+      ],
+      "hint": "The photon is the particle side of light.",
+      "label": "duality",
+      "choices": [
+        {
+          "value": "a particle",
+          "label": "a particle"
+        },
+        {
+          "value": "a fluid",
+          "label": "a fluid"
+        },
+        {
+          "value": "a field only",
+          "label": "a field only"
+        }
+      ]
+    },
+    {
+      "prompt": "When an electron drops to a lower energy level, what is emitted?",
+      "answer": "a photon",
+      "answers": [
+        "a photon",
+        "photon"
+      ],
+      "hint": "The energy difference leaves as light.",
+      "label": "emission",
+      "choices": [
+        {
+          "value": "a photon",
+          "label": "a photon"
+        },
+        {
+          "value": "a proton",
+          "label": "a proton"
+        },
+        {
+          "value": "an electron",
+          "label": "an electron"
+        },
+        {
+          "value": "heat only",
+          "label": "heat only"
+        }
+      ]
+    },
+    {
+      "prompt": "Which letter names Planck's constant?",
+      "answer": "h",
+      "answers": [
+        "h"
+      ],
+      "hint": "It sets the scale of quantum effects.",
+      "label": "planck",
+      "choices": [
+        {
+          "value": "h",
+          "label": "h"
+        },
+        {
+          "value": "c",
+          "label": "c"
+        },
+        {
+          "value": "g",
+          "label": "g"
+        },
+        {
+          "value": "k",
+          "label": "k"
+        }
+      ]
+    },
+    {
+      "prompt": "Can a particle's exact position and momentum both be known at once?",
+      "answer": "no",
+      "answers": [
+        "no",
+        "false"
+      ],
+      "hint": "Heisenberg's uncertainty principle forbids it.",
+      "label": "uncertainty",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "Can a quantum particle cross a barrier it classically lacks the energy to climb?",
+      "answer": "yes",
+      "answers": [
+        "yes",
+        "true"
+      ],
+      "hint": "That escape is called tunneling.",
+      "label": "tunneling",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     }
+
   ]
 };
 })();

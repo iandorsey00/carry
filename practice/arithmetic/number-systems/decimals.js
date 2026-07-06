@@ -91,7 +91,36 @@
       "hint": "Subtract tenths from tenths and ones from ones.",
       "label": "decimal difference",
       "feedback": "Line up the decimal points."
+    },
+    {
+      "prompt": "What is 0.9 × 10?",
+      "answer": "9",
+      "answers": [
+        "9",
+        "9.0"
+      ],
+      "hint": "Multiplying by ten shifts the decimal point right.",
+      "label": "shift right",
+      "choices": [
+        {
+          "value": "9",
+          "label": "9"
+        },
+        {
+          "value": "0.09",
+          "label": "0.09"
+        },
+        {
+          "value": "90",
+          "label": "90"
+        },
+        {
+          "value": "9.9",
+          "label": "9.9"
+        }
+      ]
     }
+
   ]
 };
 })();

@@ -65,7 +65,36 @@
       "hint": "Put the hundreds, tens, and ones together.",
       "label": "standard form",
       "feedback": "Expanded form names each place value separately."
+    },
+    {
+      "prompt": "In 4,058, what is the value of the 4?",
+      "answer": "4000",
+      "answers": [
+        "4000",
+        "4,000"
+      ],
+      "hint": "It sits in the thousands place.",
+      "label": "thousands",
+      "choices": [
+        {
+          "value": "4000",
+          "label": "4000"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "400",
+          "label": "400"
+        },
+        {
+          "value": "40",
+          "label": "40"
+        }
+      ]
     }
+
   ]
 };
 })();

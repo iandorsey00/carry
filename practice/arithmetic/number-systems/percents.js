@@ -67,7 +67,35 @@
       "hint": "75% means 75 out of 100.",
       "label": "percent to decimal",
       "feedback": "Percent means per hundred."
+    },
+    {
+      "prompt": "What is 100% of 47?",
+      "answer": "47",
+      "answers": [
+        "47"
+      ],
+      "hint": "One hundred percent is the whole thing.",
+      "label": "whole percent",
+      "choices": [
+        {
+          "value": "47",
+          "label": "47"
+        },
+        {
+          "value": "100",
+          "label": "100"
+        },
+        {
+          "value": "4.7",
+          "label": "4.7"
+        },
+        {
+          "value": "470",
+          "label": "470"
+        }
+      ]
     }
+
   ]
 };
 })();

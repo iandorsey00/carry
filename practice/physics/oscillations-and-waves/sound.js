@@ -65,7 +65,134 @@
           "label": "transverse"
         }
       ]
+    },
+    {
+      "prompt": "Can sound travel through a vacuum?",
+      "answer": "no",
+      "answers": [
+        "no",
+        "false"
+      ],
+      "hint": "No medium, no wave.",
+      "label": "vacuum",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "Loudness corresponds to which wave property?",
+      "answer": "amplitude",
+      "answers": [
+        "amplitude"
+      ],
+      "hint": "Bigger swings push the air harder.",
+      "label": "loudness",
+      "choices": [
+        {
+          "value": "amplitude",
+          "label": "amplitude"
+        },
+        {
+          "value": "frequency",
+          "label": "frequency"
+        },
+        {
+          "value": "wavelength",
+          "label": "wavelength"
+        },
+        {
+          "value": "speed",
+          "label": "speed"
+        }
+      ]
+    },
+    {
+      "prompt": "Sound travels fastest through which state of matter?",
+      "answer": "solids",
+      "answers": [
+        "solids",
+        "a solid"
+      ],
+      "hint": "Tightly linked particles pass the push quickly.",
+      "label": "fastest medium",
+      "choices": [
+        {
+          "value": "solids",
+          "label": "solids"
+        },
+        {
+          "value": "gases",
+          "label": "gases"
+        },
+        {
+          "value": "liquids",
+          "label": "liquids"
+        },
+        {
+          "value": "vacuum",
+          "label": "vacuum"
+        }
+      ]
+    },
+    {
+      "prompt": "An echo is sound doing what?",
+      "answer": "reflecting",
+      "answers": [
+        "reflecting",
+        "reflection"
+      ],
+      "hint": "It bounces off a surface and returns.",
+      "label": "echo",
+      "choices": [
+        {
+          "value": "reflecting",
+          "label": "reflecting"
+        },
+        {
+          "value": "refracting",
+          "label": "refracting"
+        },
+        {
+          "value": "speeding up",
+          "label": "speeding up"
+        }
+      ]
+    },
+    {
+      "prompt": "The speed of sound in air is about how many meters per second?",
+      "answer": "343",
+      "answers": [
+        "343"
+      ],
+      "hint": "Roughly a kilometer every three seconds.",
+      "label": "sound speed",
+      "choices": [
+        {
+          "value": "343",
+          "label": "343"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "3000",
+          "label": "3000"
+        },
+        {
+          "value": "30000",
+          "label": "30000"
+        }
+      ]
     }
+
   ]
 };
 })();

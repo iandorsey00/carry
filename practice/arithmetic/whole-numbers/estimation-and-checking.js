@@ -85,7 +85,35 @@
       "hint": "30 x 20 is a nearby easy product.",
       "label": "two-factor estimate",
       "feedback": "Round both factors when exact precision is not needed."
+    },
+    {
+      "prompt": "Estimate 297 + 512 by rounding to hundreds.",
+      "answer": "800",
+      "answers": [
+        "800"
+      ],
+      "hint": "300 plus 500.",
+      "label": "round hundreds",
+      "choices": [
+        {
+          "value": "800",
+          "label": "800"
+        },
+        {
+          "value": "700",
+          "label": "700"
+        },
+        {
+          "value": "900",
+          "label": "900"
+        },
+        {
+          "value": "810",
+          "label": "810"
+        }
+      ]
     }
+
   ]
 };
 })();

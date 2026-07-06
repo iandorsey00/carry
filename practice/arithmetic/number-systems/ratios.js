@@ -59,7 +59,36 @@
       "hint": "Divide both parts by 5.",
       "label": "simplified ratio",
       "feedback": "Look for the greatest common factor."
+    },
+    {
+      "prompt": "A recipe uses 2 cups of flour for every 3 cups of milk. How much flour for 9 cups of milk?",
+      "answer": "6",
+      "answers": [
+        "6",
+        "6 cups"
+      ],
+      "hint": "The milk tripled, so the flour triples.",
+      "label": "scale recipe",
+      "choices": [
+        {
+          "value": "6",
+          "label": "6"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "9",
+          "label": "9"
+        }
+      ]
     }
+
   ]
 };
 })();

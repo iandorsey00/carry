@@ -82,7 +82,140 @@
           "label": "at rest"
         }
       ]
+    },
+    {
+      "prompt": "On a velocity-time graph, slope represents what?",
+      "answer": "acceleration",
+      "answers": [
+        "acceleration"
+      ],
+      "hint": "The rate velocity changes.",
+      "label": "vt slope",
+      "choices": [
+        {
+          "value": "acceleration",
+          "label": "acceleration"
+        },
+        {
+          "value": "displacement",
+          "label": "displacement"
+        },
+        {
+          "value": "position",
+          "label": "position"
+        },
+        {
+          "value": "mass",
+          "label": "mass"
+        }
+      ]
+    },
+    {
+      "prompt": "A straight diagonal line on a position-time graph means what is constant?",
+      "answer": "velocity",
+      "answers": [
+        "velocity"
+      ],
+      "hint": "Steady slope, steady speed.",
+      "label": "diagonal line",
+      "choices": [
+        {
+          "value": "velocity",
+          "label": "velocity"
+        },
+        {
+          "value": "acceleration",
+          "label": "acceleration"
+        },
+        {
+          "value": "position",
+          "label": "position"
+        },
+        {
+          "value": "force",
+          "label": "force"
+        }
+      ]
+    },
+    {
+      "prompt": "A steeper slope on a position-time graph means the object is what?",
+      "answer": "faster",
+      "answers": [
+        "faster"
+      ],
+      "hint": "More distance per second.",
+      "label": "steeper faster",
+      "choices": [
+        {
+          "value": "faster",
+          "label": "faster"
+        },
+        {
+          "value": "slower",
+          "label": "slower"
+        },
+        {
+          "value": "heavier",
+          "label": "heavier"
+        },
+        {
+          "value": "at rest",
+          "label": "at rest"
+        }
+      ]
+    },
+    {
+      "prompt": "The area under an acceleration-time graph gives the change in what?",
+      "answer": "velocity",
+      "answers": [
+        "velocity"
+      ],
+      "hint": "Accumulate acceleration and you get velocity change.",
+      "label": "at area",
+      "choices": [
+        {
+          "value": "velocity",
+          "label": "velocity"
+        },
+        {
+          "value": "position",
+          "label": "position"
+        },
+        {
+          "value": "mass",
+          "label": "mass"
+        },
+        {
+          "value": "force",
+          "label": "force"
+        }
+      ]
+    },
+    {
+      "prompt": "A curved position-time graph means the object is doing what?",
+      "answer": "accelerating",
+      "answers": [
+        "accelerating",
+        "changing velocity"
+      ],
+      "hint": "Changing slope means changing velocity.",
+      "label": "curved graph",
+      "choices": [
+        {
+          "value": "accelerating",
+          "label": "accelerating"
+        },
+        {
+          "value": "standing still",
+          "label": "standing still"
+        },
+        {
+          "value": "moving steadily",
+          "label": "moving steadily"
+        }
+      ]
     }
+
   ]
 };
 })();

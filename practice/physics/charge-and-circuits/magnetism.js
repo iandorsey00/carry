@@ -73,7 +73,119 @@
           "label": "repel"
         }
       ]
+    },
+    {
+      "prompt": "Magnetic field lines around a straight current-carrying wire form what shape?",
+      "answer": "circles",
+      "answers": [
+        "circles"
+      ],
+      "hint": "They wrap around the wire.",
+      "label": "wire field",
+      "choices": [
+        {
+          "value": "circles",
+          "label": "circles"
+        },
+        {
+          "value": "straight lines",
+          "label": "straight lines"
+        },
+        {
+          "value": "spirals outward",
+          "label": "spirals outward"
+        },
+        {
+          "value": "squares",
+          "label": "squares"
+        }
+      ]
+    },
+    {
+      "prompt": "Is the Earth itself a giant magnet?",
+      "answer": "yes",
+      "answers": [
+        "yes",
+        "true"
+      ],
+      "hint": "That is why compasses work at all.",
+      "label": "earth magnet",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "Does a compass needle align with the local magnetic field?",
+      "answer": "yes",
+      "answers": [
+        "yes",
+        "true"
+      ],
+      "hint": "The needle is a tiny magnet free to turn.",
+      "label": "compass",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "Cutting a bar magnet in half produces what?",
+      "answer": "two smaller magnets",
+      "answers": [
+        "two smaller magnets",
+        "two magnets"
+      ],
+      "hint": "Poles always come in pairs; you cannot isolate one.",
+      "label": "cut magnet",
+      "choices": [
+        {
+          "value": "two smaller magnets",
+          "label": "two smaller magnets"
+        },
+        {
+          "value": "one pole each",
+          "label": "one pole each"
+        },
+        {
+          "value": "no magnets",
+          "label": "no magnets"
+        }
+      ]
+    },
+    {
+      "prompt": "Does more current make an electromagnet stronger?",
+      "answer": "yes",
+      "answers": [
+        "yes",
+        "true"
+      ],
+      "hint": "The field grows with the moving charge that causes it.",
+      "label": "electromagnet",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     }
+
   ]
 };
 })();

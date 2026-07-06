@@ -31,7 +31,143 @@
       "answer": "8",
       "hint": "Divide first, then add.",
       "label": "division before addition"
+    },
+    {
+      "prompt": "Evaluate 2 + 3².",
+      "answer": "11",
+      "answers": [
+        "11"
+      ],
+      "hint": "The power comes before the addition.",
+      "label": "power first",
+      "choices": [
+        {
+          "value": "11",
+          "label": "11"
+        },
+        {
+          "value": "25",
+          "label": "25"
+        },
+        {
+          "value": "10",
+          "label": "10"
+        },
+        {
+          "value": "13",
+          "label": "13"
+        }
+      ]
+    },
+    {
+      "prompt": "Evaluate (8 - 3) × 2.",
+      "answer": "10",
+      "answers": [
+        "10"
+      ],
+      "hint": "Parentheses first.",
+      "label": "parens first",
+      "choices": [
+        {
+          "value": "10",
+          "label": "10"
+        },
+        {
+          "value": "13",
+          "label": "13"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "16",
+          "label": "16"
+        }
+      ]
+    },
+    {
+      "prompt": "Evaluate 20 - 2 × 5.",
+      "answer": "10",
+      "answers": [
+        "10"
+      ],
+      "hint": "Multiply before subtracting.",
+      "label": "multiply first",
+      "choices": [
+        {
+          "value": "10",
+          "label": "10"
+        },
+        {
+          "value": "90",
+          "label": "90"
+        },
+        {
+          "value": "15",
+          "label": "15"
+        },
+        {
+          "value": "8",
+          "label": "8"
+        }
+      ]
+    },
+    {
+      "prompt": "Evaluate 16 ÷ (2 + 2).",
+      "answer": "4",
+      "answers": [
+        "4"
+      ],
+      "hint": "Settle the parentheses before dividing.",
+      "label": "divide after parens",
+      "choices": [
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "10",
+          "label": "10"
+        },
+        {
+          "value": "8",
+          "label": "8"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ]
+    },
+    {
+      "prompt": "Evaluate 4 + 6 ÷ 2.",
+      "answer": "7",
+      "answers": [
+        "7"
+      ],
+      "hint": "Division outranks addition.",
+      "label": "divide first",
+      "choices": [
+        {
+          "value": "7",
+          "label": "7"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "10",
+          "label": "10"
+        },
+        {
+          "value": "8",
+          "label": "8"
+        }
+      ]
     }
+
   ]
 };
 })();

@@ -78,7 +78,130 @@
           "label": "No"
         }
       ]
+    },
+    {
+      "prompt": "Compared with a clock at rest, a fast-moving clock runs how?",
+      "answer": "slower",
+      "answers": [
+        "slower"
+      ],
+      "hint": "Time dilation stretches the moving clock's seconds.",
+      "label": "time dilation",
+      "choices": [
+        {
+          "value": "slower",
+          "label": "slower"
+        },
+        {
+          "value": "faster",
+          "label": "faster"
+        },
+        {
+          "value": "the same",
+          "label": "the same"
+        }
+      ]
+    },
+    {
+      "prompt": "No object with mass can reach the speed of what?",
+      "answer": "light",
+      "answers": [
+        "light"
+      ],
+      "hint": "It is the universe's speed limit.",
+      "label": "speed limit",
+      "choices": [
+        {
+          "value": "light",
+          "label": "light"
+        },
+        {
+          "value": "sound",
+          "label": "sound"
+        },
+        {
+          "value": "a rocket",
+          "label": "a rocket"
+        },
+        {
+          "value": "gravity",
+          "label": "gravity"
+        }
+      ]
+    },
+    {
+      "prompt": "The speed of light is about how many kilometers per second?",
+      "answer": "300000",
+      "answers": [
+        "300000",
+        "300,000"
+      ],
+      "hint": "Three hundred thousand.",
+      "label": "light speed",
+      "choices": [
+        {
+          "value": "300000",
+          "label": "300000"
+        },
+        {
+          "value": "3000",
+          "label": "3000"
+        },
+        {
+          "value": "150000",
+          "label": "150000"
+        },
+        {
+          "value": "1000000",
+          "label": "1000000"
+        }
+      ]
+    },
+    {
+      "prompt": "Do GPS satellites need relativity corrections to stay accurate?",
+      "answer": "yes",
+      "answers": [
+        "yes",
+        "true"
+      ],
+      "hint": "Without them, positions would drift kilometers per day.",
+      "label": "gps",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "At everyday speeds, relativistic effects are what size?",
+      "answer": "tiny",
+      "answers": [
+        "tiny",
+        "negligible"
+      ],
+      "hint": "They exist, but far below anything you can feel.",
+      "label": "everyday speeds",
+      "choices": [
+        {
+          "value": "tiny",
+          "label": "tiny"
+        },
+        {
+          "value": "huge",
+          "label": "huge"
+        },
+        {
+          "value": "moderate",
+          "label": "moderate"
+        }
+      ]
     }
+
   ]
 };
 })();
