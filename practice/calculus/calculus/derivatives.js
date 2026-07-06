@@ -60,7 +60,64 @@
       "hint": "The coefficient of x is -2.",
       "label": "line slope",
       "feedback": "Read the coefficient of x."
+    },
+    {
+      "prompt": "What is the derivative of x^5?",
+      "answer": "5x^4",
+      "answers": [
+        "5x^4",
+        "5x⁴"
+      ],
+      "hint": "Bring the exponent down and lower it by one.",
+      "label": "power rule five",
+      "choices": [
+        {
+          "value": "5x^4",
+          "label": "5x⁴"
+        },
+        {
+          "value": "x^4",
+          "label": "x⁴"
+        },
+        {
+          "value": "5x^5",
+          "label": "5x⁵"
+        },
+        {
+          "value": "4x^5",
+          "label": "4x⁵"
+        }
+      ]
+    },
+    {
+      "prompt": "What is the derivative of sin x?",
+      "answer": "cos x",
+      "answers": [
+        "cos x",
+        "cosx"
+      ],
+      "hint": "The sine wave's slope traces the cosine wave.",
+      "label": "sine derivative",
+      "choices": [
+        {
+          "value": "cos x",
+          "label": "cos x"
+        },
+        {
+          "value": "-cos x",
+          "label": "-cos x"
+        },
+        {
+          "value": "sin x",
+          "label": "sin x"
+        },
+        {
+          "value": "-sin x",
+          "label": "-sin x"
+        }
+      ]
     }
+
   ]
 };
 })();

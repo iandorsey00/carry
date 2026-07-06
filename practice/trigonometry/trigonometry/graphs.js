@@ -62,7 +62,64 @@
       "hint": "The sine graph starts at 0.",
       "label": "sine graph value",
       "feedback": "Use the unit circle or the graph."
+    },
+    {
+      "prompt": "What is the amplitude of y = -2 sin x?",
+      "answer": "2",
+      "answers": [
+        "2",
+        "two"
+      ],
+      "hint": "Amplitude is a distance, so it is always positive.",
+      "label": "negative coefficient",
+      "choices": [
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "-2",
+          "label": "-2"
+        },
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        }
+      ]
+    },
+    {
+      "prompt": "What is the maximum value of y = sin x?",
+      "answer": "1",
+      "answers": [
+        "1",
+        "one"
+      ],
+      "hint": "The wave peaks at the top of the unit circle.",
+      "label": "sine maximum",
+      "choices": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "0",
+          "label": "0"
+        },
+        {
+          "value": "π",
+          "label": "π"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ]
     }
+
   ]
 };
 })();

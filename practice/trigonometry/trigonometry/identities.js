@@ -67,7 +67,61 @@
       "hint": "Cotangent is cosine divided by sine.",
       "label": "cotangent identity",
       "feedback": "Cotangent is the reciprocal of tangent."
+    },
+    {
+      "prompt": "If sin x = 0.6, what is sin² x?",
+      "answer": "0.36",
+      "answers": [
+        "0.36",
+        "9/25"
+      ],
+      "hint": "Square the value: 0.6 × 0.6.",
+      "label": "square sine",
+      "choices": [
+        {
+          "value": "0.36",
+          "label": "0.36"
+        },
+        {
+          "value": "1.2",
+          "label": "1.2"
+        },
+        {
+          "value": "0.6",
+          "label": "0.6"
+        },
+        {
+          "value": "0.8",
+          "label": "0.8"
+        }
+      ]
+    },
+    {
+      "prompt": "Complete the identity: sec x = 1 over what?",
+      "answer": "cos x",
+      "answers": [
+        "cos x",
+        "cosx",
+        "cos"
+      ],
+      "hint": "Secant is the reciprocal of cosine.",
+      "label": "secant reciprocal",
+      "choices": [
+        {
+          "value": "cos x",
+          "label": "cos x"
+        },
+        {
+          "value": "sin x",
+          "label": "sin x"
+        },
+        {
+          "value": "tan x",
+          "label": "tan x"
+        }
+      ]
     }
+
   ]
 };
 })();

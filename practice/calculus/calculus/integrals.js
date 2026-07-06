@@ -74,7 +74,65 @@
       "hint": "A derivative of 9x is 9.",
       "label": "constant antiderivative",
       "feedback": "Constants integrate to constant times x plus C."
+    },
+    {
+      "prompt": "What is an antiderivative of cos x?",
+      "answer": "sin x + C",
+      "answers": [
+        "sin x + C",
+        "sinx+c",
+        "sin x"
+      ],
+      "hint": "Which function differentiates to cosine?",
+      "label": "cosine antiderivative",
+      "choices": [
+        {
+          "value": "sin x + C",
+          "label": "sin x + C"
+        },
+        {
+          "value": "-sin x + C",
+          "label": "-sin x + C"
+        },
+        {
+          "value": "cos x + C",
+          "label": "cos x + C"
+        },
+        {
+          "value": "tan x + C",
+          "label": "tan x + C"
+        }
+      ]
+    },
+    {
+      "prompt": "The definite integral from 2 to 2 of any function equals what?",
+      "answer": "0",
+      "answers": [
+        "0",
+        "zero"
+      ],
+      "hint": "An interval of zero width holds no area.",
+      "label": "zero width",
+      "choices": [
+        {
+          "value": "0",
+          "label": "0"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "undefined",
+          "label": "undefined"
+        }
+      ]
     }
+
   ]
 };
 })();

@@ -168,7 +168,64 @@
           "label": "momentum"
         }
       ]
+    },
+    {
+      "prompt": "On the unit circle, what is cos π/2?",
+      "answer": "0",
+      "answers": [
+        "0",
+        "zero"
+      ],
+      "hint": "At the top of the circle, the x-coordinate vanishes.",
+      "label": "cos ninety",
+      "choices": [
+        {
+          "value": "0",
+          "label": "0"
+        },
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "-1",
+          "label": "-1"
+        },
+        {
+          "value": "1/2",
+          "label": "1/2"
+        }
+      ]
+    },
+    {
+      "prompt": "At 3π/2, what is the point on the unit circle?",
+      "answer": "(0,-1)",
+      "answers": [
+        "(0,-1)",
+        "(0, -1)"
+      ],
+      "hint": "Three quarters of the way around lands at the bottom.",
+      "label": "bottom point",
+      "choices": [
+        {
+          "value": "(0,-1)",
+          "label": "(0, -1)"
+        },
+        {
+          "value": "(0,1)",
+          "label": "(0, 1)"
+        },
+        {
+          "value": "(-1,0)",
+          "label": "(-1, 0)"
+        },
+        {
+          "value": "(1,0)",
+          "label": "(1, 0)"
+        }
+      ]
     }
+
   ]
 };
 })();

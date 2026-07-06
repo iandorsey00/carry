@@ -52,7 +52,64 @@
       "hint": "Tangent is opposite over adjacent.",
       "label": "tangent ratio",
       "feedback": "Tangent does not use the hypotenuse."
+    },
+    {
+      "prompt": "If sin θ = 3/5 and the opposite side is 3, what is the hypotenuse?",
+      "answer": "5",
+      "answers": [
+        "5",
+        "five"
+      ],
+      "hint": "Sine is opposite over hypotenuse.",
+      "label": "solve hypotenuse",
+      "choices": [
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "15",
+          "label": "15"
+        }
+      ]
+    },
+    {
+      "prompt": "What is tan 45°?",
+      "answer": "1",
+      "answers": [
+        "1",
+        "one"
+      ],
+      "hint": "At 45 degrees, opposite and adjacent are equal.",
+      "label": "tan forty five",
+      "choices": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "0",
+          "label": "0"
+        },
+        {
+          "value": "1/2",
+          "label": "1/2"
+        },
+        {
+          "value": "√2",
+          "label": "√2"
+        }
+      ]
     }
+
   ]
 };
 })();

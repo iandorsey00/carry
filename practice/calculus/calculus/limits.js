@@ -66,7 +66,56 @@
           "label": "No"
         }
       ]
+    },
+    {
+      "prompt": "As x approaches 0, what does (5x)/x approach?",
+      "answer": "5",
+      "answers": [
+        "5",
+        "five"
+      ],
+      "hint": "Cancel the x first; the hole at 0 does not change the destination.",
+      "label": "cancel first",
+      "choices": [
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "0",
+          "label": "0"
+        },
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "infinity",
+          "label": "infinity"
+        }
+      ]
+    },
+    {
+      "prompt": "Does the limit of 1/x exist as x approaches 0?",
+      "answer": "no",
+      "answers": [
+        "no",
+        "false"
+      ],
+      "hint": "The two sides run off in opposite directions.",
+      "label": "one over x",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     }
+
   ]
 };
 })();

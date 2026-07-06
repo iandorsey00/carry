@@ -35,7 +35,140 @@
       ],
       "hint": "tan 45 degrees = 1.",
       "label": "arctangent one"
+    },
+    {
+      "prompt": "What is arccos 0 in degrees?",
+      "answer": "90",
+      "answers": [
+        "90",
+        "90 degrees"
+      ],
+      "hint": "Which angle has cosine zero?",
+      "label": "arccos zero",
+      "choices": [
+        {
+          "value": "90",
+          "label": "90°"
+        },
+        {
+          "value": "0",
+          "label": "0°"
+        },
+        {
+          "value": "45",
+          "label": "45°"
+        },
+        {
+          "value": "180",
+          "label": "180°"
+        }
+      ]
+    },
+    {
+      "prompt": "What is arctan 0?",
+      "answer": "0",
+      "answers": [
+        "0",
+        "zero"
+      ],
+      "hint": "Which angle has tangent zero?",
+      "label": "arctan zero",
+      "choices": [
+        {
+          "value": "0",
+          "label": "0"
+        },
+        {
+          "value": "45",
+          "label": "45°"
+        },
+        {
+          "value": "90",
+          "label": "90°"
+        },
+        {
+          "value": "1",
+          "label": "1"
+        }
+      ]
+    },
+    {
+      "prompt": "What is arcsin 1 in degrees?",
+      "answer": "90",
+      "answers": [
+        "90",
+        "90 degrees"
+      ],
+      "hint": "Sine reaches 1 at the top of the circle.",
+      "label": "arcsin one",
+      "choices": [
+        {
+          "value": "90",
+          "label": "90°"
+        },
+        {
+          "value": "0",
+          "label": "0°"
+        },
+        {
+          "value": "45",
+          "label": "45°"
+        },
+        {
+          "value": "180",
+          "label": "180°"
+        }
+      ]
+    },
+    {
+      "prompt": "Is arcsin(2) defined for real numbers?",
+      "answer": "no",
+      "answers": [
+        "no",
+        "false"
+      ],
+      "hint": "Sine never exceeds 1, so no angle can answer.",
+      "label": "out of range",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
+    },
+    {
+      "prompt": "Since sin 30° = 1/2, what is arcsin(1/2) in degrees?",
+      "answer": "30",
+      "answers": [
+        "30",
+        "30 degrees"
+      ],
+      "hint": "Inverse trig runs the known fact backwards.",
+      "label": "arcsin half",
+      "choices": [
+        {
+          "value": "30",
+          "label": "30°"
+        },
+        {
+          "value": "60",
+          "label": "60°"
+        },
+        {
+          "value": "45",
+          "label": "45°"
+        },
+        {
+          "value": "90",
+          "label": "90°"
+        }
+      ]
     }
+
   ]
 };
 })();
