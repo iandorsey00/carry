@@ -548,6 +548,7 @@ body[data-surface="scratchpad"] .site-footer {
 }
 
 .scratchpad-panel {
+  position: relative;
   display: grid;
   gap: 22px;
   padding: 4px 0 28px;
@@ -3791,6 +3792,7 @@ body[data-surface="tools"][data-active-tool="graphing"] .tools-header {
 }
 
 .graphing-pane {
+  position: relative;
   display: grid;
   gap: clamp(16px, 3vh, 32px);
 }
@@ -3877,13 +3879,42 @@ body[data-surface="tools"][data-active-tool="graphing"] .progress-panel {
 
 @media (max-width: 760px) {
   .scratchpad-header-actions {
-    position: fixed;
+    position: sticky;
     top: 10px;
-    left: 12px;
     z-index: 40;
   }
+}
 
-  .scratchpad-title-lockup {
-    padding-top: 56px;
-  }
+
+/* Fully immersive graph: the plot is the page background. */
+body[data-surface="tools"][data-active-tool="graphing"] .graphing-pane .graph-svg,
+body[data-surface="tools"][data-active-tool="graphing"] .graphing-pane .graph-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  z-index: 0;
+}
+
+body[data-surface="tools"][data-active-tool="graphing"] .graphing-pane .graph-canvas {
+  object-fit: cover;
+}
+
+body[data-surface="tools"][data-active-tool="graphing"] .graph-background {
+  fill: var(--surface);
+}
+
+body[data-surface="tools"][data-active-tool="graphing"] .grapher-header,
+body[data-surface="tools"][data-active-tool="graphing"] .graphing-pane .scratchpad-header-actions,
+body[data-surface="tools"][data-active-tool="graphing"] .graphing-pane .graph-equation-preview {
+  position: relative;
+  z-index: 2;
+}
+
+body[data-surface="tools"][data-active-tool="graphing"] .graphing-pane .scratchpad-drawer {
+  z-index: 3;
 }
