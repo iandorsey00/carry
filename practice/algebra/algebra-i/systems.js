@@ -167,7 +167,333 @@
           }
         }
       ]
+    },
+    {
+      "equations": [
+        "x + y = 7",
+        "x - y = 3"
+      ],
+      "method": "elimination",
+      "rows": [
+        {
+          "label": "combine",
+          "left": {
+            "answer": "2x",
+            "hint": "Add the left sides: x + x = 2x, and y + -y cancels."
+          },
+          "relation": "=",
+          "right": {
+            "answer": "10",
+            "hint": "Add the right sides: 7 + 3 = 10."
+          }
+        },
+        {
+          "label": "solve x",
+          "left": "x",
+          "relation": "=",
+          "right": {
+            "answer": "5",
+            "hint": "Divide both sides of 2x = 10 by 2."
+          }
+        },
+        {
+          "label": "substitute",
+          "left": {
+            "answer": "5+y",
+            "answers": [
+              "5+y",
+              "y+5"
+            ],
+            "hint": "Put x = 5 into x + y = 7."
+          },
+          "relation": "=",
+          "right": "7"
+        },
+        {
+          "label": "solve y",
+          "left": "y",
+          "relation": "=",
+          "right": {
+            "answer": "2",
+            "hint": "Subtract 5 from both sides."
+          }
+        },
+        {
+          "label": "solution",
+          "left": "(x,y)",
+          "relation": "=",
+          "right": {
+            "answer": "(5,2)",
+            "answers": [
+              "(5,2)",
+              "5,2"
+            ],
+            "hint": "Use x first, then y."
+          }
+        }
+      ]
+    },
+    {
+      "equations": [
+        "x + y = 10",
+        "x - y = 4"
+      ],
+      "method": "elimination",
+      "rows": [
+        {
+          "label": "combine",
+          "left": {
+            "answer": "2x",
+            "hint": "Add the left sides: x + x = 2x, and y + -y cancels."
+          },
+          "relation": "=",
+          "right": {
+            "answer": "14",
+            "hint": "Add the right sides: 10 + 4 = 14."
+          }
+        },
+        {
+          "label": "solve x",
+          "left": "x",
+          "relation": "=",
+          "right": {
+            "answer": "7",
+            "hint": "Divide both sides of 2x = 14 by 2."
+          }
+        },
+        {
+          "label": "substitute",
+          "left": {
+            "answer": "7+y",
+            "answers": [
+              "7+y",
+              "y+7"
+            ],
+            "hint": "Put x = 7 into x + y = 10."
+          },
+          "relation": "=",
+          "right": "10"
+        },
+        {
+          "label": "solve y",
+          "left": "y",
+          "relation": "=",
+          "right": {
+            "answer": "3",
+            "hint": "Subtract 7 from both sides."
+          }
+        },
+        {
+          "label": "solution",
+          "left": "(x,y)",
+          "relation": "=",
+          "right": {
+            "answer": "(7,3)",
+            "answers": [
+              "(7,3)",
+              "7,3"
+            ],
+            "hint": "Use x first, then y."
+          }
+        }
+      ]
+    },
+    {
+      "equations": [
+        "x + y = 6",
+        "x - y = 2"
+      ],
+      "method": "elimination",
+      "rows": [
+        {
+          "label": "combine",
+          "left": {
+            "answer": "2x",
+            "hint": "Add the left sides: x + x = 2x, and y + -y cancels."
+          },
+          "relation": "=",
+          "right": {
+            "answer": "8",
+            "hint": "Add the right sides: 6 + 2 = 8."
+          }
+        },
+        {
+          "label": "solve x",
+          "left": "x",
+          "relation": "=",
+          "right": {
+            "answer": "4",
+            "hint": "Divide both sides of 2x = 8 by 2."
+          }
+        },
+        {
+          "label": "substitute",
+          "left": {
+            "answer": "4+y",
+            "answers": [
+              "4+y",
+              "y+4"
+            ],
+            "hint": "Put x = 4 into x + y = 6."
+          },
+          "relation": "=",
+          "right": "6"
+        },
+        {
+          "label": "solve y",
+          "left": "y",
+          "relation": "=",
+          "right": {
+            "answer": "2",
+            "hint": "Subtract 4 from both sides."
+          }
+        },
+        {
+          "label": "solution",
+          "left": "(x,y)",
+          "relation": "=",
+          "right": {
+            "answer": "(4,2)",
+            "answers": [
+              "(4,2)",
+              "4,2"
+            ],
+            "hint": "Use x first, then y."
+          }
+        }
+      ]
+    },
+    {
+      "equations": [
+        "x + y = 9",
+        "x - y = 1"
+      ],
+      "method": "elimination",
+      "rows": [
+        {
+          "label": "combine",
+          "left": {
+            "answer": "2x",
+            "hint": "Add the left sides: x + x = 2x, and y + -y cancels."
+          },
+          "relation": "=",
+          "right": {
+            "answer": "10",
+            "hint": "Add the right sides: 9 + 1 = 10."
+          }
+        },
+        {
+          "label": "solve x",
+          "left": "x",
+          "relation": "=",
+          "right": {
+            "answer": "5",
+            "hint": "Divide both sides of 2x = 10 by 2."
+          }
+        },
+        {
+          "label": "substitute",
+          "left": {
+            "answer": "5+y",
+            "answers": [
+              "5+y",
+              "y+5"
+            ],
+            "hint": "Put x = 5 into x + y = 9."
+          },
+          "relation": "=",
+          "right": "9"
+        },
+        {
+          "label": "solve y",
+          "left": "y",
+          "relation": "=",
+          "right": {
+            "answer": "4",
+            "hint": "Subtract 5 from both sides."
+          }
+        },
+        {
+          "label": "solution",
+          "left": "(x,y)",
+          "relation": "=",
+          "right": {
+            "answer": "(5,4)",
+            "answers": [
+              "(5,4)",
+              "5,4"
+            ],
+            "hint": "Use x first, then y."
+          }
+        }
+      ]
+    },
+    {
+      "equations": [
+        "x + y = 8",
+        "x - y = 6"
+      ],
+      "method": "elimination",
+      "rows": [
+        {
+          "label": "combine",
+          "left": {
+            "answer": "2x",
+            "hint": "Add the left sides: x + x = 2x, and y + -y cancels."
+          },
+          "relation": "=",
+          "right": {
+            "answer": "14",
+            "hint": "Add the right sides: 8 + 6 = 14."
+          }
+        },
+        {
+          "label": "solve x",
+          "left": "x",
+          "relation": "=",
+          "right": {
+            "answer": "7",
+            "hint": "Divide both sides of 2x = 14 by 2."
+          }
+        },
+        {
+          "label": "substitute",
+          "left": {
+            "answer": "7+y",
+            "answers": [
+              "7+y",
+              "y+7"
+            ],
+            "hint": "Put x = 7 into x + y = 8."
+          },
+          "relation": "=",
+          "right": "8"
+        },
+        {
+          "label": "solve y",
+          "left": "y",
+          "relation": "=",
+          "right": {
+            "answer": "1",
+            "hint": "Subtract 7 from both sides."
+          }
+        },
+        {
+          "label": "solution",
+          "left": "(x,y)",
+          "relation": "=",
+          "right": {
+            "answer": "(7,1)",
+            "answers": [
+              "(7,1)",
+              "7,1"
+            ],
+            "hint": "Use x first, then y."
+          }
+        }
+      ]
     }
+
   ]
 };
 })();
