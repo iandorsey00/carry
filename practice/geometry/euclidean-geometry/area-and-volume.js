@@ -52,7 +52,62 @@
       "hint": "Multiply all three dimensions.",
       "label": "prism volume",
       "feedback": "Volume uses three dimensions."
+    },
+    {
+      "prompt": "A square has side length 6. What is its area?",
+      "answer": "36",
+      "answers": [
+        "36"
+      ],
+      "hint": "A square is a rectangle with equal sides.",
+      "label": "square area",
+      "choices": [
+        {
+          "value": "36",
+          "label": "36"
+        },
+        {
+          "value": "24",
+          "label": "24"
+        },
+        {
+          "value": "12",
+          "label": "12"
+        },
+        {
+          "value": "18",
+          "label": "18"
+        }
+      ]
+    },
+    {
+      "prompt": "A cube has edge length 3. What is its volume?",
+      "answer": "27",
+      "answers": [
+        "27"
+      ],
+      "hint": "Three copies of the edge multiply: 3 × 3 × 3.",
+      "label": "cube volume",
+      "choices": [
+        {
+          "value": "27",
+          "label": "27"
+        },
+        {
+          "value": "9",
+          "label": "9"
+        },
+        {
+          "value": "18",
+          "label": "18"
+        },
+        {
+          "value": "81",
+          "label": "81"
+        }
+      ]
     }
+
   ]
 };
 })();

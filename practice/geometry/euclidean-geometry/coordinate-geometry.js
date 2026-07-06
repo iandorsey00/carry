@@ -60,7 +60,64 @@
       "hint": "Area is length times width.",
       "label": "coordinate rectangle area",
       "feedback": "Use the side lengths after reading the grid."
+    },
+    {
+      "prompt": "What is the distance from (0, 0) to (3, 4)?",
+      "answer": "5",
+      "answers": [
+        "5",
+        "five"
+      ],
+      "hint": "Pythagoras on the horizontal and vertical steps.",
+      "label": "distance formula",
+      "choices": [
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "7",
+          "label": "7"
+        },
+        {
+          "value": "12",
+          "label": "12"
+        },
+        {
+          "value": "3.5",
+          "label": "3.5"
+        }
+      ]
+    },
+    {
+      "prompt": "What is the midpoint of (2, 3) and (6, 7)?",
+      "answer": "(4,5)",
+      "answers": [
+        "(4,5)",
+        "(4, 5)"
+      ],
+      "hint": "Average the x-values and the y-values separately.",
+      "label": "midpoint both axes",
+      "choices": [
+        {
+          "value": "(4,5)",
+          "label": "(4, 5)"
+        },
+        {
+          "value": "(8,10)",
+          "label": "(8, 10)"
+        },
+        {
+          "value": "(4,4)",
+          "label": "(4, 4)"
+        },
+        {
+          "value": "(3,5)",
+          "label": "(3, 5)"
+        }
+      ]
     }
+
   ]
 };
 })();

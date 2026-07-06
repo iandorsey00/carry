@@ -114,7 +114,55 @@
           "label": "No"
         }
       ]
+    },
+    {
+      "prompt": "A triangle with all three sides different lengths is called what?",
+      "answer": "scalene",
+      "answers": [
+        "scalene"
+      ],
+      "hint": "No sides match at all.",
+      "label": "scalene",
+      "choices": [
+        {
+          "value": "scalene",
+          "label": "scalene"
+        },
+        {
+          "value": "isosceles",
+          "label": "isosceles"
+        },
+        {
+          "value": "equilateral",
+          "label": "equilateral"
+        },
+        {
+          "value": "right",
+          "label": "right"
+        }
+      ]
+    },
+    {
+      "prompt": "Can a triangle have two right angles?",
+      "answer": "no",
+      "answers": [
+        "no",
+        "false"
+      ],
+      "hint": "Two right angles alone would spend the whole 180 degrees.",
+      "label": "two right angles",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ]
     }
+
   ]
 };
 })();

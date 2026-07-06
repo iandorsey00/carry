@@ -112,7 +112,59 @@
           "label": "right"
         }
       ]
+    },
+    {
+      "prompt": "Two angles that add to 90 degrees are called what?",
+      "answer": "complementary",
+      "answers": [
+        "complementary"
+      ],
+      "hint": "They complete a right angle together.",
+      "label": "complementary",
+      "choices": [
+        {
+          "value": "complementary",
+          "label": "complementary"
+        },
+        {
+          "value": "supplementary",
+          "label": "supplementary"
+        },
+        {
+          "value": "adjacent",
+          "label": "adjacent"
+        },
+        {
+          "value": "vertical",
+          "label": "vertical"
+        }
+      ]
+    },
+    {
+      "prompt": "Vertical angles formed by two crossing lines are always what?",
+      "answer": "equal",
+      "answers": [
+        "equal",
+        "congruent"
+      ],
+      "hint": "Opposite corners of an X share the same measure.",
+      "label": "vertical angles",
+      "choices": [
+        {
+          "value": "equal",
+          "label": "equal"
+        },
+        {
+          "value": "supplementary",
+          "label": "supplementary"
+        },
+        {
+          "value": "obtuse",
+          "label": "obtuse"
+        }
+      ]
     }
+
   ]
 };
 })();

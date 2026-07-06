@@ -64,7 +64,65 @@
       "hint": "Leave the answer exact as 8π.",
       "label": "circumference",
       "feedback": "Multiply π by the diameter."
+    },
+    {
+      "prompt": "Using A = πr², what is the area of a circle with radius 3?",
+      "answer": "9π",
+      "answers": [
+        "9π",
+        "9pi",
+        "9 pi"
+      ],
+      "hint": "Square the radius first.",
+      "label": "circle area",
+      "choices": [
+        {
+          "value": "9π",
+          "label": "9π"
+        },
+        {
+          "value": "6π",
+          "label": "6π"
+        },
+        {
+          "value": "3π",
+          "label": "3π"
+        },
+        {
+          "value": "12π",
+          "label": "12π"
+        }
+      ]
+    },
+    {
+      "prompt": "If a circle's radius doubles, its area multiplies by what?",
+      "answer": "4",
+      "answers": [
+        "4",
+        "four"
+      ],
+      "hint": "Area grows with the square of the radius.",
+      "label": "area scaling",
+      "choices": [
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "8",
+          "label": "8"
+        },
+        {
+          "value": "π",
+          "label": "π"
+        }
+      ]
     }
+
   ]
 };
 })();
