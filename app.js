@@ -1,6 +1,6 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-beta.36";
+const APP_VERSION = "0.1.0-beta.37";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 const GAMES_STORAGE_KEY = "carry.games.v1";
@@ -6788,30 +6788,38 @@ function equationStep({ id, row, col, expected, answers, sequence, label, hint }
 }
 
 function renderEquationGrid(model) {
-  const staticCells = [
+  renderTransformGrid(model, [
     { row: 1, col: 2, value: model.expression, className: "equation-expression active-source" },
     { row: 1, col: 3, value: "=", className: "operator" },
     { row: 1, col: 4, value: String(model.c), className: "equation-expression active-source" },
     { row: 4, col: 3, value: "=", className: "operator" },
     { row: 6, col: 2, value: "x", className: "equation-expression" },
     { row: 6, col: 3, value: "=", className: "operator" }
-  ];
+  ]);
+}
+
+function renderTransformGrid(model, staticCells) {
+  const contentRows = new Set();
+  staticCells.forEach((item) => {
+    if (item.value !== "" && item.value != null) contentRows.add(item.row);
+  });
+  model.cells.forEach((item) => contentRows.add(item.row));
 
   for (let row = 1; row <= 6; row += 1) {
-    addCell({ row, col: 1, value: equationLabelForRow(row), className: "row-label" });
+    if (contentRows.has(row)) {
+      addCell({ row, col: 1, value: equationLabelForRow(row), className: "row-label" });
+    }
   }
 
   for (let row = 1; row <= 6; row += 1) {
     for (let col = 2; col <= 4; col += 1) {
-      const staticCell = staticCells.find((item) => item.row === row && item.col === col);
       const inputCell = model.cells.find((item) => item.row === row && item.col === col);
-      if (staticCell) {
-        addCell({ row, col, value: staticCell.value, className: staticCell.className });
-      } else if (inputCell) {
+      if (inputCell) {
         addInput(inputCell);
-      } else {
-        addCell({ row, col, value: "", className: "digit-static" });
+        continue;
       }
+      const staticCell = staticCells.find((item) => item.row === row && item.col === col);
+      if (staticCell) addCell({ row, col, value: staticCell.value, className: staticCell.className });
     }
   }
 }
@@ -6928,33 +6936,14 @@ function buildInequalityModel(problem) {
 }
 
 function renderInequalityGrid(model) {
-  const simplifiedRelation = model.b === 0 ? model.relation : model.relation;
-  const staticCells = [
+  renderTransformGrid(model, [
     { row: 1, col: 2, value: model.expression, className: "equation-expression active-source" },
     { row: 1, col: 3, value: displayRelation(model.relation), className: "operator" },
     { row: 1, col: 4, value: String(model.c), className: "equation-expression active-source" },
-    { row: 4, col: 3, value: displayRelation(simplifiedRelation), className: "operator" },
+    { row: 4, col: 3, value: displayRelation(model.relation), className: "operator" },
     { row: 6, col: 2, value: "x", className: "equation-expression" },
     { row: 6, col: 3, value: displayRelation(model.finalRelation), className: "operator" }
-  ];
-
-  for (let row = 1; row <= 6; row += 1) {
-    addCell({ row, col: 1, value: equationLabelForRow(row), className: "row-label" });
-  }
-
-  for (let row = 1; row <= 6; row += 1) {
-    for (let col = 2; col <= 4; col += 1) {
-      const staticCell = staticCells.find((item) => item.row === row && item.col === col);
-      const inputCell = model.cells.find((item) => item.row === row && item.col === col);
-      if (inputCell) {
-        addInput(inputCell);
-      } else if (staticCell) {
-        addCell({ row, col, value: staticCell.value, className: staticCell.className });
-      } else {
-        addCell({ row, col, value: "", className: "digit-static" });
-      }
-    }
-  }
+  ]);
 }
 
 function buildSystemModel(problem) {
