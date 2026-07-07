@@ -2044,10 +2044,16 @@ button.binary-bit {
   stroke-linecap: round;
 }
 
+.graph-edge.path {
+  stroke: var(--accent);
+  stroke-width: 6;
+}
+
 .graph-node circle {
   fill: var(--surface);
   stroke: var(--sudoku-ink);
   stroke-width: 3;
+  transition: fill 120ms ease, stroke 120ms ease;
 }
 
 .graph-node.target circle {
@@ -2060,6 +2066,49 @@ button.binary-bit {
   font-family: var(--font);
   font-size: 17px;
   font-weight: 900;
+  pointer-events: none;
+  user-select: none;
+}
+
+.graph-paths-board .graph-node {
+  cursor: pointer;
+}
+
+.graph-paths-board .graph-node.visited circle {
+  fill: var(--accent-soft);
+  stroke: var(--accent);
+}
+
+.graph-paths-board .graph-node.start circle {
+  fill: var(--complete-soft, #dcfce7);
+  stroke: var(--complete, #16a34a);
+  stroke-width: 4;
+}
+
+.graph-paths-board .graph-node.end circle {
+  fill: var(--sudoku-soft);
+  stroke: var(--sudoku-ink);
+  stroke-width: 4;
+}
+
+.graph-paths-board .graph-node.reachable circle {
+  stroke: var(--accent);
+  stroke-dasharray: 4 3;
+}
+
+.graph-paths-board .graph-node.head circle {
+  stroke: var(--accent);
+  stroke-width: 5;
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--accent) 55%, transparent));
+}
+
+.graph-paths-board .graph-node:focus {
+  outline: none;
+}
+
+.graph-paths-board .graph-node:focus circle {
+  stroke: var(--accent);
+  stroke-width: 5;
 }
 
 .scratch-line {

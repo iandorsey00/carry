@@ -1,6 +1,6 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-beta.33";
+const APP_VERSION = "0.1.0-beta.34";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 const GAMES_STORAGE_KEY = "carry.games.v1";
@@ -871,6 +871,12 @@ function cacheElements() {
   els.numberGameVisuals = Object.fromEntries(Array.from(document.querySelectorAll("[data-number-visual]")).map((item) => [item.dataset.numberVisual, item]));
   els.numberGameDifficulties = Object.fromEntries(Array.from(document.querySelectorAll("[data-number-difficulty]")).map((item) => [item.dataset.numberDifficulty, item]));
   els.graphPathsFigure = document.querySelector("#graphPathsFigure");
+  els.graphPathsDifficulty = document.querySelector("#graphPathsDifficulty");
+  els.graphPathsStatus = document.querySelector("#graphPathsStatus");
+  els.graphPathsPrompt = document.querySelector("#graphPathsPrompt");
+  els.graphPathsUndo = document.querySelector("#graphPathsUndo");
+  els.graphPathsReset = document.querySelector("#graphPathsReset");
+  els.graphPathsNew = document.querySelector("#graphPathsNew");
   els.scratchpadInput = document.querySelector("#scratchpadInput");
   els.duplicateScratchLine = document.querySelector("#duplicateScratchLine");
   els.duplicateScratchLineHeader = document.querySelector("#duplicateScratchLineHeader");
@@ -1014,8 +1020,8 @@ function loadGames() {
     graphPaths: {
       difficulty: "easy",
       seed: 0,
-      selected: null,
-      checked: false
+      path: [],
+      status: "playing"
     }
   };
 
@@ -1798,6 +1804,7 @@ function renderGames() {
   renderSudoku();
   renderModClock();
   renderNumberGames();
+  renderGraphPaths();
 }
 
 function setActiveGame(game) {
@@ -3402,20 +3409,26 @@ function graphPathProblem(settings) {
   const graph = graphPathLayouts[settings.difficulty] || graphPathLayouts.easy;
   const random = seededRandom(settings.seed * 1999 + { easy: 163, medium: 181, hard: 197 }[settings.difficulty]);
   const pair = graph.pairs[Math.floor(random() * graph.pairs.length)];
-  const answer = shortestPathLength(graph.edges, pair[0], pair[1]);
-  const choices = uniqueShuffledChoices([answer, answer + 1, Math.max(1, answer - 1), answer + 2], random, 4);
+  const shortest = shortestPathLength(graph.edges, pair[0], pair[1]);
+  const neighbors = graphAdjacency(graph.edges);
   return {
-    multi: false,
     graph,
+    neighbors,
     start: pair[0],
     end: pair[1],
-    prompt: `What is the shortest path length from ${pair[0]} to ${pair[1]}?`,
-    choices: choices.map((value) => ({ value, label: `${value} ${Number(value) === 1 ? "edge" : "edges"}` })),
-    answers: [String(answer)],
-    emptyStatus: "Choose the fewest number of edges.",
-    success: "Correct. That is the shortest path length.",
-    hint: "Count edges, not nodes. Try tracing the shortest route without revisiting nodes."
+    shortest
   };
+}
+
+function graphAdjacency(edges) {
+  const neighbors = new Map();
+  edges.forEach(([left, right]) => {
+    if (!neighbors.has(left)) neighbors.set(left, new Set());
+    if (!neighbors.has(right)) neighbors.set(right, new Set());
+    neighbors.get(left).add(right);
+    neighbors.get(right).add(left);
+  });
+  return neighbors;
 }
 
 function shortestPathLength(edges, start, end) {
@@ -3445,7 +3458,6 @@ function numberGameProblem(game) {
   if (game === "prime-factors") return primeFactorProblem(settings);
   if (game === "gcd-race") return gcdRaceProblem(settings);
   if (game === "divisibility") return divisibilityProblem(settings);
-  if (game === "graph-paths") return graphPathProblem(settings);
   return residueMatchProblem(settings);
 }
 
@@ -3464,7 +3476,7 @@ function numberGameIsCorrect(game, problem) {
 }
 
 function renderNumberGames() {
-  ["prime-factors", "gcd-race", "divisibility", "residue-match", "graph-paths"].forEach((game) => {
+  ["prime-factors", "gcd-race", "divisibility", "residue-match"].forEach((game) => {
     const key = gameStateKey(game);
     const stored = state.games[key];
     const problem = numberGameProblem(game);
@@ -3711,23 +3723,148 @@ function numberGameWrongStatus(game, problem) {
   return `Not quite. You chose ${selectedText}. Correct ${problem.multi ? "choices are" : "choice is"} ${answerText}. ${problem.hint}`;
 }
 
-function renderGraphPathsFigure(problem) {
+function currentGraphPathsState() {
+  const stored = state.games.graphPaths || {};
+  return {
+    difficulty: ["easy", "medium", "hard"].includes(stored.difficulty) ? stored.difficulty : "easy",
+    seed: Number.isFinite(Number(stored.seed)) ? Number(stored.seed) : 0,
+    path: Array.isArray(stored.path) ? stored.path : [],
+    status: stored.status === "won" ? "won" : "playing"
+  };
+}
+
+function ensureGraphPathsStart() {
+  const settings = currentGraphPathsState();
+  const problem = graphPathProblem(settings);
+  if (!settings.path.length || settings.path[0] !== problem.start || !problem.graph.nodes[settings.path[settings.path.length - 1]]) {
+    state.games.graphPaths = { ...state.games.graphPaths, path: [problem.start], status: "playing" };
+  }
+  return problem;
+}
+
+function renderGraphPaths() {
   const svg = els.graphPathsFigure;
-  if (!svg || !problem?.graph) return;
+  if (!svg) return;
+  const problem = ensureGraphPathsStart();
+  const settings = currentGraphPathsState();
+  const path = settings.path;
+  const head = path[path.length - 1];
+  const pathEdges = new Set();
+  for (let index = 0; index < path.length - 1; index += 1) {
+    pathEdges.add(graphEdgeKey(path[index], path[index + 1]));
+  }
+  const usedNodes = new Set(path);
+  const reachable = new Set();
+  if (settings.status !== "won") {
+    (problem.neighbors.get(head) || new Set()).forEach((node) => {
+      if (!usedNodes.has(node)) reachable.add(node);
+    });
+  }
+
   svg.innerHTML = "";
   problem.graph.edges.forEach(([left, right]) => {
     const [x1, y1] = problem.graph.nodes[left];
     const [x2, y2] = problem.graph.nodes[right];
-    svg.append(svgEl("line", { x1, y1, x2, y2, class: "graph-edge" }));
+    const onPath = pathEdges.has(graphEdgeKey(left, right));
+    svg.append(svgEl("line", { x1, y1, x2, y2, class: `graph-edge${onPath ? " path" : ""}` }));
   });
+
   Object.entries(problem.graph.nodes).forEach(([node, [cx, cy]]) => {
-    const group = svgEl("g", { class: `graph-node ${node === problem.start || node === problem.end ? "target" : ""}` });
+    const classes = ["graph-node"];
+    if (node === problem.start) classes.push("start");
+    if (node === problem.end) classes.push("end");
+    if (usedNodes.has(node)) classes.push("visited");
+    if (node === head) classes.push("head");
+    if (reachable.has(node)) classes.push("reachable");
+    const group = svgEl("g", { class: classes.join(" "), "data-graph-node": node, role: "button", tabindex: "0" });
     group.append(svgEl("circle", { cx, cy, r: 18 }));
     const label = svgEl("text", { x: cx, y: cy + 6, "text-anchor": "middle" });
-    label.textContent = node;
+    label.textContent = node === problem.end ? "⚑" : node;
     group.append(label);
     svg.append(group);
   });
+
+  els.graphPathsDifficulty.value = settings.difficulty;
+  const steps = path.length - 1;
+  els.graphPathsPrompt.textContent = `Route ${problem.start} → ${problem.end}⚑ · ${steps} ${steps === 1 ? "edge" : "edges"} so far`;
+  if (settings.status === "won") {
+    els.graphPathsStatus.textContent = `Shortest route found in ${steps} ${steps === 1 ? "edge" : "edges"}. Press New for another.`;
+  } else if (path.length === 1) {
+    els.graphPathsStatus.textContent = `Tap a glowing node to step toward ${problem.end}⚑.`;
+  } else {
+    els.graphPathsStatus.textContent = "Keep going, or tap the last node to step back.";
+  }
+}
+
+function graphEdgeKey(a, b) {
+  return a < b ? `${a}|${b}` : `${b}|${a}`;
+}
+
+function clickGraphPathsNode(node) {
+  const settings = currentGraphPathsState();
+  if (settings.status === "won") return;
+  const problem = graphPathProblem(settings);
+  if (!problem.graph.nodes[node]) return;
+  const path = [...settings.path];
+  const head = path[path.length - 1];
+
+  if (node === head && path.length > 1) {
+    path.pop();
+    state.games.graphPaths = { ...state.games.graphPaths, path, status: "playing" };
+    saveGames("Stepped back in Graph Paths");
+    renderGraphPaths();
+    return;
+  }
+  const adjacent = problem.neighbors.get(head)?.has(node);
+  if (!adjacent || path.includes(node)) {
+    els.graphPathsStatus.textContent = path.includes(node) && node !== head
+      ? "That node is already on your route. Step back to reuse it."
+      : "You can only step to a connected node.";
+    return;
+  }
+  path.push(node);
+  const won = node === problem.end && path.length - 1 === problem.shortest;
+  const reachedLong = node === problem.end && path.length - 1 > problem.shortest;
+  state.games.graphPaths = { ...state.games.graphPaths, path, status: won ? "won" : "playing" };
+  saveGames("Extended Graph Paths route");
+  renderGraphPaths();
+  if (reachedLong) {
+    els.graphPathsStatus.textContent = `You reached ${problem.end} in ${path.length - 1} edges, but there is a route in ${problem.shortest}. Undo or Reset to try again.`;
+  }
+}
+
+function undoGraphPathsStep() {
+  const settings = currentGraphPathsState();
+  if (settings.path.length <= 1) return;
+  const path = settings.path.slice(0, -1);
+  state.games.graphPaths = { ...state.games.graphPaths, path, status: "playing" };
+  saveGames("Undid Graph Paths step");
+  renderGraphPaths();
+}
+
+function resetGraphPaths() {
+  const problem = graphPathProblem(currentGraphPathsState());
+  state.games.graphPaths = { ...state.games.graphPaths, path: [problem.start], status: "playing" };
+  saveGames("Reset Graph Paths route");
+  renderGraphPaths();
+}
+
+function newGraphPaths() {
+  const settings = currentGraphPathsState();
+  state.games.graphPaths = { ...state.games.graphPaths, seed: settings.seed + 1, path: [], status: "playing" };
+  const problem = ensureGraphPathsStart();
+  state.games.graphPaths = { ...state.games.graphPaths, path: [problem.start], status: "playing" };
+  saveGames("Started a new Graph Paths puzzle");
+  renderGraphPaths();
+}
+
+function setGraphPathsDifficulty(difficulty) {
+  if (!["easy", "medium", "hard"].includes(difficulty)) return;
+  state.games.graphPaths = { ...state.games.graphPaths, difficulty, seed: 0, path: [], status: "playing" };
+  const problem = ensureGraphPathsStart();
+  state.games.graphPaths = { ...state.games.graphPaths, path: [problem.start], status: "playing" };
+  saveGames("Changed Graph Paths difficulty");
+  renderGraphPaths();
 }
 
 function toggleNumberGameChoice(game, value) {
@@ -3789,6 +3926,7 @@ function setNumberGameDifficulty(game, difficulty) {
 function handleSudokuKeydown(event) {
   if (state.activeSurface !== "games" || event.defaultPrevented) return false;
   if (state.games.activeGame === "mod-clock") return handleModClockKeydown(event);
+  if (state.games.activeGame === "graph-paths") return false;
   if (gameStateKey(state.games.activeGame)) return handleNumberGameKeydown(event);
   if (isFormControl(event.target) && !event.target.classList?.contains("sudoku-cell")) return false;
 
@@ -8843,6 +8981,23 @@ function bindEvents() {
   Object.entries(els.numberGameDifficulties).forEach(([game, select]) => {
     select.addEventListener("change", () => setNumberGameDifficulty(game, select.value));
   });
+  if (els.graphPathsFigure) {
+    els.graphPathsFigure.addEventListener("click", (event) => {
+      const node = event.target.closest("[data-graph-node]");
+      if (node) clickGraphPathsNode(node.dataset.graphNode);
+    });
+    els.graphPathsFigure.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter" && event.key !== " ") return;
+      const node = event.target.closest("[data-graph-node]");
+      if (!node) return;
+      event.preventDefault();
+      clickGraphPathsNode(node.dataset.graphNode);
+    });
+  }
+  els.graphPathsUndo?.addEventListener("click", undoGraphPathsStep);
+  els.graphPathsReset?.addEventListener("click", resetGraphPaths);
+  els.graphPathsNew?.addEventListener("click", newGraphPaths);
+  els.graphPathsDifficulty?.addEventListener("change", () => setGraphPathsDifficulty(els.graphPathsDifficulty.value));
   els.scratchpadToolbar.addEventListener("click", (event) => {
     const button = event.target.closest("button[data-insert]");
     if (!button) return;
