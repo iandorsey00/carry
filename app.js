@@ -1,11 +1,11 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-beta.34";
+const APP_VERSION = "0.1.0-beta.35";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 const GAMES_STORAGE_KEY = "carry.games.v1";
 const TOOLS_STORAGE_KEY = "carry.tools.v1";
-const GAME_IDS = ["sudoku", "mod-clock", "prime-factors", "gcd-race", "divisibility", "residue-match", "graph-paths"];
+const GAME_IDS = ["sudoku", "mod-clock", "prime-factors", "gcd-race", "divisibility", "residue-match", "graph-paths", "graph-color"];
 const TOOL_IDS = ["random-number", "normal-simulator", "unit-circle", "complex-plane", "graphing", "number-theory"];
 const EXPLORATION_ENTRIES = Array.isArray(window.CarryExplorations?.entries) ? window.CarryExplorations.entries : [];
 const EXPLORATION_DEFAULT_ID = EXPLORATION_ENTRIES[0]?.id || "";
@@ -877,6 +877,11 @@ function cacheElements() {
   els.graphPathsUndo = document.querySelector("#graphPathsUndo");
   els.graphPathsReset = document.querySelector("#graphPathsReset");
   els.graphPathsNew = document.querySelector("#graphPathsNew");
+  els.graphColorFigure = document.querySelector("#graphColorFigure");
+  els.graphColorDifficulty = document.querySelector("#graphColorDifficulty");
+  els.graphColorStatus = document.querySelector("#graphColorStatus");
+  els.graphColorPrompt = document.querySelector("#graphColorPrompt");
+  els.graphColorClear = document.querySelector("#graphColorClear");
   els.scratchpadInput = document.querySelector("#scratchpadInput");
   els.duplicateScratchLine = document.querySelector("#duplicateScratchLine");
   els.duplicateScratchLineHeader = document.querySelector("#duplicateScratchLineHeader");
@@ -1022,6 +1027,11 @@ function loadGames() {
       seed: 0,
       path: [],
       status: "playing"
+    },
+    graphColor: {
+      difficulty: "easy",
+      seed: 0,
+      colors: {}
     }
   };
 
@@ -1061,6 +1071,11 @@ function loadGames() {
       graphPaths: {
         ...fallback.graphPaths,
         ...(parsed.graphPaths || {})
+      },
+      graphColor: {
+        ...fallback.graphColor,
+        ...(parsed.graphColor || {}),
+        colors: parsed.graphColor?.colors || {}
       }
     };
   } catch {
@@ -1805,6 +1820,7 @@ function renderGames() {
   renderModClock();
   renderNumberGames();
   renderGraphPaths();
+  renderGraphColor();
 }
 
 function setActiveGame(game) {
@@ -3207,7 +3223,8 @@ function gameLabel(game) {
     "gcd-race": "GCD",
     divisibility: "Divisibility",
     "residue-match": "Residues",
-    "graph-paths": "Graph Paths"
+    "graph-paths": "Graph Paths",
+    "graph-color": "Graph Color"
   }[game] || "Sudoku";
 }
 
@@ -3867,6 +3884,106 @@ function setGraphPathsDifficulty(difficulty) {
   renderGraphPaths();
 }
 
+const GRAPH_COLOR_COUNT = 3;
+
+function currentGraphColorState() {
+  const stored = state.games.graphColor || {};
+  return {
+    difficulty: ["easy", "medium", "hard"].includes(stored.difficulty) ? stored.difficulty : "easy",
+    colors: stored.colors && typeof stored.colors === "object" ? stored.colors : {}
+  };
+}
+
+function graphColorGraph(difficulty) {
+  return graphPathLayouts[difficulty] || graphPathLayouts.easy;
+}
+
+function graphColorConflicts(graph, colors) {
+  const conflicts = new Set();
+  graph.edges.forEach(([left, right]) => {
+    const a = colors[left];
+    const b = colors[right];
+    if (a !== undefined && a !== null && a === b) conflicts.add(graphEdgeKey(left, right));
+  });
+  return conflicts;
+}
+
+function renderGraphColor() {
+  const svg = els.graphColorFigure;
+  if (!svg) return;
+  const settings = currentGraphColorState();
+  const graph = graphColorGraph(settings.difficulty);
+  const colors = settings.colors;
+  const conflicts = graphColorConflicts(graph, colors);
+  const nodeIds = Object.keys(graph.nodes);
+  const colored = nodeIds.filter((node) => colors[node] !== undefined && colors[node] !== null).length;
+  const solved = colored === nodeIds.length && conflicts.size === 0;
+
+  svg.innerHTML = "";
+  graph.edges.forEach(([left, right]) => {
+    const [x1, y1] = graph.nodes[left];
+    const [x2, y2] = graph.nodes[right];
+    const bad = conflicts.has(graphEdgeKey(left, right));
+    svg.append(svgEl("line", { x1, y1, x2, y2, class: `graph-edge${bad ? " conflict" : ""}` }));
+  });
+  nodeIds.forEach((node) => {
+    const [cx, cy] = graph.nodes[node];
+    const color = colors[node];
+    const hasColor = color !== undefined && color !== null;
+    const classes = ["graph-node"];
+    if (hasColor) classes.push(`color-${color}`);
+    const group = svgEl("g", { class: classes.join(" "), "data-graph-color-node": node, role: "button", tabindex: "0" });
+    group.append(svgEl("circle", { cx, cy, r: 18 }));
+    const label = svgEl("text", { x: cx, y: cy + 6, "text-anchor": "middle" });
+    label.textContent = node;
+    group.append(label);
+    svg.append(group);
+  });
+
+  els.graphColorDifficulty.value = settings.difficulty;
+  els.graphColorPrompt.textContent = `${colored} / ${nodeIds.length} nodes colored · ${GRAPH_COLOR_COUNT} colors`;
+  if (solved) {
+    els.graphColorStatus.textContent = "Solved! No two connected nodes share a color. Try a harder graph.";
+  } else if (conflicts.size > 0) {
+    els.graphColorStatus.textContent = `${conflicts.size} ${conflicts.size === 1 ? "edge connects" : "edges connect"} same-colored nodes (shown in red). Recolor to fix.`;
+  } else if (colored === 0) {
+    els.graphColorStatus.textContent = "Tap a node to color it. No two connected nodes may share a color.";
+  } else {
+    els.graphColorStatus.textContent = "Keep coloring. Tap a node again to cycle its color.";
+  }
+}
+
+function clickGraphColorNode(node) {
+  const settings = currentGraphColorState();
+  const graph = graphColorGraph(settings.difficulty);
+  if (!graph.nodes[node]) return;
+  const colors = { ...settings.colors };
+  const current = colors[node];
+  if (current === undefined || current === null) {
+    colors[node] = 0;
+  } else if (current + 1 < GRAPH_COLOR_COUNT) {
+    colors[node] = current + 1;
+  } else {
+    delete colors[node];
+  }
+  state.games.graphColor = { ...state.games.graphColor, colors };
+  saveGames("Colored a node");
+  renderGraphColor();
+}
+
+function clearGraphColor() {
+  state.games.graphColor = { ...state.games.graphColor, colors: {} };
+  saveGames("Cleared Graph Color");
+  renderGraphColor();
+}
+
+function setGraphColorDifficulty(difficulty) {
+  if (!["easy", "medium", "hard"].includes(difficulty)) return;
+  state.games.graphColor = { ...state.games.graphColor, difficulty, colors: {} };
+  saveGames("Changed Graph Color difficulty");
+  renderGraphColor();
+}
+
 function toggleNumberGameChoice(game, value) {
   const key = gameStateKey(game);
   const problem = numberGameProblem(game);
@@ -3927,6 +4044,7 @@ function handleSudokuKeydown(event) {
   if (state.activeSurface !== "games" || event.defaultPrevented) return false;
   if (state.games.activeGame === "mod-clock") return handleModClockKeydown(event);
   if (state.games.activeGame === "graph-paths") return false;
+  if (state.games.activeGame === "graph-color") return false;
   if (gameStateKey(state.games.activeGame)) return handleNumberGameKeydown(event);
   if (isFormControl(event.target) && !event.target.classList?.contains("sudoku-cell")) return false;
 
@@ -8998,6 +9116,21 @@ function bindEvents() {
   els.graphPathsReset?.addEventListener("click", resetGraphPaths);
   els.graphPathsNew?.addEventListener("click", newGraphPaths);
   els.graphPathsDifficulty?.addEventListener("change", () => setGraphPathsDifficulty(els.graphPathsDifficulty.value));
+  if (els.graphColorFigure) {
+    els.graphColorFigure.addEventListener("click", (event) => {
+      const node = event.target.closest("[data-graph-color-node]");
+      if (node) clickGraphColorNode(node.dataset.graphColorNode);
+    });
+    els.graphColorFigure.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter" && event.key !== " ") return;
+      const node = event.target.closest("[data-graph-color-node]");
+      if (!node) return;
+      event.preventDefault();
+      clickGraphColorNode(node.dataset.graphColorNode);
+    });
+  }
+  els.graphColorClear?.addEventListener("click", clearGraphColor);
+  els.graphColorDifficulty?.addEventListener("change", () => setGraphColorDifficulty(els.graphColorDifficulty.value));
   els.scratchpadToolbar.addEventListener("click", (event) => {
     const button = event.target.closest("button[data-insert]");
     if (!button) return;

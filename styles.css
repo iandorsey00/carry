@@ -2111,6 +2111,43 @@ button.binary-bit {
   stroke-width: 5;
 }
 
+.graph-color-board .graph-node {
+  cursor: pointer;
+}
+
+.graph-color-board .graph-node:focus {
+  outline: none;
+}
+
+.graph-color-board .graph-node:focus circle {
+  stroke-width: 5;
+}
+
+.graph-color-board .graph-node.color-0 circle {
+  fill: #2563eb;
+  stroke: #1e40af;
+}
+
+.graph-color-board .graph-node.color-1 circle {
+  fill: #f59e0b;
+  stroke: #b45309;
+}
+
+.graph-color-board .graph-node.color-2 circle {
+  fill: #10b981;
+  stroke: #047857;
+}
+
+.graph-color-board .graph-node.color-0 text,
+.graph-color-board .graph-node.color-2 text {
+  fill: #ffffff;
+}
+
+.graph-edge.conflict {
+  stroke: #dc2626;
+  stroke-width: 6;
+}
+
 .scratch-line {
   display: grid;
   grid-template-columns: 32px minmax(0, 1fr);
