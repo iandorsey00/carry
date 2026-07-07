@@ -1,6 +1,6 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-beta.35";
+const APP_VERSION = "0.1.0-beta.36";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 const GAMES_STORAGE_KEY = "carry.games.v1";
@@ -738,7 +738,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (routeState?.exploration) state.activeExplorationId = routeState.exploration;
   state.activeTopic = routeState?.topic || state.progress.currentTopic || "Arithmetic";
   state.activeWorkspaceId = routeState?.workspaceId || state.progress.currentWorkspaceId || "arithmetic.long-addition.3x3";
-  state.mode = state.progress.preferences.mode || "guided";
+  state.mode = ["guided", "practice"].includes(state.progress.preferences.mode) ? state.progress.preferences.mode : "guided";
   ensureSurfaceWorkspace();
   renderSurface();
   renderTopics();
@@ -6182,7 +6182,7 @@ function createConceptAnswerInput(model) {
   input.addEventListener("input", (event) => {
     event.target.value = normalizeAnswerInput(event.target.value);
     if (state.mode === "guided") setStatus("Enter the answer, then check it.", "");
-    if (state.mode === "explore") markExploreInput(event.target);
+    if (state.mode === "practice") markExploreInput(event.target);
   });
   input.setAttribute("oninput", "document.dispatchEvent(new CustomEvent('carry-concept-input-command', { detail: this }))");
   input.setAttribute("onkeydown", "window.carryInlineReturn?.(event)");
@@ -6660,7 +6660,7 @@ function selectConceptChoice(input, value) {
   syncConceptChoiceButtons(input);
   if (state.mode === "guided") setStatus("Choice selected. Press Check.", "");
   if (state.mode === "practice") setStatus("Choice selected. Press Check.", "");
-  if (state.mode === "explore") markExploreInput(input);
+  if (state.mode === "practice") markExploreInput(input);
 }
 
 function syncConceptChoiceButtons(input) {
@@ -8071,8 +8071,7 @@ function addInput(cell) {
     event.target.value = event.target.inputMode === "numeric" ? normalizeDigitInput(event.target) : normalizeAnswerInput(event.target.value);
     if (event.target.value.trim()) state.autoAdvancedToStep = null;
     if (shouldAutoAdvance(event.target)) autoAdvanceCurrentStep();
-    if (state.mode === "practice") validateInput(event.target, false);
-    if (state.mode === "explore") markExploreInput(event.target);
+    if (state.mode === "practice") markExploreInput(event.target);
   });
 
   if (input.inputMode === "numeric") {
@@ -8120,8 +8119,7 @@ function createScratchInput(type, role) {
     event.target.value = event.target.value.replace(/\D/g, "").slice(0, 1);
     if (event.target.value.trim()) state.autoAdvancedToStep = null;
     if (shouldAutoAdvance(event.target)) autoAdvanceCurrentStep();
-    if (state.mode === "practice") validateInput(event.target, false);
-    if (state.mode === "explore") markExploreInput(event.target);
+    if (state.mode === "practice") markExploreInput(event.target);
   });
 
   input.addEventListener("beforeinput", handleDigitBeforeInput);
@@ -8358,7 +8356,7 @@ function configureAdditionCarrySlots(activeStep) {
 
 function checkCurrentStep() {
   const steps = orderedSteps();
-  if (state.mode === "explore") {
+  if (state.mode === "practice") {
     const allCorrect = visibleInputs().every((input) => validateInput(input, true));
     setStatus(allCorrect ? "All visible entries are correct." : "Some entries need another look.", allCorrect ? "correct" : "incorrect");
     return;
@@ -8464,7 +8462,7 @@ document.addEventListener("carry-concept-input-command", (event) => {
   if (!input?.classList?.contains("digit-input")) return;
   input.value = normalizeAnswerInput(input.value);
   if (state.mode === "guided") setStatus("Enter the answer, then check it.", "");
-  if (state.mode === "explore") markExploreInput(input);
+  if (state.mode === "practice") markExploreInput(input);
 });
 
 function runReturnCommand() {
@@ -8823,10 +8821,8 @@ function updateStepText() {
   }
   if (state.mode === "guided") {
     els.stepText.textContent = target.label;
-  } else if (state.mode === "practice") {
-    els.stepText.textContent = "Fill the boxes. Feedback appears as you work.";
   } else {
-    els.stepText.textContent = "Use the workspace freely, then check all entries.";
+    els.stepText.textContent = "Fill the boxes freely, then press Check when ready.";
   }
 }
 
@@ -9163,12 +9159,14 @@ function configureModeTabs(workspace) {
     tab.hidden = !available;
     tab.setAttribute("aria-selected", tab.dataset.mode === state.mode ? "true" : "false");
   });
+  const modeTabsContainer = els.modeTabs[0]?.closest(".mode-tabs");
+  if (modeTabsContainer) modeTabsContainer.hidden = availableModes.length <= 1;
 }
 
 function modesForWorkspace(workspace) {
   if (workspace.status === "planned") return ["guided"];
-  if (workspace.type === "concept") return ["guided", "practice"];
-  return ["guided", "practice", "explore"];
+  if (workspace.type === "concept") return ["guided"];
+  return ["guided", "practice"];
 }
 
 function startCurrentLesson() {
@@ -9387,8 +9385,7 @@ function divisionGuardrailMessage(workspace) {
 
 function modeStatus(mode) {
   if (mode === "guided") return "Guided mode shows one next action.";
-  if (mode === "practice") return "Practice mode checks entries as you work.";
-  return "Explore mode lets you try freely before checking.";
+  return "Practice mode lets you fill freely, then check when ready.";
 }
 
 function exportProgress() {
@@ -9455,7 +9452,7 @@ function importProgress(event) {
       const isBackup = applyImportedData(imported);
       state.activeTopic = state.progress.currentTopic || "Arithmetic";
       state.activeWorkspaceId = state.progress.currentWorkspaceId || "arithmetic.long-addition.3x3";
-      state.mode = state.progress.preferences.mode || "guided";
+      state.mode = ["guided", "practice"].includes(state.progress.preferences.mode) ? state.progress.preferences.mode : "guided";
       els.autoAdvance.checked = state.progress.preferences.autoAdvance !== false;
       safeLocalStorageSet(STORAGE_KEY, JSON.stringify(state.progress, null, 2), "Imported progress could not be saved in this browser.");
       els.modeTabs.forEach((item) => {
