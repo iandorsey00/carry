@@ -32,3 +32,30 @@ test("Euler's method responds to a finer step size", async ({ page }) => {
   await expect(page.locator(".intro-fig-readout")).toContainText("0.2");
   await expect(page.locator("#lessonTitle")).toHaveText("Euler's method");
 });
+
+test("every course overview has relevant figures and fully rendered notation", async ({ page }) => {
+  const lessons = [
+    "equations-and-classification",
+    "slope-fields",
+    "euler-s-method",
+    "separable-equations",
+    "linear-first-order-equations",
+    "autonomous-equations",
+    "first-order-models",
+    "second-order-models",
+    "homogeneous-linear-equations",
+    "forcing-damping-and-resonance",
+    "systems-and-phase-planes",
+    "laplace-transforms",
+    "series-solutions"
+  ];
+
+  for (const lesson of lessons) {
+    await page.goto(`/math/differential-equations/${lesson}`);
+    const intro = page.locator("#lessonIntro");
+    await expect(intro.locator(".intro-figure").first(), lesson).toBeVisible();
+    await expect(intro, lesson).not.toContainText("Mixed review");
+    const copy = await intro.innerText();
+    expect(copy, lesson).not.toMatch(/mathb[fF]|\\(?:mathbf|mathcal|lambda|omega|mu|sum|infty|frac|int|text)/);
+  }
+});

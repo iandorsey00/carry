@@ -8,7 +8,7 @@
       workedRows: [
         { math: "y'=y(1-y)", note: "Set the rate equal to zero." },
         { math: "y(1-y)=0", note: "Factorization exposes the equilibria." },
-        { math: "y=0\text{ or }y=1", note: "Check signs between these values for stability." }
+        { math: "y=0\\text{ or }y=1", note: "Check signs between these values for stability." }
       ],
       notice: ["Equilibria are constant solutions.", "Arrows point upward where f(y) is positive.", "Stable equilibria attract nearby solutions."],
       applications: ["Logistic growth", "Chemical populations", "Long-term behavior without solving explicitly"]

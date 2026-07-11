@@ -3,10 +3,75 @@
   if (!figures) return;
 
   figures.registerLesson("differential-equations.classification", (workspace, h) => h.mathCard([
-    "y' = x+y \quad \text{first order, linear}",
-    "y'' + 4y = 0 \quad \text{second order, linear}",
-    "y' = y^2 \quad \text{first order, nonlinear}"
+    "y' = x+y \\quad \\text{first order, linear}",
+    "y'' + 4y = 0 \\quad \\text{second order, linear}",
+    "y' = y^2 \\quad \\text{first order, nonlinear}"
   ], "Order comes from the highest derivative. Linearity comes from how the unknown function appears."));
+
+  figures.registerLesson("differential-equations.separable", (workspace, h) => h.mathCard([
+    "\\frac{dy}{dx}=3xy",
+    "\\frac{1}{y}\\,dy=3x\\,dx",
+    "\\int\\frac{1}{y}\\,dy=\\int 3x\\,dx"
+  ], "Separate variables first; integration comes after each variable has its own side."));
+
+  figures.registerLesson("differential-equations.linear-first-order", (workspace, h) => h.mathCard([
+    "y'+p(x)y=q(x)",
+    "\\mu(x)=e^{\\int p(x)\\,dx}",
+    "(\\mu y)'=\\mu q"
+  ], "The integrating factor packages the left side into one product derivative."));
+
+  figures.registerLesson("differential-equations.first-order-models", (workspace, h) => h.mathCard([
+    "\\frac{dP}{dt}=kP",
+    "P(t)=P_0e^{kt}",
+    "k>0\\Rightarrow\\text{ growth}"
+  ], "A rate proportional to the current amount produces exponential change."));
+
+  figures.registerLesson("differential-equations.second-order-models", (workspace, h) => h.mathCard([
+    "x'(t)=v(t)",
+    "x''(t)=a(t)",
+    "mx''+kx=0"
+  ], "Second derivatives connect a changing position to acceleration."));
+
+  figures.registerLesson("differential-equations.homogeneous-second-order", (workspace, h) => h.mathCard([
+    "y''-5y'+6y=0",
+    "r^2-5r+6=0",
+    "y=C_1e^{2x}+C_2e^{3x}"
+  ], "The characteristic equation turns a differential equation into an algebra problem."));
+
+  figures.registerLesson("differential-equations.forcing-and-resonance", (workspace, h) => h.mathCard([
+    "my''+cy'+ky=F(t)",
+    "y=y_h+y_p",
+    "F(t)=F_0\\cos(\\omega t)"
+  ], "The response combines the system's transient motion with the continuing effect of the forcing."));
+
+  figures.registerLesson("differential-equations.laplace-transforms", (workspace, h) => h.mathCard([
+    "\\mathcal{L}(y')=sY(s)-y(0)",
+    "\\text{differentiation in }t\\Rightarrow\\text{ algebra in }s",
+    "Y(s)\\Rightarrow y(t)"
+  ], "Laplace transforms move an initial-value problem into an algebraic domain and then back again."));
+
+  figures.registerLesson("differential-equations.series-solutions", (workspace, h) => h.mathCard([
+    "y=\\sum_{n=0}^{\\infty}a_nx^n",
+    "y'=\\sum_{n=1}^{\\infty}na_nx^{n-1}",
+    "\\text{match coefficients of }x^n"
+  ], "Matching equal powers produces a recurrence for the unknown coefficients."));
+
+  figures.registerLesson("differential-equations.systems-phase-plane", (workspace, h) => {
+    const svg = h.canvas({ height: 230, ariaLabel: "Saddle phase portrait with stable and unstable directions" });
+    const map = h.mapper({ xMin: -3, xMax: 3, yMin: -3, yMax: 3, left: 34, right: 326, top: 16, bottom: 210 });
+    h.line(svg, map.left, map.y(0), map.right, map.y(0), "geometry-grid-line");
+    h.line(svg, map.x(0), map.top, map.x(0), map.bottom, "geometry-grid-line");
+    h.arrow(svg, map.x(0.25), map.y(0), map.x(2.4), map.y(0), "geometry-line active");
+    h.arrow(svg, map.x(-0.25), map.y(0), map.x(-2.4), map.y(0), "geometry-line active");
+    h.arrow(svg, map.x(0), map.y(2.5), map.x(0), map.y(0.35), "geometry-line result");
+    h.arrow(svg, map.x(0), map.y(-2.5), map.x(0), map.y(-0.35), "geometry-line result");
+    h.path(svg, `M ${map.x(-2.6)} ${map.y(-0.35)} C ${map.x(-1.4)} ${map.y(-0.7)} ${map.x(-0.7)} ${map.y(-1.5)} ${map.x(-0.35)} ${map.y(-2.7)}`, "geometry-line");
+    h.path(svg, `M ${map.x(0.35)} ${map.y(2.7)} C ${map.x(0.7)} ${map.y(1.5)} ${map.x(1.4)} ${map.y(0.7)} ${map.x(2.6)} ${map.y(0.35)}`, "geometry-line");
+    h.path(svg, `M ${map.x(-2.6)} ${map.y(0.35)} C ${map.x(-1.4)} ${map.y(0.7)} ${map.x(-0.7)} ${map.y(1.5)} ${map.x(-0.35)} ${map.y(2.7)}`, "geometry-line");
+    h.path(svg, `M ${map.x(0.35)} ${map.y(-2.7)} C ${map.x(0.7)} ${map.y(-1.5)} ${map.x(1.4)} ${map.y(-0.7)} ${map.x(2.6)} ${map.y(-0.35)}`, "geometry-line");
+    h.circle(svg, map.x(0), map.y(0), 6, "geometry-point result");
+    return h.figure({ svg, caption: "A saddle has one stable direction toward equilibrium and one unstable direction away from it." });
+  });
 
   figures.registerLesson("differential-equations.euler-method", (workspace, h) => {
     const svg = h.canvas({ height: 230, interactive: true, ariaLabel: "Euler approximation to y prime equals y" });
@@ -31,7 +96,7 @@
         h.circle(dyn, map.x(x), map.y(y), 4, "geometry-point active");
       }
       dyn.prepend(h.el("polyline", { class: "geometry-line active", fill: "none", points: points.join(" ") }));
-      out.set(`<math>h=${h.fmt(step, 2)}</math>: Euler gives <math>y(2)\approx ${h.fmt(y, 3)}</math>; the exact value is <math>e^2\approx ${h.fmt(Math.exp(2), 3)}</math>.`);
+      out.set(`<math>h=${h.fmt(step, 2)}</math>: Euler gives <math>y(2)\\approx ${h.fmt(y, 3)}</math>; the exact value is <math>e^2\\approx ${h.fmt(Math.exp(2), 3)}</math>.`);
     };
 
     const control = h.slider({ label: "steps from 0 to 2", min: 2, max: 20, step: 1, value: 4 }, update);
@@ -62,6 +127,9 @@
     };
     h.circle(svg, x, map.y(0), 7, "geometry-point result");
     h.circle(svg, x, map.y(1), 7, "geometry-point result");
+    h.arrow(svg, x, map.y(-0.08), x, map.y(-0.38), "geometry-line");
+    h.arrow(svg, x, map.y(0.25), x, map.y(0.72), "geometry-line active");
+    h.arrow(svg, x, map.y(1.42), x, map.y(1.1), "geometry-line");
     h.text(svg, "0", x - 18, map.y(0) + 5, "geometry-label geometry-math result", "end");
     h.text(svg, "1", x - 18, map.y(1) + 5, "geometry-label geometry-math result", "end");
     const handle = h.dragPoint(svg, {
@@ -79,4 +147,3 @@
     return h.figure({ svg, readouts: [out], hint: "Drag the state along the phase line.", caption: "A phase line compresses the differential equation into equilibria and directions of motion." });
   });
 })();
-

@@ -6,9 +6,9 @@
     intro: ["When elementary formulas are unavailable, assume a power series for the solution.", "Differentiate the series term by term and substitute into the equation.", "Matching equal powers produces a recurrence for the coefficients."],
     overview: {
       workedRows: [
-        { math: "y=\sum_{n=0}^{\infty}a_nx^n", note: "Assume a local power-series solution." },
-        { math: "y'=\sum_{n=1}^{\infty}na_nx^{n-1}", note: "Differentiate term by term." },
-        { math: "\text{match coefficients of }x^n", note: "Equal powers must have equal coefficients." }
+        { math: "y=\\sum_{n=0}^{\\infty}a_nx^n", note: "Assume a local power-series solution." },
+        { math: "y'=\\sum_{n=1}^{\\infty}na_nx^{n-1}", note: "Differentiate term by term." },
+        { math: "\\text{match coefficients of }x^n", note: "Equal powers must have equal coefficients." }
       ],
       notice: ["Align powers before comparing coefficients.", "Initial conditions determine the first coefficients.", "The recurrence generates later coefficients."],
       applications: ["Airy and Bessel equations", "Approximations near ordinary points", "Special functions"]

@@ -12,7 +12,7 @@
       workedRows: [
         { math: "y'' + 4y = 0", note: "The highest derivative is second order." },
         { math: "y'' + 4y = 0", note: "Every occurrence of y is linear." },
-        { math: "y(0) = 2,\, y'(0) = 0", note: "Two conditions select one second-order solution." }
+        { math: "y(0) = 2,\\, y'(0) = 0", note: "Two conditions select one second-order solution." }
       ],
       notice: [
         "Classify order before choosing a solution method.",

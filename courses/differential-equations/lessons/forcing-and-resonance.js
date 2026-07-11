@@ -8,7 +8,7 @@
       workedRows: [
         { math: "my''+cy'+ky=F(t)", note: "Identify the physical role of each term." },
         { math: "y=y_h+y_p", note: "Combine transient and forced responses." },
-        { math: "F(t)=F_0\cos(\omega t)", note: "Compare forcing frequency with the natural frequency." }
+        { math: "F(t)=F_0\\cos(\\omega t)", note: "Compare forcing frequency with the natural frequency." }
       ],
       notice: ["Damping removes energy.", "Forcing supplies energy.", "Resonance is controlled by both frequency matching and damping."],
       applications: ["Suspension systems", "Buildings in earthquakes", "Driven electrical circuits"]

@@ -10,7 +10,7 @@
     ],
     overview: {
       workedRows: [
-        { math: "y' = x+y,\, (x_0,y_0)=(0,1),\, h=0.1", note: "Evaluate the slope at the current point." },
+        { math: "y' = x+y,\\, (x_0,y_0)=(0,1),\\, h=0.1", note: "Evaluate the slope at the current point." },
         { math: "f(0,1)=1", note: "The first slope is 1." },
         { math: "y_1=1+0.1(1)=1.1", note: "Move one horizontal step using that slope." }
       ],

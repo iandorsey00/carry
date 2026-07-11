@@ -1,6 +1,6 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-beta.42";
+const APP_VERSION = "0.1.0-beta.43";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 const GAMES_STORAGE_KEY = "carry.games.v1";
@@ -9886,6 +9886,20 @@ function appendMathMlContent(target, value) {
       }
     }
 
+    if (text.startsWith("\\mathbf", cursor) || text.startsWith("\\mathcal", cursor)) {
+      const isBold = text.startsWith("\\mathbf", cursor);
+      const commandLength = isBold ? 7 : 8;
+      const group = readBraceGroup(text, cursor + commandLength);
+      if (group) {
+        const style = createMathMlElement("mstyle");
+        style.setAttribute("mathvariant", isBold ? "bold" : "script");
+        style.append(createMathMlRow(group.value));
+        target.append(style);
+        cursor = group.end;
+        continue;
+      }
+    }
+
     if (text.startsWith("\\operatorname", cursor)) {
       const group = readBraceGroup(text, cursor + 13);
       if (group) {
@@ -10137,7 +10151,7 @@ function appendMathMlIntegral(target, text, index) {
 }
 
 function mathMlCommandAt(text, index) {
-  const commands = ["\\Leftrightarrow", "\\leftrightarrow", "\\Rightarrow", "\\rightarrow", "\\operatorname", "\\therefore", "\\setminus", "\\subseteq", "\\emptyset", "\\downarrow", "\\because", "\\epsilon", "\\uparrow", "\\arcsin", "\\arccos", "\\arctan", "\\lfloor", "\\rfloor", "\\lceil", "\\rceil", "\\forall", "\\exists", "\\lambda", "\\approx", "\\equiv", "\\models", "\\infty", "\\bmod", "\\Delta", "\\Omega", "\\sigma", "\\notin", "\\subset", "\\theta", "\\vdash", "\\times", "\\quad", "\\land", "\\oplus", "\\cdot", "\\oint", "\\rho", "\\chi", "\\sum", "\\bot", "\\top", "\\div", "\\lim", "\\lor", "\\neg", "\\iff", "\\sim", "\\sin", "\\cos", "\\tan", "\\sec", "\\csc", "\\cot", "\\log", "\\cup", "\\cap", "\\mu", "\\ln", "\\pi", "\\le", "\\ge", "\\ne", "\\pm", "\\to", "\\in", "\\;", "\\,"];
+  const commands = ["\\Leftrightarrow", "\\leftrightarrow", "\\Rightarrow", "\\rightarrow", "\\operatorname", "\\therefore", "\\setminus", "\\subseteq", "\\emptyset", "\\downarrow", "\\because", "\\epsilon", "\\uparrow", "\\arcsin", "\\arccos", "\\arctan", "\\lfloor", "\\rfloor", "\\lceil", "\\rceil", "\\forall", "\\exists", "\\lambda", "\\approx", "\\equiv", "\\models", "\\infty", "\\bmod", "\\Delta", "\\Omega", "\\sigma", "\\omega", "\\notin", "\\subset", "\\theta", "\\vdash", "\\times", "\\quad", "\\land", "\\oplus", "\\cdot", "\\oint", "\\rho", "\\chi", "\\sum", "\\bot", "\\top", "\\div", "\\lim", "\\lor", "\\neg", "\\iff", "\\sim", "\\sin", "\\cos", "\\tan", "\\sec", "\\csc", "\\cot", "\\log", "\\cup", "\\cap", "\\mu", "\\ln", "\\pi", "\\le", "\\ge", "\\ne", "\\pm", "\\to", "\\in", "\\;", "\\,"];
   return commands.find((command) => text.startsWith(command, index));
 }
 
@@ -10189,6 +10203,7 @@ function appendMathMlCommand(target, command) {
     "\\lambda": ["mi", "λ"],
     "\\Delta": ["mi", "Δ", "normal"],
     "\\Omega": ["mi", "Ω", "normal"],
+    "\\omega": ["mi", "ω"],
     "\\infty": ["mo", "∞"],
     "\\times": ["mo", "×"],
     "\\cdot": ["mo", "·"],

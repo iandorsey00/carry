@@ -3,11 +3,11 @@
     id: "differential-equations.linear-first-order",
     title: "Linear first-order equations",
     figure: "diff-eq-linear-first-order",
-    intro: ["Write a linear first-order equation as <math>y'+p(x)y=q(x)</math>.", "The integrating factor is <math>mu(x)=e^{int p(x)dx}</math>.", "Multiplication by the integrating factor turns the left side into a product derivative."],
+    intro: ["Write a linear first-order equation as <math>y'+p(x)y=q(x)</math>.", "The integrating factor is <math>\\mu(x)=e^{\\int p(x)dx}</math>.", "Multiplication by the integrating factor turns the left side into a product derivative."],
     overview: {
       workedRows: [
         { math: "y' + 2y = 6", note: "The coefficient p(x) is 2." },
-        { math: "\mu(x)=e^{\int 2dx}=e^{2x}", note: "Build the integrating factor." },
+        { math: "\\mu(x)=e^{\\int 2dx}=e^{2x}", note: "Build the integrating factor." },
         { math: "(e^{2x}y)'=6e^{2x}", note: "Recognize the product derivative." }
       ],
       notice: ["Put the equation in standard form first.", "The integrating factor depends only on p(x).", "Integrate after the left side becomes one derivative."],

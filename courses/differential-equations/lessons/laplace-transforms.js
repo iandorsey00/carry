@@ -6,9 +6,9 @@
     intro: ["The Laplace transform converts differentiation in time into algebra in s.", "Initial conditions enter during the transform of derivatives.", "After solving for the transformed function, invert the transform to return to time."],
     overview: {
       workedRows: [
-        { math: "\mathcal{L}\{y'\}=sY(s)-y(0)", note: "The initial value appears automatically." },
-        { math: "sY(s)-y(0)+Y(s)=\frac{1}{s}", note: "The differential equation becomes algebraic." },
-        { math: "Y(s)=\frac{s+1}{s(s+1)}", note: "Solve in the transform domain, then invert." }
+        { math: "\\mathcal{L}(y')=sY(s)-y(0)", note: "The initial value appears automatically." },
+        { math: "sY(s)-y(0)+Y(s)=\\frac{1}{s}", note: "The differential equation becomes algebraic." },
+        { math: "Y(s)=\\frac{s+1}{s(s+1)}", note: "Solve in the transform domain, then invert." }
       ],
       notice: ["Transform derivatives before solving for Y(s).", "Carry every initial condition into the algebra.", "Partial fractions often make inversion possible."],
       applications: ["Discontinuous forcing", "Impulse inputs", "Control systems"]
