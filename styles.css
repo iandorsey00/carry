@@ -2126,16 +2126,20 @@ button.binary-bit {
 .graph-color-board .graph-node.color-0 circle {
   fill: #2563eb;
   stroke: #1e40af;
+  stroke-dasharray: none;
 }
 
 .graph-color-board .graph-node.color-1 circle {
   fill: #f59e0b;
   stroke: #b45309;
+  stroke-dasharray: 7 4;
 }
 
 .graph-color-board .graph-node.color-2 circle {
   fill: #10b981;
   stroke: #047857;
+  stroke-dasharray: 1 4;
+  stroke-linecap: round;
 }
 
 .graph-color-board .graph-node.color-0 text,
@@ -2144,8 +2148,54 @@ button.binary-bit {
 }
 
 .graph-edge.conflict {
-  stroke: #dc2626;
+  stroke: var(--incorrect);
   stroke-width: 6;
+  stroke-dasharray: 9 5;
+}
+
+.graph-color-board .graph-node.conflict circle {
+  stroke: var(--incorrect);
+  stroke-width: 6;
+}
+
+.graph-color-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  margin-bottom: 12px;
+}
+
+.graph-color-legend > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.graph-color-swatch {
+  width: 24px;
+  height: 24px;
+  border: 3px solid;
+  border-radius: 50%;
+}
+
+.graph-color-swatch.color-0 {
+  border-color: #1e40af;
+  background: #2563eb;
+}
+
+.graph-color-swatch.color-1 {
+  border-color: #b45309;
+  border-style: dashed;
+  background: #f59e0b;
+}
+
+.graph-color-swatch.color-2 {
+  border-color: #047857;
+  border-style: dotted;
+  background: #10b981;
 }
 
 .scratch-line {
@@ -3064,20 +3114,24 @@ body[data-surface="scratchpad"] .scratch-line-math-aligned {
 }
 
 .system-grid {
-  grid-template-columns: 104px minmax(136px, 190px) 44px minmax(96px, 150px);
+  grid-template-columns: 104px minmax(150px, 220px) 44px minmax(150px, 220px);
   grid-template-rows: repeat(8, 48px);
 }
 
 .factoring-grid,
 .quadratic-grid {
-  grid-template-columns: 132px minmax(148px, 190px) 44px minmax(136px, 190px);
+  grid-template-columns: 132px minmax(160px, 230px) 44px minmax(160px, 230px);
   grid-template-rows: repeat(9, 48px);
   grid-auto-rows: 48px;
 }
 
+.system-grid .equation-input,
 .factoring-grid .equation-input,
 .quadratic-grid .equation-input {
-  width: 136px;
+  width: 100%;
+  min-width: 0;
+  padding-inline: 8px;
+  font-size: 18px;
 }
 
 .addition-grid,
@@ -3464,11 +3518,6 @@ body[data-surface="scratchpad"] .scratch-line-math-aligned {
 
 .digit-input[maxlength="3"] {
   width: 72px;
-}
-
-.factoring-grid .digit-input.equation-input,
-.quadratic-grid .digit-input.equation-input {
-  width: 136px;
 }
 
 .digit-input::-webkit-outer-spin-button,

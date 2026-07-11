@@ -20,16 +20,16 @@
       "hint": "Speed has size but no direction.",
       "label": "speed type",
       "answers": [
-        "false"
+        "scalar"
       ],
       "choices": [
         {
-          "value": "yes",
-          "label": "Yes"
+          "value": "scalar",
+          "label": "scalar"
         },
         {
-          "value": "no",
-          "label": "No"
+          "value": "vector",
+          "label": "vector"
         }
       ]
     },
@@ -39,16 +39,16 @@
       "hint": "Velocity includes direction.",
       "label": "velocity type",
       "answers": [
-        "false"
+        "vector"
       ],
       "choices": [
         {
-          "value": "yes",
-          "label": "Yes"
+          "value": "scalar",
+          "label": "scalar"
         },
         {
-          "value": "no",
-          "label": "No"
+          "value": "vector",
+          "label": "vector"
         }
       ]
     },
@@ -140,12 +140,12 @@
           "label": "their directions"
         },
         {
-          "value": "their names",
-          "label": "their names"
+          "value": "only their magnitudes",
+          "label": "only their magnitudes"
         },
         {
-          "value": "their colors",
-          "label": "their colors"
+          "value": "only their units",
+          "label": "only their units"
         }
       ]
     },

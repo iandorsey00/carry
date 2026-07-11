@@ -1,6 +1,6 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-beta.37";
+const APP_VERSION = "0.1.0-beta.40";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 const GAMES_STORAGE_KEY = "carry.games.v1";
@@ -3885,6 +3885,7 @@ function setGraphPathsDifficulty(difficulty) {
 }
 
 const GRAPH_COLOR_COUNT = 3;
+const GRAPH_COLOR_NAMES = ["blue with a solid outline", "amber with a dashed outline", "green with a dotted outline"];
 
 function currentGraphColorState() {
   const stored = state.games.graphColor || {};
@@ -3915,6 +3916,12 @@ function renderGraphColor() {
   const graph = graphColorGraph(settings.difficulty);
   const colors = settings.colors;
   const conflicts = graphColorConflicts(graph, colors);
+  const conflictedNodes = new Set();
+  graph.edges.forEach(([left, right]) => {
+    if (!conflicts.has(graphEdgeKey(left, right))) return;
+    conflictedNodes.add(left);
+    conflictedNodes.add(right);
+  });
   const nodeIds = Object.keys(graph.nodes);
   const colored = nodeIds.filter((node) => colors[node] !== undefined && colors[node] !== null).length;
   const solved = colored === nodeIds.length && conflicts.size === 0;
@@ -3932,7 +3939,16 @@ function renderGraphColor() {
     const hasColor = color !== undefined && color !== null;
     const classes = ["graph-node"];
     if (hasColor) classes.push(`color-${color}`);
-    const group = svgEl("g", { class: classes.join(" "), "data-graph-color-node": node, role: "button", tabindex: "0" });
+    if (conflictedNodes.has(node)) classes.push("conflict");
+    const colorName = hasColor ? GRAPH_COLOR_NAMES[color] : "uncolored";
+    const conflictName = conflictedNodes.has(node) ? ", conflicts with a connected node" : "";
+    const group = svgEl("g", {
+      class: classes.join(" "),
+      "data-graph-color-node": node,
+      role: "button",
+      tabindex: "0",
+      "aria-label": `Node ${node}, ${colorName}${conflictName}. Activate to cycle its assignment.`,
+    });
     group.append(svgEl("circle", { cx, cy, r: 18 }));
     const label = svgEl("text", { x: cx, y: cy + 6, "text-anchor": "middle" });
     label.textContent = node;
@@ -3945,7 +3961,7 @@ function renderGraphColor() {
   if (solved) {
     els.graphColorStatus.textContent = "Solved! No two connected nodes share a color. Try a harder graph.";
   } else if (conflicts.size > 0) {
-    els.graphColorStatus.textContent = `${conflicts.size} ${conflicts.size === 1 ? "edge connects" : "edges connect"} same-colored nodes (shown in red). Recolor to fix.`;
+    els.graphColorStatus.textContent = `${conflicts.size} ${conflicts.size === 1 ? "thick dashed edge connects" : "thick dashed edges connect"} nodes with the same assignment. Recolor to fix.`;
   } else if (colored === 0) {
     els.graphColorStatus.textContent = "Tap a node to color it. No two connected nodes may share a color.";
   } else {
@@ -3957,6 +3973,7 @@ function clickGraphColorNode(node) {
   const settings = currentGraphColorState();
   const graph = graphColorGraph(settings.difficulty);
   if (!graph.nodes[node]) return;
+  const restoreKeyboardFocus = document.activeElement?.dataset?.graphColorNode === node;
   const colors = { ...settings.colors };
   const current = colors[node];
   if (current === undefined || current === null) {
@@ -3969,6 +3986,11 @@ function clickGraphColorNode(node) {
   state.games.graphColor = { ...state.games.graphColor, colors };
   saveGames("Colored a node");
   renderGraphColor();
+  if (restoreKeyboardFocus) {
+    els.graphColorFigure
+      ?.querySelector(`[data-graph-color-node="${node}"]`)
+      ?.focus({ preventScroll: true });
+  }
 }
 
 function clearGraphColor() {
@@ -7117,6 +7139,8 @@ function quadraticMethodText(method) {
   if (method === "roots by factoring") return "List pairs, match the x term, then set factors to zero.";
   if (method === "vertex") return "Use the opposite of the x term number divided by double the x^2 number.";
   if (method === "evaluate") return "Substitute the given x-value, then simplify.";
+  if (method === "discriminant") return "Use b^2 - 4ac to determine what kind of roots exist.";
+  if (method === "quadratic formula") return "Use (-b +/- sqrt(b^2 - 4ac)) / (2a), then simplify.";
   return "Choose the structure that matches the question.";
 }
 
@@ -7132,6 +7156,7 @@ function systemCellText(value) {
 function systemMethodText(method) {
   if (method === "elimination") return "Combine equations to remove one variable.";
   if (method === "substitution") return "Replace a variable using the other equation.";
+  if (method === "compare equations") return "Scale one equation, then compare the two lines.";
   return "Show each algebra step.";
 }
 

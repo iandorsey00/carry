@@ -1,6 +1,6 @@
 # Carry
 
-Version: `0.1.0-beta.37`
+Version: `0.1.0-beta.40`
 
 Carry is a local-first math, physics, scratchpad, and puzzle learning studio designed to run fully in the browser.
 
@@ -25,7 +25,7 @@ Open `index.html` in a browser, or serve the directory with any static file serv
 
 Carry uses pre-1.0 semantic versions while the curriculum and interaction model are still settling. Bump the app version when releasing user-visible curriculum, validation, persistence, import/export, navigation, or interface behavior changes. Do not bump it for private notes, comments, or purely local development experiments that are not deployed.
 
-Use `sh scripts/release.sh <new-version>` to bump every version string (`APP_VERSION`, the footer, this README, and all `?v=` cache-busting parameters) in one verified step.
+Run `node scripts/lesson-qa.js` to validate authored lesson data. Use `sh scripts/release.sh --check` to run lesson QA and verify release metadata without changing files. Use `sh scripts/release.sh <new-version>` to pass the gate and bump every version string (`APP_VERSION`, the footer, this README, and all `?v=` cache-busting parameters) in one verified step.
 
 ## Current Guardrails
 

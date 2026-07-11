@@ -50,16 +50,16 @@
       "hint": "Waves carry energy without transporting matter overall.",
       "label": "wave transfer",
       "answers": [
-        "false"
+        "energy"
       ],
       "choices": [
         {
-          "value": "yes",
-          "label": "Yes"
+          "value": "energy",
+          "label": "energy"
         },
         {
-          "value": "no",
-          "label": "No"
+          "value": "mass",
+          "label": "mass"
         }
       ]
     },

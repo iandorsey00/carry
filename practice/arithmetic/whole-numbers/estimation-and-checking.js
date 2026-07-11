@@ -32,16 +32,16 @@
       "hint": "812 - 400 is about 412.",
       "label": "closer estimate",
       "answers": [
-        "false"
+        "400"
       ],
       "choices": [
         {
-          "value": "yes",
-          "label": "Yes"
+          "value": "400",
+          "label": "400"
         },
         {
-          "value": "no",
-          "label": "No"
+          "value": "600",
+          "label": "600"
         }
       ]
     },
@@ -66,16 +66,16 @@
       "label": "closer estimate",
       "feedback": "Estimate before doing exact subtraction.",
       "answers": [
-        "false"
+        "800"
       ],
       "choices": [
         {
-          "value": "yes",
-          "label": "Yes"
+          "value": "800",
+          "label": "800"
         },
         {
-          "value": "no",
-          "label": "No"
+          "value": "900",
+          "label": "900"
         }
       ]
     },

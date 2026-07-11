@@ -19,19 +19,18 @@
       "answer": "repel",
       "answers": [
         "repel",
-        "repels",
-        "false"
+        "repels"
       ],
       "hint": "Two positives or two negatives push apart.",
       "label": "like charges",
       "choices": [
         {
-          "value": "yes",
-          "label": "Yes"
+          "value": "attract",
+          "label": "attract"
         },
         {
-          "value": "no",
-          "label": "No"
+          "value": "repel",
+          "label": "repel"
         }
       ]
     },
@@ -40,19 +39,18 @@
       "answer": "attract",
       "answers": [
         "attract",
-        "attracts",
-        "false"
+        "attracts"
       ],
       "hint": "Positive and negative pull together.",
       "label": "opposite charges",
       "choices": [
         {
-          "value": "yes",
-          "label": "Yes"
+          "value": "attract",
+          "label": "attract"
         },
         {
-          "value": "no",
-          "label": "No"
+          "value": "repel",
+          "label": "repel"
         }
       ]
     },
@@ -67,16 +65,16 @@
           "label": "charge"
         },
         {
-          "value": "closure",
-          "label": "closure"
+          "value": "mass",
+          "label": "mass"
         },
         {
-          "value": "identity",
-          "label": "identity"
+          "value": "distance",
+          "label": "distance"
         },
         {
-          "value": "inverse",
-          "label": "inverse"
+          "value": "time",
+          "label": "time"
         }
       ]
     },
