@@ -17,7 +17,7 @@ if [ -z "$OLD" ]; then
 fi
 
 if [ "$NEW" = "--check" ]; then
-  node scripts/lesson-qa.js
+  npm run check
   grep -Fq "Version: \`$OLD\`" README.md || {
     echo "error: README version does not match $OLD" >&2
     exit 1
@@ -41,7 +41,7 @@ printf '%s\n' "$NEW" | grep -Eq '^0\.[0-9]+\.[0-9]+-(alpha|beta)\.[0-9]+$' || {
   exit 1
 }
 
-node scripts/lesson-qa.js
+npm run check
 
 if [ "$OLD" = "$NEW" ]; then
   echo "already at $NEW" >&2
@@ -49,7 +49,7 @@ if [ "$OLD" = "$NEW" ]; then
 fi
 
 ESC=$(printf '%s' "$OLD" | sed 's/[.[\*^$]/\\&/g')
-for FILE in app.js index.html README.md; do
+for FILE in app.js index.html README.md package.json package-lock.json; do
   if sed --version >/dev/null 2>&1; then
     sed -i "s/$ESC/$NEW/g" "$FILE"
   else
@@ -57,7 +57,7 @@ for FILE in app.js index.html README.md; do
   fi
 done
 
-if grep -q "$OLD" app.js index.html README.md; then
+if grep -q "$OLD" app.js index.html README.md package.json package-lock.json; then
   echo "error: old version string still present after bump" >&2
   exit 1
 fi

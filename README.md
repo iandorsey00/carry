@@ -1,8 +1,10 @@
 # Carry
 
-Version: `0.1.0-beta.40`
+Version: `0.1.0-beta.42`
 
-Carry is a local-first math, physics, scratchpad, and puzzle learning studio designed to run fully in the browser.
+Carry is a local-first math, physics, scratchpad, and puzzle learning studio designed to run fully in the browser. Short-form subjects live in a browsable Topic library; deeper, sequenced study lives under Courses.
+
+Differential Equations is Carry's first university-level course. Its thirteen-lesson sequence covers foundations, first-order equations, numerical methods, second-order equations, systems, Laplace transforms, and series solutions. Course labs include a draggable initial condition on a slope field, a step-size-controlled Euler approximation, and an autonomous phase line.
 
 Carry opens directly into a focused learning workspace. It currently includes implemented Arithmetic, Pre-Algebra, Algebra, Geometry, Trigonometry, Precalculus, Calculus, Differential Equations, Linear Algebra, Complex Analysis, Proofs, Set Theory, Number Theory, Graph Theory, Probability, Statistics, Real Analysis, Topology, Abstract Algebra, and Physics lessons. Math coverage includes guided long addition, subtraction, multiplication, division, division with remainders, equation transformations, inequality transformations, systems, factoring, quadratics, angles, triangles, circles, area and volume, coordinate geometry, proof basics, unit circle values, right-triangle ratios, trig graphs, identities, inverse trig, functions, transformations, polynomial and rational functions, exponential and log functions, sequences, complex numbers, limits, derivatives, integrals, calculus applications, series, slope fields, separable equations, first-order and second-order differential equation models, vectors, matrices, linear transformations, determinants, eigenvalues, vector spaces, complex functions, analytic functions, contour integrals, power series, residues, logic, quantifiers, induction, contradiction, construction, counterexamples, set notation, subsets, set operations, relations, functions as maps, countability, divisibility, primes, GCD and LCM, the Euclidean algorithm, modular arithmetic, congruences, graph vertices, edges, paths, cycles, degree, trees, connectedness, sample spaces, basic probability, counting, conditional probability, random variables, data summaries, center and spread, data displays, variance, standard deviation, normal distributions, binomial distributions, correlation, regression, confidence intervals, sampling and inference, real sequences, epsilon-delta limits, continuity, differentiability, Riemann integration, open and closed sets, metric spaces, bases, compactness, topological connectedness, homeomorphisms, groups, rings, fields, homomorphisms, and abstract examples. Lesson overviews use adaptive sections, meaningful figures, worked examples, studio moves, workspace notes, and concise “Where it shows up” context from modular Learning / Overview content files. More than fifty overview figures are interactive: draggable points and sliders with keyboard support drive live readouts for ideas such as tangent slopes, Riemann rectangles, slope fields, the unit circle, modular clocks, epsilon bands, subgroup cycles, induction dominoes, and the normal curve. Graph Theory lessons include SVG figures for vertices, edges, paths, cycles, degree, trees, and connected components. Physics coverage includes units, vectors, graphs, kinematics, forces, energy, momentum, oscillations, waves, sound, electric charge and fields, circuits, magnetism, thermodynamics, ideal gases, quantum ideas, and relativity. Carry also includes a local-first Scratchpad for typing plain math or LaTeX-ish notation, previewing readable notation, aligning equations and inequalities, copying clean plain text, LaTeX-ish notation, or Markdown, importing/exporting LaTeX, and exporting or sharing the rendered preview as an SVG image. Tools include random values, normal-simulation, exact unit-circle and complex-coordinate helpers, draggable exact-angle unit circle input, 2D graphing with pan and zoom, and draggable 3D graphing. Practice runs in two modes. Concept lessons use a single tap-to-answer Guided flow (no mode switch to distract). Procedural workspaces such as long addition, factoring, equations, and inequalities offer Guided (one step at a time) and Practice (fill every box freely, then check when ready). Completed problem sets now offer Restart after the final question. The Games section currently includes generated Sudoku with adjustable board size, difficulty, keyboard input, and local browser persistence, plus Mod Clock, Prime Factors, GCD, Divisibility, and Residues games for visual number-theory practice, an interactive Graph Paths puzzle where you tap nodes to trace the shortest route between two points, and a Graph Color puzzle where you color nodes so that no edge joins two of the same color. The Explorations section publishes dated puzzle articles with a think-first prompt, an optional figure, and a hidden response that can include an interactive follow-up. Progress, scratchpads, games, and tools are stored privately in the browser with `localStorage`. Export produces a single JSON backup covering all four stores, and import restores it (legacy progress-only files still work).
 
@@ -12,12 +14,24 @@ Lessons use readable paths such as `/math/arithmetic/long-addition`, `/math/diff
 
 Open `index.html` in a browser, or serve the directory with any static file server.
 
+For development and browser QA, install the local test dependency once:
+
+```sh
+npm install
+npx playwright install chromium
+```
+
+Then run the complete automated gate with `npm run check`, fast module tests with `npm run test:unit`, or only the browser suite with `npm run test:e2e`. Playwright starts its own local static server and covers direct links, typed and multiple-choice answers, procedural focus movement, local persistence, Scratchpad rendering, and keyboard game input.
+
 ## Architecture
 
 - `index.html` provides the static app shell.
 - `styles.css` defines the shared interface system, light and dark themes, grid layout, focus states, and responsive behavior.
-- `app.js` contains the client-side workspace registry, progress and game persistence, lesson renderers, validation, hints, problem guardrails, and import/export flow.
+- `app.js` currently coordinates UI state, persistence, lesson rendering, validation, hints, problem guardrails, and import/export. It is being reduced incrementally behind tested module boundaries.
+- `core/router.js` owns pure route parsing and URL generation.
+- `core/workspace-registry.js` discovers practice modules and builds the runtime workspace index without topic-specific wiring.
 - `practice/` documents the recommended modular home for reusable question data and special practice engines as they migrate out of `app.js`.
+- `courses/` holds deeper sequenced curricula. Each course owns its catalog, lesson modules, authored overviews, and course-specific interactive figures.
 - `explorations/` holds the exploration registry and one dated entry file per exploration article.
 - `assets/carry-icon.png`, `assets/carry-icon-256.png`, and `favicon.ico` provide the app icon and browser favicons.
 
@@ -25,7 +39,7 @@ Open `index.html` in a browser, or serve the directory with any static file serv
 
 Carry uses pre-1.0 semantic versions while the curriculum and interaction model are still settling. Bump the app version when releasing user-visible curriculum, validation, persistence, import/export, navigation, or interface behavior changes. Do not bump it for private notes, comments, or purely local development experiments that are not deployed.
 
-Run `node scripts/lesson-qa.js` to validate authored lesson data. Use `sh scripts/release.sh --check` to run lesson QA and verify release metadata without changing files. Use `sh scripts/release.sh <new-version>` to pass the gate and bump every version string (`APP_VERSION`, the footer, this README, and all `?v=` cache-busting parameters) in one verified step.
+Run `node scripts/lesson-qa.js` to validate authored lesson data. Use `sh scripts/release.sh --check` to run lesson QA, the Chromium regression suite, and release metadata checks without changing files. Use `sh scripts/release.sh <new-version>` to pass the complete gate and bump every version string (`APP_VERSION`, package metadata, the footer, this README, and all `?v=` cache-busting parameters) in one verified step.
 
 ## Current Guardrails
 

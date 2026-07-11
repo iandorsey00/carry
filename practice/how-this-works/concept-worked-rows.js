@@ -92,7 +92,7 @@
         ],
         "differential-equations.slope-fields": [
           { math: "\\frac{dy}{dx} = x", note: "The slope depends on the x-position." },
-          { math: "x = 2 \\Rightarrow \\frac{dy}{dx} = 2", note: "Each mark at x = 2 has slope 2." }
+          { math: "x = 2 \\Rightarrow \\frac{dy}{dx} = 2", note: "Every mark in that vertical column has slope 2." }
         ],
         "differential-equations.separable": [
           { math: "\\frac{dy}{dx} = 3xy", note: "Start with a separable equation." },

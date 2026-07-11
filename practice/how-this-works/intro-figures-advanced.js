@@ -592,7 +592,7 @@
 
   // Differential equations — slope fields: the equation paints arrows; solutions obey them.
   register("diff-eq-slope-fields", (workspace, h) => {
-    const svg = h.canvas({ height: 240, interactive: true });
+    const svg = h.canvas({ height: 240, interactive: true, ariaLabel: "Slope field for y prime equals y with a draggable initial condition" });
     const map = h.mapper({ xMin: -3, xMax: 3, yMin: -3, yMax: 3, left: 36, right: 324, top: 14, bottom: 218 });
     h.line(svg, map.left, map.y(0), map.right, map.y(0), "geometry-grid-line");
     h.line(svg, map.x(0), map.top, map.x(0), map.bottom, "geometry-grid-line");
@@ -608,29 +608,40 @@
     svg.append(dyn);
     const out = h.readout("");
 
-    const update = (y0) => {
+    const update = (x0, y0) => {
       dyn.replaceChildren();
       if (y0 === 0) {
         h.plot(dyn, () => 0, map, { samples: 20 });
-        out.set(`Start at 0 and <math>dy/dx = y</math> says: slope 0 forever. Equilibrium.`);
+        out.set(`At <math>(${h.fmt(x0, 1)},0)</math>, the slope is 0. The solution stays on the equilibrium <math>y=0</math>.`);
         return;
       }
       h.plot(dyn, (x) => {
-        const y = y0 * Math.exp(x);
+        const y = y0 * Math.exp(x - x0);
         return Math.abs(y) > 3 ? NaN : y;
       }, map, { samples: 140 });
-      h.circle(dyn, map.x(0), map.y(y0), 6, "geometry-point result");
-      out.set(`Starting at <math>y(0) = ${h.fmt(y0, 1)}</math> and following the arrows traces <math>y = ${h.fmt(y0, 1)}e^x</math>.`);
+      const tangentDx = 0.42 / Math.sqrt(1 + y0 * y0);
+      const tangentDy = y0 * tangentDx;
+      h.line(dyn, map.x(x0 - tangentDx), map.y(y0 - tangentDy), map.x(x0 + tangentDx), map.y(y0 + tangentDy), "geometry-line result");
+      out.set(`At <math>(${h.fmt(x0, 1)},${h.fmt(y0, 1)})</math>, <math>y' = y = ${h.fmt(y0, 1)}</math>. The initial condition selects <math>y=${h.fmt(y0 * Math.exp(-x0), 2)}e^x</math>.`);
     };
 
-    const control = h.slider({ label: "start y(0)", min: -2, max: 2, step: 0.5, value: 1, format: (v) => h.fmt(v, 1) }, update);
-    update(1);
+    const handle = h.dragPointXY(svg, {
+      ariaLabel: "Initial condition",
+      map,
+      x: 0,
+      y: 1,
+      stepX: 0.5,
+      stepY: 0.5,
+      valueText: (x, y) => `initial condition x ${x}, y ${y}, local slope ${y}`,
+      onChange: update
+    });
+    handle.refresh();
 
     return h.figure({
       svg,
       readouts: [out],
-      controls: [control],
-      caption: "The equation <math>dy/dx = y</math> never names its solution — it just paints a tiny arrow at every point saying which way to lean. A solution is any curve obedient enough to follow every arrow it meets."
+      hint: "Drag the initial condition. Arrow keys move it in half-unit steps.",
+      caption: "The equation <math>dy/dx = y</math> paints a local instruction at every point. One initial condition selects exactly one curve that follows all of those instructions."
     });
   });
 

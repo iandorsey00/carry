@@ -1,6 +1,6 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-beta.40";
+const APP_VERSION = "0.1.0-beta.42";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 const GAMES_STORAGE_KEY = "carry.games.v1";
@@ -24,7 +24,7 @@ const mathTopicCategories = new Map([
   ["Trigonometry", "Core Math"],
   ["Precalculus", "Core Math"],
   ["Calculus", "Advanced Math"],
-  ["Differential Equations", "Advanced Math"],
+  ["Differential Equations", "Courses"],
   ["Linear Algebra", "Advanced Math"],
   ["Complex Analysis", "Advanced Math"],
   ["Real Analysis", "Advanced Math"],
@@ -38,7 +38,8 @@ const mathTopicCategories = new Map([
   ["Abstract Algebra", "Discrete and Structures"]
 ]);
 
-const mathCategoryOrder = ["Foundations", "Core Math", "Advanced Math", "Discrete and Structures", "Data and Chance"];
+const mathCategoryOrder = ["Courses", "Foundations", "Core Math", "Advanced Math", "Discrete and Structures", "Data and Chance"];
+const differentialEquationsCourse = window.CarryCourses?.["differential-equations"];
 
 const topicGroups = [
   {
@@ -169,17 +170,10 @@ const topicGroups = [
   },
   {
     name: "Differential Equations",
-    sections: [
-      {
-        title: "Change Over Time",
-        lessons: [
-          { id: "differential-equations.slope-fields", title: "Slope fields" },
-          { id: "differential-equations.separable", title: "Separable equations" },
-          { id: "differential-equations.first-order-models", title: "First-order models" },
-          { id: "differential-equations.second-order-models", title: "Second-order models" }
-        ]
-      }
-    ]
+    kind: "course",
+    level: differentialEquationsCourse?.level || "University course",
+    description: differentialEquationsCourse?.description || "A sequenced first course in ordinary differential equations.",
+    sections: differentialEquationsCourse?.sections || []
   },
   {
     name: "Linear Algebra",
@@ -445,104 +439,25 @@ const physicsTopicGroups = [
   }
 ];
 
-const subtractionWorkspace = window.CarryPractice?.modes?.longOperations?.subtractionWorkspace;
+const routeService = window.CarryRouter.create({
+  mathGroups: topicGroups,
+  physicsGroups: physicsTopicGroups,
+  lessonsForGroup,
+  toolIds: TOOL_IDS,
+  gameIds: GAME_IDS,
+  findExploration,
+  defaultExplorationId: EXPLORATION_DEFAULT_ID
+});
 
-const additionWorkspace = window.CarryPractice?.modes?.longOperations?.additionWorkspace;
-
-const multiplicationWorkspace = window.CarryPractice?.modes?.longOperations?.multiplicationWorkspace;
-
-const divisionWorkspace = window.CarryPractice?.modes?.longOperations?.divisionWorkspace;
-
-const divisionRemainderWorkspace = window.CarryPractice?.modes?.longOperations?.divisionRemainderWorkspace;
-
-const arithmeticConceptWorkspaces = window.CarryPractice?.sections?.["arithmetic"] || {};
-
-const preAlgebraConceptWorkspaces = window.CarryPractice?.sections?.["prealgebra"] || {};
-
-const algebraConceptWorkspaces = window.CarryPractice?.sections?.["algebra"] || {};
-
-const geometryConceptWorkspaces = window.CarryPractice?.sections?.["geometry"] || {};
-
-const trigonometryConceptWorkspaces = window.CarryPractice?.sections?.["trigonometry"] || {};
-
-const precalculusConceptWorkspaces = window.CarryPractice?.sections?.["precalculus"] || {};
-
-const calculusConceptWorkspaces = window.CarryPractice?.sections?.["calculus"] || {};
-
-const differentialEquationsConceptWorkspaces = window.CarryPractice?.sections?.["differential-equations"] || {};
-
-const linearAlgebraConceptWorkspaces = window.CarryPractice?.sections?.["linear-algebra"] || {};
-
-const proofsConceptWorkspaces = window.CarryPractice?.sections?.["proofs"] || {};
-
-const setTheoryConceptWorkspaces = window.CarryPractice?.sections?.["set-theory"] || {};
-
-const numberTheoryConceptWorkspaces = window.CarryPractice?.sections?.["number-theory"] || {};
-
-const graphTheoryConceptWorkspaces = window.CarryPractice?.sections?.["graph-theory"] || {};
-
-const probabilityConceptWorkspaces = window.CarryPractice?.sections?.["probability"] || {};
-
-const statisticsConceptWorkspaces = window.CarryPractice?.sections?.["statistics"] || {};
-
-const realAnalysisConceptWorkspaces = window.CarryPractice?.sections?.["real-analysis"] || {};
-
-const complexAnalysisConceptWorkspaces = window.CarryPractice?.sections?.["complex-analysis"] || {};
-
-const topologyConceptWorkspaces = window.CarryPractice?.sections?.["topology"] || {};
-
-const abstractAlgebraConceptWorkspaces = window.CarryPractice?.sections?.["abstract-algebra"] || {};
-
-const physicsConceptWorkspaces = window.CarryPractice?.sections?.["physics"] || {};
-
-const conceptWorkspaces = {
-  ...arithmeticConceptWorkspaces,
-  ...preAlgebraConceptWorkspaces,
-  ...algebraConceptWorkspaces,
-  ...geometryConceptWorkspaces,
-  ...trigonometryConceptWorkspaces,
-  ...precalculusConceptWorkspaces,
-  ...calculusConceptWorkspaces,
-  ...differentialEquationsConceptWorkspaces,
-  ...linearAlgebraConceptWorkspaces,
-  ...proofsConceptWorkspaces,
-  ...setTheoryConceptWorkspaces,
-  ...numberTheoryConceptWorkspaces,
-  ...graphTheoryConceptWorkspaces,
-  ...probabilityConceptWorkspaces,
-  ...statisticsConceptWorkspaces,
-  ...realAnalysisConceptWorkspaces,
-  ...complexAnalysisConceptWorkspaces,
-  ...topologyConceptWorkspaces,
-  ...abstractAlgebraConceptWorkspaces,
-  ...physicsConceptWorkspaces
-};
-
-const workspaceRegistry = {
-  "arithmetic.long-addition.3x3": additionWorkspace,
-  "arithmetic.long-subtraction.3x3": subtractionWorkspace,
-  "arithmetic.long-multiplication.3x3": multiplicationWorkspace,
-  "arithmetic.long-division.3x1": divisionWorkspace,
-  "arithmetic.long-division-remainders": divisionRemainderWorkspace,
-  ...conceptWorkspaces,
-  "Pre-Algebra": { id: "prealgebra.placeholders", title: "Number patterns", status: "planned" },
-  "Algebra": { id: "algebra.placeholders", title: "Equation transformations", status: "planned" },
-  "Geometry": { id: "geometry.placeholders", title: "Shape reasoning", status: "planned" },
-  "Trigonometry": { id: "trigonometry.placeholders", title: "Identity studio", status: "planned" },
-  "Calculus": { id: "calculus.placeholders", title: "Limits and derivatives", status: "planned" },
-  "Differential Equations": { id: "differential-equations.placeholders", title: "Change over time", status: "planned" },
-  "Linear Algebra": { id: "linear-algebra.placeholders", title: "Vector spaces", status: "planned" },
-  "Set Theory": { id: "set-theory.placeholders", title: "Sets and relations", status: "planned" },
-  "Number Theory": { id: "number-theory.placeholders", title: "Divisibility and congruence", status: "planned" },
-  "Graph Theory": { id: "graph-theory.placeholders", title: "Graphs and networks", status: "planned" },
-  "Probability": { id: "probability.placeholders", title: "Chance and counting", status: "planned" },
-  "Statistics": { id: "statistics.placeholders", title: "Data and inference", status: "planned" },
-  "Complex Analysis": { id: "complex-analysis.placeholders", title: "Complex functions", status: "planned" },
-  "Real Analysis": { id: "real-analysis.placeholders", title: "Definitions and proofs", status: "planned" },
-  "Topology": { id: "topology.placeholders", title: "Spaces and continuity", status: "planned" },
-  "Abstract Algebra": { id: "abstract-algebra.placeholders", title: "Groups and examples", status: "planned" },
-  "Proofs": { id: "proofs.placeholders", title: "Proof construction", status: "planned" }
-};
+const {
+  conceptWorkspaces,
+  registry: workspaceRegistry,
+  additionWorkspace,
+  subtractionWorkspace,
+  multiplicationWorkspace,
+  divisionWorkspace,
+  divisionRemainderWorkspace
+} = window.CarryWorkspaceRegistry.create(window.CarryPractice);
 
 const sudokuBoards = {
   4: {
@@ -1213,101 +1128,24 @@ function isPhysicsWorkspaceId(id) {
   return String(id || "").startsWith("physics.");
 }
 
-function slugifyRoutePart(value) {
-  return String(value || "")
-    .toLowerCase()
-    .replace(/&/g, " and ")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
-
-function routeSurfaceForWorkspace(id) {
-  return isPhysicsWorkspaceId(id) ? "physics" : "learn";
-}
-
-function routePrefixForSurface(surface) {
-  if (surface === "physics") return "physics";
-  if (surface === "tools") return "tools";
-  if (surface === "games") return "games";
-  if (surface === "explorations") return "explorations";
-  if (surface === "scratchpad") return "scratchpad";
-  return "math";
-}
-
 function findExploration(id) {
   return window.CarryExplorations?.find?.(id) || EXPLORATION_ENTRIES.find((entry) => entry.id === id) || EXPLORATION_ENTRIES[0] || null;
 }
 
-function routeGroupsForSurface(surface) {
-  return surface === "physics" ? physicsTopicGroups : topicGroups;
-}
-
-function findRouteMatch(surface, topicSlug, lessonSlug) {
-  for (const group of routeGroupsForSurface(surface)) {
-    if (slugifyRoutePart(group.name) !== topicSlug) continue;
-    const lesson = lessonsForGroup(group).find((item) => slugifyRoutePart(item.title) === lessonSlug);
-    if (lesson) return { surface, topic: group.name, workspaceId: lesson.id };
-  }
-  return null;
-}
-
-function findRouteForWorkspace(workspaceId) {
-  const surface = routeSurfaceForWorkspace(workspaceId);
-  for (const group of routeGroupsForSurface(surface)) {
-    const lesson = lessonsForGroup(group).find((item) => item.id === workspaceId);
-    if (lesson) {
-      return {
-        surface,
-        topic: group.name,
-        path: `/${routePrefixForSurface(surface)}/${slugifyRoutePart(group.name)}/${slugifyRoutePart(lesson.title)}`
-      };
-    }
-  }
-  return null;
-}
-
 function resolveRouteFromPath() {
-  const parts = window.location.pathname.split("/").filter(Boolean);
-  if (parts.length === 0) return null;
-  if (parts[0] === "scratchpad") return { surface: "scratchpad" };
-  if (parts[0] === "tools") {
-    const tool = TOOL_IDS.includes(parts[1]) ? parts[1] : "random-number";
-    return {
-      surface: "tools",
-      tool
-    };
-  }
-  if (parts[0] === "games") {
-    const game = GAME_IDS.includes(parts[1]) ? parts[1] : "sudoku";
-    return {
-      surface: "games",
-      game
-    };
-  }
-  if (parts[0] === "explorations") {
-    const exploration = findExploration(parts[1])?.id || EXPLORATION_DEFAULT_ID;
-    return {
-      surface: "explorations",
-      exploration
-    };
-  }
-  if (parts[0] !== "math" && parts[0] !== "physics") return null;
-  if (parts.length < 3) return null;
-  return findRouteMatch(parts[0] === "physics" ? "physics" : "learn", parts[1], parts[2]);
+  return routeService.resolvePath(window.location.pathname);
 }
 
 function updateUrlFromState(options = {}) {
-  const route = state.activeSurface === "scratchpad"
-    ? { path: "/scratchpad" }
-    : state.activeSurface === "tools"
-      ? { path: `/tools/${TOOL_IDS.includes(state.tools.activeTool) ? state.tools.activeTool : "random-number"}` }
-    : state.activeSurface === "games"
-      ? { path: `/games/${GAME_IDS.includes(state.games.activeGame) ? state.games.activeGame : "sudoku"}` }
-    : state.activeSurface === "explorations"
-      ? { path: `/explorations/${findExploration(state.activeExplorationId)?.id || EXPLORATION_DEFAULT_ID}` }
-    : findRouteForWorkspace(state.activeWorkspaceId);
-  if (!route) return;
-  const nextUrl = `${route.path}${window.location.search}`;
+  const path = routeService.pathForState({
+    activeSurface: state.activeSurface,
+    activeWorkspaceId: state.activeWorkspaceId,
+    activeTool: state.tools.activeTool,
+    activeGame: state.games.activeGame,
+    activeExplorationId: state.activeExplorationId
+  });
+  if (!path) return;
+  const nextUrl = `${path}${window.location.search}`;
   if (nextUrl === `${window.location.pathname}${window.location.search}`) return;
   const method = options.replace ? "replaceState" : "pushState";
   window.history[method]({}, "", nextUrl);
@@ -1394,6 +1232,12 @@ function renderTopics() {
   for (const group of currentTopicGroups()) {
     const nextCategory = topicCategoryForGroup(group);
     if (nextCategory && nextCategory !== currentCategory) {
+      if (currentCategory === "Courses" && nextCategory !== "Courses") {
+        const libraryHeading = document.createElement("p");
+        libraryHeading.className = "topic-library-heading";
+        libraryHeading.textContent = "Topic library";
+        els.topicList.append(libraryHeading);
+      }
       const categoryHeading = document.createElement("p");
       categoryHeading.className = "topic-category-heading";
       categoryHeading.textContent = nextCategory;
@@ -1407,7 +1251,16 @@ function renderTopics() {
 
     const summary = document.createElement("summary");
     summary.className = "topic-summary";
-    summary.textContent = group.name;
+    if (group.kind === "course") summary.classList.add("course-summary");
+    const summaryTitle = document.createElement("span");
+    summaryTitle.textContent = group.name;
+    summary.append(summaryTitle);
+    if (group.kind === "course") {
+      const badge = document.createElement("span");
+      badge.className = "course-badge";
+      badge.textContent = "Course";
+      summary.append(badge);
+    }
     summary.setAttribute("aria-current", group.name === state.activeTopic && lessonsForGroup(group).length === 0 ? "true" : "false");
     details.append(summary);
 
@@ -4278,10 +4131,12 @@ function introExplanationSection(workspace) {
 }
 
 function introWorkspaceItems(workspace) {
+  if (workspace.overview?.workspace?.length) return workspace.overview.workspace;
   return window.CarryHowThisWorks?.introWorkspaceItems?.(workspace) || [];
 }
 
 function introApplicationItems(workspace) {
+  if (workspace.overview?.applications?.length) return workspace.overview.applications;
   return window.CarryHowThisWorks?.introApplicationItems?.(workspace) || [];
 }
 
@@ -4308,6 +4163,7 @@ function lessonStudioMove(workspace) {
 }
 
 function lessonStudioItems(workspace) {
+  if (workspace.overview?.studio?.length) return workspace.overview.studio;
   return window.CarryHowThisWorks?.lessonStudioItems?.(workspace) || [];
 }
 
@@ -4368,6 +4224,7 @@ function appendAlignedMathLine(target, latex, prefix, align = true) {
 }
 
 function introWorkedExampleRows(workspace) {
+  if (workspace.overview?.workedRows?.length) return workspace.overview.workedRows;
   return window.CarryHowThisWorks?.introWorkedExampleRows?.(workspace) || conceptWorkedExampleRows(workspace);
 }
 
@@ -4397,6 +4254,7 @@ function conceptWhyItems(workspace) {
 }
 
 function conceptNoticeItems(workspace) {
+  if (workspace.overview?.notice?.length) return workspace.overview.notice;
   return window.CarryHowThisWorks?.conceptNoticeItems?.(workspace) || conceptWhyItems(workspace);
 }
 
@@ -8420,17 +8278,12 @@ function checkCurrentStep() {
   }
 }
 
-let lastPointerCheckAt = 0;
-
 function requestStepCheck(event) {
   event?.preventDefault?.();
   event?.stopPropagation?.();
   event?.stopImmediatePropagation?.();
-  if (event && event.type !== "keydown") {
-    const now = window.performance?.now?.() || Date.now();
-    if (now - lastPointerCheckAt < 180) return;
-    lastPointerCheckAt = now;
-  }
+  if (event?.carryCheckHandled) return;
+  if (event) event.carryCheckHandled = true;
   if (state.showIntro) {
     startCurrentLesson();
     return;

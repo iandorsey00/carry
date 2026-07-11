@@ -10,6 +10,7 @@ const vm = require("node:vm");
 
 const root = path.resolve(__dirname, "..");
 const practiceRoot = path.join(root, "practice");
+const differentialEquationsCourseRoot = path.join(root, "courses", "differential-equations");
 const ignoredDirectories = new Set(["how-this-works"]);
 const ignoredFiles = new Set(["practice-format.js"]);
 
@@ -50,7 +51,15 @@ function loadWorkspaces() {
     },
   };
   vm.createContext(context);
+  vm.runInContext(fs.readFileSync(path.join(differentialEquationsCourseRoot, "course.js"), "utf8"), context, {
+    filename: "courses/differential-equations/course.js",
+  });
   practiceFiles(practiceRoot).sort().forEach((file) => {
+    vm.runInContext(fs.readFileSync(file, "utf8"), context, {
+      filename: path.relative(root, file),
+    });
+  });
+  practiceFiles(path.join(differentialEquationsCourseRoot, "lessons")).sort().forEach((file) => {
     vm.runInContext(fs.readFileSync(file, "utf8"), context, {
       filename: path.relative(root, file),
     });

@@ -1,0 +1,16 @@
+{
+  "name": "carry",
+  "version": "0.1.0-beta.42",
+  "private": true,
+  "description": "Local-first math and physics learning studio",
+  "scripts": {
+    "test:qa": "node scripts/lesson-qa.js",
+    "test:unit": "node --test scripts/tests/*.test.js",
+    "test:e2e": "playwright test",
+    "test:e2e:update": "playwright test --update-snapshots",
+    "check": "node scripts/lesson-qa.js && node --test scripts/tests/*.test.js && playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.61.1"
+  }
+}
