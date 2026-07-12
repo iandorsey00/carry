@@ -47,14 +47,14 @@
       },
       {
         id: "integrate",
-        label: "integrate",
+        label: "write integrals",
         left: step(`int ${config.separatedLeft}`, integralAnswers(config.separatedLeft), "Integrate the entire left side with respect to y.", "Write the left integral"),
         relation: "=",
         right: step(`int ${config.separatedRight}`, integralAnswers(config.separatedRight), "Integrate the entire right side with respect to x.", "Write the right integral")
       },
       {
         id: "evaluate",
-        label: "evaluate",
+        label: "integrate",
         left: step(config.evaluatedLeft, config.evaluatedLeftAnswers, config.evaluateLeftHint, "Evaluate the left integral"),
         relation: "=",
         right: step(config.evaluatedRight, config.evaluatedRightAnswers, config.evaluateRightHint, "Evaluate the right integral and include C")

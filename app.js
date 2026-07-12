@@ -1,6 +1,6 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-beta.44";
+const APP_VERSION = "0.1.0-beta.45";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 const GAMES_STORAGE_KEY = "carry.games.v1";
@@ -8345,6 +8345,8 @@ function checkCurrentStep() {
     } else {
       setActiveStep();
       updateStepText();
+      const nextLabel = String(steps[state.activeStep]?.label || "continue to the next box").replace(/[.!?]+$/, "");
+      setStatus(`Correct. Next: ${nextLabel}.`, "correct");
     }
   }
 }
@@ -8427,6 +8429,12 @@ function handleDigitKeydown(event) {
   if (/^\d$/.test(event.key)) {
     event.preventDefault();
     insertDigit(event.target, event.key);
+    return;
+  }
+  if (event.key === "Tab" && !event.shiftKey && state.mode === "guided" && event.target.classList.contains("active") && event.target.value.trim()) {
+    const correct = isCorrectAnswer(event.target);
+    if (correct) event.preventDefault();
+    checkCurrentStep();
     return;
   }
   if (event.key === "Enter") {
@@ -8590,7 +8598,7 @@ function isCorrectAnswer(input) {
   const userValues = answerVariants(input.value);
   return answers.some((answer) => {
     const acceptedValues = answerVariants(answer);
-    return acceptedValues.some((accepted) => userValues.has(accepted));
+    return [...acceptedValues].some((accepted) => userValues.has(accepted));
   });
 }
 

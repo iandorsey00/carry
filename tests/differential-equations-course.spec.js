@@ -67,23 +67,32 @@ test("separable equations use staged guided solving with keyboard advancement", 
   await expect(page.locator("#multiplicationGrid")).toHaveClass(/guided-derivation-grid/);
   await expect(page.locator("#multiplicationGrid")).not.toContainText("\\frac");
   await expect(page.locator(".derivation-label", { hasText: "separate" })).toBeVisible();
-  await expect(page.locator(".derivation-label", { hasText: "integrate" })).toBeHidden();
+  await expect(page.locator(".derivation-label", { hasText: "write integrals" })).toBeHidden();
 
   let active = page.locator(".guided-derivation-grid .digit-input.active");
   await expect(active).toBeFocused();
   await active.fill("dy/y");
-  await active.press("Enter");
+  await active.press("Tab");
   await expect(page.locator(".derivation-answer-preview").first()).toBeVisible();
   await expect(page.locator(".derivation-answer-preview").first().locator("mfrac")).toHaveCount(1);
+  await expect(page.locator("#activityStatus")).toContainText("Separate the x terms on the right");
 
   active = page.locator(".guided-derivation-grid .digit-input.active");
   await expect(active).toBeFocused();
   await active.fill("3x dx");
   await active.press("Enter");
 
-  await expect(page.locator(".derivation-label", { hasText: "integrate" })).toBeVisible();
+  await expect(page.locator(".derivation-label", { hasText: "write integrals" })).toBeVisible();
+  active = page.locator(".guided-derivation-grid .digit-input.active");
+  await expect(active).toBeFocused();
+  await active.fill("ln|y|+C");
+  await active.press("Tab");
+  await expect(page.locator("#activityStatus")).toContainText("Integrate the entire left side");
+
+  await active.fill("int dy/y");
+  await active.press("Tab");
   await expect(page.locator(".guided-derivation-grid .digit-input.active")).toBeFocused();
-  await expect(page.locator("#activityStatus")).toContainText(/Correct|Continue/i);
+  await expect(page.locator("#activityStatus")).toContainText("Write the right integral");
 });
 
 test("linear first-order equations guide the integrating-factor method", async ({ page }) => {
@@ -119,4 +128,26 @@ test("homogeneous equations guide characteristic roots and basis solutions", asy
 
   await expect(page.locator(".derivation-label", { hasText: "basis" })).toBeVisible();
   await expect(page.locator(".guided-derivation-grid .digit-input.active")).toBeFocused();
+});
+
+test("forcing equations guide trial selection and coefficient matching", async ({ page }) => {
+  await freshPage(page, "/math/differential-equations/forcing-damping-and-resonance");
+  await page.locator("#startLesson").click();
+
+  await expect(page.locator("#multiplicationGrid")).toHaveClass(/guided-derivation-grid/);
+  await expect(page.locator(".derivation-label", { hasText: "complementary" })).toBeVisible();
+  await expect(page.locator(".derivation-label", { hasText: "trial" })).toBeHidden();
+
+  let active = page.locator(".guided-derivation-grid .digit-input.active");
+  await active.fill("C1e^x+C2e^(2x)");
+  await active.press("Enter");
+
+  await expect(page.locator(".derivation-label", { hasText: "trial" })).toBeVisible();
+  active = page.locator(".guided-derivation-grid .digit-input.active");
+  await expect(active).toBeFocused();
+  await active.fill("A");
+  await active.press("Tab");
+
+  await expect(page.locator(".derivation-label", { hasText: "substitute" })).toBeVisible();
+  await expect(page.locator("#activityStatus")).toContainText("Substitute the trial and simplify");
 });

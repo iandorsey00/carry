@@ -64,7 +64,12 @@ function loadWorkspaces() {
       filename: path.relative(root, file),
     });
   });
-  practiceFiles(path.join(differentialEquationsCourseRoot, "workspaces")).sort().forEach((file) => {
+  const workspaceFiles = practiceFiles(path.join(differentialEquationsCourseRoot, "workspaces")).sort();
+  workspaceFiles.sort((a, b) => {
+    const aIsEngine = path.basename(a) === "guided-derivation.js";
+    const bIsEngine = path.basename(b) === "guided-derivation.js";
+    return Number(bIsEngine) - Number(aIsEngine) || a.localeCompare(b);
+  }).forEach((file) => {
     vm.runInContext(fs.readFileSync(file, "utf8"), context, {
       filename: path.relative(root, file),
     });
