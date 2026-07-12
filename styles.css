@@ -3138,6 +3138,69 @@ body[data-surface="scratchpad"] .scratch-line-math-aligned {
   min-width: 0;
 }
 
+.guided-derivation-grid {
+  grid-template-columns: 116px minmax(210px, 1fr) 44px minmax(210px, 1fr);
+  grid-auto-rows: minmax(58px, auto);
+  width: min(100%, 920px);
+  min-width: 0;
+  align-items: stretch;
+}
+
+.derivation-problem {
+  align-self: center;
+  padding: 4px 0 14px;
+  border-bottom: 1px solid var(--line);
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.derivation-label {
+  justify-content: flex-end;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+  text-align: right;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.derivation-expression,
+.derivation-input-cell {
+  width: 100%;
+  min-width: 0;
+}
+
+.derivation-input-cell .equation-input {
+  width: 100%;
+  min-width: 0;
+  padding-inline: 12px;
+  font-size: 18px;
+}
+
+.derivation-answer-preview {
+  width: 100%;
+  min-height: 46px;
+  padding: 6px 12px;
+  border: 1px solid var(--correct);
+  border-radius: 7px;
+  background: var(--correct-soft);
+  color: var(--text);
+  cursor: default;
+  font-size: 18px;
+}
+
+.derivation-answer-preview math {
+  font-size: 1.05em;
+}
+
+.guided-derivation-grid.practice-grid .derivation-answer-preview {
+  cursor: pointer;
+}
+
+.guided-derivation-grid .active-column {
+  background: var(--accent-soft);
+}
+
 .system-grid {
   grid-template-columns: 104px minmax(150px, 220px) 44px minmax(150px, 220px);
   grid-template-rows: repeat(8, 48px);

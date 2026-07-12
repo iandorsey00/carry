@@ -1,6 +1,6 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-beta.43";
+const APP_VERSION = "0.1.0-beta.44";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 const GAMES_STORAGE_KEY = "carry.games.v1";
@@ -1340,6 +1340,9 @@ function renderWorkspace() {
   if (workspace.type === "concept") {
     state.currentModel = buildConceptModel(workspace);
     renderConceptGrid(state.currentModel);
+  } else if (workspace.type === "guided-derivation") {
+    state.currentModel = window.CarryGuidedDerivation.buildModel(workspace.problem);
+    renderGuidedDerivationGrid(state.currentModel);
   } else if (workspace.type === "equation") {
     state.currentModel = buildEquationModel(workspace.problem);
     renderEquationGrid(state.currentModel);
@@ -1382,7 +1385,7 @@ function workspaceStartStatus(workspace) {
       ? "Choose an answer, then Check."
       : "Enter the answer, then Check.";
   }
-  if (["equation", "inequality", "system", "factoring", "quadratic"].includes(workspace.type)) {
+  if (["guided-derivation", "equation", "inequality", "system", "factoring", "quadratic"].includes(workspace.type)) {
     return "Enter the active step, then check it.";
   }
   return "Place the first digit in the active box.";
@@ -6704,6 +6707,58 @@ function renderTransformGrid(model, staticCells) {
   }
 }
 
+function renderGuidedDerivationGrid(model) {
+  els.grid.classList.toggle("practice-grid", state.mode === "practice");
+  const prompt = document.createElement("div");
+  prompt.className = "derivation-problem";
+  prompt.style.gridRow = "1";
+  prompt.style.gridColumn = "1 / 5";
+  prompt.dataset.derivationRow = "1";
+  setMathText(prompt, model.prompt);
+  els.grid.append(prompt);
+
+  for (const row of model.rows) {
+    const rowCells = model.cells.filter((cell) => cell.row === row.row);
+    const firstSequence = rowCells.length ? Math.min(...rowCells.map((cell) => cell.sequence)) : -1;
+    const attributes = (element) => {
+      if (!element) return;
+      element.dataset.derivationRow = String(row.row);
+      element.dataset.firstSequence = String(firstSequence);
+    };
+
+    attributes(addCell({ row: row.row, col: 1, value: row.label, className: "row-label derivation-label" }));
+    for (const [side, col] of [["left", 2], ["right", 4]]) {
+      const cellId = row[`${side}CellId`];
+      const inputCell = cellId ? model.cells.find((cell) => cell.id === cellId) : null;
+      if (inputCell) {
+        const inputLabel = addInput(inputCell);
+        inputLabel.classList.add("derivation-input-cell");
+        const input = inputLabel.querySelector("input");
+        input.placeholder = "Enter expression";
+        const preview = document.createElement("button");
+        preview.type = "button";
+        preview.className = "derivation-answer-preview";
+        preview.hidden = true;
+        preview.setAttribute("aria-label", `Edit ${inputCell.label}`);
+        preview.addEventListener("click", () => {
+          if (state.mode !== "practice") return;
+          preview.hidden = true;
+          input.hidden = false;
+          input.focus({ preventScroll: true });
+          input.select();
+        });
+        inputLabel.append(preview);
+        attributes(inputLabel);
+      } else {
+        const value = String(row[side] ?? "");
+        const mathValue = value.includes("<math>") ? value : `<math>${value}</math>`;
+        attributes(addCell({ row: row.row, col, value: mathValue, className: "equation-expression derivation-expression" }));
+      }
+    }
+    attributes(addCell({ row: row.row, col: 3, value: row.relation || "=", className: "operator" }));
+  }
+}
+
 function buildInequalityModel(problem) {
   const { a, b, relation, c } = problem;
   const afterSubtract = c - b;
@@ -7694,6 +7749,7 @@ function addCell({ row, col, value, className, borrowSlot = false }) {
     setMathText(cell, value);
   }
   els.grid.append(cell);
+  return cell;
 }
 
 function setMathText(element, value) {
@@ -7936,6 +7992,7 @@ function addInput(cell) {
   input.dataset.hint = cell.hint;
   input.dataset.label = cell.label;
   input.dataset.feedback = cell.feedback || "";
+  input.dataset.mathDisplay = cell.math || cell.expected;
   input.dataset.sequence = String(cell.sequence);
   input.setAttribute("aria-label", cell.label);
 
@@ -7958,6 +8015,7 @@ function addInput(cell) {
 
   label.append(input);
   els.grid.append(label);
+  return label;
 }
 
 function addCarrySlot({ row, col, slotKind }) {
@@ -8014,6 +8072,7 @@ function setActiveStep() {
   configureBorrowSlots(activeStep);
   configureCarrySlots(activeStep);
   configureAdditionCarrySlots(activeStep);
+  configureDerivationRows(activeStep);
 
   steps.forEach((step, index) => {
     if (step.kind === "borrow" && step.sequence > state.activeStep) return;
@@ -8031,6 +8090,18 @@ function setActiveStep() {
     highlightActiveContext(activeStep, activeInput);
     activeInput.focus({ preventScroll: true });
   }
+}
+
+function configureDerivationRows(activeStep) {
+  if (!els.grid.classList.contains("guided-derivation-grid")) return;
+  const activeSequence = activeStep?.sequence ?? Number.MAX_SAFE_INTEGER;
+  els.grid.querySelectorAll("[data-derivation-row]").forEach((element) => {
+    const firstSequence = Number(element.dataset.firstSequence ?? -1);
+    const visible = state.mode === "practice" || firstSequence < 0 || firstSequence <= activeSequence;
+    element.hidden = !visible;
+    const input = element.matches("label") ? element.querySelector(".digit-input") : null;
+    if (input) input.hidden = !visible || input.classList.contains("correct");
+  });
 }
 
 function highlightActiveContext(step, input) {
@@ -8394,11 +8465,21 @@ function validateInput(input, announce) {
   } else {
     state.checkedCells.delete(input.dataset.cellId);
   }
+  syncDerivationAnswerPreview(input, correct);
   if (announce) {
     setStatus(correct ? successForInput(input) : feedbackForInput(input), correct ? "correct" : "incorrect");
   }
   updatePrimaryAction();
   return correct;
+}
+
+function syncDerivationAnswerPreview(input, correct) {
+  const cell = input.closest(".derivation-input-cell");
+  const preview = cell?.querySelector(".derivation-answer-preview");
+  if (!preview) return;
+  preview.hidden = !correct;
+  input.hidden = correct;
+  if (correct) setMathText(preview, `<math>${input.dataset.mathDisplay || input.dataset.expected}</math>`);
 }
 
 const ANSWER_NORMALIZE_LIMIT = 160;

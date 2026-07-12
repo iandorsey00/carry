@@ -64,6 +64,11 @@ function loadWorkspaces() {
       filename: path.relative(root, file),
     });
   });
+  practiceFiles(path.join(differentialEquationsCourseRoot, "workspaces")).sort().forEach((file) => {
+    vm.runInContext(fs.readFileSync(file, "utf8"), context, {
+      filename: path.relative(root, file),
+    });
+  });
   return Object.values(context.window.CarryPractice.sections)
     .flatMap((section) => Object.values(section));
 }

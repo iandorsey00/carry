@@ -59,3 +59,64 @@ test("every course overview has relevant figures and fully rendered notation", a
     expect(copy, lesson).not.toMatch(/mathb[fF]|\\(?:mathbf|mathcal|lambda|omega|mu|sum|infty|frac|int|text)/);
   }
 });
+
+test("separable equations use staged guided solving with keyboard advancement", async ({ page }) => {
+  await freshPage(page, "/math/differential-equations/separable-equations");
+  await page.locator("#startLesson").click();
+
+  await expect(page.locator("#multiplicationGrid")).toHaveClass(/guided-derivation-grid/);
+  await expect(page.locator("#multiplicationGrid")).not.toContainText("\\frac");
+  await expect(page.locator(".derivation-label", { hasText: "separate" })).toBeVisible();
+  await expect(page.locator(".derivation-label", { hasText: "integrate" })).toBeHidden();
+
+  let active = page.locator(".guided-derivation-grid .digit-input.active");
+  await expect(active).toBeFocused();
+  await active.fill("dy/y");
+  await active.press("Enter");
+  await expect(page.locator(".derivation-answer-preview").first()).toBeVisible();
+  await expect(page.locator(".derivation-answer-preview").first().locator("mfrac")).toHaveCount(1);
+
+  active = page.locator(".guided-derivation-grid .digit-input.active");
+  await expect(active).toBeFocused();
+  await active.fill("3x dx");
+  await active.press("Enter");
+
+  await expect(page.locator(".derivation-label", { hasText: "integrate" })).toBeVisible();
+  await expect(page.locator(".guided-derivation-grid .digit-input.active")).toBeFocused();
+  await expect(page.locator("#activityStatus")).toContainText(/Correct|Continue/i);
+});
+
+test("linear first-order equations guide the integrating-factor method", async ({ page }) => {
+  await freshPage(page, "/math/differential-equations/linear-first-order-equations");
+  await page.locator("#startLesson").click();
+
+  await expect(page.locator(".derivation-label", { hasText: "factor" })).toBeVisible();
+  await expect(page.locator(".derivation-label", { hasText: "multiply" })).toBeHidden();
+
+  const active = page.locator(".guided-derivation-grid .digit-input.active");
+  await expect(active).toBeFocused();
+  await active.fill("e^(2x)");
+  await active.press("Enter");
+
+  await expect(page.locator(".derivation-label", { hasText: "multiply" })).toBeVisible();
+  await expect(page.locator(".derivation-answer-preview math")).toContainText("e2x");
+  await expect(page.locator(".guided-derivation-grid .digit-input.active")).toBeFocused();
+});
+
+test("homogeneous equations guide characteristic roots and basis solutions", async ({ page }) => {
+  await freshPage(page, "/math/differential-equations/homogeneous-linear-equations");
+  await page.locator("#startLesson").click();
+
+  let active = page.locator(".guided-derivation-grid .digit-input.active");
+  await expect(active).toBeFocused();
+  await active.fill("r^2-5r+6");
+  await active.press("Enter");
+
+  active = page.locator(".guided-derivation-grid .digit-input.active");
+  await expect(active).toBeFocused();
+  await active.fill("2,3");
+  await active.press("Enter");
+
+  await expect(page.locator(".derivation-label", { hasText: "basis" })).toBeVisible();
+  await expect(page.locator(".guided-derivation-grid .digit-input.active")).toBeFocused();
+});
