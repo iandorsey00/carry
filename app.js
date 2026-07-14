@@ -1,6 +1,6 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-beta.45";
+const APP_VERSION = "0.1.0-beta.46";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 const GAMES_STORAGE_KEY = "carry.games.v1";
@@ -15,6 +15,8 @@ const GRAPH_FUNCTIONS = new Set(GRAPH_FUNCTION_NAMES);
 const GRAPH_VARIABLES = new Set(["x", "y", "z"]);
 const graphPointerState = { dragging: false, x: 0, y: 0, mode: "", saveTimer: 0 };
 const unitCircleDragState = { dragging: false };
+const scratchpadEditHistories = new Map();
+const learningRecord = window.CarryLearningRecord;
 
 const mathTopicCategories = new Map([
   ["Arithmetic", "Foundations"],
@@ -495,6 +497,8 @@ const state = {
   customProblems: {},
   currentModel: null,
   checkedCells: new Map(),
+  hintedCells: new Set(),
+  recordedAttemptSignatures: new Set(),
   autoAdvancedToStep: null
 };
 
@@ -679,6 +683,7 @@ function cacheElements() {
   els.stepText = document.querySelector("#stepText");
   els.progressTopic = document.querySelector("#progressTopic");
   els.progressCompleted = document.querySelector("#progressCompleted");
+  els.progressSkills = document.querySelector("#progressSkills");
   els.progressRecent = document.querySelector("#progressRecent");
   els.progressSummary = document.querySelector("#progressSummary");
   els.betaQaStatus = document.querySelector("#betaQaStatus");
@@ -799,8 +804,10 @@ function cacheElements() {
   els.graphColorClear = document.querySelector("#graphColorClear");
   els.scratchpadInput = document.querySelector("#scratchpadInput");
   els.duplicateScratchLine = document.querySelector("#duplicateScratchLine");
+  els.duplicateScratchLineToEnd = document.querySelector("#duplicateScratchLineToEnd");
   els.duplicateScratchLineHeader = document.querySelector("#duplicateScratchLineHeader");
   els.duplicateScratchHint = document.querySelector("#duplicateScratchHint");
+  els.duplicateScratchEndHint = document.querySelector("#duplicateScratchEndHint");
   els.scratchpadPreview = document.querySelector("#scratchpadPreview");
   els.scratchpadList = document.querySelector("#scratchpadList");
   els.scratchpadStatus = document.querySelector("#scratchpadStatus");
@@ -829,7 +836,8 @@ function loadProgress() {
     currentWorkspaceId: "arithmetic.long-addition.3x3",
     savedWorkspaces: ["Long addition", "Long subtraction", "Long multiplication", "Long division"],
     preferences: { mode: "guided", autoAdvance: true },
-    recentActivity: []
+    recentActivity: [],
+    learning: learningRecord.empty()
   };
 
   try {
@@ -840,7 +848,8 @@ function loadProgress() {
       ...fallback,
       ...parsed,
       savedWorkspaces: uniqueList([...(fallback.savedWorkspaces || []), ...(parsed.savedWorkspaces || [])]),
-      preferences: { ...fallback.preferences, ...parsed.preferences }
+      preferences: { ...fallback.preferences, ...parsed.preferences },
+      learning: learningRecord.normalize(parsed.learning)
     };
   } catch {
     return fallback;
@@ -1321,7 +1330,10 @@ function renderWorkspace() {
   els.lessonTitle.textContent = workspace.title;
   els.grid.className = `math-grid ${workspace.type}-grid`;
   els.grid.innerHTML = "";
+  removeDerivationScaffoldHelper();
   state.checkedCells.clear();
+  state.hintedCells.clear();
+  state.recordedAttemptSignatures.clear();
   state.autoAdvancedToStep = null;
 
   if (workspace.status === "planned") {
@@ -4029,6 +4041,7 @@ function renderSurface() {
   const isGames = state.activeSurface === "games";
   const isExplorations = state.activeSurface === "explorations";
   document.body.dataset.surface = state.activeSurface;
+  document.title = isScratchpad ? "Carry Scratchpad" : "Carry";
   els.lessonPanel.hidden = isScratchpad || isTools || isGames || isExplorations;
   els.scratchpadPanel.hidden = !isScratchpad;
   els.toolsPanel.hidden = !isTools;
@@ -6715,6 +6728,20 @@ function renderGuidedDerivationGrid(model) {
   prompt.style.gridColumn = "1 / 5";
   prompt.dataset.derivationRow = "1";
   setMathText(prompt, model.prompt);
+  const conditions = [];
+  if (model.solutionForm === "implicit") conditions.push("An implicit solution is acceptable.");
+  if (model.domain && model.domain !== "real intervals where every expression is defined") {
+    conditions.push(`Domain: ${model.domain}.`);
+  }
+  if (model.equilibriumSolutions?.length) {
+    conditions.push(`Check separately: ${model.equilibriumSolutions.join(", ")}.`);
+  }
+  if (conditions.length) {
+    const note = document.createElement("p");
+    note.className = "derivation-conditions";
+    setMathText(note, conditions.join(" "));
+    prompt.append(note);
+  }
   els.grid.append(prompt);
 
   for (const row of model.rows) {
@@ -6734,7 +6761,7 @@ function renderGuidedDerivationGrid(model) {
         const inputLabel = addInput(inputCell);
         inputLabel.classList.add("derivation-input-cell");
         const input = inputLabel.querySelector("input");
-        input.placeholder = "Enter expression";
+        input.placeholder = inputCell.placeholder || "Enter expression";
         const preview = document.createElement("button");
         preview.type = "button";
         preview.className = "derivation-answer-preview";
@@ -6748,7 +6775,10 @@ function renderGuidedDerivationGrid(model) {
           input.select();
         });
         inputLabel.append(preview);
-        attributes(inputLabel);
+        const renderedCell = inputCell.scaffold
+          ? attachDerivationScaffold(inputLabel, inputCell, input)
+          : inputLabel;
+        attributes(renderedCell);
       } else {
         const value = String(row[side] ?? "");
         const mathValue = value.includes("<math>") ? value : `<math>${value}</math>`;
@@ -6757,6 +6787,160 @@ function renderGuidedDerivationGrid(model) {
     }
     attributes(addCell({ row: row.row, col: 3, value: row.relation || "=", className: "operator" }));
   }
+}
+
+function attachDerivationScaffold(inputLabel, inputCell, mainInput) {
+  const parent = inputLabel.parentElement;
+  const stack = document.createElement("div");
+  stack.className = "grid-cell derivation-input-stack";
+  stack.style.gridRow = inputLabel.style.gridRow;
+  stack.style.gridColumn = inputLabel.style.gridColumn;
+  stack.dataset.row = inputLabel.dataset.row;
+  stack.dataset.col = inputLabel.dataset.col;
+
+  inputLabel.style.gridRow = "";
+  inputLabel.style.gridColumn = "";
+  inputLabel.classList.remove("grid-cell");
+  delete inputLabel.dataset.row;
+  delete inputLabel.dataset.col;
+  parent.replaceChild(stack, inputLabel);
+  stack.append(inputLabel);
+
+  const trigger = document.createElement("button");
+  trigger.type = "button";
+  trigger.className = "derivation-scaffold-trigger";
+  trigger.textContent = inputCell.scaffold.label || "Break this step down";
+  trigger.setAttribute("aria-expanded", "false");
+  trigger.addEventListener("click", () => {
+    const isOpen = trigger.getAttribute("aria-expanded") === "true";
+    if (isOpen) {
+      removeDerivationScaffoldHelper();
+      trigger.setAttribute("aria-expanded", "false");
+      mainInput.focus({ preventScroll: true });
+      return;
+    }
+    openDerivationScaffoldHelper(inputCell, mainInput, trigger);
+  });
+  stack.append(trigger);
+  return stack;
+}
+
+function openDerivationScaffoldHelper(inputCell, mainInput, trigger) {
+  removeDerivationScaffoldHelper();
+  els.gridShell.querySelectorAll(".derivation-scaffold-trigger[aria-expanded='true']").forEach((button) => {
+    button.setAttribute("aria-expanded", "false");
+  });
+
+  state.hintedCells.add(inputCell.id);
+  const helperId = `derivation-helper-${inputCell.id.replace(/[^a-z0-9_-]/gi, "-")}`;
+  const helper = document.createElement("section");
+  helper.className = "derivation-helper";
+  helper.id = helperId;
+  helper.setAttribute("aria-labelledby", `${helperId}-title`);
+
+  const header = document.createElement("div");
+  header.className = "derivation-helper-header";
+  const heading = document.createElement("strong");
+  heading.id = `${helperId}-title`;
+  heading.textContent = inputCell.scaffold.title || "Smaller steps";
+  const close = document.createElement("button");
+  close.type = "button";
+  close.className = "derivation-helper-close";
+  close.textContent = "Hide";
+  close.addEventListener("click", () => {
+    removeDerivationScaffoldHelper();
+    trigger.setAttribute("aria-expanded", "false");
+    trigger.focus({ preventScroll: true });
+  });
+  header.append(heading, close);
+  helper.append(header);
+
+  if (inputCell.scaffold.intro) {
+    const intro = document.createElement("p");
+    intro.className = "derivation-helper-intro";
+    setMathText(intro, inputCell.scaffold.intro);
+    helper.append(intro);
+  }
+
+  const steps = document.createElement("div");
+  steps.className = "derivation-helper-steps";
+  const scaffoldInputs = [];
+  (inputCell.scaffold.steps || []).forEach((step, index) => {
+    const row = document.createElement("label");
+    row.className = "derivation-scaffold-row";
+    const prompt = document.createElement("span");
+    setMathText(prompt, step.prompt || `Step ${index + 1}`);
+    const input = document.createElement("input");
+    input.className = "derivation-scaffold-input";
+    input.type = "text";
+    input.autocomplete = "off";
+    input.placeholder = step.placeholder || "Enter expression";
+    input.dataset.expected = String(step.answer);
+    input.dataset.answers = JSON.stringify([...new Set([step.answer, ...(step.answers || [])].map(String))]);
+    input.dataset.hint = step.hint || "Use the previous smaller step.";
+    input.dataset.label = step.label || step.prompt || `Smaller step ${index + 1}`;
+    input.disabled = index > 0;
+    input.addEventListener("input", () => input.classList.remove("incorrect"));
+    input.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter" && event.key !== "Tab") return;
+      event.preventDefault();
+      event.stopPropagation();
+      checkDerivationScaffoldInput(input, scaffoldInputs, mainInput, helper, trigger);
+    });
+    row.append(prompt, input);
+    steps.append(row);
+    scaffoldInputs.push(input);
+  });
+  helper.append(steps);
+  els.gridShell.insertBefore(helper, els.overlay);
+  trigger.setAttribute("aria-controls", helperId);
+  trigger.setAttribute("aria-expanded", "true");
+  scaffoldInputs[0]?.focus({ preventScroll: true });
+  const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+  helper.scrollIntoView({ block: "nearest", behavior: reduceMotion ? "auto" : "smooth" });
+  setStatus(`${inputCell.scaffold.title || "Smaller steps"}: complete one line at a time.`, "hint");
+}
+
+function removeDerivationScaffoldHelper() {
+  els.gridShell?.querySelector(".derivation-helper")?.remove();
+}
+
+function checkDerivationScaffoldInput(input, inputs, mainInput, helper, trigger) {
+  if (!input.value.trim()) {
+    input.classList.add("incorrect");
+    input.focus({ preventScroll: true });
+    setStatus("Enter this smaller step first.", "incorrect");
+    return;
+  }
+  if (!isCorrectAnswer(input)) {
+    input.classList.add("incorrect");
+    input.focus({ preventScroll: true });
+    input.select();
+    setStatus(`Not yet. ${stripMathTags(input.dataset.hint)}`, "incorrect");
+    return;
+  }
+
+  input.classList.remove("incorrect");
+  input.classList.add("correct");
+  input.disabled = true;
+  const index = inputs.indexOf(input);
+  const next = inputs[index + 1];
+  if (next) {
+    next.disabled = false;
+    next.focus({ preventScroll: true });
+    setStatus(`Correct. Next smaller step: ${stripMathTags(next.dataset.label)}.`, "correct");
+    return;
+  }
+
+  helper.remove();
+  trigger.classList.add("complete");
+  trigger.textContent = "Smaller steps complete";
+  trigger.setAttribute("aria-expanded", "false");
+  trigger.disabled = true;
+  mainInput.value = mainInput.dataset.expected;
+  mainInput.dispatchEvent(new Event("input", { bubbles: true }));
+  mainInput.focus({ preventScroll: true });
+  checkCurrentStep();
 }
 
 function buildInequalityModel(problem) {
@@ -7992,6 +8176,7 @@ function addInput(cell) {
   input.dataset.hint = cell.hint;
   input.dataset.label = cell.label;
   input.dataset.feedback = cell.feedback || "";
+  input.dataset.capabilities = JSON.stringify(cell.capabilities || []);
   input.dataset.mathDisplay = cell.math || cell.expected;
   input.dataset.sequence = String(cell.sequence);
   input.setAttribute("aria-label", cell.label);
@@ -8473,6 +8658,7 @@ function validateInput(input, announce) {
   } else {
     state.checkedCells.delete(input.dataset.cellId);
   }
+  recordCapabilityAttempt(input, correct);
   syncDerivationAnswerPreview(input, correct);
   if (announce) {
     setStatus(correct ? successForInput(input) : feedbackForInput(input), correct ? "correct" : "incorrect");
@@ -8551,6 +8737,7 @@ function feedbackForInput(input) {
   if (input.dataset.feedback) return input.dataset.feedback;
   const label = answerValue(input.dataset.label);
   const hint = input.dataset.hint;
+  if (hint) return `Not yet. ${stripMathTags(hint)}`;
 
   if (label.includes("fraction")) return "Check whether the fraction should be simplified or whether the numerator and denominator were changed by the same factor.";
   if (label.includes("decimal")) return "Check decimal place value and line up the decimal points.";
@@ -8562,7 +8749,6 @@ function feedbackForInput(input) {
   if (label.includes("inequality")) return "Check the comparison sign, especially if a negative multiplier or divisor was used.";
   if (label.includes("factor")) return "Multiply your factors back out to check the original expression.";
   if (label.includes("degree") || label.includes("polynomial")) return "Match variable powers carefully before combining or naming the degree.";
-  if (hint) return `Not yet. ${stripMathTags(hint)}`;
   return input.inputMode === "numeric" ? "Try another digit." : "Try another entry.";
 }
 
@@ -8726,6 +8912,35 @@ function markExploreInput(input) {
   syncConceptChoiceButtons(input);
 }
 
+function recordCapabilityAttempt(input, correct) {
+  let capabilityIds = [];
+  try {
+    capabilityIds = JSON.parse(input.dataset.capabilities || "[]");
+  } catch {
+    capabilityIds = [];
+  }
+  if (!capabilityIds.length) return;
+
+  const workspace = getActiveWorkspace();
+  const problemId = workspace.problem?.id || state.currentModel?.id || "";
+  const usedHint = state.hintedCells.has(input.dataset.cellId);
+  const signature = [workspace.id, problemId, input.dataset.cellId, input.value, correct, usedHint].join("|");
+  if (state.recordedAttemptSignatures.has(signature)) return;
+  state.recordedAttemptSignatures.add(signature);
+
+  state.progress.learning = learningRecord.recordAttempt(state.progress.learning, {
+    workspaceId: workspace.id,
+    problemId,
+    stepId: input.dataset.cellId,
+    capabilityIds,
+    correct,
+    usedHint,
+    mode: state.mode
+  });
+  safeLocalStorageSet(STORAGE_KEY, JSON.stringify(state.progress, null, 2), "Learning progress could not be saved in this browser.");
+  updateProgressPanel();
+}
+
 function showHint() {
   const steps = orderedSteps();
   const target = state.mode === "guided"
@@ -8736,6 +8951,7 @@ function showHint() {
 
   if (!target) return;
   target.classList.add("hint");
+  if (target.dataset.cellId) state.hintedCells.add(target.dataset.cellId);
   setStatus(target.dataset.hint, "hint");
   saveProgress("Used a hint");
 }
@@ -8895,12 +9111,17 @@ function bindEvents() {
   els.exportProgress.addEventListener("click", exportProgress);
   els.importProgress.addEventListener("change", importProgress);
   els.scratchpadInput.addEventListener("input", handleScratchpadInput);
+  els.scratchpadInput.addEventListener("beforeinput", handleScratchpadBeforeInput);
   els.scratchpadInput.addEventListener("keydown", handleScratchpadKeydown);
-  els.duplicateScratchLine?.addEventListener("click", duplicateScratchpadLine);
-  els.duplicateScratchLineHeader?.addEventListener("click", duplicateScratchpadLine);
+  els.duplicateScratchLine?.addEventListener("click", () => duplicateScratchpadLine("next"));
+  els.duplicateScratchLineToEnd?.addEventListener("click", () => duplicateScratchpadLine("end"));
+  els.duplicateScratchLineHeader?.addEventListener("click", () => duplicateScratchpadLine("next"));
   if (els.duplicateScratchHint) {
     const isApplePlatform = /Mac|iPhone|iPad|iPod/.test(navigator.platform || navigator.userAgent);
     els.duplicateScratchHint.textContent = isApplePlatform ? "⌘⏎" : "Ctrl+⏎";
+    if (els.duplicateScratchEndHint) {
+      els.duplicateScratchEndHint.textContent = isApplePlatform ? "⌘⇧⏎" : "Ctrl+Shift+⏎";
+    }
   }
   els.scratchpadPlainView.addEventListener("click", () => setScratchpadView("plain"));
   els.scratchpadRenderedView.addEventListener("click", () => setScratchpadView("rendered"));
@@ -9393,7 +9614,8 @@ function applyImportedData(imported) {
   state.progress = {
     ...state.progress,
     ...progressData,
-    preferences: { ...state.progress.preferences, ...progressData.preferences }
+    preferences: { ...state.progress.preferences, ...progressData.preferences },
+    learning: learningRecord.normalize(progressData.learning || state.progress.learning)
   };
   return isBackup;
 }
@@ -9454,6 +9676,7 @@ function renderScratchpad() {
   if (els.scratchpadInput && els.scratchpadInput.value !== pad.text) {
     els.scratchpadInput.value = pad.text;
   }
+  ensureScratchpadEditHistory(true);
   renderScratchpadPreview();
   renderScratchpadList();
   setScratchpadView(els.scratchpadLayout?.dataset.scratchpadView || "plain");
@@ -9502,6 +9725,8 @@ function handleScratchpadInput() {
   if (!pad) return;
   pad.text = els.scratchpadInput.value;
   pad.updatedAt = new Date().toISOString();
+  const history = ensureScratchpadEditHistory();
+  if (history) history.current = captureScratchpadEdit();
   saveScratchpads();
   renderScratchpadPreview();
   renderScratchpadList();
@@ -10516,17 +10741,38 @@ function insertScratchpadText(value) {
   const input = els.scratchpadInput;
   const start = input.selectionStart ?? input.value.length;
   const end = input.selectionEnd ?? input.value.length;
-  input.value = `${input.value.slice(0, start)}${value}${input.value.slice(end)}`;
-  const caret = start + value.length;
-  input.focus();
-  input.setSelectionRange(caret, caret);
-  handleScratchpadInput();
+  replaceScratchpadRange(start, end, value);
 }
 
 function handleScratchpadKeydown(event) {
-  if (event.key !== "Enter" || (!event.metaKey && !event.ctrlKey) || event.shiftKey || event.altKey) return;
+  const hasCommand = event.metaKey || event.ctrlKey;
+  const key = event.key.toLowerCase();
+  if (hasCommand && !event.altKey && (key === "z" || (key === "y" && !event.metaKey))) {
+    const redo = key === "y" || event.shiftKey;
+    if (restoreScratchpadEdit(redo ? "redo" : "undo")) event.preventDefault();
+    return;
+  }
+  if (event.key !== "Enter" || (!event.metaKey && !event.ctrlKey) || event.altKey) return;
   event.preventDefault();
-  duplicateScratchpadLine();
+  duplicateScratchpadLine(event.shiftKey ? "end" : "next");
+}
+
+function handleScratchpadBeforeInput(event) {
+  if (event.inputType === "historyUndo" || event.inputType === "historyRedo") {
+    if (restoreScratchpadEdit(event.inputType === "historyRedo" ? "redo" : "undo")) event.preventDefault();
+    return;
+  }
+
+  const history = ensureScratchpadEditHistory();
+  if (!history) return;
+  const now = Date.now();
+  const inputType = String(event.inputType || "edit");
+  const grouped = ["insertText", "insertCompositionText", "deleteContentBackward", "deleteContentForward"].includes(inputType);
+  const continuesGroup = grouped && history.groupType === inputType && now - history.groupAt < 800;
+  if (!continuesGroup) pushScratchpadUndo(history);
+  history.groupType = grouped ? inputType : "";
+  history.groupAt = now;
+  history.redo.length = 0;
 }
 
 function handleScratchpadShortcut(event) {
@@ -10537,7 +10783,70 @@ function handleScratchpadShortcut(event) {
   setScratchpadView(currentView === "plain" ? "rendered" : "plain");
 }
 
-function duplicateScratchpadLine() {
+function replaceScratchpadRange(start, end, replacement) {
+  const input = els.scratchpadInput;
+  const history = ensureScratchpadEditHistory();
+  if (history) {
+    pushScratchpadUndo(history);
+    history.redo.length = 0;
+    history.groupType = "";
+  }
+  input.focus();
+  input.setRangeText(replacement, start, end, "end");
+  handleScratchpadInput();
+}
+
+function captureScratchpadEdit() {
+  const input = els.scratchpadInput;
+  return {
+    value: input?.value || "",
+    start: input?.selectionStart ?? 0,
+    end: input?.selectionEnd ?? 0
+  };
+}
+
+function ensureScratchpadEditHistory(reset = false) {
+  const pad = activeScratchpad();
+  if (!pad || !els.scratchpadInput) return null;
+  let history = scratchpadEditHistories.get(pad.id);
+  if (!history || reset) {
+    history = { undo: [], redo: [], current: captureScratchpadEdit(), groupType: "", groupAt: 0 };
+    scratchpadEditHistories.set(pad.id, history);
+  }
+  return history;
+}
+
+function pushScratchpadUndo(history) {
+  const snapshot = captureScratchpadEdit();
+  const previous = history.undo.at(-1);
+  if (!previous || previous.value !== snapshot.value || previous.start !== snapshot.start || previous.end !== snapshot.end) {
+    history.undo.push(snapshot);
+    if (history.undo.length > 100) history.undo.shift();
+  }
+  history.current = snapshot;
+}
+
+function restoreScratchpadEdit(direction) {
+  const history = ensureScratchpadEditHistory();
+  if (!history) return false;
+  const source = direction === "redo" ? history.redo : history.undo;
+  const destination = direction === "redo" ? history.undo : history.redo;
+  const snapshot = source.pop();
+  if (!snapshot) return false;
+
+  destination.push(captureScratchpadEdit());
+  els.scratchpadInput.value = snapshot.value;
+  els.scratchpadInput.focus();
+  els.scratchpadInput.setSelectionRange(snapshot.start, snapshot.end);
+  history.current = snapshot;
+  history.groupType = "";
+  history.groupAt = 0;
+  handleScratchpadInput();
+  setScratchpadStatus(direction === "redo" ? "Edit redone." : "Edit undone.");
+  return true;
+}
+
+function duplicateScratchpadLine(destination = "next") {
   const input = els.scratchpadInput;
   const cursor = input.selectionStart ?? input.value.length;
   const value = input.value;
@@ -10545,14 +10854,11 @@ function duplicateScratchpadLine() {
   const lineEndIndex = value.indexOf("\n", cursor);
   const lineEnd = lineEndIndex === -1 ? value.length : lineEndIndex;
   const line = value.slice(lineStart, lineEnd);
-  const insertAt = lineEnd;
-  const insertion = `\n${line}`;
-  input.value = `${value.slice(0, insertAt)}${insertion}${value.slice(insertAt)}`;
-  const caret = insertAt + insertion.length;
-  input.focus();
-  input.setSelectionRange(caret, caret);
-  handleScratchpadInput();
-  setScratchpadStatus("Line duplicated.");
+  const appendToEnd = destination === "end";
+  const insertAt = appendToEnd ? value.length : lineEnd;
+  const insertion = appendToEnd && value.endsWith("\n") ? line : `\n${line}`;
+  replaceScratchpadRange(insertAt, insertAt, insertion);
+  setScratchpadStatus(appendToEnd ? "Line duplicated at the end." : "Line duplicated.");
 }
 
 function scratchpadLatexText() {
@@ -10907,6 +11213,12 @@ function updateProgressPanel() {
   els.autoAdvance.checked = state.progress.preferences.autoAdvance !== false;
   els.progressTopic.textContent = state.progress.currentTopic || state.activeTopic;
   els.progressCompleted.textContent = `${state.progress.completedLessons.length} ${state.progress.completedLessons.length === 1 ? "lesson" : "lessons"}`;
+  if (els.progressSkills) {
+    const learning = learningRecord.summarize(state.progress.learning);
+    els.progressSkills.textContent = learning.practiced
+      ? `${learning.practiced} practiced · ${learning.independent} without hints`
+      : "None yet";
+  }
   els.progressSummary.textContent = els.progressCompleted.textContent;
   els.progressRecent.textContent = state.progress.recentActivity[0]?.label || "Just started";
   if (els.betaQaStatus) {

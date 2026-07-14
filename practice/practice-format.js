@@ -40,6 +40,10 @@
  * - Use typed answers only when there is one clear answer or a small accepted set.
  * - Put the learning nudge in hint, not in the wrong answer choices.
  * - feedback should explain the rule after the learner answers correctly.
+ * - Add stable capability ids only when the question genuinely provides evidence
+ *   for that capability; do not tag every nearby curriculum concept.
+ * - Misconception ids should name a specific learner model, not merely "wrong".
+ * - See docs/roadmap.md for the capability, misconception, fading, and retrieval direction.
  *
  * Engine authoring rules:
  * - Export a small engine object with problem generation, validation, hint, and

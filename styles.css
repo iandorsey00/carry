@@ -788,10 +788,11 @@ body[data-surface="scratchpad"] .site-footer {
 }
 
 .scratchpad-layout {
+  --scratchpad-canvas-height: clamp(520px, calc(100dvh - 250px), 880px);
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 12px;
-  min-height: 620px;
+  min-height: var(--scratchpad-canvas-height);
 }
 
 .scratchpad-work-panel {
@@ -841,7 +842,8 @@ body[data-surface="scratchpad"] .site-footer {
 
 #scratchpadInput {
   width: 100%;
-  min-height: 620px;
+  height: var(--scratchpad-canvas-height);
+  min-height: 0;
   resize: none;
   padding: clamp(32px, 8vh, 86px) clamp(18px, 6vw, 72px);
   border: 0;
@@ -862,7 +864,8 @@ body[data-surface="scratchpad"] .site-footer {
 .scratchpad-preview {
   display: grid;
   align-content: start;
-  min-height: 620px;
+  height: var(--scratchpad-canvas-height);
+  min-height: 0;
   padding: clamp(32px, 8vh, 86px) clamp(18px, 6vw, 72px);
   border: 0;
   border-radius: 0;
@@ -3154,6 +3157,15 @@ body[data-surface="scratchpad"] .scratch-line-math-aligned {
   font-weight: 700;
 }
 
+.derivation-conditions {
+  margin: 9px 0 0;
+  color: var(--muted);
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
 .derivation-label {
   justify-content: flex-end;
   color: var(--muted);
@@ -3175,6 +3187,140 @@ body[data-surface="scratchpad"] .scratch-line-math-aligned {
   min-width: 0;
   padding-inline: 12px;
   font-size: 18px;
+}
+
+.guided-derivation-grid .derivation-input-stack {
+  display: grid;
+  align-content: center;
+  align-items: stretch;
+  justify-content: stretch;
+  width: 100%;
+  min-width: 0;
+}
+
+.derivation-input-stack .derivation-input-cell {
+  width: 100%;
+  min-width: 0;
+}
+
+.derivation-scaffold-trigger {
+  width: fit-content;
+  min-height: 28px;
+  margin-top: 5px;
+  padding: 2px 0;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 750;
+  text-align: left;
+}
+
+.derivation-scaffold-trigger:hover,
+.derivation-scaffold-trigger:focus-visible {
+  color: var(--accent);
+}
+
+.derivation-scaffold-trigger.complete {
+  color: var(--correct);
+}
+
+.derivation-helper {
+  display: grid;
+  gap: 12px;
+  width: min(100%, 920px);
+  margin: 18px auto 0;
+  padding: 16px 18px 18px;
+  border-top: 3px solid var(--accent);
+  background: var(--surface-raised, var(--surface));
+}
+
+.derivation-helper-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.derivation-helper-close {
+  min-height: 36px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.derivation-helper-close:hover,
+.derivation-helper-close:focus-visible {
+  border-color: var(--accent);
+}
+
+.derivation-helper-intro {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.derivation-helper-steps {
+  display: grid;
+  gap: 10px;
+}
+
+.derivation-scaffold-row {
+  display: grid;
+  grid-template-columns: minmax(150px, 0.75fr) minmax(220px, 1fr);
+  align-items: center;
+  gap: 12px;
+  color: var(--text);
+}
+
+.derivation-scaffold-row > span {
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.derivation-scaffold-input {
+  width: 100%;
+  min-height: 42px;
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+  font-family: var(--math-font);
+  font-size: 17px;
+}
+
+.derivation-scaffold-input.correct {
+  border-color: var(--correct);
+  background: var(--correct-soft);
+}
+
+.derivation-scaffold-input.incorrect {
+  border-color: var(--incorrect);
+  background: var(--incorrect-soft);
+}
+
+.derivation-scaffold-input:disabled:not(.correct) {
+  opacity: 0.55;
+}
+
+@media (max-width: 700px) {
+  .derivation-helper {
+    padding-inline: 12px;
+  }
+
+  .derivation-scaffold-row {
+    grid-template-columns: 1fr;
+    gap: 5px;
+  }
 }
 
 .derivation-answer-preview {
@@ -4052,40 +4198,6 @@ body[data-surface="tools"][data-active-tool="graphing"] .tools-header {
 
   .grapher-header h2 {
     font-size: clamp(2.4rem, 12vw, 4rem);
-  }
-}
-
-/* Wide screens: Scratchpad shows Plain and Rendered side by side. */
-@media (min-width: 1200px) {
-  .scratchpad-work-panel {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    grid-template-rows: auto minmax(0, 1fr);
-    column-gap: 0;
-  }
-
-  .scratchpad-section-heading {
-    grid-column: 1 / -1;
-  }
-
-  .scratchpad-view-toggle {
-    display: none;
-  }
-
-  .scratchpad-layout[data-scratchpad-view="plain"] .scratchpad-preview {
-    display: grid;
-  }
-
-  .scratchpad-layout[data-scratchpad-view="rendered"] #scratchpadInput {
-    display: block;
-  }
-
-  .scratchpad-layout .scratchpad-preview {
-    border-left: 1px solid var(--line);
-  }
-
-  #scratchpadInput,
-  .scratchpad-layout .scratchpad-preview {
-    padding: clamp(24px, 5vh, 56px) clamp(16px, 3vw, 48px);
   }
 }
 

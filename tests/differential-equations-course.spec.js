@@ -67,7 +67,7 @@ test("separable equations use staged guided solving with keyboard advancement", 
   await expect(page.locator("#multiplicationGrid")).toHaveClass(/guided-derivation-grid/);
   await expect(page.locator("#multiplicationGrid")).not.toContainText("\\frac");
   await expect(page.locator(".derivation-label", { hasText: "separate" })).toBeVisible();
-  await expect(page.locator(".derivation-label", { hasText: "write integrals" })).toBeHidden();
+  await expect(page.locator(".derivation-label", { hasText: "set up integrals" })).toBeHidden();
 
   let active = page.locator(".guided-derivation-grid .digit-input.active");
   await expect(active).toBeFocused();
@@ -82,17 +82,90 @@ test("separable equations use staged guided solving with keyboard advancement", 
   await active.fill("3x dx");
   await active.press("Enter");
 
-  await expect(page.locator(".derivation-label", { hasText: "write integrals" })).toBeVisible();
+  await expect(page.locator(".derivation-label", { hasText: "set up integrals" })).toBeVisible();
   active = page.locator(".guided-derivation-grid .digit-input.active");
   await expect(active).toBeFocused();
   await active.fill("ln|y|+C");
   await active.press("Tab");
-  await expect(page.locator("#activityStatus")).toContainText("Integrate the entire left side");
+  await expect(page.locator("#activityStatus")).toContainText("only sets up the integral");
+  await expect(active).toHaveAttribute("placeholder", "Write integral");
 
   await active.fill("int dy/y");
   await active.press("Tab");
   await expect(page.locator(".guided-derivation-grid .digit-input.active")).toBeFocused();
-  await expect(page.locator("#activityStatus")).toContainText("Write the right integral");
+  await expect(page.locator("#activityStatus")).toContainText("Set up the right integral");
+});
+
+test("separable setup accepts an equivalent one-over-y integral", async ({ page }) => {
+  await freshPage(page, "/math/differential-equations/separable-equations");
+  await page.locator("#startLesson").click();
+
+  let active = page.locator(".guided-derivation-grid .digit-input.active");
+  await active.fill("dy/y");
+  await active.press("Enter");
+  active = page.locator(".guided-derivation-grid .digit-input.active");
+  await active.fill("3x dx");
+  await active.press("Enter");
+
+  active = page.locator(".guided-derivation-grid .digit-input.active");
+  await expect(active).toHaveAttribute("placeholder", "Write integral");
+  await active.fill("int 1/y dy");
+  await active.press("Enter");
+  await expect(page.locator("#activityStatus")).toContainText("Set up the right integral");
+  active = page.locator(".guided-derivation-grid .digit-input.active");
+  await expect(active).toBeFocused();
+  await active.fill("int 3x dx");
+  await active.press("Enter");
+  active = page.locator(".guided-derivation-grid .digit-input.active");
+  await active.fill("ln|y|");
+  await active.press("Enter");
+  active = page.locator(".guided-derivation-grid .digit-input.active");
+  await active.fill("(3/2)x^2+C");
+  await active.press("Enter");
+  active = page.locator(".guided-derivation-grid .digit-input.active");
+  await active.fill("e^((3/2)x^2+C)");
+  await active.press("Enter");
+  await expect(page.locator("#activityStatus")).toContainText("multiplicative constant");
+  await expect(page.locator("#activityStatus")).toContainText("zero solution");
+});
+
+test("separable equations can expand a u-substitution into smaller steps", async ({ page }) => {
+  await freshPage(page, "/math/differential-equations/separable-equations");
+  await page.locator("#startLesson").click();
+  await page.locator("#newProblem").click();
+  await expect(page.locator(".derivation-problem")).toContainText("cos");
+
+  const entries = [
+    "dy/y",
+    "2x cos(x^2) dx",
+    "int dy/y",
+    "int 2x cos(x^2) dx",
+    "ln|y|"
+  ];
+  for (const value of entries) {
+    const active = page.locator(".guided-derivation-grid .digit-input.active");
+    await active.fill(value);
+    await active.press("Enter");
+  }
+
+  const scaffoldTrigger = page.locator(".derivation-scaffold-trigger").first();
+  await expect(scaffoldTrigger).toHaveText("Break this step down");
+  await expect(scaffoldTrigger).toBeVisible();
+  await scaffoldTrigger.click();
+  const scaffold = page.locator(".derivation-helper");
+  await expect(scaffold).toContainText("Use u-substitution");
+
+  for (const value of ["x^2", "2x dx", "int cos(u) du", "sin(u)+C", "sin(x^2)+C"]) {
+    const active = scaffold.locator(".derivation-scaffold-input:not(:disabled)");
+    await expect(active).toBeFocused();
+    await active.fill(value);
+    await active.press("Enter");
+  }
+
+  await expect(scaffold).toBeHidden();
+  await expect(scaffoldTrigger).toHaveText("Smaller steps complete");
+  await expect(page.locator("#activityStatus")).toContainText("Write the solution family");
+  await expect(page.locator(".derivation-answer-preview math").last()).toContainText("sin");
 });
 
 test("linear first-order equations guide the integrating-factor method", async ({ page }) => {
@@ -150,4 +223,29 @@ test("forcing equations guide trial selection and coefficient matching", async (
 
   await expect(page.locator(".derivation-label", { hasText: "substitute" })).toBeVisible();
   await expect(page.locator("#activityStatus")).toContainText("Substitute the trial and simplify");
+});
+
+test("separable practice records transparent hinted capability evidence locally", async ({ page }) => {
+  await freshPage(page, "/math/differential-equations/separable-equations");
+  await page.locator("#startLesson").click();
+
+  const active = page.locator(".guided-derivation-grid .digit-input.active");
+  await active.fill("x dy");
+  await active.press("Enter");
+  await page.locator("#hintStep").click();
+  await active.fill("dy/y");
+  await active.press("Enter");
+
+  const evidence = await page.evaluate(() => {
+    const progress = JSON.parse(localStorage.getItem("carry.progress.v1"));
+    return progress.learning.capabilities["differential-equations.separable.separate-variables"];
+  });
+  expect(evidence).toMatchObject({
+    attempts: 2,
+    correct: 1,
+    incorrect: 1,
+    independentCorrect: 0,
+    hintedCorrect: 1
+  });
+  await expect(page.locator("#progressSkills")).toHaveText("1 practiced · 0 without hints");
 });
