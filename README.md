@@ -1,6 +1,6 @@
 # Carry
 
-Version: `0.1.0-beta.46`
+Version: `0.1.0-beta.47`
 
 Carry is a local-first math, physics, scratchpad, and puzzle learning studio designed to run fully in the browser. Short-form subjects live in a browsable Topic library; deeper, sequenced study lives under Courses.
 
@@ -89,3 +89,24 @@ cd /var/www/carry
 git pull --ff-only
 sudo caddy reload --config /etc/caddy/Caddyfile
 ```
+
+Confirm that both the app shell and a direct lesson route are healthy:
+
+```sh
+curl -fsS https://carry.iandorsey.com/ >/dev/null
+curl -fsS https://carry.iandorsey.com/math/differential-equations/separable-equations >/dev/null
+```
+
+Then open the site, confirm the expected version in the footer, and complete one practice check. Because Carry is a static, local-first app, deployment does not migrate or modify learner data stored in existing browsers.
+
+To roll back, select a known-good commit without rewriting `main`, then reload Caddy:
+
+```sh
+cd /var/www/carry
+git log --oneline -5
+KNOWN_GOOD=replace-with-commit-sha
+git switch --detach "$KNOWN_GOOD"
+sudo caddy reload --config /etc/caddy/Caddyfile
+```
+
+Return the server to the current release line with `git switch main` followed by `git pull --ff-only`.

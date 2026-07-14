@@ -328,6 +328,7 @@ body[data-surface="scratchpad"] .site-footer {
 .workspace-main {
   display: grid;
   gap: 8px;
+  min-width: 0;
 }
 
 .topic-panel,
@@ -336,6 +337,47 @@ body[data-surface="scratchpad"] .site-footer {
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius);
+}
+
+.lesson-panel {
+  min-width: 0;
+}
+
+.topic-panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.topic-panel-toggle {
+  display: none;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.topic-panel-toggle svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
+
+.topic-panel-toggle[aria-expanded="true"] svg {
+  transform: rotate(90deg);
 }
 
 .topic-panel,
@@ -3313,6 +3355,32 @@ body[data-surface="scratchpad"] .scratch-line-math-aligned {
 }
 
 @media (max-width: 700px) {
+  .intro-figures {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .activity-grid-shell {
+    max-width: 100%;
+    padding: 8px;
+  }
+
+  .guided-derivation-grid {
+    grid-template-columns: 64px minmax(128px, 1fr) 20px minmax(128px, 1fr);
+    gap: 4px;
+  }
+
+  .derivation-label {
+    font-size: 9px;
+    line-height: 1.2;
+    white-space: normal;
+  }
+
+  .derivation-input-cell .equation-input,
+  .derivation-answer-preview {
+    padding-inline: 6px;
+    font-size: 16px;
+  }
+
   .derivation-helper {
     padding-inline: 12px;
   }
@@ -3965,6 +4033,18 @@ body[data-surface="scratchpad"] .scratch-line-math-aligned {
     grid-template-columns: 1fr;
   }
 
+  .topic-panel-toggle {
+    display: inline-flex;
+  }
+
+  .topic-panel.mobile-collapsed .topic-list {
+    display: none;
+  }
+
+  .lesson-panel {
+    padding: 12px;
+  }
+
   .options-panel-body {
     grid-template-columns: 1fr;
   }
@@ -4119,6 +4199,10 @@ body[data-surface="scratchpad"] .scratch-line-math-aligned {
 }
 
 @media (prefers-reduced-motion: no-preference) {
+  .topic-panel-toggle svg {
+    transition: transform 140ms ease;
+  }
+
   .icon-button,
   .tool-button,
   .mode-tab,

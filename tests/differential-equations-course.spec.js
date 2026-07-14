@@ -1,6 +1,17 @@
 const { test, expect } = require("@playwright/test");
 const { freshPage } = require("./helpers");
 
+function contrastRatio(foreground, background) {
+  const luminance = (hex) => {
+    const channels = hex.match(/[\da-f]{2}/gi).map((value) => Number.parseInt(value, 16) / 255);
+    const linear = channels.map((value) => value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4);
+    return 0.2126 * linear[0] + 0.7152 * linear[1] + 0.0722 * linear[2];
+  };
+  const lighter = Math.max(luminance(foreground), luminance(background));
+  const darker = Math.min(luminance(foreground), luminance(background));
+  return (lighter + 0.05) / (darker + 0.05);
+}
+
 test("Differential Equations is presented as a sequenced course", async ({ page }) => {
   await freshPage(page, "/math/differential-equations/equations-and-classification");
 
@@ -10,6 +21,48 @@ test("Differential Equations is presented as a sequenced course", async ({ page 
   await expect(course.locator(".curriculum-section")).toHaveCount(4);
   await expect(course.locator(".lesson-nav-button")).toHaveCount(13);
   await expect(page.locator("#lessonTitle")).toHaveText("Equations and classification");
+});
+
+test("the course keeps the active lesson reachable on a narrow screen", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await freshPage(page, "/math/differential-equations/separable-equations");
+
+  const toggle = page.locator("#topicPanelToggle");
+  await expect(toggle).toBeVisible();
+  await expect(toggle).toHaveAttribute("aria-expanded", "false");
+  await expect(page.locator("#topicList")).toBeHidden();
+  await expect(page.locator("#lessonPanel")).toBeInViewport();
+
+  await toggle.click();
+  await expect(toggle).toHaveAttribute("aria-expanded", "true");
+  await expect(page.locator("#topicList")).toBeVisible();
+
+  await page.getByRole("button", { name: "Separable equations", exact: true }).click();
+  await expect(page.locator("#topicList")).toBeHidden();
+  await page.locator("#startLesson").click();
+  const pageWidth = await page.evaluate(() => ({
+    viewport: document.documentElement.clientWidth,
+    content: document.documentElement.scrollWidth
+  }));
+  expect(pageWidth.content).toBeLessThanOrEqual(pageWidth.viewport);
+});
+
+test("the course preserves readable semantic colors in dark mode", async ({ page }) => {
+  await page.emulateMedia({ colorScheme: "dark" });
+  await freshPage(page, "/math/differential-equations/separable-equations");
+
+  const colors = await page.evaluate(() => {
+    const styles = getComputedStyle(document.documentElement);
+    return Object.fromEntries(["surface", "text", "muted", "accent", "focus"].map((role) => [
+      role,
+      styles.getPropertyValue(`--${role}`).trim()
+    ]));
+  });
+
+  expect(contrastRatio(colors.text, colors.surface)).toBeGreaterThanOrEqual(4.5);
+  expect(contrastRatio(colors.muted, colors.surface)).toBeGreaterThanOrEqual(4.5);
+  expect(contrastRatio(colors.accent, colors.surface)).toBeGreaterThanOrEqual(3);
+  expect(contrastRatio(colors.focus, colors.surface)).toBeGreaterThanOrEqual(3);
 });
 
 test("the slope-field initial condition is keyboard draggable", async ({ page }) => {
@@ -154,6 +207,7 @@ test("separable equations can expand a u-substitution into smaller steps", async
   await scaffoldTrigger.click();
   const scaffold = page.locator(".derivation-helper");
   await expect(scaffold).toContainText("Use u-substitution");
+  await expect(scaffold.getByRole("textbox", { name: "Choose the inner expression u." })).toBeFocused();
 
   for (const value of ["x^2", "2x dx", "int cos(u) du", "sin(u)+C", "sin(x^2)+C"]) {
     const active = scaffold.locator(".derivation-scaffold-input:not(:disabled)");

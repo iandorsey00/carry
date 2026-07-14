@@ -1,6 +1,6 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-beta.46";
+const APP_VERSION = "0.1.0-beta.47";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 const GAMES_STORAGE_KEY = "carry.games.v1";
@@ -674,6 +674,7 @@ document.addEventListener("DOMContentLoaded", () => {
 function cacheElements() {
   els.workspaceLayout = document.querySelector(".workspace-layout");
   els.topicPanel = document.querySelector(".topic-panel");
+  els.topicPanelToggle = document.querySelector("#topicPanelToggle");
   els.topicList = document.querySelector("#topicList");
   els.currentTopic = document.querySelector("#currentTopic");
   els.lessonTitle = document.querySelector("#lessonTitle");
@@ -9013,6 +9014,10 @@ function drawOverlays() {
 function bindEvents() {
   refreshCheckButton();
 
+  els.topicPanelToggle?.addEventListener("click", () => {
+    setMobileTopicsExpanded(els.topicPanel.classList.contains("mobile-collapsed"));
+  });
+
   els.topicList.addEventListener("click", (event) => {
     const button = event.target.closest(".lesson-nav-button");
     if (!button) return;
@@ -9023,6 +9028,7 @@ function bindEvents() {
     state.selectedProblemIndex = 0;
     renderTopics();
     renderWorkspace();
+    setMobileTopicsExpanded(false);
     updateUrlFromState();
     saveProgress(`Opened ${button.textContent}`);
   });
@@ -9317,6 +9323,12 @@ function bindEvents() {
   window.addEventListener("resize", drawOverlays);
   document.addEventListener("keydown", handlePageKeydown);
   window.addEventListener("popstate", () => applyRouteState(resolveRouteFromPath()));
+}
+
+function setMobileTopicsExpanded(expanded) {
+  els.topicPanel.classList.toggle("mobile-collapsed", !expanded);
+  els.topicPanelToggle?.setAttribute("aria-expanded", String(expanded));
+  els.topicPanelToggle?.setAttribute("aria-label", expanded ? "Hide topics" : "Show topics");
 }
 
 function refreshCheckButton() {
