@@ -1,0 +1,222 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://carry.iandorsey.com/schema/carry-lesson-v1.schema.json",
+  "title": "Carry Lesson Specification v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["spec", "id", "subject", "section", "topic", "title", "learn", "practice"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "spec": { "const": "carry.lesson/v1" },
+    "id": { "$ref": "#/$defs/identifier" },
+    "subject": { "type": "string", "minLength": 1 },
+    "section": { "$ref": "#/$defs/identifier" },
+    "topic": { "type": "string", "minLength": 1 },
+    "title": { "type": "string", "minLength": 1 },
+    "registration": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind"],
+          "properties": { "kind": { "const": "section" } }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "key"],
+          "properties": {
+            "kind": { "const": "long-operation" },
+            "key": { "type": "string", "minLength": 1 }
+          }
+        }
+      ]
+    },
+    "learn": { "$ref": "#/$defs/learn" },
+    "practice": { "$ref": "#/$defs/practice" }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+    },
+    "textRun": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["text"],
+          "properties": { "text": { "type": "string", "minLength": 1, "pattern": "^[^<>]+$" } }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["math"],
+          "properties": { "math": { "type": "string", "minLength": 1, "pattern": "^[^<>]+$" } }
+        }
+      ]
+    },
+    "contentBlock": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "runs"],
+          "properties": {
+            "type": { "const": "paragraph" },
+            "runs": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/textRun" } }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "tex"],
+          "properties": {
+            "type": { "const": "math" },
+            "tex": { "type": "string", "minLength": 1, "pattern": "^[^<>]+$" }
+          }
+        }
+      ]
+    },
+    "learn": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["core"],
+      "properties": {
+        "figure": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["renderer", "id", "caption"],
+          "properties": {
+            "renderer": { "const": "carry" },
+            "id": { "$ref": "#/$defs/identifier" },
+            "caption": { "type": "string", "minLength": 1 }
+          }
+        },
+        "core": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/contentBlock" } },
+        "workedExample": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["math", "note"],
+            "properties": {
+              "math": { "type": "string", "minLength": 1, "pattern": "^[^<>]+$" },
+              "note": { "$ref": "#/$defs/contentBlock" }
+            }
+          }
+        },
+        "studio": { "type": "array", "items": { "$ref": "#/$defs/contentBlock" } },
+        "applications": { "type": "array", "items": { "$ref": "#/$defs/contentBlock" } },
+        "notice": { "type": "array", "items": { "$ref": "#/$defs/contentBlock" } },
+        "workspace": { "type": "array", "items": { "$ref": "#/$defs/contentBlock" } }
+      }
+    },
+    "response": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "entry", "traversal"],
+      "properties": {
+        "kind": { "enum": ["matrix", "digit-grid", "derivation"] },
+        "entry": { "enum": ["number", "expression"] },
+        "traversal": { "enum": ["row-major", "column-major", "guided"] }
+      }
+    },
+    "matrix": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "array",
+        "minItems": 1,
+        "items": { "type": "number" }
+      }
+    },
+    "fixedSide": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "math"],
+      "properties": {
+        "kind": { "const": "fixed" },
+        "math": { "type": "string", "minLength": 1, "pattern": "^[^<>]+$" }
+      }
+    },
+    "slotSide": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "response", "expected", "hint", "label"],
+      "properties": {
+        "kind": { "const": "slot" },
+        "response": { "const": "expression" },
+        "expected": { "type": "string", "minLength": 1 },
+        "accepted": { "type": "array", "items": { "type": "string" } },
+        "display": { "type": "string", "minLength": 1, "pattern": "^[^<>]+$" },
+        "hint": { "type": "string", "minLength": 1 },
+        "label": { "type": "string", "minLength": 1 },
+        "placeholder": { "type": "string" }
+      }
+    },
+    "derivationRow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "label", "left", "relation", "right"],
+      "properties": {
+        "id": { "$ref": "#/$defs/identifier" },
+        "label": { "type": "string", "minLength": 1 },
+        "left": { "oneOf": [{ "$ref": "#/$defs/fixedSide" }, { "$ref": "#/$defs/slotSide" }] },
+        "relation": { "type": "string", "minLength": 1 },
+        "right": { "oneOf": [{ "$ref": "#/$defs/fixedSide" }, { "$ref": "#/$defs/slotSide" }] }
+      }
+    },
+    "problem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "prompt", "givens"],
+      "properties": {
+        "id": { "$ref": "#/$defs/identifier" },
+        "prompt": { "$ref": "#/$defs/contentBlock" },
+        "givens": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["operation", "left", "right"],
+              "properties": {
+                "operation": { "enum": ["add", "subtract", "multiply"] },
+                "left": { "$ref": "#/$defs/matrix" },
+                "right": { "$ref": "#/$defs/matrix" }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["top", "bottom"],
+              "properties": {
+                "top": { "type": "integer", "minimum": 0, "maximum": 999 },
+                "bottom": { "type": "integer", "minimum": 0, "maximum": 999 }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["rows"],
+              "properties": {
+                "rows": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/derivationRow" } }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "practice": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["engine", "response", "problems"],
+      "properties": {
+        "engine": { "enum": ["matrix-operation", "long-addition", "guided-derivation"] },
+        "response": { "$ref": "#/$defs/response" },
+        "problems": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/problem" } }
+      }
+    }
+  }
+}

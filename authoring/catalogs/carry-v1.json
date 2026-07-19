@@ -1,0 +1,26 @@
+{
+  "spec": "carry.lesson/v1",
+  "engines": {
+    "matrix-operation": {
+      "responseKinds": ["matrix"],
+      "description": "A responsive matrix workspace with one active result entry at a time."
+    },
+    "long-addition": {
+      "responseKinds": ["digit-grid"],
+      "description": "Carry's aligned whole-number addition workspace."
+    },
+    "guided-derivation": {
+      "responseKinds": ["derivation"],
+      "description": "A sequence of fixed mathematical expressions and constrained response slots."
+    }
+  },
+  "responseKinds": {
+    "matrix": ["number", "expression"],
+    "digit-grid": ["number"],
+    "derivation": ["expression"]
+  },
+  "figures": [
+    "diff-eq-separable",
+    "linear-matrix-multiplication"
+  ]
+}

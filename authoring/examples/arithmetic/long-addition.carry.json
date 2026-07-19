@@ -1,0 +1,33 @@
+{
+  "$schema": "../../schema/carry-lesson-v1.schema.json",
+  "spec": "carry.lesson/v1",
+  "id": "arithmetic.long-addition.example",
+  "subject": "math",
+  "section": "arithmetic",
+  "topic": "Arithmetic",
+  "title": "Long addition example",
+  "registration": { "kind": "long-operation", "key": "additionWorkspace" },
+  "learn": {
+    "core": [
+      { "type": "paragraph", "runs": [{ "text": "Add one place-value column at a time, beginning with the ones." }] },
+      { "type": "paragraph", "runs": [{ "text": "When a column totals 10 or more, carry its tens digit into the next column." }] }
+    ],
+    "workedExample": [
+      {
+        "math": "38+47=85",
+        "note": { "type": "paragraph", "runs": [{ "text": "Add the ones, carry 1, then add the tens." }] }
+      }
+    ]
+  },
+  "practice": {
+    "engine": "long-addition",
+    "response": { "kind": "digit-grid", "entry": "number", "traversal": "guided" },
+    "problems": [
+      {
+        "id": "long-addition-example-486-257",
+        "prompt": { "type": "paragraph", "runs": [{ "text": "Add the aligned whole numbers." }] },
+        "givens": { "top": 486, "bottom": 257 }
+      }
+    ]
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "$schema": "../../schema/carry-lesson-v1.schema.json",
+  "spec": "carry.lesson/v1",
+  "id": "linear-algebra.matrix-multiplication",
+  "subject": "math",
+  "section": "linear-algebra",
+  "topic": "Linear Algebra",
+  "title": "Matrix multiplication",
+  "learn": {
+    "figure": {
+      "renderer": "carry",
+      "id": "linear-matrix-multiplication",
+      "caption": "Each product entry comes from one row-column dot product."
+    },
+    "core": [
+      {
+        "type": "paragraph",
+        "runs": [
+          { "text": "Matrix multiplication is built from row-column dot products, not entrywise multiplication." }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "runs": [
+          { "text": "The inner dimensions must match: an " },
+          { "math": "m\\times n" },
+          { "text": " matrix can multiply an " },
+          { "math": "n\\times p" },
+          { "text": " matrix." }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "runs": [
+          { "text": "The result has the outside dimensions " },
+          { "math": "m\\times p" },
+          { "text": "." }
+        ]
+      }
+    ],
+    "workedExample": [
+      {
+        "math": "[[1,2],[3,4]]\\cdot[[5,6],[7,8]]",
+        "note": { "type": "paragraph", "runs": [{ "text": "The first result entry uses row 1 and column 1." }] }
+      },
+      {
+        "math": "1\\cdot5+2\\cdot7=19",
+        "note": { "type": "paragraph", "runs": [{ "text": "Multiply corresponding entries, then add." }] }
+      },
+      {
+        "math": "[[19,22],[43,50]]",
+        "note": { "type": "paragraph", "runs": [{ "text": "Repeat for every row-column pair." }] }
+      }
+    ],
+    "studio": [
+      { "type": "paragraph", "runs": [{ "text": "Follow the highlighted row and column." }] },
+      { "type": "paragraph", "runs": [{ "text": "Compute their dot product for the active result entry." }] }
+    ],
+    "applications": [
+      { "type": "paragraph", "runs": [{ "text": "Composing linear transformations" }] },
+      { "type": "paragraph", "runs": [{ "text": "Changing coordinates" }] },
+      { "type": "paragraph", "runs": [{ "text": "Advancing a linear dynamical system" }] }
+    ]
+  },
+  "practice": {
+    "engine": "matrix-operation",
+    "response": {
+      "kind": "matrix",
+      "entry": "number",
+      "traversal": "row-major"
+    },
+    "problems": [
+      {
+        "id": "matrix-multiply-2x2-a",
+        "prompt": { "type": "paragraph", "runs": [{ "text": "Multiply the matrices using row-column products." }] },
+        "givens": { "operation": "multiply", "left": [[1, 2], [3, 4]], "right": [[5, 6], [7, 8]] }
+      },
+      {
+        "id": "matrix-multiply-identity",
+        "prompt": { "type": "paragraph", "runs": [{ "text": "Multiply by the identity matrix." }] },
+        "givens": { "operation": "multiply", "left": [[1, 0], [0, 1]], "right": [[4, -2], [3, 5]] }
+      },
+      {
+        "id": "matrix-multiply-2x3-3x2",
+        "prompt": { "type": "paragraph", "runs": [{ "text": "Multiply a 2 by 3 matrix by a 3 by 2 matrix." }] },
+        "givens": { "operation": "multiply", "left": [[1, 2, -1], [0, 3, 4]], "right": [[2, 1], [-1, 5], [3, 0]] }
+      },
+      {
+        "id": "matrix-multiply-row",
+        "prompt": { "type": "paragraph", "runs": [{ "text": "Multiply the row matrix by the 2 by 2 matrix." }] },
+        "givens": { "operation": "multiply", "left": [[2, -1]], "right": [[3, 4], [5, -2]] }
+      },
+      {
+        "id": "matrix-multiply-column",
+        "prompt": { "type": "paragraph", "runs": [{ "text": "Multiply the matrix by the column vector." }] },
+        "givens": { "operation": "multiply", "left": [[2, 1], [-3, 4]], "right": [[5], [2]] }
+      },
+      {
+        "id": "matrix-multiply-negatives",
+        "prompt": { "type": "paragraph", "runs": [{ "text": "Track the signs in each row-column product." }] },
+        "givens": { "operation": "multiply", "left": [[-1, 2], [3, -2]], "right": [[4, -3], [-2, 1]] }
+      },
+      {
+        "id": "matrix-multiply-diagonal",
+        "prompt": { "type": "paragraph", "runs": [{ "text": "Use the diagonal matrix to scale the rows of the second matrix." }] },
+        "givens": { "operation": "multiply", "left": [[2, 0], [0, 3]], "right": [[4, 1], [-2, 5]] }
+      },
+      {
+        "id": "matrix-multiply-3x2-vector",
+        "prompt": { "type": "paragraph", "runs": [{ "text": "Multiply the 3 by 2 matrix by the vector." }] },
+        "givens": { "operation": "multiply", "left": [[1, 2], [-1, 3], [4, 0]], "right": [[2], [-1]] }
+      }
+    ]
+  }
+}

@@ -8,6 +8,8 @@
  *   state machines in the main app file forever.
  *
  * Current state:
+ * - Data-only lessons with a supported semantic engine can use versioned CLS
+ *   sources under ../authoring/lessons and compile into generated workspaces.
  * - Lesson question data lives in curriculum-shaped files such as
  *   practice/arithmetic/whole-numbers/place-value.js.
  * - Long-operation workspace definitions live beside their arithmetic lessons.
@@ -15,6 +17,8 @@
  *   renderer and validator code inline in ../app.js while they are migrated.
  *
  * Recommended migration target:
+ * - Prefer CLS when its catalog already includes the required engine, response
+ *   kind, and figure. See ../authoring/README.md.
  * - Use practice/{topic}/{section}/{lesson}.js for reusable question/answer data.
  * - Keep curriculum-specific special mode definitions beside their lesson file.
  * - Move shared validators/renderers into shared engine modules only when more
@@ -22,11 +26,12 @@
  * - Keep app-wide routing, localStorage, import/export, and page layout outside
  *   practice modules.
  *
- * Why commented JavaScript modules instead of Markdown, XML, or plain JSON:
+ * Why JavaScript modules remain available beside CLS:
  * - Comments are allowed, so authoring guidance can live beside the data.
  * - Trailing commas and multiline strings are easy for humans and AI agents.
- * - Static hosts can serve modules directly later without a backend database.
- * - Plain JSON remains best for learner progress export, not authored curriculum.
+ * - Custom engines sometimes need behavior that a data-only specification
+ *   intentionally cannot execute.
+ * - Static hosts can serve modules directly without a backend database.
  *
  * Question authoring rules:
  * - Give every question a stable id. Do not reuse ids after deleting questions.

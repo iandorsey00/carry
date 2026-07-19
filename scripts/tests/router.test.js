@@ -12,7 +12,7 @@ const router = create({
   mathGroups: groups,
   physicsGroups,
   lessonsForGroup: (group) => group.sections.flatMap((section) => section.lessons),
-  toolIds: ["graphing"],
+  toolIds: ["graphing", "lesson-builder"],
   gameIds: ["sudoku"],
   findExploration: (id) => id === "signal-boxes" ? { id } : null,
   defaultExplorationId: "signal-boxes"
@@ -40,5 +40,5 @@ test("uses stable fallbacks for unknown tools and games", () => {
 test("builds a path from application state", () => {
   assert.equal(router.pathForState({ activeSurface: "learn", activeWorkspaceId: "de.euler" }), "/math/differential-equations/euler-s-method");
   assert.equal(router.pathForState({ activeSurface: "tools", activeTool: "graphing" }), "/tools/graphing");
+  assert.equal(router.resolvePath("/tools/lesson-builder").tool, "lesson-builder");
 });
-

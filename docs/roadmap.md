@@ -244,6 +244,9 @@ Do not optimize for streaks, time spent, clicks, or deliberately addictive behav
 - [x] Add stable capability tags to the Separable Equations pilot.
 - [x] Show a compact, transparent Status & Data summary.
 - [x] Add optional contextual smaller steps to guided derivations, beginning with u-substitution.
+- [x] Establish Carry Lesson Specification v1 with schema validation, deterministic compilation, and a responsive matrix-operation pilot.
+- [x] Add a local-first Lesson Studio with a self-contained AI handoff, validation, compilation output, an immersive temporary custom-lesson session, and clearable history.
+- [ ] Expand CLS only through tested semantic engines, beginning with digit grids and guided derivations.
 - [ ] Add authored misconception recognition and recovery.
 - [ ] Add fading guidance, transfer problems, and mixed retrieval.
 - [ ] Extend capability evidence beyond the pilot only after the interaction proves useful.

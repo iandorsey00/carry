@@ -20,6 +20,8 @@ test("matrix multiplication highlights the active row and column", async ({ page
   await freshPage(page, "/math/linear-algebra/matrix-multiplication");
   await page.locator("#startLesson").click();
 
+  await expect(page.locator("#multiplicationGrid")).toHaveAttribute("data-lesson-spec", "carry.lesson/v1");
+  await expect(page.locator("#multiplicationGrid")).toHaveAttribute("data-response-kind", "matrix");
   await expect(page.locator('[data-matrix-role="left"].active-column')).toHaveCount(2);
   await expect(page.locator('[data-matrix-role="right"].active-column')).toHaveCount(2);
   await expect(page.locator(".matrix-entry-context-math")).toContainText("1·5+2·7=19");
@@ -113,6 +115,46 @@ test("finishing a problem set offers practice again or overview review", async (
 test("matrix workspaces remain contained on a narrow screen", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await freshPage(page, "/math/linear-algebra/matrix-multiplication");
+
+  const overview = await page.evaluate(() => {
+    const viewport = document.documentElement.clientWidth;
+    const bounds = (selector) => {
+      const element = document.querySelector(selector);
+      const rect = element.getBoundingClientRect();
+      return {
+        left: rect.left,
+        right: rect.right,
+        width: rect.width,
+        scrollWidth: element.scrollWidth,
+        clientWidth: element.clientWidth
+      };
+    };
+    return {
+      viewport,
+      page: document.documentElement.scrollWidth,
+      title: bounds("#lessonTitle"),
+      modes: bounds(".mode-tabs"),
+      figure: bounds(".intro-figures"),
+      mathStack: bounds(".intro-math-stack"),
+      mathRuns: Array.from(document.querySelectorAll(".intro-math-row .scratch-mathml-line"), (math) => {
+        const rect = math.getBoundingClientRect();
+        return { left: rect.left, right: rect.right, width: rect.width };
+      })
+    };
+  });
+  expect(overview.page).toBeLessThanOrEqual(overview.viewport);
+  for (const region of [overview.title, overview.modes, overview.figure, overview.mathStack]) {
+    expect(region.left).toBeGreaterThanOrEqual(0);
+    expect(region.right).toBeLessThanOrEqual(overview.viewport);
+    expect(region.scrollWidth).toBeLessThanOrEqual(region.clientWidth);
+  }
+  expect(overview.mathRuns.length).toBeGreaterThan(0);
+  for (const math of overview.mathRuns) {
+    expect(math.width).toBeGreaterThan(0);
+    expect(math.left).toBeGreaterThanOrEqual(overview.figure.left);
+    expect(math.right).toBeLessThanOrEqual(overview.figure.right);
+  }
+
   await page.locator("#startLesson").click();
 
   const widths = await page.evaluate(() => ({
@@ -122,5 +164,11 @@ test("matrix workspaces remain contained on a narrow screen", async ({ page }) =
   }));
   expect(widths.page).toBeLessThanOrEqual(widths.viewport);
   expect(widths.equation).toBeGreaterThan(0);
+  const activeSize = await page.locator(".matrix-entry-input.active").evaluate((input) => {
+    const rect = input.getBoundingClientRect();
+    return { width: rect.width, height: rect.height };
+  });
+  expect(activeSize.width).toBeGreaterThanOrEqual(44);
+  expect(activeSize.height).toBeGreaterThanOrEqual(44);
   await expect(page.locator(".matrix-entry-input.active")).toBeFocused();
 });

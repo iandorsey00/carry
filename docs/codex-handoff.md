@@ -4,8 +4,9 @@
 
 1. Read the shared standards handoff at `../guidelines/docs/codex-handoff.md` from the Carry repository root.
 2. Read [`docs/roadmap.md`](roadmap.md) before making product, curriculum, learner-model, or major interaction decisions.
-3. Use [`practice/practice-format.js`](../practice/practice-format.js) when changing authored practice data or special practice engines.
-4. Use [`README.md`](../README.md) for current architecture, release, test, and deployment details.
+3. Read [`authoring/README.md`](../authoring/README.md) before creating or migrating a lesson supported by Carry Lesson Specification.
+4. Use [`practice/practice-format.js`](../practice/practice-format.js) for legacy lesson data or special practice engines not yet represented in CLS.
+5. Use [`README.md`](../README.md) for current architecture, release, test, and deployment details.
 
 This file is Carry's project-specific overlay. Shared standards remain in `../guidelines`; Carry-specific exceptions and product direction belong here.
 
@@ -40,6 +41,17 @@ Implementation should proceed through small pilots. Differential Equations is th
 - Preserve keyboard flow and visible focus.
 - Render mathematics with MathML where appropriate and custom semantic layouts where manipulation matters.
 - Prefer linked equations, diagrams, graphs, and physical interpretations over decorative figures.
+- Keep authored lessons semantic and mobile-first. Lesson data must not prescribe fixed widths, breakpoints, CSS classes, or input layouts.
+
+## Lesson Authoring
+
+- Prefer versioned `carry.lesson/v1` data for lessons whose figure, engine, and response kind exist in the CLS catalog.
+- Treat the JSON Schema, catalog, and compiler as the source of truth; keep the prose AI handoff synchronized with them.
+- Author TeX-like formula source and explicit math runs. Do not author raw MathML, HTML, SVG, or executable validators in lesson files.
+- Compile CLS sources into checked-in static workspace modules so production remains build-free.
+- Use `/tools/lesson-builder` for custom, momentary lessons: local drafting, AI handoff copying, validation, compilation inspection, and an immersive temporary lesson session. Sessions must stay outside the curriculum navigation, remain data-only, avoid learner-progress records, and return to the saved draft on reload. Promotion into `authoring/lessons/` is an optional, separate maintainer decision.
+- Add a renderer or engine in reviewed JavaScript before adding its identifier to the CLS catalog.
+- Keep bespoke JavaScript modules for interactions CLS cannot yet express; do not weaken the schema to accommodate one lesson.
 
 ## Learning Data Defaults
 

@@ -1,0 +1,73 @@
+{
+  "$schema": "../../schema/carry-lesson-v1.schema.json",
+  "spec": "carry.lesson/v1",
+  "id": "differential-equations.separable.example",
+  "subject": "math",
+  "section": "differential-equations",
+  "topic": "Differential Equations",
+  "title": "Separable equation example",
+  "learn": {
+    "figure": {
+      "renderer": "carry",
+      "id": "diff-eq-separable",
+      "caption": "Separation collects each variable with its differential before integration."
+    },
+    "core": [
+      {
+        "type": "paragraph",
+        "runs": [
+          { "text": "A separable equation can be rearranged into " },
+          { "math": "g(y)\\,dy=f(x)\\,dx" },
+          { "text": "." }
+        ]
+      }
+    ]
+  },
+  "practice": {
+    "engine": "guided-derivation",
+    "response": { "kind": "derivation", "entry": "expression", "traversal": "guided" },
+    "problems": [
+      {
+        "id": "separable-example-3xy",
+        "prompt": {
+          "type": "paragraph",
+          "runs": [{ "text": "Solve " }, { "math": "dy/dx=3xy" }, { "text": "." }]
+        },
+        "givens": {
+          "rows": [
+            {
+              "id": "start",
+              "label": "start",
+              "left": { "kind": "fixed", "math": "\\frac{dy}{dx}" },
+              "relation": "=",
+              "right": { "kind": "fixed", "math": "3xy" }
+            },
+            {
+              "id": "separate",
+              "label": "separate",
+              "left": {
+                "kind": "slot",
+                "response": "expression",
+                "expected": "dy/y",
+                "accepted": ["(1/y)dy"],
+                "display": "\\frac{1}{y}\\,dy",
+                "hint": "Move the factor y to the left beside dy.",
+                "label": "Separate the y terms"
+              },
+              "relation": "=",
+              "right": {
+                "kind": "slot",
+                "response": "expression",
+                "expected": "3x dx",
+                "accepted": ["3x*dx"],
+                "display": "3x\\,dx",
+                "hint": "Keep the x terms beside dx.",
+                "label": "Separate the x terms"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

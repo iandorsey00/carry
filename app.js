@@ -1,12 +1,12 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-beta.48";
+const APP_VERSION = "0.1.0-beta.49";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 const GAMES_STORAGE_KEY = "carry.games.v1";
 const TOOLS_STORAGE_KEY = "carry.tools.v1";
 const GAME_IDS = ["sudoku", "mod-clock", "prime-factors", "gcd-race", "divisibility", "residue-match", "graph-paths", "graph-color"];
-const TOOL_IDS = ["random-number", "normal-simulator", "unit-circle", "complex-plane", "graphing", "number-theory"];
+const TOOL_IDS = ["random-number", "normal-simulator", "unit-circle", "complex-plane", "graphing", "number-theory", "lesson-builder"];
 const EXPLORATION_ENTRIES = Array.isArray(window.CarryExplorations?.entries) ? window.CarryExplorations.entries : [];
 const EXPLORATION_DEFAULT_ID = EXPLORATION_ENTRIES[0]?.id || "";
 const MAX_CONCEPT_CHOICES = 4;
@@ -17,6 +17,8 @@ const graphPointerState = { dragging: false, x: 0, y: 0, mode: "", saveTimer: 0 
 const unitCircleDragState = { dragging: false };
 const scratchpadEditHistories = new Map();
 const learningRecord = window.CarryLearningRecord;
+let lessonBuilderController = null;
+let lessonPreview = null;
 
 const mathTopicCategories = new Map([
   ["Arithmetic", "Foundations"],
@@ -661,6 +663,10 @@ const els = {};
 
 document.addEventListener("DOMContentLoaded", () => {
   cacheElements();
+  lessonBuilderController = window.CarryLessonBuilder?.mount({
+    compiler: window.CarryLessonSpec,
+    onRun: runCompiledLesson
+  }) || null;
   window.carryLessonQA = createLessonQaReport;
   if (els.appVersion) els.appVersion.textContent = `v${APP_VERSION}`;
   const routeState = resolveRouteFromPath();
@@ -719,6 +725,8 @@ function cacheElements() {
   els.lessonCompletion = document.querySelector("#lessonCompletion");
   els.restartLesson = document.querySelector("#restartLesson");
   els.reviewLesson = document.querySelector("#reviewLesson");
+  els.lessonPreviewHeader = document.querySelector("#lessonPreviewHeader");
+  els.exitLessonPreview = document.querySelector("#exitLessonPreview");
   els.topNumberLabel = document.querySelector("#topNumberLabel");
   els.bottomNumberLabel = document.querySelector("#bottomNumberLabel");
   els.topNumber = document.querySelector("#topNumber");
@@ -1163,7 +1171,7 @@ function resolveRouteFromPath() {
 }
 
 function updateUrlFromState(options = {}) {
-  const path = routeService.pathForState({
+  const path = state.activeSurface === "lesson-preview" ? "/tools/lesson-builder/run" : routeService.pathForState({
     activeSurface: state.activeSurface,
     activeWorkspaceId: state.activeWorkspaceId,
     activeTool: state.tools.activeTool,
@@ -1179,6 +1187,7 @@ function updateUrlFromState(options = {}) {
 
 function applyRouteState(routeState) {
   if (!routeState) return;
+  if (lessonPreview && routeState.surface !== "lesson-preview") removeLessonPreview();
   state.activeSurface = routeState.surface;
   if (routeState.game) state.games.activeGame = routeState.game;
   if (routeState.tool) state.tools.activeTool = routeState.tool;
@@ -1217,6 +1226,7 @@ function mathCategoryRank(group) {
 }
 
 function ensureSurfaceWorkspace() {
+  if (state.activeSurface === "lesson-preview") return;
   if (state.activeSurface === "tools") return;
   if (state.activeSurface === "games") return;
   if (state.activeSurface === "explorations") return;
@@ -1238,6 +1248,7 @@ function ensureSurfaceWorkspace() {
 }
 
 function saveProgress(activity) {
+  if (getActiveWorkspace()?.authoring?.preview) return;
   state.progress.currentTopic = state.activeTopic;
   state.progress.currentWorkspaceId = state.activeWorkspaceId;
   state.progress.preferences.mode = state.mode;
@@ -1347,6 +1358,8 @@ function renderWorkspace() {
   els.currentTopic.textContent = state.activeTopic;
   els.lessonTitle.textContent = workspace.title;
   els.grid.className = `math-grid ${workspace.type}-grid`;
+  els.grid.dataset.lessonSpec = workspace.authoring?.spec || "";
+  els.grid.dataset.responseKind = workspace.responseContract?.kind || "";
   els.grid.innerHTML = "";
   removeDerivationScaffoldHelper();
   state.checkedCells.clear();
@@ -1927,7 +1940,8 @@ function toolLabel(tool) {
     "unit-circle": "Unit Circle",
     "complex-plane": "Complex Plane",
     graphing: "Graphing",
-    "number-theory": "Number Theory"
+    "number-theory": "Number Theory",
+    "lesson-builder": "Lesson Studio"
   }[tool] || "Random Number";
 }
 
@@ -1935,6 +1949,7 @@ function renderTools() {
   const activeTool = TOOL_IDS.includes(state.tools.activeTool) ? state.tools.activeTool : "random-number";
   state.tools.activeTool = activeTool;
   document.body.dataset.activeTool = activeTool;
+  if (state.activeSurface === "tools") document.title = activeTool === "lesson-builder" ? "Carry Lesson Studio" : "Carry";
   els.toolTabs.forEach((tab) => {
     tab.setAttribute("aria-selected", tab.dataset.tool === activeTool ? "true" : "false");
   });
@@ -4060,20 +4075,22 @@ function handleModClockKeydown(event) {
 
 function renderSurface() {
   const isScratchpad = state.activeSurface === "scratchpad";
+  const isLessonPreview = state.activeSurface === "lesson-preview";
   const isPhysics = state.activeSurface === "physics";
   const isTools = state.activeSurface === "tools";
   const isGames = state.activeSurface === "games";
   const isExplorations = state.activeSurface === "explorations";
   document.body.dataset.surface = state.activeSurface;
-  document.title = isScratchpad ? "Carry Scratchpad" : "Carry";
+  document.title = isScratchpad ? "Carry Scratchpad" : isLessonPreview ? "Carry Lesson Studio" : "Carry";
   els.lessonPanel.hidden = isScratchpad || isTools || isGames || isExplorations;
   els.scratchpadPanel.hidden = !isScratchpad;
   els.toolsPanel.hidden = !isTools;
   els.sudokuPanel.hidden = !isGames;
   els.explorationsPanel.hidden = !isExplorations;
-  els.topicPanel.hidden = isScratchpad || isTools || isGames || isExplorations;
-  els.workspaceLayout.classList.toggle("single-column", isScratchpad || isTools || isGames || isExplorations);
-  els.learnSurface.setAttribute("aria-pressed", !isScratchpad && !isPhysics && !isTools && !isGames && !isExplorations ? "true" : "false");
+  els.topicPanel.hidden = isScratchpad || isLessonPreview || isTools || isGames || isExplorations;
+  els.workspaceLayout.classList.toggle("single-column", isScratchpad || isLessonPreview || isTools || isGames || isExplorations);
+  els.lessonPreviewHeader.hidden = !isLessonPreview;
+  els.learnSurface.setAttribute("aria-pressed", !isScratchpad && !isLessonPreview && !isPhysics && !isTools && !isGames && !isExplorations ? "true" : "false");
   els.physicsSurface.setAttribute("aria-pressed", isPhysics ? "true" : "false");
   els.toolsSurface.setAttribute("aria-pressed", isTools ? "true" : "false");
   els.gamesSurface.setAttribute("aria-pressed", isGames ? "true" : "false");
@@ -4091,6 +4108,7 @@ function renderSurface() {
 }
 
 function setSurface(surface) {
+  if (lessonPreview && surface !== "lesson-preview") removeLessonPreview();
   state.activeSurface = surface;
   ensureSurfaceWorkspace();
   state.scratchpads.activeSurface = surface;
@@ -4450,13 +4468,14 @@ function createIntroMathFigure(rows, captionText, type = "concept") {
 
   const stack = document.createElement("div");
   stack.className = "intro-math-stack";
-  if (rows.filter((row) => splitTopLevelEquals(normalizePlainMathLine(row))).length > 1) {
+  const normalizedRows = rows.map((row) => normalizePlainMathLine(row));
+  if (normalizedRows.length > 1 && normalizedRows.every((row) => splitTopLevelEquals(row))) {
     stack.classList.add("align-equals");
   }
-  for (const row of rows) {
+  for (const row of normalizedRows) {
     const item = document.createElement("div");
     item.className = "intro-math-row";
-    appendAlignedMathLine(item, normalizePlainMathLine(row), "intro", stack.classList.contains("align-equals"));
+    appendAlignedMathLine(item, row, "intro", stack.classList.contains("align-equals"));
     stack.append(item);
   }
 
@@ -4503,7 +4522,12 @@ function staticMathFigureRows(workspace) {
     "diff-eq-first-order": ["\\frac{dP}{dt} = kP", "\\frac{dT}{dt} = -k(T - A)"],
     "diff-eq-second-order": ["x''(t) = a(t)", "m x'' + kx = 0"],
     "linear-matrix-addition": ["[[2,-1],[4,3]] + [[5,2],[-1,6]] = [[7,1],[3,9]]"],
-    "linear-matrix-multiplication": ["[[1,2],[3,4]]\\cdot[[5,6],[7,8]] = [[19,22],[43,50]]", "1\\cdot5 + 2\\cdot7 = 19"],
+    "linear-matrix-multiplication": [
+      "A=[[1,2],[3,4]]",
+      "B=[[5,6],[7,8]]",
+      "c_{11}=1\\cdot5 + 2\\cdot7 = 19",
+      "AB=[[19,22],[43,50]]"
+    ],
     "linear-eigenvectors-guided": ["A=[[2,1],[0,3]]", "\\operatorname{det}(A-\\lambda I)=(2-\\lambda)(3-\\lambda)", "A\\mathbf{v}=\\lambda\\mathbf{v}"],
     "probability-sample-space": ["S = \\{H, T\\}", "A \\subseteq S"],
     "probability-basic": ["P(A) = \\frac{\\text{favorable}}{\\text{total}}", "P(3) = \\frac{1}{6}"],
@@ -5643,7 +5667,7 @@ function addIntroRule(grid, row) {
 }
 
 function introFigureCaption(workspace) {
-  return window.CarryHowThisWorks?.introFigureCaption?.(workspace) || conceptFigureCaption(workspace.figure);
+  return workspace.figureCaption || window.CarryHowThisWorks?.introFigureCaption?.(workspace) || conceptFigureCaption(workspace.figure);
 }
 
 function updateProblemSetup(workspace) {
@@ -5909,6 +5933,67 @@ function getActiveWorkspace() {
     title: "Planned workspace",
     status: "planned"
   };
+}
+
+function runCompiledLesson(result) {
+  const compiledWorkspace = result?.compiled?.workspace;
+  if (!compiledWorkspace || !Array.isArray(compiledWorkspace.problems) || !compiledWorkspace.problems.length) return;
+
+  removeLessonPreview();
+  const isPhysics = String(result.spec?.subject || "math").toLowerCase() === "physics";
+  const previewId = isPhysics
+    ? `physics.preview.${compiledWorkspace.id.replace(/^physics\./, "")}`
+    : `preview.${compiledWorkspace.id}`;
+  const previewWorkspace = {
+    ...compiledWorkspace,
+    id: previewId,
+    title: `${compiledWorkspace.title} preview`,
+    authoring: { ...(compiledWorkspace.authoring || {}), preview: true }
+  };
+  const returnWorkspaceId = state.activeWorkspaceId;
+  const returnTopic = state.activeTopic;
+  conceptWorkspaces[previewId] = previewWorkspace;
+  workspaceRegistry[previewId] = previewWorkspace;
+  lessonPreview = { id: previewId, returnWorkspaceId, returnTopic };
+
+  state.activeSurface = "lesson-preview";
+  state.activeTopic = compiledWorkspace.topic;
+  state.activeWorkspaceId = previewId;
+  state.activeStep = 0;
+  state.selectedProblemIndex = 0;
+  state.showIntro = true;
+  state.mode = "guided";
+  renderSurface();
+  renderTopics();
+  renderWorkspace();
+  updateUrlFromState();
+  window.scrollTo({ top: 0, behavior: "auto" });
+}
+
+function removeLessonPreview() {
+  if (!lessonPreview) return;
+  const { id, returnWorkspaceId, returnTopic } = lessonPreview;
+  delete conceptWorkspaces[id];
+  delete workspaceRegistry[id];
+  delete state.customProblems[id];
+  if (state.activeWorkspaceId === id) {
+    state.activeWorkspaceId = returnWorkspaceId;
+    state.activeTopic = returnTopic;
+  }
+  lessonPreview = null;
+}
+
+function exitLessonPreview() {
+  removeLessonPreview();
+  state.activeSurface = "tools";
+  state.tools.activeTool = "lesson-builder";
+  state.scratchpads.activeSurface = "tools";
+  saveScratchpads();
+  renderSurface();
+  renderTopics();
+  renderTools();
+  updateUrlFromState();
+  window.setTimeout(() => document.querySelector("#lessonBuilderSource")?.focus({ preventScroll: true }), 0);
 }
 
 function buildConceptModel(workspace) {
@@ -9064,6 +9149,7 @@ function recordCapabilityAttempt(input, correct) {
   if (!capabilityIds.length) return;
 
   const workspace = getActiveWorkspace();
+  if (workspace.authoring?.preview) return;
   const problemId = workspace.problem?.id || state.currentModel?.id || "";
   const usedHint = state.hintedCells.has(input.dataset.cellId);
   const signature = [workspace.id, problemId, input.dataset.cellId, input.value, correct, usedHint].join("|");
@@ -9099,8 +9185,9 @@ function showHint() {
 }
 
 function completeLesson() {
-  const id = getActiveWorkspace().id;
-  if (!state.progress.completedLessons.includes(id)) {
+  const workspace = getActiveWorkspace();
+  const id = workspace.id;
+  if (!workspace.authoring?.preview && !state.progress.completedLessons.includes(id)) {
     state.progress.completedLessons.push(id);
   }
   visibleInputs().forEach((input) => {
@@ -9121,7 +9208,7 @@ function completeLesson() {
     "complete"
   );
   setLessonCompletionVisible(lessonSetComplete);
-  saveProgress(`Completed ${getActiveWorkspace().title.toLowerCase()}`);
+  saveProgress(`Completed ${workspace.title.toLowerCase()}`);
   updatePrimaryAction();
   updateStepText();
 }
@@ -9262,6 +9349,7 @@ function bindEvents() {
   });
   els.hintStep.addEventListener("click", showHint);
   els.startLesson.addEventListener("click", startCurrentLesson);
+  els.exitLessonPreview?.addEventListener("click", exitLessonPreview);
   els.autoAdvance.addEventListener("change", () => {
     saveProgress("Changed status settings");
     setStatus(els.autoAdvance.checked ? "Auto-advance is on." : "Auto-advance is off.", "");
@@ -9755,7 +9843,7 @@ function exportProgress() {
   anchor.download = "carry-backup.json";
   anchor.click();
   URL.revokeObjectURL(url);
-  setStatus("Backup exported: progress, scratchpads, games, and tools.", "correct");
+  setStatus("Backup exported: progress, scratchpads, games, tools, and lesson drafts.", "correct");
 }
 
 function createBackupPayload() {
@@ -9767,7 +9855,8 @@ function createBackupPayload() {
     progress: state.progress,
     scratchpads: state.scratchpads,
     games: state.games,
-    tools: state.tools
+    tools: state.tools,
+    lessonBuilder: lessonBuilderController?.exportState() || null
   };
 }
 
@@ -9789,6 +9878,7 @@ function applyImportedData(imported) {
       state.tools = { ...state.tools, ...imported.tools };
       saveTools();
     }
+    if (imported.lessonBuilder) lessonBuilderController?.importState(imported.lessonBuilder);
   }
 
   state.progress = {
@@ -9826,7 +9916,7 @@ function importProgress(event) {
       }
       updateUrlFromState({ replace: true });
       saveProgress("Imported progress");
-      setStatus(isBackup ? "Backup imported: progress, scratchpads, games, and tools." : "Progress imported.", "correct");
+      setStatus(isBackup ? "Backup imported: progress, scratchpads, games, tools, and lesson drafts." : "Progress imported.", "correct");
     } catch {
       setStatus("Choose a valid Carry backup or progress JSON file.", "incorrect");
     } finally {

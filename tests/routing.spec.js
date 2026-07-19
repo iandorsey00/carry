@@ -15,6 +15,7 @@ test("the main surfaces open from direct links", async ({ page }) => {
     ["/scratchpad", "#scratchpadInput"],
     ["/games/graph-color", "#graphColorFigure"],
     ["/tools/random-number", "#randomNumberTool"],
+    ["/tools/lesson-builder", "#lessonBuilderTool"],
   ]) {
     await page.goto(path);
     await expect(page.locator(marker)).toBeVisible();

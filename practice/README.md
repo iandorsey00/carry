@@ -3,11 +3,13 @@
 This directory is the migration home for Carry's learner-facing practice content.
 
 Current production state:
+- Carry Lesson Specification sources under `../authoring/lessons/` compile into `generated/carry-lessons.js` when an existing semantic engine can express the lesson.
 - Reusable lesson question data lives in curriculum-shaped files under `practice/`.
 - Long-operation workspace definitions live beside the arithmetic lesson files.
 - Some special-mode rendering and validation engines still live in `../app.js` while they are migrated safely.
 
 Recommended target:
+- Prefer CLS for data-only lessons using a cataloged engine, response kind, and figure renderer.
 - Keep practice content under `practice/`.
 - Put reusable question and answer data in small lesson modules.
 - Put special practice definitions beside the lesson they power when the lesson is curriculum-specific.
@@ -15,6 +17,8 @@ Recommended target:
 - Keep the app shell responsible for navigation, rendering containers, local persistence, import/export, and orchestration.
 
 This is intentionally a modular directory, not one large data file. "One place" means one practice boundary with a predictable structure.
+
+Do not edit `generated/carry-lessons.js` by hand. Edit the matching `.carry.json` source and run `npm run lessons:compile`. See `../authoring/README.md` for the AI and human authoring contract.
 
 Suggested shape:
 
