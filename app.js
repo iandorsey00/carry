@@ -1,6 +1,6 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-beta.50";
+const APP_VERSION = "0.1.0-beta.51";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 const GAMES_STORAGE_KEY = "carry.games.v1";
@@ -9020,6 +9020,7 @@ function misconceptionFeedbackForInput(input) {
   } catch {
     return "";
   }
+  // CLS misconceptions use the accepted-answer normalizer, never patterns or executable matching.
   const entered = answerVariants(input.value);
   const match = misconceptions.find((misconception) => {
     const expected = answerVariants(misconception.matches);

@@ -75,19 +75,27 @@ Authors should shorten prompts before trying to influence layout. If a structure
 
 The build command validates every production `.carry.json` file, compiles it into the existing workspace contract, and writes one deterministic browser module to `practice/generated/carry-lessons.js`. The generated file is committed so Carry remains a build-free static deployment.
 
+## Validation Layers
+
+The JSON Schema validates the general source shape and the four engine/response pairings. The compiler additionally performs catalog-aware and cross-reference validation that JSON Schema cannot express reliably. It rejects unknown figure parameters, missing required figure parameters, incorrect parameter types, unknown capability IDs, unknown transformation operations, invalid row references, duplicate edges, and incomplete or out-of-order transformation chains.
+
+`equation-transform` problems must contain transformations. Other engines must not contain them. A transformation must connect one row to the immediately following authored row, and every row after the first must have exactly one incoming transformation.
+
+Transformation metadata names the intended mathematical relationship between two completed rows. It does not authorize arbitrary symbolic rewriting, prove equivalence independently, or replace validation of the destination response slots.
+
 ## Reasoning Metadata
 
 CLS v1 accepts optional additive metadata without invalidating earlier v1 lessons:
 
 - `objectives` states what the learner should be able to do.
-- `requires` and `teaches` contain stable capability ids for future prerequisite maps and review recommendations.
+- `requires` and `teaches` contain capability IDs registered in the catalog for prerequisite maps and review recommendations. Add one canonical catalog entry before using a new capability ID.
 - problem `difficulty` may be `1` through `5`, or `introductory`, `developing`, or `challenging`.
-- figure `params` customize only the named parameters approved for that renderer in the catalog.
+- figure `params` customize only the named parameters approved for that renderer in the catalog. Catalog entries define type and whether each parameter is required.
 - a slot `hint` may remain a string or use contiguous `level1`, `level2`, and `level3` fields for progressive disclosure.
-- slot `misconceptions` match reviewed wrong expressions to focused feedback. They do not execute code or replace Carry's answer checker.
+- slot `misconceptions` match reviewed wrong expressions to focused feedback. `matches` is one exact incorrect form processed by the same bounded normalization pipeline as accepted answers. It is not a regular expression, wildcard, parser pattern, or algebraic-equivalence rule.
 - problem `transformations` connect derivation row ids with cataloged mathematical operations.
 
-Use `equation-transform` when the mathematical action connecting each row is part of the lesson. It uses Carry's reviewed guided-derivation surface, checks each resulting expression in order, and displays the named transformation that connects the rows. See `examples/differential-equations/separable-equation.carry.json` for a complete source file; the block below is an abbreviated metadata excerpt.
+Use `equation-transform` when the mathematical action connecting each row is part of the lesson. It uses Carry's reviewed guided-derivation surface, checks each resulting expression in order, and displays the named transformation that connects the rows. See `examples/differential-equations/separable-equation.carry.json` for a complete demonstration of the source shape. The example has one problem and is intentionally not production-ready; production lessons require at least eight reviewed problems. The block below is an abbreviated metadata excerpt.
 
 ```json
 {

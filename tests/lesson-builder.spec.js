@@ -100,7 +100,7 @@ test("Lesson Studio runs equation transformations with progressive guidance", as
       "Integrate both sides"
     ]);
     const activeInput = page.locator(".digit-input.active");
-    await activeInput.fill("y dy");
+    await activeInput.fill("y*dy");
     await page.locator("#checkStep").click();
     await expect(page.locator("#activityStatus")).toContainText("Dividing by y puts");
     await expect(page.locator("#activityStatus")).toContainText("it does not multiply dy by y");

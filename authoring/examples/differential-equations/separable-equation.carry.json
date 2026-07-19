@@ -73,7 +73,11 @@
         "id": "separable-example-3xy",
         "prompt": {
           "type": "paragraph",
-          "runs": [{ "text": "Solve " }, { "math": "dy/dx=3xy" }, { "text": "." }]
+          "runs": [
+            { "text": "Separate the variables and set up the two integrals for " },
+            { "math": "dy/dx=3xy" },
+            { "text": "." }
+          ]
         },
         "difficulty": 2,
         "transformations": [

@@ -25,12 +25,12 @@
     if (spec.spec !== SPEC_VERSION) issue("spec", `expected ${SPEC_VERSION}`);
     requireIdentifier(spec.id, "id", issue);
     requireIdentifier(spec.section, "section", issue);
-    requireText(spec.subject, "subject", issue);
-    requireText(spec.topic, "topic", issue);
-    requireText(spec.title, "title", issue);
+    requirePlainText(spec.subject, "subject", issue);
+    requirePlainText(spec.topic, "topic", issue);
+    requirePlainText(spec.title, "title", issue);
     validateTextList(spec.objectives, "objectives", issue, { plain: true });
-    validateIdentifierList(spec.requires, "requires", issue);
-    validateIdentifierList(spec.teaches, "teaches", issue);
+    validateIdentifierList(spec.requires, "requires", issue, options.catalog?.capabilities);
+    validateIdentifierList(spec.teaches, "teaches", issue, options.catalog?.capabilities);
 
     validateRegistration(spec.registration, issue);
     validateLearn(spec.learn, issue, options);
@@ -77,8 +77,10 @@
         const figureDefinition = catalogEntry(options.catalog?.figures, learn.figure.id);
         if (options.catalog?.figures && !figureDefinition) {
           issue("learn.figure.id", `unknown v1 figure ${learn.figure.id}`);
+        } else if (figureDefinition) {
+          validateFigureParams(learn.figure.params || {}, figureDefinition, "learn.figure.params", issue);
         } else if (learn.figure.params != null) {
-          validateFigureParams(learn.figure.params, figureDefinition, "learn.figure.params", issue);
+          validateFigureParams(learn.figure.params, null, "learn.figure.params", issue);
         }
       }
     }
@@ -198,6 +200,9 @@
       issue(`${path}.givens`, "expected an object");
       return;
     }
+    if (problem.transformations != null && engine !== "equation-transform") {
+      issue(`${path}.transformations`, "is only allowed for the equation-transform engine");
+    }
     if (engine === "matrix-operation") {
       rejectUnknown(givens, ["operation", "left", "right"], `${path}.givens`, issue);
       if (!new Set(["add", "subtract", "multiply"]).has(givens.operation)) {
@@ -220,7 +225,9 @@
     if (engine === "guided-derivation" || engine === "equation-transform") {
       rejectUnknown(givens, ["rows"], `${path}.givens`, issue);
       validateDerivationRows(givens.rows, `${path}.givens.rows`, issue);
-      validateTransformations(problem.transformations, givens.rows, engine, `${path}.transformations`, issue, options);
+      if (engine === "equation-transform") {
+        validateTransformations(problem.transformations, givens.rows, `${path}.transformations`, issue, options);
+      }
     }
   }
 
@@ -269,8 +276,8 @@
       requireIdentifier(row.id, `${rowPath}.id`, issue);
       if (ids.has(row.id)) issue(`${rowPath}.id`, "must be unique within the derivation");
       ids.add(row.id);
-      requireText(row.label, `${rowPath}.label`, issue);
-      requireText(row.relation, `${rowPath}.relation`, issue);
+      requirePlainText(row.label, `${rowPath}.label`, issue);
+      requireMath(row.relation, `${rowPath}.relation`, issue);
       validateDerivationSide(row.left, `${rowPath}.left`, issue);
       validateDerivationSide(row.right, `${rowPath}.right`, issue);
     });
@@ -291,12 +298,15 @@
     }
     rejectUnknown(side, ["kind", "response", "expected", "accepted", "display", "hint", "misconceptions", "label", "placeholder"], path, issue);
     if (side.response !== "expression") issue(`${path}.response`, "v1 derivation slots use expression responses");
-    requireText(side.expected, `${path}.expected`, issue);
+    requireMath(side.expected, `${path}.expected`, issue);
     requireMath(side.display || side.expected, `${path}.display`, issue);
     validateHint(side.hint, `${path}.hint`, issue);
-    requireText(side.label, `${path}.label`, issue);
+    requirePlainText(side.label, `${path}.label`, issue);
+    if (side.placeholder != null) requirePlainText(side.placeholder, `${path}.placeholder`, issue);
     if (side.accepted != null && (!Array.isArray(side.accepted) || side.accepted.some((value) => typeof value !== "string"))) {
       issue(`${path}.accepted`, "expected an array of strings");
+    } else {
+      (side.accepted || []).forEach((value, index) => requireMath(value, `${path}.accepted[${index}]`, issue));
     }
     validateMisconceptions(side.misconceptions, `${path}.misconceptions`, issue);
     const accepted = new Set([side.expected, ...(Array.isArray(side.accepted) ? side.accepted : [])]
@@ -370,7 +380,7 @@
     if (engine === "long-addition") return { id: problem.id, prompt, ...metadata, ...problem.givens };
     if (engine === "guided-derivation" || engine === "equation-transform") {
       const transformations = (problem.transformations || []).map((transformation) => ({
-        operation: transformation.operation || transformation.justification,
+        operation: transformation.operation,
         from: transformation.from,
         to: transformation.to
       }));
@@ -426,7 +436,7 @@
     });
   }
 
-  function validateIdentifierList(value, path, issue) {
+  function validateIdentifierList(value, path, issue, definitions) {
     if (value == null) return;
     if (!Array.isArray(value) || value.length === 0) {
       issue(path, "expected a nonempty array");
@@ -436,6 +446,7 @@
     value.forEach((entry, index) => {
       requireIdentifier(entry, `${path}[${index}]`, issue);
       if (seen.has(entry)) issue(`${path}[${index}]`, "must be unique");
+      if (definitions && !catalogEntry(definitions, entry)) issue(`${path}[${index}]`, `unknown capability ${entry}`);
       seen.add(entry);
     });
   }
@@ -447,6 +458,9 @@
     }
     const definitions = isObject(definition?.params) ? definition.params : {};
     rejectUnknown(params, Object.keys(definitions), path, issue);
+    Object.entries(definitions).forEach(([key, parameter]) => {
+      if (parameter?.required && !Object.hasOwn(params, key)) issue(`${path}.${key}`, "is required for this figure");
+    });
     Object.entries(params).forEach(([key, value]) => {
       const expected = definitions[key]?.type;
       const valuePath = `${path}.${key}`;
@@ -507,7 +521,7 @@
         return;
       }
       rejectUnknown(entry, ["matches", "feedback"], entryPath, issue);
-      requireText(entry.matches, `${entryPath}.matches`, issue);
+      requireMath(entry.matches, `${entryPath}.matches`, issue);
       requirePlainText(entry.feedback, `${entryPath}.feedback`, issue);
       const normalized = String(entry.matches || "").trim().toLowerCase();
       if (seen.has(normalized)) issue(`${entryPath}.matches`, "must be unique within the slot");
@@ -515,9 +529,9 @@
     });
   }
 
-  function validateTransformations(value, rows, engine, path, issue, options) {
+  function validateTransformations(value, rows, path, issue, options) {
     if (value == null) {
-      if (engine === "equation-transform") issue(path, "is required for the equation-transform engine");
+      issue(path, "is required for the equation-transform engine");
       return;
     }
     if (!Array.isArray(value) || value.length === 0) {
@@ -528,33 +542,41 @@
     const rowIds = new Set(rowList.map((row) => row?.id));
     const rowOrder = new Map(rowList.map((row, index) => [row?.id, index]));
     const targets = new Set();
+    const edges = new Set();
     value.forEach((entry, index) => {
       const entryPath = `${path}[${index}]`;
       if (!isObject(entry)) {
         issue(entryPath, "expected an object");
         return;
       }
-      rejectUnknown(entry, ["operation", "justification", "from", "to"], entryPath, issue);
-      const operation = entry.operation || entry.justification;
-      if (entry.operation && entry.justification) issue(entryPath, "use operation or justification, not both");
+      rejectUnknown(entry, ["operation", "from", "to"], entryPath, issue);
+      const operation = entry.operation;
       requireIdentifier(operation, `${entryPath}.operation`, issue);
       requireIdentifier(entry.from, `${entryPath}.from`, issue);
       requireIdentifier(entry.to, `${entryPath}.to`, issue);
       if (entry.from && !rowIds.has(entry.from)) issue(`${entryPath}.from`, "must identify a derivation row");
       if (entry.to && !rowIds.has(entry.to)) issue(`${entryPath}.to`, "must identify a derivation row");
-      if (rowOrder.has(entry.from) && rowOrder.has(entry.to) && rowOrder.get(entry.from) >= rowOrder.get(entry.to)) {
-        issue(`${entryPath}.to`, "must identify a later row");
+      if (entry.from && entry.from === entry.to) issue(`${entryPath}.to`, "must differ from from");
+      if (rowOrder.has(entry.from) && rowOrder.has(entry.to)) {
+        const fromIndex = rowOrder.get(entry.from);
+        const toIndex = rowOrder.get(entry.to);
+        if (fromIndex >= toIndex) {
+          issue(`${entryPath}.to`, "must identify a later row");
+        } else if (toIndex !== fromIndex + 1) {
+          issue(`${entryPath}.from`, "must identify the row immediately before to");
+        }
       }
+      const edge = `${entry.from}->${entry.to}`;
+      if (edges.has(edge)) issue(entryPath, "duplicates an existing transformation edge");
+      edges.add(edge);
       if (targets.has(entry.to)) issue(`${entryPath}.to`, "may have only one incoming transformation");
       targets.add(entry.to);
       const definition = catalogEntry(options.catalog?.transformations, operation);
       if (options.catalog?.transformations && !definition) issue(`${entryPath}.operation`, `unknown transformation ${operation}`);
     });
-    if (engine === "equation-transform") {
-      rowList.slice(1).forEach((row, index) => {
-        if (!targets.has(row?.id)) issue(`${path}`, `missing a transformation to row ${row?.id || index + 2}`);
-      });
-    }
+    rowList.slice(1).forEach((row, index) => {
+      if (!targets.has(row?.id)) issue(`${path}`, `missing a transformation to row ${row?.id || index + 2}`);
+    });
   }
 
   function catalogEntry(collection, id) {

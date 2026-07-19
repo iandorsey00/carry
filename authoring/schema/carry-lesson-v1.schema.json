@@ -9,15 +9,15 @@
     "$schema": { "type": "string" },
     "spec": { "const": "carry.lesson/v1" },
     "id": { "$ref": "#/$defs/identifier" },
-    "subject": { "type": "string", "minLength": 1 },
+    "subject": { "$ref": "#/$defs/plainText" },
     "section": { "$ref": "#/$defs/identifier" },
-    "topic": { "type": "string", "minLength": 1 },
-    "title": { "type": "string", "minLength": 1 },
+    "topic": { "$ref": "#/$defs/plainText" },
+    "title": { "$ref": "#/$defs/plainText" },
     "objectives": {
       "type": "array",
       "minItems": 1,
       "uniqueItems": true,
-      "items": { "type": "string", "minLength": 1, "pattern": "^[^<>]+$" }
+      "items": { "$ref": "#/$defs/plainText" }
     },
     "requires": {
       "type": "array",
@@ -45,7 +45,7 @@
           "required": ["kind", "key"],
           "properties": {
             "kind": { "const": "long-operation" },
-            "key": { "type": "string", "minLength": 1 }
+            "key": { "$ref": "#/$defs/plainText" }
           }
         }
       ]
@@ -54,6 +54,16 @@
     "practice": { "$ref": "#/$defs/practice" }
   },
   "$defs": {
+    "plainText": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[^<>]+$"
+    },
+    "mathSource": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[^<>]+$"
+    },
     "identifier": {
       "type": "string",
       "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$"
@@ -64,13 +74,13 @@
           "type": "object",
           "additionalProperties": false,
           "required": ["text"],
-          "properties": { "text": { "type": "string", "minLength": 1, "pattern": "^[^<>]+$" } }
+          "properties": { "text": { "$ref": "#/$defs/plainText" } }
         },
         {
           "type": "object",
           "additionalProperties": false,
           "required": ["math"],
-          "properties": { "math": { "type": "string", "minLength": 1, "pattern": "^[^<>]+$" } }
+          "properties": { "math": { "$ref": "#/$defs/mathSource" } }
         }
       ]
     },
@@ -91,7 +101,7 @@
           "required": ["type", "tex"],
           "properties": {
             "type": { "const": "math" },
-            "tex": { "type": "string", "minLength": 1, "pattern": "^[^<>]+$" }
+            "tex": { "$ref": "#/$defs/mathSource" }
           }
         }
       ]
@@ -108,12 +118,12 @@
           "properties": {
             "renderer": { "const": "carry" },
             "id": { "$ref": "#/$defs/identifier" },
-            "caption": { "type": "string", "minLength": 1 },
+            "caption": { "$ref": "#/$defs/plainText" },
             "params": {
               "type": "object",
               "additionalProperties": {
                 "oneOf": [
-                  { "type": "string", "minLength": 1, "pattern": "^[^<>]+$" },
+                  { "$ref": "#/$defs/mathSource" },
                   { "type": "number" },
                   { "type": "boolean" }
                 ]
@@ -130,7 +140,7 @@
             "additionalProperties": false,
             "required": ["math", "note"],
             "properties": {
-              "math": { "type": "string", "minLength": 1, "pattern": "^[^<>]+$" },
+              "math": { "$ref": "#/$defs/mathSource" },
               "note": { "$ref": "#/$defs/contentBlock" }
             }
           }
@@ -166,7 +176,7 @@
       "required": ["kind", "math"],
       "properties": {
         "kind": { "const": "fixed" },
-        "math": { "type": "string", "minLength": 1, "pattern": "^[^<>]+$" }
+        "math": { "$ref": "#/$defs/mathSource" }
       }
     },
     "slotSide": {
@@ -176,30 +186,30 @@
       "properties": {
         "kind": { "const": "slot" },
         "response": { "const": "expression" },
-        "expected": { "type": "string", "minLength": 1 },
-        "accepted": { "type": "array", "items": { "type": "string" } },
-        "display": { "type": "string", "minLength": 1, "pattern": "^[^<>]+$" },
+        "expected": { "$ref": "#/$defs/mathSource" },
+        "accepted": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/mathSource" } },
+        "display": { "$ref": "#/$defs/mathSource" },
         "hint": { "$ref": "#/$defs/hint" },
         "misconceptions": {
           "type": "array",
           "minItems": 1,
           "items": { "$ref": "#/$defs/misconception" }
         },
-        "label": { "type": "string", "minLength": 1 },
-        "placeholder": { "type": "string" }
+        "label": { "$ref": "#/$defs/plainText" },
+        "placeholder": { "$ref": "#/$defs/plainText" }
       }
     },
     "hint": {
       "oneOf": [
-        { "type": "string", "minLength": 1, "pattern": "^[^<>]+$" },
+        { "$ref": "#/$defs/plainText" },
         {
           "type": "object",
           "additionalProperties": false,
           "required": ["level1"],
           "properties": {
-            "level1": { "type": "string", "minLength": 1, "pattern": "^[^<>]+$" },
-            "level2": { "type": "string", "minLength": 1, "pattern": "^[^<>]+$" },
-            "level3": { "type": "string", "minLength": 1, "pattern": "^[^<>]+$" }
+            "level1": { "$ref": "#/$defs/plainText" },
+            "level2": { "$ref": "#/$defs/plainText" },
+            "level3": { "$ref": "#/$defs/plainText" }
           },
           "dependentRequired": { "level3": ["level2"] }
         }
@@ -210,24 +220,19 @@
       "additionalProperties": false,
       "required": ["matches", "feedback"],
       "properties": {
-        "matches": { "type": "string", "minLength": 1 },
-        "feedback": { "type": "string", "minLength": 1, "pattern": "^[^<>]+$" }
+        "matches": { "$ref": "#/$defs/mathSource" },
+        "feedback": { "$ref": "#/$defs/plainText" }
       }
     },
     "transformation": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["from", "to"],
+      "required": ["operation", "from", "to"],
       "properties": {
         "operation": { "$ref": "#/$defs/identifier" },
-        "justification": { "$ref": "#/$defs/identifier" },
         "from": { "$ref": "#/$defs/identifier" },
         "to": { "$ref": "#/$defs/identifier" }
-      },
-      "oneOf": [
-        { "required": ["operation"], "not": { "required": ["justification"] } },
-        { "required": ["justification"], "not": { "required": ["operation"] } }
-      ]
+      }
     },
     "derivationRow": {
       "type": "object",
@@ -235,9 +240,9 @@
       "required": ["id", "label", "left", "relation", "right"],
       "properties": {
         "id": { "$ref": "#/$defs/identifier" },
-        "label": { "type": "string", "minLength": 1 },
+        "label": { "$ref": "#/$defs/plainText" },
         "left": { "oneOf": [{ "$ref": "#/$defs/fixedSide" }, { "$ref": "#/$defs/slotSide" }] },
-        "relation": { "type": "string", "minLength": 1 },
+        "relation": { "$ref": "#/$defs/mathSource" },
         "right": { "oneOf": [{ "$ref": "#/$defs/fixedSide" }, { "$ref": "#/$defs/slotSide" }] }
       }
     },
@@ -300,7 +305,54 @@
         "engine": { "enum": ["matrix-operation", "long-addition", "guided-derivation", "equation-transform"] },
         "response": { "$ref": "#/$defs/response" },
         "problems": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/problem" } }
-      }
+      },
+      "allOf": [
+        {
+          "oneOf": [
+            {
+              "properties": {
+                "engine": { "const": "matrix-operation" },
+                "response": { "properties": { "kind": { "const": "matrix" } } }
+              }
+            },
+            {
+              "properties": {
+                "engine": { "const": "long-addition" },
+                "response": { "properties": { "kind": { "const": "digit-grid" } } }
+              }
+            },
+            {
+              "properties": {
+                "engine": { "const": "guided-derivation" },
+                "response": { "properties": { "kind": { "const": "derivation" } } }
+              }
+            },
+            {
+              "properties": {
+                "engine": { "const": "equation-transform" },
+                "response": { "properties": { "kind": { "const": "transformation" } } }
+              }
+            }
+          ]
+        },
+        {
+          "if": {
+            "properties": { "engine": { "const": "equation-transform" } }
+          },
+          "then": {
+            "properties": {
+              "problems": { "items": { "required": ["transformations"] } }
+            }
+          },
+          "else": {
+            "properties": {
+              "problems": {
+                "items": { "not": { "required": ["transformations"] } }
+              }
+            }
+          }
+        }
+      ]
     }
   }
 }

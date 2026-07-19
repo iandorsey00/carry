@@ -105,12 +105,76 @@ test("CLS rejects incompatible matrices before they reach the learner", () => {
 test("CLS rejects unreviewed figure parameters and transformations", () => {
   const invalid = structuredClone(separable);
   invalid.learn.figure.params.unreviewed = true;
+  invalid.learn.figure.params.coefficient = "3";
   invalid.practice.problems[0].transformations[0].operation = "teleport-terms";
   invalid.practice.problems[0].transformations[1].to = "missing-row";
 
   const result = validateLesson(invalid, { catalog });
   assert.equal(result.valid, false);
   assert.ok(result.issues.some((issue) => issue.includes("learn.figure.params.unreviewed")));
+  assert.ok(result.issues.some((issue) => issue.includes("learn.figure.params.coefficient") && issue.includes("finite number")));
   assert.ok(result.issues.some((issue) => issue.includes("unknown transformation teleport-terms")));
   assert.ok(result.issues.some((issue) => issue.includes("must identify a derivation row")));
+});
+
+test("CLS enforces engine response and transformation boundaries", () => {
+  const wrongResponse = structuredClone(separable);
+  wrongResponse.practice.response.kind = "matrix";
+  let result = validateLesson(wrongResponse, { catalog });
+  assert.equal(result.valid, false);
+  assert.ok(result.issues.some((issue) => issue.includes("expected transformation for this engine")));
+
+  const missingTransformations = structuredClone(separable);
+  delete missingTransformations.practice.problems[0].transformations;
+  result = validateLesson(missingTransformations, { catalog });
+  assert.equal(result.valid, false);
+  assert.ok(result.issues.some((issue) => issue.includes("required for the equation-transform engine")));
+
+  const wrongEngine = structuredClone(separable);
+  wrongEngine.practice.engine = "guided-derivation";
+  wrongEngine.practice.response.kind = "derivation";
+  result = validateLesson(wrongEngine, { catalog });
+  assert.equal(result.valid, false);
+  assert.ok(result.issues.some((issue) => issue.includes("only allowed for the equation-transform engine")));
+});
+
+test("CLS requires a complete adjacent transformation chain", () => {
+  const invalid = structuredClone(separable);
+  invalid.practice.problems[0].transformations = [
+    { operation: "integrate-both-sides", from: "start", to: "integrals" },
+    { operation: "integrate-both-sides", from: "start", to: "integrals" }
+  ];
+
+  const result = validateLesson(invalid, { catalog });
+  assert.equal(result.valid, false);
+  assert.ok(result.issues.some((issue) => issue.includes("immediately before")));
+  assert.ok(result.issues.some((issue) => issue.includes("duplicates an existing transformation edge")));
+  assert.ok(result.issues.some((issue) => issue.includes("missing a transformation to row separate")));
+
+  const selfReference = structuredClone(separable);
+  selfReference.practice.problems[0].transformations[0].to = "start";
+  const selfResult = validateLesson(selfReference, { catalog });
+  assert.equal(selfResult.valid, false);
+  assert.ok(selfResult.issues.some((issue) => issue.includes("must differ from from")));
+});
+
+test("CLS rejects justification aliases, unknown capabilities, unsafe strings, and missing required figure params", () => {
+  const invalid = structuredClone(separable);
+  invalid.requires = ["calculus.typo"];
+  invalid.practice.problems[0].transformations[0] = {
+    justification: "separate-variables",
+    from: "start",
+    to: "separate"
+  };
+  invalid.practice.problems[0].givens.rows[1].left.accepted = ["<b>dy/y</b>"];
+  const strictCatalog = structuredClone(catalog);
+  strictCatalog.figures["diff-eq-separable"].params.equation.required = true;
+  delete invalid.learn.figure.params.equation;
+
+  const result = validateLesson(invalid, { catalog: strictCatalog });
+  assert.equal(result.valid, false);
+  assert.ok(result.issues.some((issue) => issue.includes("unknown capability calculus.typo")));
+  assert.ok(result.issues.some((issue) => issue.includes("justification") && issue.includes("not part")));
+  assert.ok(result.issues.some((issue) => issue.includes("raw markup is not allowed in math source")));
+  assert.ok(result.issues.some((issue) => issue.includes("learn.figure.params.equation") && issue.includes("required")));
 });

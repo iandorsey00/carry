@@ -28,8 +28,8 @@
     "diff-eq-separable": {
       "description": "A separation-of-variables equation sequence.",
       "params": {
-        "equation": { "type": "math" },
-        "coefficient": { "type": "number" }
+        "equation": { "type": "math", "required": false },
+        "coefficient": { "type": "number", "required": false }
       }
     },
     "linear-matrix-multiplication": {
@@ -46,5 +46,10 @@
     "factor": { "label": "Factor" },
     "divide-both-sides": { "label": "Divide both sides" },
     "multiply-both-sides": { "label": "Multiply both sides" }
+  },
+  "capabilities": {
+    "calculus.integration": { "label": "Integration" },
+    "calculus.chain-rule": { "label": "Chain rule" },
+    "differential-equations.separation-of-variables": { "label": "Separation of variables" }
   }
 }
