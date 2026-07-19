@@ -1,6 +1,6 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-beta.49";
+const APP_VERSION = "0.1.0-beta.50";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 const GAMES_STORAGE_KEY = "carry.games.v1";
@@ -513,6 +513,7 @@ const state = {
   currentModel: null,
   checkedCells: new Map(),
   hintedCells: new Set(),
+  hintLevelsShown: new Map(),
   recordedAttemptSignatures: new Set(),
   autoAdvancedToStep: null
 };
@@ -1364,6 +1365,7 @@ function renderWorkspace() {
   removeDerivationScaffoldHelper();
   state.checkedCells.clear();
   state.hintedCells.clear();
+  state.hintLevelsShown.clear();
   state.recordedAttemptSignatures.clear();
   state.autoAdvancedToStep = null;
 
@@ -4147,6 +4149,7 @@ function renderIntroCopy(workspace) {
   const isProcedural = workspace.type !== "concept";
   const sections = document.createElement("div");
   sections.className = "intro-sections";
+  if (workspace.objectives?.length) sections.append(createIntroSection("Learning objectives", workspace.objectives));
   sections.append(createIntroSection("Core idea", items, isProcedural), createWorkedExampleSection(workspace));
 
   const studioMove = lessonStudioItems(workspace);
@@ -4500,6 +4503,14 @@ function supplementalIntroFigures(workspace) {
 }
 
 function staticMathFigureRows(workspace) {
+  if (workspace.figure === "diff-eq-separable" && workspace.figureParams) {
+    const equation = workspace.figureParams.equation || "\\frac{dy}{dx}=3xy";
+    const coefficient = Number.isFinite(workspace.figureParams.coefficient)
+      ? workspace.figureParams.coefficient
+      : 3;
+    return [equation, `\\frac{1}{y}\\,dy = ${coefficient}x\\,dx`];
+  }
+
   const byFigure = {
     "fraction-bar": ["\\frac{3}{4}", "\\frac{6}{8} = \\frac{3}{4}"],
     "mixed-review": ["38 + 47 = 85", "96 ÷ 8 = 12"],
@@ -6866,7 +6877,15 @@ function renderGuidedDerivationGrid(model) {
       element.dataset.firstSequence = String(firstSequence);
     };
 
-    attributes(addCell({ row: row.row, col: 1, value: row.label, className: "row-label derivation-label" }));
+    const rowLabel = addCell({ row: row.row, col: 1, value: row.label, className: "row-label derivation-label" });
+    if (row.transformation?.operation) {
+      const reason = document.createElement("span");
+      reason.className = "derivation-transformation";
+      reason.textContent = transformationLabel(row.transformation.operation);
+      rowLabel.append(reason);
+      rowLabel.setAttribute("aria-label", `${row.label}. Transformation: ${reason.textContent}.`);
+    }
+    attributes(rowLabel);
     for (const [side, col] of [["left", 2], ["right", 4]]) {
       const cellId = row[`${side}CellId`];
       const inputCell = cellId ? model.cells.find((cell) => cell.id === cellId) : null;
@@ -6900,6 +6919,16 @@ function renderGuidedDerivationGrid(model) {
     }
     attributes(addCell({ row: row.row, col: 3, value: row.relation || "=", className: "operator" }));
   }
+}
+
+function transformationLabel(operation) {
+  const labels = {
+    "separate-variables": "Separate variables",
+    "integrate-both-sides": "Integrate both sides",
+    "divide-both-sides": "Divide both sides",
+    "multiply-both-sides": "Multiply both sides"
+  };
+  return labels[operation] || String(operation || "").replace(/-/g, " ").replace(/^./, (character) => character.toUpperCase());
 }
 
 function renderMatrixOperationGrid(model) {
@@ -8388,6 +8417,8 @@ function addInput(cell) {
     input.dataset.answers = JSON.stringify(cell.answers);
   }
   input.dataset.hint = cell.hint;
+  input.dataset.hints = JSON.stringify(cell.hints?.length ? cell.hints : [cell.hint].filter(Boolean));
+  input.dataset.misconceptions = JSON.stringify(cell.misconceptions || []);
   input.dataset.label = cell.label;
   input.dataset.feedback = cell.feedback || "";
   input.dataset.capabilities = JSON.stringify(cell.capabilities || []);
@@ -8961,6 +8992,8 @@ function feedbackForInput(input) {
         : "Use the main idea from the lesson, then compare the choices again.";
     return selected ? `Not quite. You chose ${selected}. ${feedback}` : feedback;
   }
+  const misconception = misconceptionFeedbackForInput(input);
+  if (misconception) return `Not yet. ${misconception}`;
   if (input.dataset.feedback) return input.dataset.feedback;
   const label = answerValue(input.dataset.label);
   const hint = input.dataset.hint;
@@ -8977,6 +9010,22 @@ function feedbackForInput(input) {
   if (label.includes("factor")) return "Multiply your factors back out to check the original expression.";
   if (label.includes("degree") || label.includes("polynomial")) return "Match variable powers carefully before combining or naming the degree.";
   return input.inputMode === "numeric" ? "Try another digit." : "Try another entry.";
+}
+
+function misconceptionFeedbackForInput(input) {
+  if (!input.value.trim() || !input.dataset.misconceptions) return "";
+  let misconceptions = [];
+  try {
+    misconceptions = JSON.parse(input.dataset.misconceptions);
+  } catch {
+    return "";
+  }
+  const entered = answerVariants(input.value);
+  const match = misconceptions.find((misconception) => {
+    const expected = answerVariants(misconception.matches);
+    return [...expected].some((value) => entered.has(value));
+  });
+  return match?.feedback ? stripMathTags(match.feedback) : "";
 }
 
 function successForInput(input) {
@@ -9180,8 +9229,23 @@ function showHint() {
   if (!target) return;
   target.classList.add("hint");
   if (target.dataset.cellId) state.hintedCells.add(target.dataset.cellId);
-  setStatus(target.dataset.hint, "hint");
+  const hints = hintLevelsForInput(target);
+  const key = target.dataset.cellId || target.dataset.label || "active-hint";
+  const nextIndex = Math.min(state.hintLevelsShown.get(key) || 0, Math.max(0, hints.length - 1));
+  state.hintLevelsShown.set(key, Math.min(nextIndex + 1, hints.length));
+  const prefix = hints.length > 1 ? `Hint ${nextIndex + 1} of ${hints.length}. ` : "";
+  setStatus(`${prefix}${hints[nextIndex] || target.dataset.hint || "Use the current step."}`, "hint");
   saveProgress("Used a hint");
+}
+
+function hintLevelsForInput(input) {
+  if (!input.dataset.hints) return [input.dataset.hint].filter(Boolean);
+  try {
+    const hints = JSON.parse(input.dataset.hints);
+    return Array.isArray(hints) && hints.length ? hints.map(String) : [input.dataset.hint].filter(Boolean);
+  } catch {
+    return [input.dataset.hint].filter(Boolean);
+  }
 }
 
 function completeLesson() {

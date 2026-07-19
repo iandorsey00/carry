@@ -14,8 +14,9 @@ CLS is not JavaScript, HTML, SVG, MathML, or an answer-checking service. A lesso
 6. Select an engine and its matching response kind. The response describes what the learner enters, not how the controls are laid out.
 7. Give every lesson and problem a stable lowercase id. Do not recycle deleted ids.
 8. Give each response slot one expected value, any genuinely equivalent accepted forms, a contextual hint, and a concise label.
-9. Include at least eight problems before moving a CLS lesson into production.
-10. Run `npm run lessons:compile`, then `npm run check`.
+9. Describe reasoning with cataloged transformations; do not encode a validator or UI sequence in lesson data.
+10. Include at least eight problems before moving a CLS lesson into production.
+11. Run `npm run lessons:compile`, then `npm run check`.
 
 ## Mobile And Accessibility Rules
 
@@ -73,6 +74,45 @@ Authors should shorten prompts before trying to influence layout. If a structure
 ```
 
 The build command validates every production `.carry.json` file, compiles it into the existing workspace contract, and writes one deterministic browser module to `practice/generated/carry-lessons.js`. The generated file is committed so Carry remains a build-free static deployment.
+
+## Reasoning Metadata
+
+CLS v1 accepts optional additive metadata without invalidating earlier v1 lessons:
+
+- `objectives` states what the learner should be able to do.
+- `requires` and `teaches` contain stable capability ids for future prerequisite maps and review recommendations.
+- problem `difficulty` may be `1` through `5`, or `introductory`, `developing`, or `challenging`.
+- figure `params` customize only the named parameters approved for that renderer in the catalog.
+- a slot `hint` may remain a string or use contiguous `level1`, `level2`, and `level3` fields for progressive disclosure.
+- slot `misconceptions` match reviewed wrong expressions to focused feedback. They do not execute code or replace Carry's answer checker.
+- problem `transformations` connect derivation row ids with cataloged mathematical operations.
+
+Use `equation-transform` when the mathematical action connecting each row is part of the lesson. It uses Carry's reviewed guided-derivation surface, checks each resulting expression in order, and displays the named transformation that connects the rows. See `examples/differential-equations/separable-equation.carry.json` for a complete source file; the block below is an abbreviated metadata excerpt.
+
+```json
+{
+  "objectives": ["Separate variables before integrating."],
+  "requires": ["calculus.integration"],
+  "teaches": ["differential-equations.separation-of-variables"],
+  "practice": {
+    "engine": "equation-transform",
+    "response": {
+      "kind": "transformation",
+      "entry": "expression",
+      "traversal": "guided"
+    },
+    "problems": [
+      {
+        "id": "example",
+        "difficulty": 2,
+        "transformations": [
+          { "operation": "separate-variables", "from": "start", "to": "separate" }
+        ]
+      }
+    ]
+  }
+}
+```
 
 ## Lesson Studio
 

@@ -78,6 +78,40 @@ test("Lesson Studio runs compiled CLS without persisting the custom session", as
   });
 });
 
+test("Lesson Studio runs equation transformations with progressive guidance", async ({ page }) => {
+  await expectNoPageErrors(page, async () => {
+    const source = await fs.readFile(
+      "authoring/examples/differential-equations/separable-equation.carry.json",
+      "utf8"
+    );
+    await freshPage(page, "/tools/lesson-builder");
+    await page.locator("#lessonBuilderSource").fill(source);
+    await page.locator("#compileLessonSource").click();
+    await expect(page.locator("#lessonBuilderStatus")).toContainText("Compiled Separable equation example");
+    await page.locator("#runCompiledLesson").click();
+
+    await expect(page).toHaveURL(/\/tools\/lesson-builder\/run/);
+    await expect(page.locator("#introCopy")).toContainText("Learning objectives");
+    await expect(page.locator("#introCopy")).toContainText("Divide by y");
+    await page.locator("#startLesson").click();
+
+    await expect(page.locator(".derivation-transformation")).toContainText([
+      "Separate variables",
+      "Integrate both sides"
+    ]);
+    const activeInput = page.locator(".digit-input.active");
+    await activeInput.fill("y dy");
+    await page.locator("#checkStep").click();
+    await expect(page.locator("#activityStatus")).toContainText("Dividing by y puts");
+    await expect(page.locator("#activityStatus")).toContainText("it does not multiply dy by y");
+
+    await page.locator("#hintStep").click();
+    await expect(page.locator("#activityStatus")).toContainText("Hint 1 of 3");
+    await page.locator("#hintStep").click();
+    await expect(page.locator("#activityStatus")).toContainText("Hint 2 of 3");
+  });
+});
+
 test("Lesson Studio remains usable at a narrow mobile viewport", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await freshPage(page, "/tools/lesson-builder");

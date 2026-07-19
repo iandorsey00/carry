@@ -255,6 +255,7 @@
       },
       "authoring": {
         "spec": "carry.lesson/v1",
+        "engine": "matrix-operation",
         "source": "authoring/lessons/linear-algebra/matrix-multiplication.carry.json"
       }
     }

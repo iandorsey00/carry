@@ -229,20 +229,22 @@
         return;
       }
       try {
-        const [guideResponse, catalogResponse, schemaResponse, exampleResponse] = await Promise.all([
+        const [guideResponse, catalogResponse, schemaResponse, exampleResponse, reasoningExampleResponse] = await Promise.all([
           fetcher("/authoring/README.md"),
           fetcher("/authoring/catalogs/carry-v1.json"),
           fetcher("/authoring/schema/carry-lesson-v1.schema.json"),
-          fetcher("/authoring/examples/arithmetic/long-addition.carry.json")
+          fetcher("/authoring/examples/arithmetic/long-addition.carry.json"),
+          fetcher("/authoring/examples/differential-equations/separable-equation.carry.json")
         ]);
-        for (const response of [guideResponse, catalogResponse, schemaResponse, exampleResponse]) {
+        for (const response of [guideResponse, catalogResponse, schemaResponse, exampleResponse, reasoningExampleResponse]) {
           if (!response.ok) throw new Error(`Request failed with ${response.status}`);
         }
-        const [guide, loadedCatalog, schema, example] = await Promise.all([
+        const [guide, loadedCatalog, schema, example, reasoningExample] = await Promise.all([
           guideResponse.text(),
           catalogResponse.json(),
           schemaResponse.json(),
-          exampleResponse.text()
+          exampleResponse.text(),
+          reasoningExampleResponse.text()
         ]);
         catalog = loadedCatalog;
         exampleSource = example.trim();
@@ -255,6 +257,10 @@
           "## Carry Lesson Specification v1 schema",
           "```json",
           JSON.stringify(schema, null, 2),
+          "```",
+          "## Equation transformation example",
+          "```json",
+          reasoningExample.trim(),
           "```"
         ].join("\n\n");
         elements.handoff.textContent = handoffText;

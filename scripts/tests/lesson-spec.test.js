@@ -39,9 +39,46 @@ test("CLS supports digit-grid and derivation response contracts without layout d
 
   const derivation = compileLesson(separable, { catalog });
   assert.equal(derivation.workspace.type, "guided-derivation");
-  assert.equal(derivation.workspace.responseContract.kind, "derivation");
+  assert.equal(derivation.workspace.authoring.engine, "equation-transform");
+  assert.equal(derivation.workspace.responseContract.kind, "transformation");
+  assert.deepEqual(derivation.workspace.objectives, [
+    "Recognize a separable differential equation.",
+    "Collect each variable beside its differential.",
+    "Write the two integrals before evaluating them."
+  ]);
+  assert.deepEqual(derivation.workspace.requires, ["calculus.integration", "calculus.chain-rule"]);
+  assert.deepEqual(derivation.workspace.figureParams, { equation: "\\frac{dy}{dx}=3xy", coefficient: 3 });
+  assert.equal(derivation.workspace.problems[0].difficulty, 2);
+  assert.equal(derivation.workspace.problems[0].rows[1].transformation.operation, "separate-variables");
   assert.deepEqual(derivation.workspace.problems[0].rows[1].left.answers, ["dy/y", "(1/y)dy"]);
   assert.equal(derivation.workspace.problems[0].rows[1].left.math, "\\frac{1}{y}\\,dy");
+  assert.equal(derivation.workspace.problems[0].rows[1].left.hints.length, 3);
+  assert.equal(derivation.workspace.problems[0].rows[1].left.misconceptions[0].matches, "y dy");
+});
+
+test("CLS keeps earlier v1 derivation lessons valid", () => {
+  const legacy = structuredClone(separable);
+  delete legacy.objectives;
+  delete legacy.requires;
+  delete legacy.teaches;
+  delete legacy.learn.figure.params;
+  legacy.practice.engine = "guided-derivation";
+  legacy.practice.response.kind = "derivation";
+  delete legacy.practice.problems[0].difficulty;
+  delete legacy.practice.problems[0].transformations;
+  for (const row of legacy.practice.problems[0].givens.rows) {
+    for (const side of [row.left, row.right]) {
+      if (side.kind !== "slot") continue;
+      if (typeof side.hint === "object") side.hint = side.hint.level1;
+      delete side.misconceptions;
+    }
+  }
+
+  const result = validateLesson(legacy, { catalog });
+  assert.deepEqual(result.issues, []);
+  const compiled = compileLesson(legacy, { catalog });
+  assert.equal(compiled.workspace.authoring.engine, "guided-derivation");
+  assert.equal(compiled.workspace.problems[0].rows[1].left.hints.length, 1);
 });
 
 test("CLS rejects raw markup, unknown figures, and author-supplied responsive layout", () => {
@@ -63,4 +100,17 @@ test("CLS rejects incompatible matrices before they reach the learner", () => {
   const result = validateLesson(invalid, { catalog });
   assert.equal(result.valid, false);
   assert.ok(result.issues.some((issue) => issue.includes("matching inner dimensions")));
+});
+
+test("CLS rejects unreviewed figure parameters and transformations", () => {
+  const invalid = structuredClone(separable);
+  invalid.learn.figure.params.unreviewed = true;
+  invalid.practice.problems[0].transformations[0].operation = "teleport-terms";
+  invalid.practice.problems[0].transformations[1].to = "missing-row";
+
+  const result = validateLesson(invalid, { catalog });
+  assert.equal(result.valid, false);
+  assert.ok(result.issues.some((issue) => issue.includes("learn.figure.params.unreviewed")));
+  assert.ok(result.issues.some((issue) => issue.includes("unknown transformation teleport-terms")));
+  assert.ok(result.issues.some((issue) => issue.includes("must identify a derivation row")));
 });

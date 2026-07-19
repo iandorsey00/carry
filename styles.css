@@ -3638,13 +3638,25 @@ body[data-surface="scratchpad"] .scratch-line-math-aligned {
 }
 
 .derivation-label {
+  flex-direction: column;
+  align-items: flex-end;
   justify-content: flex-end;
+  gap: 4px;
   color: var(--muted);
   font-size: 12px;
   font-weight: 800;
   text-align: right;
   text-transform: uppercase;
   white-space: nowrap;
+}
+
+.derivation-transformation {
+  color: var(--accent);
+  font-size: 10px;
+  font-weight: 750;
+  line-height: 1.15;
+  text-transform: none;
+  white-space: normal;
 }
 
 .derivation-expression,

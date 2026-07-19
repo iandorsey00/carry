@@ -5,13 +5,16 @@
   if (typeof module !== "undefined" && module.exports) module.exports = api;
 })(typeof window !== "undefined" ? window : globalThis, function createGuidedDerivationEngine() {
   function slot(answer, options = {}) {
+    const hints = [...new Set([...(options.hints || []), options.hint].filter(Boolean).map(String))];
     return {
       answer: String(answer),
       answers: [...new Set([answer, ...(options.answers || [])].map(String))],
-      hint: options.hint || "Use the current equation to make one equivalent step.",
+      hint: hints[0] || "Use the current equation to make one equivalent step.",
+      hints: hints.length ? hints : ["Use the current equation to make one equivalent step."],
       label: options.label || "Enter the next expression",
       math: options.math || String(answer),
       feedback: options.feedback || "",
+      misconceptions: Array.isArray(options.misconceptions) ? options.misconceptions : [],
       placeholder: options.placeholder || "",
       scaffold: options.scaffold || null
     };
@@ -42,13 +45,16 @@
           sequence,
           label: definition.label,
           hint: definition.hint,
+          hints: definition.hints || [definition.hint],
           feedback: definition.feedback || "",
+          misconceptions: definition.misconceptions || [],
           math: definition.math,
           placeholder: definition.placeholder,
           scaffold: definition.scaffold,
           inputMode: "text",
           stageId,
-          capabilities
+          capabilities,
+          transformation: row.transformation || null
         });
         next[`${side}CellId`] = id;
         sequence += 1;

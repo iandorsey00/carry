@@ -6,11 +6,22 @@
   "section": "differential-equations",
   "topic": "Differential Equations",
   "title": "Separable equation example",
+  "objectives": [
+    "Recognize a separable differential equation.",
+    "Collect each variable beside its differential.",
+    "Write the two integrals before evaluating them."
+  ],
+  "requires": ["calculus.integration", "calculus.chain-rule"],
+  "teaches": ["differential-equations.separation-of-variables"],
   "learn": {
     "figure": {
       "renderer": "carry",
       "id": "diff-eq-separable",
-      "caption": "Separation collects each variable with its differential before integration."
+      "caption": "Separation collects each variable with its differential before integration.",
+      "params": {
+        "equation": "\\frac{dy}{dx}=3xy",
+        "coefficient": 3
+      }
     },
     "core": [
       {
@@ -21,11 +32,42 @@
           { "text": "." }
         ]
       }
+    ],
+    "workedExample": [
+      {
+        "math": "\\frac{dy}{dx}=2xy",
+        "note": {
+          "type": "paragraph",
+          "runs": [{ "text": "Begin with a related equation whose variables can be separated." }]
+        }
+      },
+      {
+        "math": "\\frac{1}{y}\\,dy=2x\\,dx",
+        "note": {
+          "type": "paragraph",
+          "runs": [{ "text": "Divide by y, then collect each variable beside its differential." }]
+        }
+      },
+      {
+        "math": "\\int \\frac{1}{y}\\,dy=\\int 2x\\,dx",
+        "note": {
+          "type": "paragraph",
+          "runs": [{ "text": "Once the variables are separated, integrate both sides." }]
+        }
+      }
+    ],
+    "workspace": [
+      {
+        "type": "paragraph",
+        "runs": [
+          { "text": "Each row names the transformation that makes it follow from the row above." }
+        ]
+      }
     ]
   },
   "practice": {
-    "engine": "guided-derivation",
-    "response": { "kind": "derivation", "entry": "expression", "traversal": "guided" },
+    "engine": "equation-transform",
+    "response": { "kind": "transformation", "entry": "expression", "traversal": "guided" },
     "problems": [
       {
         "id": "separable-example-3xy",
@@ -33,6 +75,11 @@
           "type": "paragraph",
           "runs": [{ "text": "Solve " }, { "math": "dy/dx=3xy" }, { "text": "." }]
         },
+        "difficulty": 2,
+        "transformations": [
+          { "operation": "separate-variables", "from": "start", "to": "separate" },
+          { "operation": "integrate-both-sides", "from": "separate", "to": "integrals" }
+        ],
         "givens": {
           "rows": [
             {
@@ -51,7 +98,17 @@
                 "expected": "dy/y",
                 "accepted": ["(1/y)dy"],
                 "display": "\\frac{1}{y}\\,dy",
-                "hint": "Move the factor y to the left beside dy.",
+                "hint": {
+                  "level1": "Collect the y terms on the left.",
+                  "level2": "Divide both sides by y.",
+                  "level3": "Write dy/y on the left."
+                },
+                "misconceptions": [
+                  {
+                    "matches": "y dy",
+                    "feedback": "Dividing by y puts 1/y beside dy; it does not multiply dy by y."
+                  }
+                ],
                 "label": "Separate the y terms"
               },
               "relation": "=",
@@ -61,8 +118,43 @@
                 "expected": "3x dx",
                 "accepted": ["3x*dx"],
                 "display": "3x\\,dx",
-                "hint": "Keep the x terms beside dx.",
+                "hint": {
+                  "level1": "Collect the x terms on the right.",
+                  "level2": "The derivative denominator supplies dx.",
+                  "level3": "Write 3x dx on the right."
+                },
                 "label": "Separate the x terms"
+              }
+            },
+            {
+              "id": "integrals",
+              "label": "write integrals",
+              "left": {
+                "kind": "slot",
+                "response": "expression",
+                "expected": "int 1/y dy",
+                "accepted": ["int (1/y)dy", "∫1/y dy"],
+                "display": "\\int \\frac{1}{y}\\,dy",
+                "hint": {
+                  "level1": "Apply integration to the entire left side.",
+                  "level2": "Keep 1/y inside the integral.",
+                  "level3": "Write int 1/y dy."
+                },
+                "label": "Integrate the left side"
+              },
+              "relation": "=",
+              "right": {
+                "kind": "slot",
+                "response": "expression",
+                "expected": "int 3x dx",
+                "accepted": ["∫3x dx"],
+                "display": "\\int 3x\\,dx",
+                "hint": {
+                  "level1": "Apply the same operation to the right side.",
+                  "level2": "Keep 3x inside the integral.",
+                  "level3": "Write int 3x dx."
+                },
+                "label": "Integrate the right side"
               }
             }
           ]

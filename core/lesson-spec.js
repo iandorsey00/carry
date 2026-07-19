@@ -9,27 +9,32 @@
   const ENGINE_TYPES = {
     "matrix-operation": { workspaceType: "matrix-operation", responseKinds: ["matrix"] },
     "long-addition": { workspaceType: "addition", responseKinds: ["digit-grid"] },
-    "guided-derivation": { workspaceType: "guided-derivation", responseKinds: ["derivation"] }
+    "guided-derivation": { workspaceType: "guided-derivation", responseKinds: ["derivation"] },
+    "equation-transform": { workspaceType: "guided-derivation", responseKinds: ["transformation"] }
   };
   const ENTRY_KINDS = new Set(["number", "expression"]);
   const TRAVERSALS = new Set(["row-major", "column-major", "guided"]);
+  const DIFFICULTY_LABELS = new Set(["introductory", "developing", "challenging"]);
 
   function validateLesson(spec, options = {}) {
     const issues = [];
     const issue = (path, message) => issues.push(`${path}: ${message}`);
 
     if (!isObject(spec)) return { valid: false, issues: ["lesson: expected an object"] };
-    rejectUnknown(spec, ["$schema", "spec", "id", "subject", "section", "topic", "title", "registration", "learn", "practice"], "lesson", issue);
+    rejectUnknown(spec, ["$schema", "spec", "id", "subject", "section", "topic", "title", "objectives", "requires", "teaches", "registration", "learn", "practice"], "lesson", issue);
     if (spec.spec !== SPEC_VERSION) issue("spec", `expected ${SPEC_VERSION}`);
     requireIdentifier(spec.id, "id", issue);
     requireIdentifier(spec.section, "section", issue);
     requireText(spec.subject, "subject", issue);
     requireText(spec.topic, "topic", issue);
     requireText(spec.title, "title", issue);
+    validateTextList(spec.objectives, "objectives", issue, { plain: true });
+    validateIdentifierList(spec.requires, "requires", issue);
+    validateIdentifierList(spec.teaches, "teaches", issue);
 
     validateRegistration(spec.registration, issue);
     validateLearn(spec.learn, issue, options);
-    validatePractice(spec.practice, issue);
+    validatePractice(spec.practice, issue, options);
 
     return { valid: issues.length === 0, issues };
   }
@@ -65,13 +70,15 @@
       if (!isObject(learn.figure)) {
         issue("learn.figure", "expected an object");
       } else {
-        rejectUnknown(learn.figure, ["renderer", "id", "caption"], "learn.figure", issue);
+        rejectUnknown(learn.figure, ["renderer", "id", "caption", "params"], "learn.figure", issue);
         if (learn.figure.renderer !== "carry") issue("learn.figure.renderer", "v1 supports the carry renderer");
         requireIdentifier(learn.figure.id, "learn.figure.id", issue);
         requirePlainText(learn.figure.caption, "learn.figure.caption", issue);
-        const figureIds = options.catalog?.figures;
-        if (Array.isArray(figureIds) && !figureIds.includes(learn.figure.id)) {
+        const figureDefinition = catalogEntry(options.catalog?.figures, learn.figure.id);
+        if (options.catalog?.figures && !figureDefinition) {
           issue("learn.figure.id", `unknown v1 figure ${learn.figure.id}`);
+        } else if (learn.figure.params != null) {
+          validateFigureParams(learn.figure.params, figureDefinition, "learn.figure.params", issue);
         }
       }
     }
@@ -133,7 +140,7 @@
     });
   }
 
-  function validatePractice(practice, issue) {
+  function validatePractice(practice, issue, options) {
     if (!isObject(practice)) {
       issue("practice", "expected an object");
       return;
@@ -153,12 +160,13 @@
         issue(path, "expected an object");
         return;
       }
-      rejectUnknown(problem, ["id", "prompt", "givens"], path, issue);
+      rejectUnknown(problem, ["id", "prompt", "difficulty", "transformations", "givens"], path, issue);
       requireIdentifier(problem.id, `${path}.id`, issue);
       if (ids.has(problem.id)) issue(`${path}.id`, "must be unique within the lesson");
       ids.add(problem.id);
       validateContentBlock(problem.prompt, `${path}.prompt`, issue);
-      validateProblemForEngine(problem, practice.engine, path, issue);
+      validateDifficulty(problem.difficulty, `${path}.difficulty`, issue);
+      validateProblemForEngine(problem, practice.engine, path, issue, options);
     });
   }
 
@@ -184,7 +192,7 @@
     }
   }
 
-  function validateProblemForEngine(problem, engine, path, issue) {
+  function validateProblemForEngine(problem, engine, path, issue, options) {
     const givens = problem.givens;
     if (!isObject(givens)) {
       issue(`${path}.givens`, "expected an object");
@@ -209,9 +217,10 @@
       }
       return;
     }
-    if (engine === "guided-derivation") {
+    if (engine === "guided-derivation" || engine === "equation-transform") {
       rejectUnknown(givens, ["rows"], `${path}.givens`, issue);
       validateDerivationRows(givens.rows, `${path}.givens.rows`, issue);
+      validateTransformations(problem.transformations, givens.rows, engine, `${path}.transformations`, issue, options);
     }
   }
 
@@ -249,6 +258,7 @@
       issue(path, "expected at least one derivation row");
       return;
     }
+    const ids = new Set();
     rows.forEach((row, index) => {
       const rowPath = `${path}[${index}]`;
       if (!isObject(row)) {
@@ -257,6 +267,8 @@
       }
       rejectUnknown(row, ["id", "label", "left", "relation", "right"], rowPath, issue);
       requireIdentifier(row.id, `${rowPath}.id`, issue);
+      if (ids.has(row.id)) issue(`${rowPath}.id`, "must be unique within the derivation");
+      ids.add(row.id);
       requireText(row.label, `${rowPath}.label`, issue);
       requireText(row.relation, `${rowPath}.relation`, issue);
       validateDerivationSide(row.left, `${rowPath}.left`, issue);
@@ -277,15 +289,23 @@
       requireMath(side.math, `${path}.math`, issue);
       return;
     }
-    rejectUnknown(side, ["kind", "response", "expected", "accepted", "display", "hint", "label", "placeholder"], path, issue);
+    rejectUnknown(side, ["kind", "response", "expected", "accepted", "display", "hint", "misconceptions", "label", "placeholder"], path, issue);
     if (side.response !== "expression") issue(`${path}.response`, "v1 derivation slots use expression responses");
     requireText(side.expected, `${path}.expected`, issue);
     requireMath(side.display || side.expected, `${path}.display`, issue);
-    requireText(side.hint, `${path}.hint`, issue);
+    validateHint(side.hint, `${path}.hint`, issue);
     requireText(side.label, `${path}.label`, issue);
     if (side.accepted != null && (!Array.isArray(side.accepted) || side.accepted.some((value) => typeof value !== "string"))) {
       issue(`${path}.accepted`, "expected an array of strings");
     }
+    validateMisconceptions(side.misconceptions, `${path}.misconceptions`, issue);
+    const accepted = new Set([side.expected, ...(Array.isArray(side.accepted) ? side.accepted : [])]
+      .map((value) => String(value || "").trim().toLowerCase()));
+    (side.misconceptions || []).forEach((misconception, index) => {
+      if (accepted.has(String(misconception?.matches || "").trim().toLowerCase())) {
+        issue(`${path}.misconceptions[${index}].matches`, "must not duplicate an accepted answer");
+      }
+    });
   }
 
   function compileLesson(spec, options = {}) {
@@ -299,12 +319,19 @@
       topic: spec.topic,
       title: spec.title,
       type: engine.workspaceType,
-      ...(figure ? { figure: figure.id, figureCaption: figure.caption } : {}),
+      ...(figure ? {
+        figure: figure.id,
+        figureCaption: figure.caption,
+        ...(figure.params ? { figureParams: cloneData(figure.params) } : {})
+      } : {}),
+      ...(spec.objectives?.length ? { objectives: [...spec.objectives] } : {}),
+      ...(spec.requires?.length ? { requires: [...spec.requires] } : {}),
+      ...(spec.teaches?.length ? { teaches: [...spec.teaches] } : {}),
       intro: spec.learn.core.map(compileContentBlock),
       overview: compileOverview(spec.learn),
       problems: spec.practice.problems.map((problem) => compileProblem(problem, spec.practice.engine)),
       responseContract: { ...spec.practice.response },
-      authoring: { spec: SPEC_VERSION, source: options.source || "" }
+      authoring: { spec: SPEC_VERSION, engine: spec.practice.engine, source: options.source || "" }
     };
     if (workspace.type === "addition") workspace.problem = workspace.problems[0];
 
@@ -338,18 +365,29 @@
 
   function compileProblem(problem, engine) {
     const prompt = compileContentBlock(problem.prompt);
-    if (engine === "matrix-operation") return { id: problem.id, prompt, ...problem.givens };
-    if (engine === "long-addition") return { id: problem.id, prompt, ...problem.givens };
-    if (engine === "guided-derivation") {
+    const metadata = problem.difficulty == null ? {} : { difficulty: problem.difficulty };
+    if (engine === "matrix-operation") return { id: problem.id, prompt, ...metadata, ...problem.givens };
+    if (engine === "long-addition") return { id: problem.id, prompt, ...metadata, ...problem.givens };
+    if (engine === "guided-derivation" || engine === "equation-transform") {
+      const transformations = (problem.transformations || []).map((transformation) => ({
+        operation: transformation.operation || transformation.justification,
+        from: transformation.from,
+        to: transformation.to
+      }));
+      const byTarget = new Map(transformations.map((transformation) => [transformation.to, transformation]));
       return {
         id: problem.id,
         prompt,
+        ...metadata,
+        engine,
+        ...(transformations.length ? { transformations } : {}),
         rows: problem.givens.rows.map((row) => ({
           id: row.id,
           label: row.label,
           left: compileDerivationSide(row.left),
           relation: row.relation,
-          right: compileDerivationSide(row.right)
+          right: compileDerivationSide(row.right),
+          ...(byTarget.has(row.id) ? { transformation: byTarget.get(row.id) } : {})
         }))
       };
     }
@@ -362,11 +400,171 @@
       answer: side.expected,
       answers: [...new Set([side.expected, ...(side.accepted || [])])],
       math: side.display || side.expected,
-      hint: side.hint,
+      hint: hintLevels(side.hint)[0],
+      hints: hintLevels(side.hint),
+      ...(side.misconceptions?.length ? { misconceptions: cloneData(side.misconceptions) } : {}),
       label: side.label,
       placeholder: side.placeholder || "Enter expression",
       responseKind: side.response
     };
+  }
+
+  function validateTextList(value, path, issue, options = {}) {
+    if (value == null) return;
+    if (!Array.isArray(value) || value.length === 0) {
+      issue(path, "expected a nonempty array");
+      return;
+    }
+    const seen = new Set();
+    value.forEach((entry, index) => {
+      const entryPath = `${path}[${index}]`;
+      if (options.plain) requirePlainText(entry, entryPath, issue);
+      else requireText(entry, entryPath, issue);
+      const normalized = String(entry || "").trim().toLowerCase();
+      if (seen.has(normalized)) issue(entryPath, "must be unique");
+      seen.add(normalized);
+    });
+  }
+
+  function validateIdentifierList(value, path, issue) {
+    if (value == null) return;
+    if (!Array.isArray(value) || value.length === 0) {
+      issue(path, "expected a nonempty array");
+      return;
+    }
+    const seen = new Set();
+    value.forEach((entry, index) => {
+      requireIdentifier(entry, `${path}[${index}]`, issue);
+      if (seen.has(entry)) issue(`${path}[${index}]`, "must be unique");
+      seen.add(entry);
+    });
+  }
+
+  function validateFigureParams(params, definition, path, issue) {
+    if (!isObject(params)) {
+      issue(path, "expected an object");
+      return;
+    }
+    const definitions = isObject(definition?.params) ? definition.params : {};
+    rejectUnknown(params, Object.keys(definitions), path, issue);
+    Object.entries(params).forEach(([key, value]) => {
+      const expected = definitions[key]?.type;
+      const valuePath = `${path}.${key}`;
+      if (!expected) return;
+      if (expected === "number" && (typeof value !== "number" || !Number.isFinite(value))) {
+        issue(valuePath, "expected a finite number");
+      } else if (expected === "boolean" && typeof value !== "boolean") {
+        issue(valuePath, "expected true or false");
+      } else if (expected === "text") {
+        requirePlainText(value, valuePath, issue);
+      } else if (expected === "math") {
+        requireMath(value, valuePath, issue);
+      }
+    });
+  }
+
+  function validateDifficulty(value, path, issue) {
+    if (value == null) return;
+    if (Number.isInteger(value) && value >= 1 && value <= 5) return;
+    if (DIFFICULTY_LABELS.has(value)) return;
+    issue(path, "expected an integer from 1 through 5 or introductory, developing, or challenging");
+  }
+
+  function validateHint(value, path, issue) {
+    if (typeof value === "string") {
+      requirePlainText(value, path, issue);
+      return;
+    }
+    if (!isObject(value)) {
+      issue(path, "expected text or progressive hint levels");
+      return;
+    }
+    rejectUnknown(value, ["level1", "level2", "level3"], path, issue);
+    requirePlainText(value.level1, `${path}.level1`, issue);
+    if (value.level2 != null) requirePlainText(value.level2, `${path}.level2`, issue);
+    if (value.level3 != null) {
+      if (value.level2 == null) issue(`${path}.level2`, "is required before level3");
+      requirePlainText(value.level3, `${path}.level3`, issue);
+    }
+  }
+
+  function hintLevels(value) {
+    if (typeof value === "string") return [value];
+    return [value?.level1, value?.level2, value?.level3].filter(Boolean);
+  }
+
+  function validateMisconceptions(value, path, issue) {
+    if (value == null) return;
+    if (!Array.isArray(value) || value.length === 0) {
+      issue(path, "expected a nonempty array");
+      return;
+    }
+    const seen = new Set();
+    value.forEach((entry, index) => {
+      const entryPath = `${path}[${index}]`;
+      if (!isObject(entry)) {
+        issue(entryPath, "expected an object");
+        return;
+      }
+      rejectUnknown(entry, ["matches", "feedback"], entryPath, issue);
+      requireText(entry.matches, `${entryPath}.matches`, issue);
+      requirePlainText(entry.feedback, `${entryPath}.feedback`, issue);
+      const normalized = String(entry.matches || "").trim().toLowerCase();
+      if (seen.has(normalized)) issue(`${entryPath}.matches`, "must be unique within the slot");
+      seen.add(normalized);
+    });
+  }
+
+  function validateTransformations(value, rows, engine, path, issue, options) {
+    if (value == null) {
+      if (engine === "equation-transform") issue(path, "is required for the equation-transform engine");
+      return;
+    }
+    if (!Array.isArray(value) || value.length === 0) {
+      issue(path, "expected a nonempty array");
+      return;
+    }
+    const rowList = Array.isArray(rows) ? rows : [];
+    const rowIds = new Set(rowList.map((row) => row?.id));
+    const rowOrder = new Map(rowList.map((row, index) => [row?.id, index]));
+    const targets = new Set();
+    value.forEach((entry, index) => {
+      const entryPath = `${path}[${index}]`;
+      if (!isObject(entry)) {
+        issue(entryPath, "expected an object");
+        return;
+      }
+      rejectUnknown(entry, ["operation", "justification", "from", "to"], entryPath, issue);
+      const operation = entry.operation || entry.justification;
+      if (entry.operation && entry.justification) issue(entryPath, "use operation or justification, not both");
+      requireIdentifier(operation, `${entryPath}.operation`, issue);
+      requireIdentifier(entry.from, `${entryPath}.from`, issue);
+      requireIdentifier(entry.to, `${entryPath}.to`, issue);
+      if (entry.from && !rowIds.has(entry.from)) issue(`${entryPath}.from`, "must identify a derivation row");
+      if (entry.to && !rowIds.has(entry.to)) issue(`${entryPath}.to`, "must identify a derivation row");
+      if (rowOrder.has(entry.from) && rowOrder.has(entry.to) && rowOrder.get(entry.from) >= rowOrder.get(entry.to)) {
+        issue(`${entryPath}.to`, "must identify a later row");
+      }
+      if (targets.has(entry.to)) issue(`${entryPath}.to`, "may have only one incoming transformation");
+      targets.add(entry.to);
+      const definition = catalogEntry(options.catalog?.transformations, operation);
+      if (options.catalog?.transformations && !definition) issue(`${entryPath}.operation`, `unknown transformation ${operation}`);
+    });
+    if (engine === "equation-transform") {
+      rowList.slice(1).forEach((row, index) => {
+        if (!targets.has(row?.id)) issue(`${path}`, `missing a transformation to row ${row?.id || index + 2}`);
+      });
+    }
+  }
+
+  function catalogEntry(collection, id) {
+    if (Array.isArray(collection)) return collection.includes(id) ? { id } : null;
+    if (isObject(collection) && Object.hasOwn(collection, id)) return collection[id] || { id };
+    return null;
+  }
+
+  function cloneData(value) {
+    return JSON.parse(JSON.stringify(value));
   }
 
   function requireIdentifier(value, path, issue) {

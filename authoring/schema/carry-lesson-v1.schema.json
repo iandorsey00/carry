@@ -13,6 +13,24 @@
     "section": { "$ref": "#/$defs/identifier" },
     "topic": { "type": "string", "minLength": 1 },
     "title": { "type": "string", "minLength": 1 },
+    "objectives": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1, "pattern": "^[^<>]+$" }
+    },
+    "requires": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/identifier" }
+    },
+    "teaches": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/identifier" }
+    },
     "registration": {
       "oneOf": [
         {
@@ -90,7 +108,17 @@
           "properties": {
             "renderer": { "const": "carry" },
             "id": { "$ref": "#/$defs/identifier" },
-            "caption": { "type": "string", "minLength": 1 }
+            "caption": { "type": "string", "minLength": 1 },
+            "params": {
+              "type": "object",
+              "additionalProperties": {
+                "oneOf": [
+                  { "type": "string", "minLength": 1, "pattern": "^[^<>]+$" },
+                  { "type": "number" },
+                  { "type": "boolean" }
+                ]
+              }
+            }
           }
         },
         "core": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/contentBlock" } },
@@ -118,7 +146,7 @@
       "additionalProperties": false,
       "required": ["kind", "entry", "traversal"],
       "properties": {
-        "kind": { "enum": ["matrix", "digit-grid", "derivation"] },
+        "kind": { "enum": ["matrix", "digit-grid", "derivation", "transformation"] },
         "entry": { "enum": ["number", "expression"] },
         "traversal": { "enum": ["row-major", "column-major", "guided"] }
       }
@@ -151,10 +179,55 @@
         "expected": { "type": "string", "minLength": 1 },
         "accepted": { "type": "array", "items": { "type": "string" } },
         "display": { "type": "string", "minLength": 1, "pattern": "^[^<>]+$" },
-        "hint": { "type": "string", "minLength": 1 },
+        "hint": { "$ref": "#/$defs/hint" },
+        "misconceptions": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/misconception" }
+        },
         "label": { "type": "string", "minLength": 1 },
         "placeholder": { "type": "string" }
       }
+    },
+    "hint": {
+      "oneOf": [
+        { "type": "string", "minLength": 1, "pattern": "^[^<>]+$" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["level1"],
+          "properties": {
+            "level1": { "type": "string", "minLength": 1, "pattern": "^[^<>]+$" },
+            "level2": { "type": "string", "minLength": 1, "pattern": "^[^<>]+$" },
+            "level3": { "type": "string", "minLength": 1, "pattern": "^[^<>]+$" }
+          },
+          "dependentRequired": { "level3": ["level2"] }
+        }
+      ]
+    },
+    "misconception": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["matches", "feedback"],
+      "properties": {
+        "matches": { "type": "string", "minLength": 1 },
+        "feedback": { "type": "string", "minLength": 1, "pattern": "^[^<>]+$" }
+      }
+    },
+    "transformation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["from", "to"],
+      "properties": {
+        "operation": { "$ref": "#/$defs/identifier" },
+        "justification": { "$ref": "#/$defs/identifier" },
+        "from": { "$ref": "#/$defs/identifier" },
+        "to": { "$ref": "#/$defs/identifier" }
+      },
+      "oneOf": [
+        { "required": ["operation"], "not": { "required": ["justification"] } },
+        { "required": ["justification"], "not": { "required": ["operation"] } }
+      ]
     },
     "derivationRow": {
       "type": "object",
@@ -175,6 +248,17 @@
       "properties": {
         "id": { "$ref": "#/$defs/identifier" },
         "prompt": { "$ref": "#/$defs/contentBlock" },
+        "difficulty": {
+          "oneOf": [
+            { "type": "integer", "minimum": 1, "maximum": 5 },
+            { "enum": ["introductory", "developing", "challenging"] }
+          ]
+        },
+        "transformations": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/transformation" }
+        },
         "givens": {
           "oneOf": [
             {
@@ -213,7 +297,7 @@
       "additionalProperties": false,
       "required": ["engine", "response", "problems"],
       "properties": {
-        "engine": { "enum": ["matrix-operation", "long-addition", "guided-derivation"] },
+        "engine": { "enum": ["matrix-operation", "long-addition", "guided-derivation", "equation-transform"] },
         "response": { "$ref": "#/$defs/response" },
         "problems": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/problem" } }
       }

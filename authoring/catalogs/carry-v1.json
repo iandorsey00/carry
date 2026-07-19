@@ -12,15 +12,39 @@
     "guided-derivation": {
       "responseKinds": ["derivation"],
       "description": "A sequence of fixed mathematical expressions and constrained response slots."
+    },
+    "equation-transform": {
+      "responseKinds": ["transformation"],
+      "description": "A guided derivation whose rows are connected by named mathematical transformations."
     }
   },
   "responseKinds": {
     "matrix": ["number", "expression"],
     "digit-grid": ["number"],
-    "derivation": ["expression"]
+    "derivation": ["expression"],
+    "transformation": ["expression"]
   },
-  "figures": [
-    "diff-eq-separable",
-    "linear-matrix-multiplication"
-  ]
+  "figures": {
+    "diff-eq-separable": {
+      "description": "A separation-of-variables equation sequence.",
+      "params": {
+        "equation": { "type": "math" },
+        "coefficient": { "type": "number" }
+      }
+    },
+    "linear-matrix-multiplication": {
+      "description": "A row-column matrix product.",
+      "params": {}
+    }
+  },
+  "transformations": {
+    "separate-variables": { "label": "Separate variables" },
+    "integrate-both-sides": { "label": "Integrate both sides" },
+    "simplify": { "label": "Simplify" },
+    "substitute": { "label": "Substitute" },
+    "expand": { "label": "Expand" },
+    "factor": { "label": "Factor" },
+    "divide-both-sides": { "label": "Divide both sides" },
+    "multiply-both-sides": { "label": "Multiply both sides" }
+  }
 }
