@@ -5,7 +5,7 @@
   window.CarryPractice.sections["linear-algebra"]["linear-algebra.eigenvalues"] = {
   "id": "linear-algebra.eigenvalues",
   "topic": "Linear Algebra",
-  "title": "Eigenvalues",
+  "title": "Eigenvalue intuition",
   "type": "concept",
   "figure": "linear-eigenvalues",
   "intro": [
@@ -31,16 +31,16 @@
           "label": "2"
         },
         {
-          "value": "up",
-          "label": "up"
+          "value": "5",
+          "label": "5"
         },
         {
-          "value": "down",
-          "label": "down"
+          "value": "7",
+          "label": "7"
         },
         {
-          "value": "left",
-          "label": "left"
+          "value": "10",
+          "label": "10"
         }
       ]
     },

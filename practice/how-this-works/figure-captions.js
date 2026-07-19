@@ -56,9 +56,12 @@
       "diff-eq-second-order": "Second-order models connect position, velocity, and acceleration.",
       "linear-vectors": "Vectors encode size and direction with coordinates.",
       "linear-matrices": "Matrices organize linear rules in rows and columns.",
+      "linear-matrix-addition": "Matrix addition and subtraction combine entries in matching positions.",
+      "linear-matrix-multiplication": "Each product entry comes from one row-column dot product.",
       "linear-transformations": "Linear transformations move vectors while preserving linear structure.",
       "linear-determinants": "Determinants describe how a matrix scales area or volume.",
       "linear-eigenvalues": "Eigenvectors keep direction while eigenvalues give the scale.",
+      "linear-eigenvectors-guided": "Eigenpairs reveal the invariant modes of a linear transformation or differential-equation system.",
       "linear-vector-spaces": "Vector spaces collect all combinations allowed by addition and scaling.",
       "complex-functions": "Complex functions move points and regions in the complex plane.",
       "complex-analytic": "Analytic functions are complex differentiable on open regions.",
@@ -147,6 +150,7 @@
     if (workspace.type === "equation") return conceptFigureCaption(workspace.figure);
     if (workspace.type === "concept") return conceptFigureCaption(workspace.figure);
     if (workspace.type === "quadratic") return conceptFigureCaption(workspace.figure);
+    if (workspace.type === "matrix-operation" || workspace.type === "guided-derivation") return conceptFigureCaption(workspace.figure);
     if (workspace.type === "addition") return "A carry mark sits above the next column; the active column is highlighted.";
     if (workspace.type === "subtraction") return "Borrow marks show what changed: lent digits are crossed out, received tens sit above the digit.";
     if (workspace.type === "multiplication") return "Each partial row is built from right to left, with carries above the top row.";

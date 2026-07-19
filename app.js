@@ -1,6 +1,6 @@
 "use strict";
 
-const APP_VERSION = "0.1.0-beta.47";
+const APP_VERSION = "0.1.0-beta.48";
 const STORAGE_KEY = "carry.progress.v1";
 const SCRATCHPAD_STORAGE_KEY = "carry.scratchpads.v1";
 const GAMES_STORAGE_KEY = "carry.games.v1";
@@ -181,14 +181,27 @@ const topicGroups = [
     name: "Linear Algebra",
     sections: [
       {
-        title: "Linear Algebra",
+        title: "Vectors and Matrices",
         lessons: [
           { id: "linear-algebra.vectors", title: "Vectors" },
           { id: "linear-algebra.matrices", title: "Matrices" },
-          { id: "linear-algebra.transformations", title: "Transformations" },
-          { id: "linear-algebra.determinants", title: "Determinants" },
-          { id: "linear-algebra.eigenvalues", title: "Eigenvalues" },
+          { id: "linear-algebra.matrix-addition-subtraction", title: "Matrix addition and subtraction" },
+          { id: "linear-algebra.matrix-multiplication", title: "Matrix multiplication" },
           { id: "linear-algebra.vector-spaces", title: "Vector spaces" }
+        ]
+      },
+      {
+        title: "Linear Maps",
+        lessons: [
+          { id: "linear-algebra.transformations", title: "Transformations" },
+          { id: "linear-algebra.determinants", title: "Determinants" }
+        ]
+      },
+      {
+        title: "Structure and Dynamics",
+        lessons: [
+          { id: "linear-algebra.eigenvalues", title: "Eigenvalue intuition" },
+          { id: "linear-algebra.eigenvectors-guided", title: "Eigenvalues and eigenvectors" }
         ]
       }
     ]
@@ -703,6 +716,9 @@ function cacheElements() {
   els.problemForm = document.querySelector("#problemForm");
   els.gridShell = document.querySelector(".activity-grid-shell");
   els.workspaceTools = document.querySelector(".workspace-tools");
+  els.lessonCompletion = document.querySelector("#lessonCompletion");
+  els.restartLesson = document.querySelector("#restartLesson");
+  els.reviewLesson = document.querySelector("#reviewLesson");
   els.topNumberLabel = document.querySelector("#topNumberLabel");
   els.bottomNumberLabel = document.querySelector("#bottomNumberLabel");
   els.topNumber = document.querySelector("#topNumber");
@@ -1326,6 +1342,7 @@ function createLessonButton(lesson, topic) {
 
 function renderWorkspace() {
   const workspace = getActiveWorkspace();
+  setLessonCompletionVisible(false);
   configureModeTabs(workspace);
   els.currentTopic.textContent = state.activeTopic;
   els.lessonTitle.textContent = workspace.title;
@@ -1356,6 +1373,9 @@ function renderWorkspace() {
   } else if (workspace.type === "guided-derivation") {
     state.currentModel = window.CarryGuidedDerivation.buildModel(workspace.problem);
     renderGuidedDerivationGrid(state.currentModel);
+  } else if (workspace.type === "matrix-operation") {
+    state.currentModel = window.CarryMatrixOperations.buildModel(workspace.problem);
+    renderMatrixOperationGrid(state.currentModel);
   } else if (workspace.type === "equation") {
     state.currentModel = buildEquationModel(workspace.problem);
     renderEquationGrid(state.currentModel);
@@ -1380,9 +1400,12 @@ function renderWorkspace() {
   } else if (workspace.type === "division") {
     state.currentModel = buildDivisionModel(workspace.problem.top, workspace.problem.bottom);
     renderDivisionGrid(state.currentModel);
-  } else {
+  } else if (workspace.type === "multiplication") {
     state.currentModel = buildMultiplicationModel(workspace.problem.top, workspace.problem.bottom);
     renderMultiplicationGrid(state.currentModel);
+  } else {
+    renderPlannedWorkspace({ ...workspace, title: workspace.title || "Unsupported workspace" });
+    return;
   }
   setStatus(workspaceStartStatus(workspace), "");
   setActiveStep();
@@ -1398,7 +1421,7 @@ function workspaceStartStatus(workspace) {
       ? "Choose an answer, then Check."
       : "Enter the answer, then Check.";
   }
-  if (["guided-derivation", "equation", "inequality", "system", "factoring", "quadratic"].includes(workspace.type)) {
+  if (["guided-derivation", "matrix-operation", "equation", "inequality", "system", "factoring", "quadratic"].includes(workspace.type)) {
     return "Enter the active step, then check it.";
   }
   return "Place the first digit in the active box.";
@@ -4288,7 +4311,7 @@ function conceptWorkedExampleItems(workspace) {
 }
 
 function createIntroFigure(workspace) {
-  if (!["addition", "subtraction", "multiplication", "division", "concept", "equation", "inequality", "quadratic", "system", "factoring"].includes(workspace.type)) return null;
+  if (!["addition", "subtraction", "multiplication", "division", "concept", "guided-derivation", "matrix-operation", "equation", "inequality", "quadratic", "system", "factoring"].includes(workspace.type)) return null;
 
   if (shouldUseDiagramIntroFigure(workspace.figure)) {
     const figure = document.createElement("figure");
@@ -4479,6 +4502,9 @@ function staticMathFigureRows(workspace) {
     "diff-eq-separable": ["\\frac{dy}{dx} = 3xy", "\\frac{1}{y}\\,dy = 3x\\,dx"],
     "diff-eq-first-order": ["\\frac{dP}{dt} = kP", "\\frac{dT}{dt} = -k(T - A)"],
     "diff-eq-second-order": ["x''(t) = a(t)", "m x'' + kx = 0"],
+    "linear-matrix-addition": ["[[2,-1],[4,3]] + [[5,2],[-1,6]] = [[7,1],[3,9]]"],
+    "linear-matrix-multiplication": ["[[1,2],[3,4]]\\cdot[[5,6],[7,8]] = [[19,22],[43,50]]", "1\\cdot5 + 2\\cdot7 = 19"],
+    "linear-eigenvectors-guided": ["A=[[2,1],[0,3]]", "\\operatorname{det}(A-\\lambda I)=(2-\\lambda)(3-\\lambda)", "A\\mathbf{v}=\\lambda\\mathbf{v}"],
     "probability-sample-space": ["S = \\{H, T\\}", "A \\subseteq S"],
     "probability-basic": ["P(A) = \\frac{\\text{favorable}}{\\text{total}}", "P(3) = \\frac{1}{6}"],
     "probability-counting": ["3 \\times 2 = 6", "\\text{multiply choices}"],
@@ -5236,12 +5262,13 @@ function createDiagramIntroSvg(figure) {
     svg.append(
       svgElement("line", { class: "geometry-line", x1: 50, y1: 132, x2: 314, y2: 132 }),
       svgElement("line", { class: "geometry-line", x1: 86, y1: 38, x2: 86, y2: 150 }),
-      svgElement("path", { class: "geometry-line active", d: "M 86 132 L 168 78" }),
-      svgElement("path", { class: "geometry-line result", d: "M 86 132 L 258 42" }),
-      svgElement("path", { class: "geometry-line result", d: "M 244 42 L 260 42 L 252 56" })
+      svgElement("path", { class: "geometry-line result", d: "M 86 132 L 248 48" }),
+      svgElement("path", { class: "geometry-line result", d: "M 232 47 L 250 47 L 241 63" }),
+      svgElement("path", { class: "geometry-line active", d: "M 86 132 L 140 104" }),
+      svgElement("path", { class: "geometry-line active", d: "M 128 102 L 142 103 L 135 116" })
     );
-    svgText(svg, "v", 150, 74, "geometry-label geometry-math active");
-    svgText(svg, "Av = 3v", 232, 62, "geometry-label geometry-math result");
+    svgText(svg, "v", 126, 92, "geometry-label geometry-math active");
+    svgText(svg, "Av = 3v", 194, 42, "geometry-label geometry-math result");
   } else if (figure === "linear-vector-spaces") {
     svg.append(
       svgElement("line", { class: "geometry-line", x1: 48, y1: 132, x2: 312, y2: 132 }),
@@ -6790,6 +6817,107 @@ function renderGuidedDerivationGrid(model) {
   }
 }
 
+function renderMatrixOperationGrid(model) {
+  els.grid.classList.toggle("practice-grid", state.mode === "practice");
+
+  const prompt = document.createElement("div");
+  prompt.className = "matrix-problem";
+  setMathText(prompt, model.prompt);
+
+  const equation = document.createElement("div");
+  equation.className = "matrix-equation";
+  equation.append(
+    createMatrixBlock(model.left, "A", "left"),
+    createMatrixOperator(model.operation === "add" ? "+" : model.operation === "subtract" ? "−" : "×"),
+    createMatrixBlock(model.right, "B", "right"),
+    createMatrixOperator("="),
+    createMatrixResultBlock(model)
+  );
+
+  const context = document.createElement("div");
+  context.className = "matrix-entry-context";
+  context.dataset.matrixEntryContext = "";
+  const contextLabel = document.createElement("span");
+  contextLabel.textContent = model.operation === "multiply" ? "Active row · column" : "Active position";
+  const contextMath = document.createElement("div");
+  contextMath.className = "matrix-entry-context-math";
+  context.append(contextLabel, contextMath);
+
+  els.grid.append(prompt, equation, context);
+}
+
+function createMatrixOperator(value) {
+  const operator = document.createElement("span");
+  operator.className = "matrix-equation-operator";
+  operator.textContent = value;
+  operator.setAttribute("aria-hidden", "true");
+  return operator;
+}
+
+function createMatrixBlock(matrix, name, role) {
+  const figure = document.createElement("figure");
+  figure.className = "matrix-block";
+  figure.setAttribute("aria-label", `Matrix ${name}`);
+
+  const label = document.createElement("figcaption");
+  label.textContent = name;
+
+  const shell = document.createElement("div");
+  shell.className = "matrix-bracket-shell";
+  const entries = document.createElement("div");
+  entries.className = "matrix-entries";
+  entries.style.setProperty("--matrix-columns", String(matrix[0].length));
+
+  matrix.forEach((row, rowIndex) => {
+    row.forEach((value, colIndex) => {
+      const entry = document.createElement("span");
+      entry.className = "grid-cell matrix-entry matrix-static-entry";
+      entry.dataset.matrixRole = role;
+      entry.dataset.matrixRow = String(rowIndex);
+      entry.dataset.matrixCol = String(colIndex);
+      setMathText(entry, `<math>${value}</math>`);
+      entries.append(entry);
+    });
+  });
+
+  shell.append(entries);
+  figure.append(label, shell);
+  return figure;
+}
+
+function createMatrixResultBlock(model) {
+  const figure = document.createElement("figure");
+  figure.className = "matrix-block matrix-result-block";
+  figure.setAttribute("aria-label", "Result matrix");
+
+  const label = document.createElement("figcaption");
+  label.textContent = "Result";
+
+  const shell = document.createElement("div");
+  shell.className = "matrix-bracket-shell";
+  const entries = document.createElement("div");
+  entries.className = "matrix-entries matrix-result-entries";
+  entries.style.setProperty("--matrix-columns", String(model.result[0].length));
+
+  for (const cell of model.cells) {
+    const inputLabel = addInput(cell);
+    inputLabel.classList.add("matrix-entry", "matrix-result-entry");
+    inputLabel.style.gridRow = "";
+    inputLabel.style.gridColumn = "";
+    inputLabel.dataset.matrixRole = "result";
+    inputLabel.dataset.matrixRow = String(cell.row);
+    inputLabel.dataset.matrixCol = String(cell.col);
+    const input = inputLabel.querySelector("input");
+    input.classList.add("matrix-entry-input");
+    input.placeholder = "?";
+    entries.append(inputLabel);
+  }
+
+  shell.append(entries);
+  figure.append(label, shell);
+  return figure;
+}
+
 function attachDerivationScaffold(inputLabel, inputCell, mainInput) {
   const parent = inputLabel.parentElement;
   const stack = document.createElement("div");
@@ -8299,6 +8427,19 @@ function highlightActiveContext(step, input) {
     return;
   }
 
+  if (step.kind === "matrixEntry") {
+    for (const [role, coordinates] of [["left", step.sourceLeft], ["right", step.sourceRight]]) {
+      for (const [row, col] of coordinates || []) {
+        els.grid.querySelector(
+          `[data-matrix-role="${role}"][data-matrix-row="${row}"][data-matrix-col="${col}"]`
+        )?.classList.add("active-column");
+      }
+    }
+    const context = els.grid.querySelector(".matrix-entry-context-math");
+    if (context) setMathText(context, `<math>${step.calculation}</math>`);
+    return;
+  }
+
   if (step.kind === "equationStep") {
     if (els.grid.classList.contains("system-grid") || els.grid.classList.contains("factoring-grid") || els.grid.classList.contains("quadratic-grid")) {
       els.grid.querySelector(`[data-row="${step.row}"][data-col="2"]`)?.classList.add("active-column");
@@ -8972,15 +9113,40 @@ function completeLesson() {
     input.disabled = false;
   });
   els.grid.querySelectorAll(".active-column").forEach((cell) => cell.classList.remove("active-column"));
+  const lessonSetComplete = isLastProblemInSet();
   setStatus(
-    isLastProblemInSet()
-      ? "All questions in this lesson are complete. Restart from the first question when ready."
+    lessonSetComplete
+      ? "All questions in this lesson are complete."
       : "Lesson complete. Continue to the next problem.",
     "complete"
   );
+  setLessonCompletionVisible(lessonSetComplete);
   saveProgress(`Completed ${getActiveWorkspace().title.toLowerCase()}`);
   updatePrimaryAction();
   updateStepText();
+}
+
+function setLessonCompletionVisible(visible) {
+  if (!els.lessonCompletion) return;
+  els.lessonCompletion.hidden = !visible;
+  if (visible) {
+    els.workspaceTools.hidden = true;
+    els.grid.querySelectorAll(".concept-check-button").forEach((button) => {
+      button.hidden = true;
+    });
+    window.setTimeout(() => {
+      if (!els.lessonCompletion.hidden) els.restartLesson?.focus({ preventScroll: true });
+    }, 0);
+  }
+}
+
+function reviewCurrentLesson() {
+  state.showIntro = true;
+  state.activeStep = 0;
+  renderWorkspace();
+  updateUrlFromState();
+  saveProgress(`Reviewed ${getActiveWorkspace().title.toLowerCase()}`);
+  window.setTimeout(() => els.startLesson?.focus({ preventScroll: true }), 0);
 }
 
 function updateStepText() {
@@ -9103,6 +9269,8 @@ function bindEvents() {
   els.newProblem.addEventListener("click", () => {
     startNextProblem();
   });
+  els.restartLesson?.addEventListener("click", startNextProblem);
+  els.reviewLesson?.addEventListener("click", reviewCurrentLesson);
   els.problemForm.addEventListener("submit", (event) => {
     event.preventDefault();
     applyCustomProblem();

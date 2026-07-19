@@ -3191,6 +3191,142 @@ body[data-surface="scratchpad"] .scratch-line-math-aligned {
   align-items: stretch;
 }
 
+.matrix-operation-grid {
+  grid-template-columns: minmax(0, 1fr);
+  width: min(100%, 980px);
+  min-width: 0;
+  gap: 18px;
+  justify-content: stretch;
+}
+
+.matrix-problem {
+  padding: 4px 0 14px;
+  border-bottom: 1px solid var(--line);
+  color: var(--text);
+  font-size: 1.15rem;
+  font-weight: 750;
+}
+
+.matrix-equation {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  overflow-x: auto;
+  padding: 10px 4px 16px;
+}
+
+.matrix-block {
+  display: grid;
+  flex: 0 0 auto;
+  gap: 7px;
+  justify-items: center;
+  margin: 0;
+}
+
+.matrix-block figcaption {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.matrix-bracket-shell {
+  position: relative;
+  padding: 8px 12px;
+}
+
+.matrix-bracket-shell::before,
+.matrix-bracket-shell::after {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 7px;
+  border-block: 2px solid var(--text);
+  content: "";
+  pointer-events: none;
+}
+
+.matrix-bracket-shell::before {
+  left: 0;
+  border-left: 2px solid var(--text);
+}
+
+.matrix-bracket-shell::after {
+  right: 0;
+  border-right: 2px solid var(--text);
+}
+
+.matrix-entries {
+  display: grid;
+  grid-template-columns: repeat(var(--matrix-columns), 56px);
+  grid-auto-rows: 52px;
+  gap: 5px;
+}
+
+.matrix-entry {
+  min-width: 56px;
+  min-height: 52px;
+  font-family: var(--math-font);
+  font-size: 21px;
+}
+
+.matrix-static-entry {
+  border: 1px solid transparent;
+}
+
+.matrix-result-entry {
+  border-radius: 7px;
+}
+
+.matrix-result-entry .matrix-entry-input {
+  width: 56px;
+  height: 52px;
+  padding: 0 4px;
+  font-family: var(--math-font);
+  font-size: 20px;
+  text-align: center;
+}
+
+.matrix-equation-operator {
+  flex: 0 0 auto;
+  color: var(--muted);
+  font-family: var(--math-font);
+  font-size: 30px;
+  line-height: 1;
+}
+
+.matrix-entry-context {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  min-height: 58px;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--line);
+  background: var(--surface-muted);
+}
+
+.matrix-entry-context > span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.matrix-entry-context-math {
+  min-width: 0;
+  color: var(--text);
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.matrix-operation-grid.practice-grid .matrix-entry-context {
+  display: none;
+}
+
 .derivation-problem {
   align-self: center;
   padding: 4px 0 14px;
@@ -3388,6 +3524,32 @@ body[data-surface="scratchpad"] .scratch-line-math-aligned {
   .derivation-scaffold-row {
     grid-template-columns: 1fr;
     gap: 5px;
+  }
+
+  .matrix-equation {
+    justify-content: flex-start;
+    gap: 9px;
+  }
+
+  .matrix-entries {
+    grid-template-columns: repeat(var(--matrix-columns), 48px);
+    grid-auto-rows: 48px;
+  }
+
+  .matrix-entry {
+    min-width: 48px;
+    min-height: 48px;
+  }
+
+  .matrix-result-entry .matrix-entry-input {
+    width: 48px;
+    height: 48px;
+    font-size: 18px;
+  }
+
+  .matrix-entry-context {
+    grid-template-columns: 1fr;
+    gap: 4px;
   }
 }
 
@@ -3915,6 +4077,59 @@ body[data-surface="scratchpad"] .scratch-line-math-aligned {
 .workspace-tools {
   flex-wrap: wrap;
   margin-top: 14px;
+}
+
+.lesson-completion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-top: 14px;
+  padding: 16px;
+  border-top: 3px solid var(--complete);
+  background: var(--complete-soft);
+}
+
+.lesson-completion[hidden] {
+  display: none;
+}
+
+.lesson-completion h3,
+.lesson-completion p {
+  margin: 0;
+}
+
+.lesson-completion h3 {
+  font-size: 18px;
+}
+
+.lesson-completion p {
+  margin-top: 3px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.lesson-completion-actions {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 8px;
+}
+
+@media (max-width: 700px) {
+  .lesson-completion {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .lesson-completion-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .lesson-completion-actions .tool-button {
+    justify-content: center;
+    width: 100%;
+  }
 }
 
 .tool-button {
