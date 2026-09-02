@@ -17,3 +17,5 @@ CARRY_URL=http://127.0.0.1:4173 npm run portfolio:capture
 ```
 
 The script uses a fixed 1440 by 1000 viewport, light mode, reduced motion, clean local state, and 2x output for portfolio-quality PNGs. Review the images before publishing; screenshots are demonstrations, not visual regression baselines.
+
+`screenshots/social-preview.png` is a 2:1 crop intended for GitHub's repository **Settings > General > Social preview** upload. The README uses the full long-addition screenshot.

@@ -24,6 +24,14 @@ async function capture(page, name) {
   });
 }
 
+async function captureSocialPreview(page) {
+  await page.screenshot({
+    path: path.join(outputDirectory, "social-preview.png"),
+    animations: "disabled",
+    clip: { x: 0, y: 0, width: 1440, height: 720 }
+  });
+}
+
 async function main() {
   fs.mkdirSync(outputDirectory, { recursive: true });
   const browser = await chromium.launch();
@@ -40,6 +48,7 @@ async function main() {
     await page.locator("#startLesson").click();
     await page.locator("#multiplicationGrid .digit-input.active").waitFor();
     await capture(page, "01-guided-long-addition");
+    await captureSocialPreview(page);
 
     await openFresh(page, "/math/differential-equations/separable-equations");
     await page.locator("#startLesson").click();
@@ -75,7 +84,7 @@ async function main() {
   } finally {
     await browser.close();
   }
-  console.log(`Captured 6 portfolio screenshots in ${path.relative(root, outputDirectory)}.`);
+  console.log(`Captured 6 portfolio screenshots and a social preview in ${path.relative(root, outputDirectory)}.`);
 }
 
 main().catch((error) => {
