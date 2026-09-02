@@ -126,6 +126,8 @@ Use `equation-transform` when the mathematical action connecting each row is par
 
 Carry exposes this contract at `/tools/lesson-builder`. Its primary purpose is to create custom lessons for the moment: remedial refreshers, targeted practice, or a bridge between topics. The browser tool combines this guide, the current catalog, and the JSON Schema into one copyable AI handoff. It accepts CLS JSON, reports validation issues, shows the compiled workspace, runs a successful compile in an immersive lesson surface, and retains up to twelve successful compilations in local browser history.
 
+Lesson Studio offers two AI routes. **Copy Codex task** creates a short repo-aware request and requires the generated lesson to pass `npm run lesson:validate -- <file>` before Codex returns it. **Copy ChatGPT handoff** copies the complete authoring contract for chats that cannot read the repository. Codex is the more reliable route because it can inspect nearby examples and respond to the real validator instead of trying to reproduce the contract from context alone.
+
 **Run lesson** creates a temporary in-memory session, separate from the Math and Physics curriculum libraries. The session uses Carry's reviewed renderer and interaction engine; it does not evaluate authored JavaScript or inject authored markup. Session attempts and completions do not alter learner progress, and reloading returns to the saved Lesson Studio draft.
 
 Custom lessons never need to be added to Carry. If a maintainer separately decides that a lesson belongs in the permanent curriculum, its reviewed source may be placed under `authoring/lessons/`, compiled with `npm run lessons:compile`, and committed with the deterministic generated output. Lesson Studio drafts and history are included in Carry's JSON backup and can be cleared from the tool.
@@ -133,5 +135,11 @@ Custom lessons never need to be added to Carry. If a maintainer separately decid
 ## AI Handoff
 
 When asking an AI to author a lesson, provide this file, the schema, the catalog, one nearby example, and the relevant curriculum goal. Ask it to output only the `.carry.json` lesson source and to report any required engine or figure that is missing from the catalog.
+
+Validate a single temporary lesson without adding it to Carry:
+
+```sh
+npm run lesson:validate -- /tmp/carry-custom-lesson.carry.json
+```
 
 The AI must not invent renderer ids, execute code, create answer validators, or encode presentation dimensions. New capabilities belong in reviewed renderer or engine modules, then in the catalog, before lesson data may use them.

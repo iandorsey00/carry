@@ -1,15 +1,17 @@
 {
   "name": "carry",
-  "version": "0.1.0-beta.51",
+  "version": "0.1.0-beta.52",
   "private": true,
   "description": "Local-first math and physics learning studio",
   "scripts": {
     "lessons:compile": "node scripts/compile-lessons.js",
     "lessons:check": "node scripts/compile-lessons.js --check",
+    "lesson:validate": "node scripts/validate-lesson.js",
     "test:qa": "node scripts/lesson-qa.js",
     "test:unit": "node --test scripts/tests/*.test.js",
     "test:e2e": "playwright test",
     "test:e2e:update": "playwright test --update-snapshots",
+    "portfolio:capture": "node scripts/capture-portfolio.js",
     "check": "node scripts/compile-lessons.js --check && node scripts/lesson-qa.js && node --test scripts/tests/*.test.js && playwright test"
   },
   "devDependencies": {

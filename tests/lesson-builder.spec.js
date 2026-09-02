@@ -9,6 +9,7 @@ test("Lesson Studio compiles CLS and preserves clearable local history", async (
     await expect(page.locator("#lessonBuilderStatus")).toContainText("Ready");
     await expect(page.locator("#lessonBuilderSource")).toHaveValue(/"spec": "carry\.lesson\/v1"/);
     await expect(page.locator("#lessonBuilderHandoff")).toContainText("Carry Lesson Specification v1 schema");
+    await expect(page.locator("#copyCodexLessonTask")).toBeDisabled();
 
     await page.locator("#lessonBuilderSource").press("Control+Enter");
     await expect(page.locator("#lessonBuilderStatus")).toContainText("Compiled Long addition example");
@@ -41,6 +42,27 @@ test("Lesson Studio reports invalid source without losing the draft", async ({ p
   await expect(page.locator("#lessonBuilderDiagnostics")).toContainText("Invalid JSON");
   await page.reload();
   await expect(page.locator("#lessonBuilderSource")).toHaveValue("{");
+});
+
+test("Lesson Studio creates a repo-aware Codex authoring task", async ({ page }) => {
+  await freshPage(page, "/tools/lesson-builder");
+  await expect(page.locator("#lessonBuilderStatus")).toContainText("Ready");
+  await page.locator(".lesson-builder-handoff summary").click();
+  await page.locator("#lessonBuilderGoal").fill("Connect matrix eigenvectors to phase-plane solutions.");
+  await expect(page.locator("#copyCodexLessonTask")).toBeEnabled();
+
+  const task = await page.evaluate(() => window.CarryLessonBuilder.buildCodexTask(
+    document.querySelector("#lessonBuilderGoal").value
+  ));
+  expect(task).toContain("Connect matrix eigenvectors to phase-plane solutions.");
+  expect(task).toContain("authoring/catalogs/carry-v1.json");
+  expect(task).toContain("npm run lesson:validate -- /tmp/carry-custom-lesson.carry.json");
+  expect(task).toContain("do not add it to the permanent curriculum");
+  expect(task).toContain("instead of inventing an identifier");
+
+  await page.reload();
+  await page.locator(".lesson-builder-handoff summary").click();
+  await expect(page.locator("#lessonBuilderGoal")).toHaveValue("Connect matrix eigenvectors to phase-plane solutions.");
 });
 
 test("Lesson Studio runs compiled CLS without persisting the custom session", async ({ page }) => {

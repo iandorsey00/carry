@@ -7,16 +7,37 @@
   const STORAGE_KEY = "carry.lesson-builder.v1";
   const MAX_HISTORY = 12;
   const MAX_SOURCE_LENGTH = 100000;
+  const MAX_GOAL_LENGTH = 1000;
 
   function normalizeState(value) {
     const state = value && typeof value === "object" ? value : {};
     return {
       version: 1,
+      goal: typeof state.goal === "string" ? state.goal.slice(0, MAX_GOAL_LENGTH) : "",
       draft: typeof state.draft === "string" ? state.draft.slice(0, MAX_SOURCE_LENGTH) : "",
       history: Array.isArray(state.history)
         ? state.history.map(normalizeHistoryEntry).filter(Boolean).slice(0, MAX_HISTORY)
         : []
     };
+  }
+
+  function buildCodexTask(goal) {
+    const learningGoal = String(goal || "").trim();
+    if (!learningGoal) return "";
+    return [
+      "Create one valid, temporary Carry Lesson Specification (CLS) lesson for this learning goal:",
+      "",
+      learningGoal,
+      "",
+      "Work in the Carry repository. Read authoring/README.md, authoring/schema/carry-lesson-v1.schema.json, authoring/catalogs/carry-v1.json, and the nearest authoring/examples or authoring/lessons file before drafting.",
+      "",
+      "Use only cataloged engines, capabilities, transformations, figures, and figure parameters. Keep this as a one-off Lesson Studio lesson; do not add it to the permanent curriculum or edit generated production files.",
+      "",
+      "Save the draft to /tmp/carry-custom-lesson.carry.json and run:",
+      "npm run lesson:validate -- /tmp/carry-custom-lesson.carry.json",
+      "",
+      "Fix every reported issue. Then return only the final valid CLS JSON in one fenced json block, ready to paste into Carry Lesson Studio. If the goal requires an engine, response type, capability, or figure that Carry does not support, explain the missing capability instead of inventing an identifier."
+    ].join("\n");
   }
 
   function normalizeHistoryEntry(entry) {
@@ -81,6 +102,8 @@
       copyOutput: doc.querySelector("#copyCompiledLesson"),
       handoff: doc.querySelector("#lessonBuilderHandoff"),
       copyHandoff: doc.querySelector("#copyLessonHandoff"),
+      goal: doc.querySelector("#lessonBuilderGoal"),
+      copyCodexTask: doc.querySelector("#copyCodexLessonTask"),
       history: doc.querySelector("#lessonBuilderHistory"),
       clearHistory: doc.querySelector("#clearLessonBuilderHistory")
     };
@@ -207,12 +230,14 @@
     }
 
     function exportState() {
+      state.goal = elements.goal.value.slice(0, MAX_GOAL_LENGTH);
       state.draft = elements.source.value.slice(0, MAX_SOURCE_LENGTH);
       return normalizeState(state);
     }
 
     function importState(value) {
       state = normalizeState(value);
+      elements.goal.value = state.goal;
       elements.source.value = state.draft;
       renderDiagnostics();
       const result = state.history[0] && catalog
@@ -265,6 +290,7 @@
         ].join("\n\n");
         elements.handoff.textContent = handoffText;
         elements.copyHandoff.disabled = false;
+        elements.copyCodexTask.disabled = !state.goal.trim();
         elements.compile.disabled = false;
         if (!state.draft) {
           state.draft = exampleSource;
@@ -282,6 +308,12 @@
     }
 
     elements.source.value = state.draft;
+    elements.goal.value = state.goal;
+    elements.goal.addEventListener("input", () => {
+      state.goal = elements.goal.value.slice(0, MAX_GOAL_LENGTH);
+      elements.copyCodexTask.disabled = !state.goal.trim() || !catalog;
+      persist();
+    });
     elements.source.addEventListener("input", () => {
       state.draft = elements.source.value.slice(0, MAX_SOURCE_LENGTH);
       currentResult = null;
@@ -308,7 +340,17 @@
     elements.copyHandoff.addEventListener("click", async () => {
       if (!handoffText) return;
       const copied = await copyText(handoffText, doc);
-      setStatus(copied ? "AI authoring handoff copied." : "Carry could not copy the handoff.", copied ? "success" : "error");
+      setStatus(copied ? "ChatGPT authoring handoff copied." : "Carry could not copy the handoff.", copied ? "success" : "error");
+    });
+    elements.copyCodexTask.addEventListener("click", async () => {
+      const task = buildCodexTask(elements.goal.value);
+      if (!task) {
+        setStatus("Enter a lesson goal before copying the Codex task.", "error");
+        elements.goal.focus({ preventScroll: true });
+        return;
+      }
+      const copied = await copyText(task, doc);
+      setStatus(copied ? "Codex task copied. Open Carry in Codex, then paste the task." : "Carry could not copy the Codex task.", copied ? "success" : "error");
     });
     elements.history.addEventListener("click", (event) => {
       const button = event.target.closest("button[data-lesson-build-id]");
@@ -322,6 +364,7 @@
     elements.compile.disabled = true;
     elements.run.disabled = true;
     elements.copyHandoff.disabled = true;
+    elements.copyCodexTask.disabled = true;
     setStatus("Loading the CLS authoring handoff...", "pending");
     loadResources();
 
@@ -369,5 +412,5 @@
     }
   }
 
-  return { MAX_HISTORY, MAX_SOURCE_LENGTH, STORAGE_KEY, compileSource, mount, normalizeState };
+  return { MAX_GOAL_LENGTH, MAX_HISTORY, MAX_SOURCE_LENGTH, STORAGE_KEY, buildCodexTask, compileSource, mount, normalizeState };
 });

@@ -1,6 +1,6 @@
 # Carry
 
-Version: `0.1.0-beta.51`
+Version: `0.1.0-beta.52`
 
 Carry is a local-first math, physics, scratchpad, and puzzle learning studio designed to run fully in the browser. Short-form subjects live in a browsable Topic library; deeper, sequenced study lives under Courses.
 
@@ -22,6 +22,10 @@ npx playwright install chromium
 ```
 
 Then run the complete automated gate with `npm run check`, fast module tests with `npm run test:unit`, or only the browser suite with `npm run test:e2e`. Playwright starts its own local static server and covers direct links, typed and multiple-choice answers, procedural focus movement, local persistence, Scratchpad rendering, and keyboard game input.
+
+## Pause And Portfolio
+
+[`docs/project-pause.md`](docs/project-pause.md) records the browser-data preservation, droplet-retirement, and resume procedure. [`docs/portfolio/README.md`](docs/portfolio/README.md) documents the repeatable portfolio screenshot set.
 
 ## Architecture
 

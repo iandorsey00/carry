@@ -7,6 +7,7 @@
 3. Read [`authoring/README.md`](../authoring/README.md) before creating or migrating a lesson supported by Carry Lesson Specification.
 4. Use [`practice/practice-format.js`](../practice/practice-format.js) for legacy lesson data or special practice engines not yet represented in CLS.
 5. Use [`README.md`](../README.md) for current architecture, release, test, and deployment details.
+6. If resuming after the project pause, read [`docs/project-pause.md`](project-pause.md) for preservation, restore, and restart steps.
 
 This file is Carry's project-specific overlay. Shared standards remain in `../guidelines`; Carry-specific exceptions and product direction belong here.
 
@@ -49,7 +50,7 @@ Implementation should proceed through small pilots. Differential Equations is th
 - Treat the JSON Schema, catalog, and compiler as the source of truth; keep the prose AI handoff synchronized with them.
 - Author TeX-like formula source and explicit math runs. Do not author raw MathML, HTML, SVG, or executable validators in lesson files.
 - Compile CLS sources into checked-in static workspace modules so production remains build-free.
-- Use `/tools/lesson-builder` for custom, momentary lessons: local drafting, AI handoff copying, validation, compilation inspection, and an immersive temporary lesson session. Sessions must stay outside the curriculum navigation, remain data-only, avoid learner-progress records, and return to the saved draft on reload. Promotion into `authoring/lessons/` is an optional, separate maintainer decision.
+- Use `/tools/lesson-builder` for custom, momentary lessons: local drafting, repo-aware Codex task copying, self-contained ChatGPT handoff copying, validation, compilation inspection, and an immersive temporary lesson session. Prefer the Codex route because it requires the source to pass the real single-lesson validator before returning JSON. Sessions must stay outside the curriculum navigation, remain data-only, avoid learner-progress records, and return to the saved draft on reload. Promotion into `authoring/lessons/` is an optional, separate maintainer decision.
 - Add a renderer or engine in reviewed JavaScript before adding its identifier to the CLS catalog.
 - Keep bespoke JavaScript modules for interactions CLS cannot yet express; do not weaken the schema to accommodate one lesson.
 
