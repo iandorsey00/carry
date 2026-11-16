@@ -1,5 +1,7 @@
 # Carry Education Specification
 
+[简体中文规范](spec.zh-CN.md)
+
 This is an experimental, separately versioned project in the Carry repository. It describes portable, local-first courses with readable source files, reusable questions, and optional guided activities. [Architecture assessment](../docs/education-spec-assessment.md)
 
 The [0.1 profile](spec.md) and [JSON Schema](schema/profile-0.1.schema.json) describe the package. The Node toolkit runs independently of Carry. It validates local course directories and exports a reference reader as offline HTML. Carry's Lesson Studio can run the guided math example's CLS payload.

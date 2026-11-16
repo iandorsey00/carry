@@ -1,5 +1,7 @@
 # Education course profile 0.1
 
+[简体中文](spec.zh-CN.md)
+
 Status: experimental. A package declares `education-course/0.1`. Banks declare `education-bank/0.1`. These versions identify the content contract independently of Carry's release.
 
 In this profile, **must** is a requirement, **should** is a recommendation, and **may** indicates an option. The schema defines field names, allowed values and shape. This document defines their meaning and additional constraints.
