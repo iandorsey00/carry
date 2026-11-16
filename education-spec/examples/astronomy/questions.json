@@ -1,0 +1,24 @@
+{
+  "format": "education-bank/0.1",
+  "id": "moon",
+  "items": [{
+    "id": "lit-fraction",
+    "revision": 1,
+    "prompt": "What changes as the Moon goes from a crescent to a half-lit disk as seen from Earth?",
+    "demand": "explain",
+    "explanationCard": "viewpoint",
+    "objectives": ["explain-phases"],
+    "parts": [{
+      "id": "reason",
+      "label": "Explanation",
+      "kind": "single-choice",
+      "options": [
+        { "id": "view", "label": "We see more of its sunlit half." },
+        { "id": "shadow", "label": "Less of it is covered by Earth's shadow." }
+      ],
+      "correct": ["view"],
+      "hint": "Imagine looking at a ball lit by a lamp from two different positions.",
+      "feedback": "Earth's shadow causes a lunar eclipse. Regular phases come from the changing viewing angle."
+    }]
+  }]
+}

@@ -124,6 +124,8 @@ npm run lessons:check
 
 Generated lesson output is committed so production remains build-free.
 
+For portable courses, see the [Carry Education Specification](education-spec/README.md). This independent draft includes a validator, an offline reader, and example courses with reusable YAML or JSON question banks.
+
 ## Architecture
 
 - `index.html` contains the static application shell.

@@ -1,0 +1,23 @@
+{
+  "spec": "carry.lesson/v1",
+  "id": "arithmetic.long-addition.education-example",
+  "subject": "math",
+  "section": "arithmetic",
+  "topic": "Arithmetic",
+  "title": "Add by place value",
+  "registration": { "kind": "long-operation", "key": "additionWorkspace" },
+  "learn": {
+    "core": [
+      { "type": "paragraph", "runs": [{ "text": "Start in the ones column and carry to the next column when needed." }] }
+    ]
+  },
+  "practice": {
+    "engine": "long-addition",
+    "response": { "kind": "digit-grid", "entry": "number", "traversal": "guided" },
+    "problems": [{
+      "id": "add-486-257",
+      "prompt": { "type": "paragraph", "runs": [{ "text": "Add the aligned whole numbers." }] },
+      "givens": { "top": 486, "bottom": 257 }
+    }]
+  }
+}

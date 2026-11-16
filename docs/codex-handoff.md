@@ -8,6 +8,7 @@
 4. Use [`practice/practice-format.js`](../practice/practice-format.js) for legacy lesson data or special practice engines not yet represented in CLS.
 5. Use [`README.md`](../README.md) for current architecture, release, test, and deployment details.
 6. If resuming after the project pause, read [`docs/project-pause.md`](project-pause.md) for preservation, restore, and restart steps.
+7. For portable course or question bank work, start with the [experimental Education Specification](../education-spec/README.md) and its [architecture assessment](education-spec-assessment.md).
 
 This file is Carry's project-specific overlay. Shared standards remain in `../guidelines`; Carry-specific exceptions and product direction belong here.
 
