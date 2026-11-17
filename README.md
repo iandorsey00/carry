@@ -124,20 +124,11 @@ npm run lessons:check
 
 Generated lesson output is committed so production remains build-free.
 
-For portable courses, see the [Carry Education Specification](education-spec/README.md). This independent draft includes a validator, an offline reader, and example courses with reusable YAML or JSON question banks.
-
 ### Carry Education Kit
 
-[Download the Carry Education Kit (ZIP)](https://raw.githubusercontent.com/iandorsey00/carry/main/downloads/carry-education-kit-0.1.0.zip). It includes the authoring tools, public examples, and guides in English and Simplified Chinese.
+The [Carry Education Kit](https://github.com/iandorsey00/carry-education-kit) is maintained in its own repository. It includes the portable course specification, Course Builder, validator, offline reader, and public examples. [English quick start](https://github.com/iandorsey00/carry-education-kit/blob/main/README.md) · [简体中文快速入门](https://github.com/iandorsey00/carry-education-kit/blob/main/README.zh-CN.md)
 
-Extract the ZIP and run these commands from the extracted `education-spec` folder with Node.js and npm installed:
-
-```sh
-npm ci
-npm run read -- examples/astronomy astronomy.html
-```
-
-Open `astronomy.html` in your browser. Finished courses are self-contained HTML files that learners can open offline.
+The [original 0.1.0 ZIP](downloads/carry-education-kit-0.1.0.zip) remains available as an archive.
 
 ## Architecture
 
